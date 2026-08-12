@@ -1,23 +1,314 @@
 aid: dealhub
 name: DealHub
-description: 'DealHub is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: 'DealHub is an agentic quote-to-revenue platform that unifies CPQ (Configure,
+  Price, Quote), CLM (contract lifecycle management), DealRoom digital sales rooms,
+  subscription management, usage-based billing and revenue recognition. The platform
+  is governed by the customer''s CRM — with native connectors for Salesforce, HubSpot
+  and Microsoft Dynamics — and centers the quoting experience on a guided-selling
+  Playbook that generates products, calculates pricing and applies discount and
+  approval workflows automatically. DealHub publishes a public developer portal at
+  developers.dealhub.io covering eleven OpenAPI 3.0.3 contracts: Quote, Headless
+  Quote, Actions, CRM, CRM Import, User, Partner, Pricing and Version APIs on
+  api.dealhub.io, the Subskribe billing and revenue API acquired with Subskribe on
+  api.app.subskribe.com, plus two inbound callback contracts (External Query and
+  Callouts) that customers implement so DealHub can pull real-time data and pricing
+  from an external system during quote generation.'
+image: https://cms.dealhub.io/wp-content/uploads/2026/02/HP-Thumbnail-1.png
 url: https://raw.githubusercontent.com/api-evangelist/dealhub/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
-x-tier: stub
-x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-12'
 modified: '2026-08-12'
+x-enrichment:
+  date: '2026-08-12'
+  status: enriched
+  artifacts_added: 56
+  pass: local-v1
 tags:
 - Company
-apis: []
+- CPQ
+- Quote to Cash
+- Contract Lifecycle Management
+- Subscription Management
+- Billing
+- Revenue Operations
+- Sales
+- Pricing
+- Usage Based Billing
+- Revenue Recognition
+- Sales Enablement
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: dealhub-quote-api
+  name: DealHub Quote API
+  description: Retrieve quotes and quote documents from DealHub, list quotes for a
+    CRM opportunity, create renewal opportunities and read DealRoom signer status.
+    The read side of the CPQ platform used to feed BI systems and downstream
+    integrations.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Quotes
+  - CPQ
+  - DealRoom
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-quote-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: Overlay
+    url: overlays/dealhub-quote-api-overlay.yaml
+- aid: dealhub-headless-api
+  name: DealHub Headless Quote API
+  description: Generate, simulate, submit, publish and externally sign quotes entirely
+    from a backend system with no user interaction in the DealHub UI, including the
+    Actions API and the quote-template generator for an API Playbook.
+  humanURL: https://developers.dealhub.io/docs/headless-api-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Quotes
+  - Headless
+  - CPQ
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-headless-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: Overlay
+    url: overlays/dealhub-headless-api-overlay.yaml
+- aid: dealhub-crm-api
+  name: DealHub CRM API
+  description: Authenticate a user from an external CRM into DealHub with a short-lived
+    one-time access token, then create or open a quote and view quotes and
+    opportunities through returned redirect URLs.
+  humanURL: https://developers.dealhub.io/docs/overview-and-flow-of-events
+  baseURL: https://api.dealhub.io
+  tags:
+  - CRM
+  - Authentication
+  - Quotes
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-crm-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: Overlay
+    url: overlays/dealhub-crm-api-overlay.yaml
+- aid: dealhub-crm-import-api
+  name: DealHub CRM Import API
+  description: Start, track, inspect and retry asynchronous imports of buyer accounts
+    and contacts from a tenant's connected CRM into DealHub, with per-id lookup and
+    aggregate success/failure counts.
+  humanURL: https://developers.dealhub.io/docs/crm-import-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - CRM
+  - Import
+  - Asynchronous
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-crm-import-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/startcrmimport
+  - type: Overlay
+    url: overlays/dealhub-crm-import-api-overlay.yaml
+- aid: dealhub-user-api
+  name: DealHub User API
+  description: Retrieve DealHub users by login or by DealHub user id, list users, and
+    create or update users in bulk through the v1 and v2 user provisioning endpoints.
+  humanURL: https://developers.dealhub.io/docs/user-api-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Users
+  - Provisioning
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-user-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: Overlay
+    url: overlays/dealhub-user-api-overlay.yaml
+- aid: dealhub-partner-api
+  name: DealHub Partner API
+  description: Two-step PRM integration that authenticates a partner user from a
+    partner relationship management system and returns redirect URLs to create a
+    quote, open an existing quote, or view an opportunity's quotes in DealHub CPQ.
+  humanURL: https://developers.dealhub.io/docs/partner-api-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Partners
+  - PRM
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-partner-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: Overlay
+    url: overlays/dealhub-partner-api-overlay.yaml
+- aid: dealhub-pricing-api
+  name: DealHub Pricing API
+  description: Return the list of parameters required to price each SKU and return a
+    calculated price per SKU, used to expose DealHub pricing logic to external
+    systems.
+  humanURL: https://developers.dealhub.io/docs/retrieving-product-data
+  baseURL: https://api.dealhub.io
+  tags:
+  - Pricing
+  - Products
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-pricing-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: Overlay
+    url: overlays/dealhub-pricing-api-overlay.yaml
+- aid: dealhub-version-api
+  name: DealHub Version API
+  description: Manage DealHub configuration Versions and their product catalog —
+    retrieve, duplicate and activate versions, export playbook data, read and upload
+    the product catalog, patch catalog items, manage the product hierarchy, and poll
+    asynchronous request status.
+  humanURL: https://developers.dealhub.io/docs/version-api-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Versions
+  - Product Catalog
+  - Configuration
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-version-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: Overlay
+    url: overlays/dealhub-version-api-overlay.yaml
+- aid: dealhub-subskribe-api
+  name: DealHub Subskribe API
+  description: The subscription management, usage-based billing and revenue
+    recognition API DealHub acquired with Subskribe — accounts, orders,
+    subscriptions, plans and rate plans, charge types, usage records and
+    aggregation, invoices and credit memos, payments and payment methods, taxation,
+    accounting periods, ERP and revenue-recognition integration, ledger and journal
+    entries, entitlements, approvals, documents and tenant administration.
+  humanURL: https://developers.dealhub.io/docs/orders-and-subscriptions
+  baseURL: https://api.app.subskribe.com
+  tags:
+  - Billing
+  - Subscriptions
+  - Usage Based Billing
+  - Revenue Recognition
+  - Invoicing
+  - Payments
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-subskribe-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: Overlay
+    url: overlays/dealhub-subskribe-api-overlay.yaml
+- aid: dealhub-external-query
+  name: DealHub External Query (inbound callback contract)
+  description: The endpoint contract a DealHub customer implements on their own
+    infrastructure so DealHub can send the current quote's playbook and product list
+    to an external system and populate the returned data back into the quote. The
+    server URL in the published spec is a documented placeholder — the real endpoint
+    URL is configured per tenant in DealHub Version Settings, so this entry has no
+    DealHub-hosted base URL.
+  humanURL: https://developers.dealhub.io/docs/external-query-overview
+  tags:
+  - Callbacks
+  - Integration
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-external-query-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: Overlay
+    url: overlays/dealhub-external-query-overlay.yaml
+- aid: dealhub-callout-api
+  name: DealHub Callout API (inbound callback contract)
+  description: The endpoint contract a DealHub customer implements so DealHub can
+    retrieve real-time product prices and attributes from an external system such as
+    an ERP while a quote is being generated. The server URL in the published spec is
+    a documented placeholder — the real endpoint URL is configured per tenant in
+    DealHub Version Settings, so this entry has no DealHub-hosted base URL.
+  humanURL: https://developers.dealhub.io/docs/callouts-api-overview
+  tags:
+  - Callbacks
+  - Pricing
+  - Integration
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-callout-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+  - type: Overlay
+    url: overlays/dealhub-callout-api-overlay.yaml
 common:
+- type: TrustCenter
+  url: security/dealhub-trust-center.yml
 - type: Website
-  url: https://www.hiive.com/securities/dealhub-stock
+  url: https://dealhub.io/
+- type: DeveloperPortal
+  url: https://developers.dealhub.io/
+- type: Documentation
+  url: https://developers.dealhub.io/docs/introduction-to-dealhub-apis
+- type: APIReference
+  url: https://developers.dealhub.io/reference/getquotebyid
+- type: GettingStarted
+  url: https://developers.dealhub.io/docs/introduction-to-dealhub-apis
+- type: Authentication
+  url: authentication/dealhub-authentication.yml
+- type: Blog
+  url: https://dealhub.io/blog/
+- type: Pricing
+  url: https://dealhub.io/pricing/
+- type: Plans
+  url: plans/dealhub-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/dealhub-rate-limits.yml
+- type: PrivacyPolicy
+  url: https://dealhub.io/privacy-policy/
+- type: TermsOfService
+  url: https://dealhub.io/enterprise-subscription-agreement-msa/
+- type: Trust
+  url: https://trust.dealhub.io/
+- type: Compliance
+  url: https://dealhub.io/security/
+- type: Security
+  url: https://dealhub.io/security/
+- type: VulnerabilityDisclosure
+  url: security/dealhub-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/dealhub-domain-security.yml
+- type: Support
+  url: https://support.dealhub.io/support/home/
+- type: Login
+  url: https://login.dealhub.io/
+- type: Webhooks
+  url: asyncapi/dealhub-webhooks.yml
+- type: ErrorCatalog
+  url: errors/dealhub-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/dealhub-lifecycle.yml
+- type: Conventions
+  url: conventions/dealhub-conventions.yml
+- type: DataModel
+  url: data-model/dealhub-data-model.yml
+- type: Conformance
+  url: conformance/dealhub-conformance.yml
+- type: Packages
+  url: packages/dealhub-packages.yml
+- type: MCPServer
+  url: mcp/dealhub-mcp.yml
+- type: ToolCrosswalk
+  url: mcp/dealhub-tool-crosswalk.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/dealhub-llms.txt

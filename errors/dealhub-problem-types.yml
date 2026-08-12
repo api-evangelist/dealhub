@@ -1,0 +1,274 @@
+generated: '2026-08-12'
+method: derived
+source: openapi/ (all 11 DealHub OpenAPI documents) enriched from https://developers.dealhub.io/docs/v2-error-reference
+  and /docs/v1-error-reference
+format: proprietary-json
+rfc9457: false
+envelope:
+  note: DealHub does not use RFC 9457 application/problem+json. Errors are returned as JSON with a human-readable
+    message string; messages contain placeholders (<PARAM_NAME>, <entity_id>, <MAX_LENGTH>, [SKU]) substituted at
+    runtime. There is no stable machine-readable error code field on the CPQ APIs.
+docs:
+- https://developers.dealhub.io/docs/v2-error-reference
+- https://developers.dealhub.io/docs/v1-error-reference
+asynchronous_errors:
+  note: Failures for asynchronous operations (version activation/duplication, product catalog upload) are NOT returned
+    on the HTTP response. They are delivered out-of-band via the "Failure WebHook v1" webhook event, and surfaced
+    on GET /api/v1/request/{request_id}/status as status=failed with error_description and error_code.
+  status_endpoint: getAsyncRequestStatus
+documented_classes:
+- status: 400
+  class: payload-and-validation
+  messages:
+  - 'Invalid payload format. Supported format: JSON'
+  - 'The request parameter <PARAM_NAME> exceeds its limits. Allowed maximum length: <MAX_LENGTH>'
+  - 'Request payload missing mandatory field(s): <field1>, <field2>'
+  - 'Unrecognized parameter: <PARAM_NAME>'
+  - '<PARAMETER_NAME> - Invalid parameter value. Valid value(s): <VALID_VALUES>'
+  source: https://developers.dealhub.io/docs/v2-error-reference
+- status: 403
+  class: authentication
+  messages:
+  - Unauthenticated
+  remediation: The Authorization bearer token is missing, invalid, or does not match the user. Note DealHub returns
+    403 (not 401) for authentication failures.
+  source: https://developers.dealhub.io/docs/v2-error-reference
+- status: 400
+  class: entity-not-found
+  messages:
+  - Entity (ID = <entity_id>) not found
+  remediation: DealHub returns 400 rather than 404 for a missing entity on most CPQ endpoints.
+  source: https://developers.dealhub.io/docs/v2-error-reference
+problems:
+- status: '400'
+  spec: openapi/dealhub-callout-api-openapi.yml
+  title: Bad Request. An error occurred in the external system. The response should contain a clear error message.
+  media_types:
+  - application/json
+  source_operations:
+  - getPricing
+  occurrences: 1
+- status: '403'
+  spec: openapi/dealhub-crm-api-openapi.yml
+  title: Unauthenticated. The secret token is missing or invalid.
+  media_types:
+  - application/json
+  source_operations:
+  - authenticateUser
+  - createQuote
+  - openQuote
+  - viewQuotesForOpportunity
+  - viewMyOpportunities
+  occurrences: 5
+- status: '400'
+  spec: openapi/dealhub-crm-api-openapi.yml
+  title: Bad Request.
+  media_types:
+  - application/json
+  source_operations:
+  - createQuote
+  - openQuote
+  - viewQuotesForOpportunity
+  occurrences: 3
+- status: '400'
+  spec: openapi/dealhub-crm-import-api-openapi.yml
+  title: Invalid payload, missing ids, or the tenant's CRM integration is not supported.
+  media_types:
+  - application/json
+  source_operations:
+  - startCrmImport
+  - lookupCrmImportId
+  - retryCrmImport
+  occurrences: 3
+- status: '403'
+  spec: openapi/dealhub-crm-import-api-openapi.yml
+  title: Unauthenticated. The bearer token is missing or invalid.
+  media_types:
+  - application/json
+  source_operations:
+  - startCrmImport
+  - getCrmImportStatus
+  - getCrmImportDetail
+  - lookupCrmImportId
+  - retryCrmImport
+  occurrences: 5
+- status: '500'
+  spec: openapi/dealhub-crm-import-api-openapi.yml
+  title: Unexpected server error.
+  media_types:
+  - application/json
+  source_operations:
+  - startCrmImport
+  - getCrmImportStatus
+  - getCrmImportDetail
+  - lookupCrmImportId
+  - retryCrmImport
+  occurrences: 5
+- status: '404'
+  spec: openapi/dealhub-crm-import-api-openapi.yml
+  title: No import found for the tenant (or the given request_id).
+  media_types:
+  - application/json
+  source_operations:
+  - getCrmImportStatus
+  - getCrmImportDetail
+  - lookupCrmImportId
+  - retryCrmImport
+  occurrences: 4
+- status: '400'
+  spec: openapi/dealhub-external-query-openapi.yml
+  title: Bad Request. An error occurred while processing the request. The response should contain a clear error
+    message.
+  media_types:
+  - application/json
+  source_operations:
+  - fulfillExternalQuery
+  occurrences: 1
+- status: '400'
+  spec: openapi/dealhub-headless-api-openapi.yml
+  title: Bad Request. The request payload is invalid or missing required information.
+  media_types:
+  - application/json
+  source_operations:
+  - simulateQuote
+  - generateQuote
+  - submitQuote
+  - publishQuote
+  - signQuoteExternally
+  - getQuoteId
+  - generateQuote-1
+  occurrences: 7
+- status: '403'
+  spec: openapi/dealhub-partner-api-openapi.yml
+  title: Forbidden. The authentication key is invalid or the request is from an untrusted IP.
+  media_types: []
+  source_operations:
+  - authenticatePartnerUser
+  - createPartnerQuote
+  - openPartnerQuote
+  - openPartnerOpportunity
+  occurrences: 4
+- status: '400'
+  spec: openapi/dealhub-pricing-api-openapi.yml
+  title: Bad Request.
+  media_types: []
+  source_operations:
+  - getProductsParameters
+  - getProductsPricing
+  occurrences: 2
+- status: '403'
+  spec: openapi/dealhub-pricing-api-openapi.yml
+  title: Forbidden. The authentication token is missing or invalid.
+  media_types: []
+  source_operations:
+  - getProductsParameters
+  - getProductsPricing
+  occurrences: 2
+- status: '400'
+  spec: openapi/dealhub-quote-api-openapi.yml
+  title: Bad Request. The quote is in draft status or the requested document type is not supported.
+  media_types: []
+  source_operations:
+  - getQuoteById
+  - createOpportunity
+  - getQuoteDocument
+  - getDealRoomSigners
+  occurrences: 4
+- status: '403'
+  spec: openapi/dealhub-quote-api-openapi.yml
+  title: Forbidden. Invalid or missing authentication token.
+  media_types: []
+  source_operations:
+  - getQuoteById
+  - getQuotes
+  - createOpportunity
+  - getQuoteDocument
+  - getDealRoomSigners
+  occurrences: 5
+- status: default
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  title: successful operation
+  media_types: []
+  source_operations:
+  - putAccountReceivableContact
+  - updateAccount
+  - deleteAccount
+  - updateAccountCrmId
+  - getAccountContactViaShareLink
+  - addAccountContactViaShareLink
+  - addErpDetails
+  - updateAccountContact
+  - deleteAccountContact
+  - updateAccountContactViaShareLink
+  - getAgentSession
+  - createAgentSession
+  occurrences: 263
+- status: '404'
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  title: Order not found
+  media_types: []
+  source_operations:
+  - getOrderApprovalHistory
+  occurrences: 1
+- status: '500'
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  title: Internal server error
+  media_types: []
+  source_operations:
+  - getOrderApprovalHistory
+  occurrences: 1
+- status: '400'
+  spec: openapi/dealhub-user-api-openapi.yml
+  title: Bad Request. The user could not be found.
+  media_types: []
+  source_operations:
+  - getUserByLogin
+  - getUserById
+  - updateUsersV1
+  - createOrUpdateUsersV2
+  occurrences: 4
+- status: '403'
+  spec: openapi/dealhub-user-api-openapi.yml
+  title: Forbidden. Invalid or missing authentication token.
+  media_types: []
+  source_operations:
+  - getUserByLogin
+  - getUserById
+  - getUsers
+  - updateUsersV1
+  - createOrUpdateUsersV2
+  occurrences: 5
+- status: '400'
+  spec: openapi/dealhub-version-api-openapi.yml
+  title: Bad Request. Invalid versionId.
+  media_types:
+  - application/json
+  source_operations:
+  - getGenerateQuoteTemplate
+  - updateProductCatalogItems
+  - deleteAllProducts
+  - deleteProductsBySku
+  occurrences: 4
+- status: '404'
+  spec: openapi/dealhub-version-api-openapi.yml
+  title: Playbook not found.
+  media_types:
+  - application/json
+  source_operations:
+  - getGenerateQuoteTemplate
+  occurrences: 1
+- status: '500'
+  spec: openapi/dealhub-version-api-openapi.yml
+  title: Failed to generate JSON.
+  media_types:
+  - application/json
+  source_operations:
+  - getGenerateQuoteTemplate
+  occurrences: 1
+- status: '403'
+  spec: openapi/dealhub-version-api-openapi.yml
+  title: Unauthenticated. The `Authorization` token is missing or invalid.
+  media_types: []
+  source_operations:
+  - updateProductCatalogItems
+  occurrences: 1

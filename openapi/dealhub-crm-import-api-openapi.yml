@@ -1,0 +1,532 @@
+openapi: 3.0.3
+info:
+  title: CRM Import API
+  description: 'Public, token-authenticated services that bulk-migrate a tenant''s buyer accounts and their contacts out of
+    the tenant''s connected CRM (Salesforce, HubSpot, or Microsoft Dynamics) and into DealHub.
+
+
+    The caller provides a list of buyer-account CRM ids; for each id the system fetches the matching account and all of its
+    contacts from the CRM and persists them. The import is asynchronous — the start call returns a `request_id` immediately
+    and the work runs in the background. Progress and per-record outcomes are tracked through the status / detail / lookup
+    services, and a partially failed import can be re-run with the retry service.
+
+
+    Accounts that already exist in DealHub (matched by CRM id) and ids not found in the CRM are skipped, so the import is
+    safe to run again.'
+  version: 1.0.0
+servers:
+- url: https://api.dealhub.io
+  description: The base URL for your DealHub instance.
+  variables:
+    your-dealhub-instance:
+      default: app
+      description: Your specific DealHub instance name (e.g., 'app', 'service-eu1').
+security:
+- bearerToken: []
+tags:
+- name: CRM Import
+  description: Bulk migration of buyer accounts and contacts from the tenant's connected CRM into DealHub.
+paths:
+  /api/v1/accounts/crm-import:
+    post:
+      tags:
+      - CRM Import
+      summary: Start CRM Import
+      description: Starts (or joins) a CRM import for the authenticated tenant. Accepts the list of buyer-account CRM ids
+        to migrate; duplicate ids are ignored. If an import is already running for the tenant, its `request_id` is returned
+        instead of starting a new one.
+      operationId: startCrmImport
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartCrmImportRequest'
+            examples:
+              startCrmImportExample:
+                summary: Start an import for two buyer accounts
+                value:
+                  buyer_account_crm_ids:
+                  - 0011t00000ABCDE
+                  - 0011t00000FGHIJ
+      responses:
+        '200':
+          description: Import started (or joined). The work runs in the background.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmImportRequestResponse'
+              examples:
+                startedExample:
+                  summary: Import started
+                  value:
+                    request_id: a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+        '400':
+          description: Invalid payload, missing ids, or the tenant's CRM integration is not supported.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalidFormat:
+                  summary: Invalid payload format
+                  value:
+                    message: 'Invalid payload format. Supported format: JSON'
+                missingIds:
+                  summary: No ids provided
+                  value:
+                    message: No buyer_account_crm_ids provided.
+                unsupportedIntegration:
+                  summary: Unsupported CRM integration
+                  value:
+                    message: 'Unsupported integration: <TYPE>'
+        '403':
+          description: Unauthenticated. The bearer token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                unauthenticated:
+                  value:
+                    message: Unauthenticated
+        '500':
+          description: Unexpected server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                serverError:
+                  value:
+                    message: Internal server error
+  /api/v1/accounts/crm-import/status:
+    get:
+      tags:
+      - CRM Import
+      summary: Get CRM Import Status
+      description: 'Retrieves the summary of an import: aggregate counts plus a flat list of per-id failures with reasons.
+        This is the service to poll. When `request_id` is omitted, the tenant''s most recent import is used.'
+      operationId: getCrmImportStatus
+      parameters:
+      - name: request_id
+        in: query
+        required: false
+        description: ID of the import request. If omitted, the tenant's most-recent import is returned.
+        schema:
+          type: string
+          maxLength: 64
+      responses:
+        '200':
+          description: Import status summary.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmImportStatusResponse'
+              examples:
+                runningExample:
+                  summary: Import in progress with some failures
+                  value:
+                    request_id: a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+                    status: RUNNING
+                    total: 1200
+                    processed: 850
+                    succeeded: 800
+                    failed: 12
+                    skipped: 38
+                    failures:
+                    - crm_id: 0011t00000XYZAB
+                      reason: HubSpot rate limit (429)
+        '403':
+          description: Unauthenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No import found for the tenant (or the given request_id).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                notFound:
+                  value:
+                    message: No CRM import job found.
+        '500':
+          description: Unexpected server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/accounts/crm-import/detail:
+    get:
+      tags:
+      - CRM Import
+      summary: Get CRM Import Detail
+      description: 'Retrieves the full picture of an import: the same summary as the status service plus every buyer account
+        and each of its contacts, each with its own state and (if failed) reason. Use this to see exactly which contacts within
+        an account did or did not migrate. When `request_id` is omitted, the tenant''s most recent import is used.'
+      operationId: getCrmImportDetail
+      parameters:
+      - name: request_id
+        in: query
+        required: false
+        description: ID of the import request. If omitted, the tenant's most-recent import is returned.
+        schema:
+          type: string
+          maxLength: 64
+      responses:
+        '200':
+          description: Full per-account, per-contact import detail.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmImportDetailResponse'
+              examples:
+                detailExample:
+                  summary: One succeeded account with a failed contact, one skipped account
+                  value:
+                    request_id: a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+                    status: COMPLETED
+                    total: 2
+                    processed: 2
+                    succeeded: 1
+                    failed: 0
+                    skipped: 1
+                    accounts:
+                    - crm_id: 0011t00000ABCDE
+                      state: SUCCEEDED
+                      reason: null
+                      contacts:
+                      - crm_id: 0031t00000AAA11
+                        email: a@example.com
+                        state: SUCCEEDED
+                        reason: null
+                      - crm_id: null
+                        email: b@example.com
+                        state: FAILED
+                        reason: duplicate email
+                    - crm_id: 0011t00000FGHIJ
+                      state: SKIPPED
+                      reason: null
+                      contacts: []
+        '403':
+          description: Unauthenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No import found for the tenant (or the given request_id).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                notFound:
+                  value:
+                    message: No CRM import job found.
+        '500':
+          description: Unexpected server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/accounts/crm-import/lookup:
+    get:
+      tags:
+      - CRM Import
+      summary: Lookup CRM Import Id
+      description: 'Resolves a single CRM id within an import: whether it is a buyer account or a contact (or not part of
+        the import), its state, and the failure reason if any. For a contact match, the buyer-account CRM id it belongs to
+        is also returned.'
+      operationId: lookupCrmImportId
+      parameters:
+      - name: crm_id
+        in: query
+        required: true
+        description: The CRM id to resolve (account or contact).
+        schema:
+          type: string
+      - name: request_id
+        in: query
+        required: false
+        description: ID of the import request. If omitted, the tenant's most-recent import is used.
+        schema:
+          type: string
+          maxLength: 64
+      responses:
+        '200':
+          description: Lookup result for the given CRM id.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmImportLookupResponse'
+              examples:
+                contactMatch:
+                  summary: Id resolves to a contact
+                  value:
+                    request_id: a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+                    crm_id: 0031t00000AAA11
+                    type: CONTACT
+                    account_crm_id: 0011t00000ABCDE
+                    state: SUCCEEDED
+                    reason: null
+        '400':
+          description: Missing required crm_id query parameter.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                missingCrmId:
+                  value:
+                    message: Query parameter 'crm_id' is required.
+        '403':
+          description: Unauthenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No import found for the tenant (or the given request_id).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                notFound:
+                  value:
+                    message: No CRM import job found.
+        '500':
+          description: Unexpected server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/accounts/crm-import/retry:
+    post:
+      tags:
+      - CRM Import
+      summary: Retry CRM Import
+      description: 'Re-runs the failed ids of an import (plus any unfinished ids from an interruption) under the same `request_id`.
+        Already-imported accounts are skipped, so retrying is safe. No-op when there is nothing to reprocess. Like Start CRM
+        Import, retry is asynchronous: it re-enqueues the failed ids and returns the `request_id` immediately — poll Get CRM
+        Import Status (same `request_id`) for the outcome as the re-run progresses.'
+      operationId: retryCrmImport
+      parameters:
+      - name: request_id
+        in: query
+        required: false
+        description: ID of the import request to retry. If omitted, the tenant's most-recent import is retried.
+        schema:
+          type: string
+          maxLength: 64
+      responses:
+        '200':
+          description: Retry started (or nothing to reprocess). Same response shape as Start CRM Import.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmImportRequestResponse'
+              examples:
+                retryExample:
+                  value:
+                    request_id: a1b2c3d4-5e6f-7a8b-9c0d-1e2f3a4b5c6d
+        '400':
+          description: The tenant's CRM integration is not supported for import.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                unsupportedIntegration:
+                  value:
+                    message: 'Unsupported integration: <TYPE>'
+        '403':
+          description: Unauthenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: No import found for the tenant (or the given request_id).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                notFound:
+                  value:
+                    message: No CRM import job found.
+        '500':
+          description: Unexpected server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  securitySchemes:
+    bearerToken:
+      type: http
+      scheme: bearer
+      description: DealHub authentication token generated by the CPQ administrator and shared with the consuming application
+        in advance. The tenant is resolved from the token — it is never passed in the request.
+  schemas:
+    StartCrmImportRequest:
+      type: object
+      properties:
+        buyer_account_crm_ids:
+          type: array
+          description: List of buyer-account CRM ids to import.
+          items:
+            type: string
+          minItems: 1
+      required:
+      - buyer_account_crm_ids
+    CrmImportRequestResponse:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: ID of the asynchronous import request. Use it for the status / detail / lookup / retry services, or
+            wait for the `crmImport` completion webhook (same request_id).
+    CrmImportFailure:
+      type: object
+      properties:
+        crm_id:
+          type: string
+          description: The buyer-account CRM id that failed.
+        reason:
+          type: string
+          description: Human-readable failure reason.
+    CrmImportStatusResponse:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: ID of the import request.
+        status:
+          type: string
+          enum:
+          - RUNNING
+          - COMPLETED
+          - INTERRUPTED
+          description: COMPLETED does not imply zero failures — check the failed count.
+        total:
+          type: integer
+          description: Number of (de-duplicated) ids in the import.
+        processed:
+          type: integer
+          description: Number of ids that reached a terminal state (succeeded + failed + skipped).
+        succeeded:
+          type: integer
+          description: Number of accounts imported.
+        failed:
+          type: integer
+          description: Number of ids that errored. See failures for reasons.
+        skipped:
+          type: integer
+          description: Number of ids skipped — already in DealHub, or not found in the CRM.
+        failures:
+          type: array
+          description: Per-id failures. Empty when nothing failed.
+          items:
+            $ref: '#/components/schemas/CrmImportFailure'
+    CrmImportContactResult:
+      type: object
+      properties:
+        crm_id:
+          type: string
+          nullable: true
+          description: Contact CRM id. Null when the contact has no CRM id (identified by email).
+        email:
+          type: string
+          format: email
+          description: Contact email.
+        state:
+          type: string
+          enum:
+          - SUCCEEDED
+          - FAILED
+        reason:
+          type: string
+          nullable: true
+          description: Failure reason (contact level). Present only when state = FAILED.
+    CrmImportAccountResult:
+      type: object
+      properties:
+        crm_id:
+          type: string
+          description: Buyer-account CRM id.
+        state:
+          type: string
+          enum:
+          - SUCCEEDED
+          - FAILED
+          - SKIPPED
+          - PENDING
+        reason:
+          type: string
+          nullable: true
+          description: Failure reason (account level). Present only when state = FAILED.
+        contacts:
+          type: array
+          description: Per-contact results for the account.
+          items:
+            $ref: '#/components/schemas/CrmImportContactResult'
+    CrmImportDetailResponse:
+      allOf:
+      - $ref: '#/components/schemas/CrmImportStatusResponse'
+      - type: object
+        properties:
+          accounts:
+            type: array
+            description: Per buyer-account results.
+            items:
+              $ref: '#/components/schemas/CrmImportAccountResult'
+    CrmImportLookupResponse:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: ID of the import request.
+        crm_id:
+          type: string
+          description: The looked-up CRM id.
+        type:
+          type: string
+          enum:
+          - ACCOUNT
+          - CONTACT
+          - NOT_FOUND
+          description: What the id resolved to.
+        account_crm_id:
+          type: string
+          nullable: true
+          description: For a contact match, the buyer-account CRM id it belongs to. Present only when type = CONTACT.
+        state:
+          type: string
+          nullable: true
+          enum:
+          - SUCCEEDED
+          - FAILED
+          - SKIPPED
+          - PENDING
+          - null
+          description: Empty when type = NOT_FOUND.
+        reason:
+          type: string
+          nullable: true
+          description: Failure reason, if any.
+    ErrorResponse:
+      type: object
+      description: A generic error response. The specific message will vary based on the context.
+      properties:
+        message:
+          type: string
+          example: Unauthenticated
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

@@ -1,0 +1,58 @@
+generated: '2026-08-12'
+method: searched
+source: npm registry search + registry.npmjs.org metadata, pypi.org, rubygems.org,
+  crates.io, repo.packagist.org, search.maven.org, nuget.org, and the DealHub
+  developer portal at https://developers.dealhub.io/
+official_sdk_count: 0
+package_count: 2
+summary: >-
+  DealHub publishes NO first-party client libraries in any public package registry.
+  The developer portal documents raw HTTPS/JSON calls with a bearer token and ships
+  no SDK, no CLI and no code-generation artifact. Because no official SDK exists,
+  no `SDKs` pointer is wired into apis.yml. The two packages below are third-party
+  community publications, recorded for accuracy and explicitly marked
+  `official: false` — note that `dealhub-admin-mcp` sets an npm `author` field
+  reading "DealHub" while its sole maintainer and its git repository belong to an
+  individual account, so the author string must not be read as first-party
+  provenance.
+registries_checked:
+- {registry: npm, query: dealhub, result: 2 third-party packages}
+- {registry: pypi, packages_probed: [dealhub, dealhub-api, subskribe, pysubskribe], result: 404 on all}
+- {registry: rubygems, packages_probed: [dealhub, subskribe], result: 404 on all}
+- {registry: crates.io, packages_probed: [dealhub, subskribe], result: no crate}
+- {registry: packagist, packages_probed: [dealhub/dealhub], result: 404}
+- {registry: maven-central, query: dealhub, result: 0 artifacts}
+- {registry: nuget, query: dealhub, result: 0 packages}
+packages:
+- language: typescript
+  registry: npm
+  name: dealhub-admin-mcp
+  url: https://www.npmjs.com/package/dealhub-admin-mcp
+  install: npx dealhub-admin-mcp
+  version: 1.0.1
+  published: '2026-04-01'
+  official: false
+  repository: https://github.com/vishvick/dealhub-admin-mcp
+  maintainers: [vishvick]
+  description: Model Context Protocol (MCP) server for DealHub administrators —
+    manage DealHub CPQ Versions through Claude and other AI agents. Runs locally and
+    calls the configured DealHub instance's Version API.
+  note: >-
+    Third-party. The npm `author` field is the string "DealHub" but the package's
+    only maintainer is the individual npm account `vishvick` and the git repository
+    is github.com/vishvick/dealhub-admin-mcp, not a DealHub-controlled organization.
+    DealHub's own GitHub organization (github.com/dealhub) has zero public
+    repositories. Not recorded as first-party.
+- language: typescript
+  registry: npm
+  name: '@velocity-bpa/n8n-nodes-dealhub'
+  url: https://www.npmjs.com/package/@velocity-bpa/n8n-nodes-dealhub
+  install: npm install @velocity-bpa/n8n-nodes-dealhub
+  version: 1.0.0
+  published: '2026-04-23'
+  official: false
+  repository: https://github.com/velocity-bpa/n8n-nodes-dealhub
+  maintainers: [velobpa]
+  description: n8n community node for DealHub — manages deals, quotes, proposals and
+    related objects from an n8n workflow.
+  note: Third-party, published by Velocity BPA (info@velocity-bpa.com).

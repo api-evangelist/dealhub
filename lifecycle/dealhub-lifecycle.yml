@@ -1,0 +1,67 @@
+generated: '2026-08-12'
+method: searched
+source: https://developers.dealhub.io/
+versioning:
+  scheme: uri-path
+  current: v2 (quote reads) alongside v1 (documents, opportunities, versions, users,
+    partners, pricing, async)
+  docs: https://developers.dealhub.io/docs/v2-error-reference
+  note: v1 and v2 coexist per-endpoint rather than per-API, and each carries its own error
+    reference page.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  rfc8594: false
+  note: >-
+    DealHub publishes no deprecation policy, no sunset schedule for v1, and no RFC 8594
+    Sunset/Deprecation header support. No operation in any of the eleven OpenAPI documents
+    is marked `deprecated: true`. No `Deprecation` pointer is wired into apis.yml because
+    there is no deprecation policy to point at.
+deprecated_operations: []
+beta_operations:
+- spec: openapi/dealhub-version-api-openapi.yml
+  tag: Product Hierarchy (Beta)
+  operations: [getProductHierarchy, updateProductHierarchy, deleteFromProductHierarchy]
+  docs: https://developers.dealhub.io/docs/managing-product-hierarchy-beta
+- spec: openapi/dealhub-subskribe-api-openapi.yml
+  tag: Experimental
+  operation_count: 21
+  note: The Subskribe billing API groups 21 operations under an "Experimental" tag with no
+    published stability guarantee.
+status_page:
+  url: null
+  published: false
+  probed:
+  - {url: 'https://status.dealhub.io/', status: 000, result: DNS does not resolve}
+  note: >-
+    DealHub publishes no public status page. status.dealhub.io does not resolve and no
+    status link appears on dealhub.io, the developer portal, or the trust center overview.
+    No `StatusPage` pointer is wired into apis.yml.
+sla:
+  url: null
+  uptime_target: null
+  note: No public SLA or uptime commitment. Availability terms sit inside the Enterprise
+    Subscription Agreement (MSA), which is a contract page rather than a published SLA.
+  contract: https://dealhub.io/enterprise-subscription-agreement-msa/
+changelog:
+  url: null
+  published: false
+  note: See changelog/dealhub-changelog.yml — no dated developer changelog is published.
+known_issues:
+- issue: 'Asynchronous requests carrying more than roughly 500 SKUs may remain stuck in
+    `queued` status and never advance to `in-progress`.'
+  status: open, documented by DealHub as under investigation
+  workaround: Batch catalog pushes below 500 SKUs per request and monitor each request_id
+    individually.
+  source: https://developers.dealhub.io/docs/handling-asynchronous-requests
+docs_freshness:
+  note: The ReadMe hub stamps an updatedAt date on each page. Observed range across the
+    pages harvested runs from 2026-01-19 to 2026-07-20, so the documentation is actively
+    maintained even though no changelog aggregates the changes.
+  observed:
+  - {page: webhooks-overview, updated: '2026-07-20'}
+  - {page: handling-asynchronous-requests, updated: '2026-06-03'}
+  - {page: authentication-overview, updated: '2026-03-05'}
+  - {page: introduction-to-dealhub-apis, updated: '2026-01-19'}

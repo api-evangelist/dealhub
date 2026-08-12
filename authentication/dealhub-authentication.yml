@@ -1,0 +1,44 @@
+generated: '2026-08-12'
+method: derived
+source: openapi/dealhub-callout-api-openapi.yml, openapi/dealhub-crm-api-openapi.yml, openapi/dealhub-crm-import-api-openapi.yml,
+  openapi/dealhub-external-query-openapi.yml, openapi/dealhub-headless-api-openapi.yml, openapi/dealhub-partner-api-openapi.yml,
+  openapi/dealhub-pricing-api-openapi.yml, openapi/dealhub-quote-api-openapi.yml, openapi/dealhub-subskribe-api-openapi.yml,
+  openapi/dealhub-user-api-openapi.yml, openapi/dealhub-version-api-openapi.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: Bearer token authentication. The token is provided by the DealHub admin during
+    Callout configuration.
+  sources:
+  - openapi/dealhub-callout-api-openapi.yml
+  - openapi/dealhub-crm-api-openapi.yml
+  - openapi/dealhub-crm-import-api-openapi.yml
+  - openapi/dealhub-external-query-openapi.yml
+  - openapi/dealhub-headless-api-openapi.yml
+  - openapi/dealhub-partner-api-openapi.yml
+  - openapi/dealhub-pricing-api-openapi.yml
+  - openapi/dealhub-quote-api-openapi.yml
+  - openapi/dealhub-user-api-openapi.yml
+  - openapi/dealhub-version-api-openapi.yml
+- name: basicAuth
+  type: http
+  scheme: basic
+  description: Basic authentication with username and password. Credentials are provided by
+    the DealHub admin during Callout configuration.
+  sources:
+  - openapi/dealhub-callout-api-openapi.yml
+  - openapi/dealhub-external-query-openapi.yml
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: X-API-Key
+  sources:
+  - openapi/dealhub-subskribe-api-openapi.yml

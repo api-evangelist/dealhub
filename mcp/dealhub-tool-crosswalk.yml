@@ -1,0 +1,932 @@
+generated: '2026-08-12'
+method: derived
+source: openapi/ (all 11 DealHub OpenAPI documents) + mcp/dealhub-mcp.yml
+status: unbound
+note: This crosswalk is emitted because DealHub has BOTH an OpenAPI surface (616 operations across 11 documents)
+  and a live MCP endpoint — but the two cannot be bound, and that unbindability is the finding. The only MCP endpoint
+  DealHub serves, https://developers.dealhub.io/mcp, returns -32001 "Authorization required" to an anonymous tools/list,
+  and it is the ReadMe platform documentation MCP server rather than a DealHub-authored server over the CPQ or billing
+  APIs. DealHub separately markets "DealHub Native MCP" on its AI page and lists "MCP Extensibility" on its pricing
+  page while publishing no endpoint, no tool catalog and no MCP documentation. crosswalk[] is therefore EMPTY on
+  purpose — mapping a tool set nobody has published would be fabrication. rest_only[] below is the complete, real
+  REST capability surface that a DealHub MCP server would have to cover, grouped by the tag each operation actually
+  carries in the published spec, so the gap is measurable the day a tool list appears.
+surfaces:
+  openapi:
+    documents: 11
+    operations: 616
+    location: openapi/
+    hosts:
+    - https://api.dealhub.io
+    - https://api.app.subskribe.com
+    gated: false
+    harvest_note: Specs were not served at a downloadable URL — /openapi.json, /openapi.yaml and /swagger.json all
+      return the ReadMe HTML shell. Each document was extracted verbatim from the embedded OpenAPI definition the
+      ReadMe hub ships inside its reference pages.
+  graphql:
+    endpoint: null
+    present: false
+  mcp:
+    url: https://developers.dealhub.io/mcp
+    present: true
+    gated: true
+    tools_list_status: 401
+    error: '{"jsonrpc":"2.0","error":{"code":-32001,"message":"Authorization required"},"id":null}'
+    provider: ReadMe-hosted documentation MCP server
+    covers_business_apis: false
+crosswalk: []
+mcp_only: []
+rest_only:
+- capability: Callouts
+  spec: openapi/dealhub-callout-api-openapi.yml
+  api: Callout API
+  operation_count: 1
+  operations:
+  - getPricing
+- capability: CRM Integration
+  spec: openapi/dealhub-crm-api-openapi.yml
+  api: CRM API
+  operation_count: 5
+  operations:
+  - authenticateUser
+  - createQuote
+  - openQuote
+  - viewMyOpportunities
+  - viewQuotesForOpportunity
+- capability: CRM Import
+  spec: openapi/dealhub-crm-import-api-openapi.yml
+  api: CRM Import API
+  operation_count: 5
+  operations:
+  - getCrmImportDetail
+  - getCrmImportStatus
+  - lookupCrmImportId
+  - retryCrmImport
+  - startCrmImport
+- capability: External Query
+  spec: openapi/dealhub-external-query-openapi.yml
+  api: External Query
+  operation_count: 1
+  operations:
+  - fulfillExternalQuery
+- capability: Headless Quoting
+  spec: openapi/dealhub-headless-api-openapi.yml
+  api: Headless API
+  operation_count: 7
+  operations:
+  - generateQuote
+  - generateQuote-1
+  - getQuoteId
+  - publishQuote
+  - signQuoteExternally
+  - simulateQuote
+  - submitQuote
+- capability: Partner Integration
+  spec: openapi/dealhub-partner-api-openapi.yml
+  api: Partner API
+  operation_count: 4
+  operations:
+  - authenticatePartnerUser
+  - createPartnerQuote
+  - openPartnerOpportunity
+  - openPartnerQuote
+- capability: Get Products Information
+  spec: openapi/dealhub-pricing-api-openapi.yml
+  api: Pricing API
+  operation_count: 2
+  operations:
+  - getProductsParameters
+  - getProductsPricing
+- capability: Quote Management
+  spec: openapi/dealhub-quote-api-openapi.yml
+  api: Quote API
+  operation_count: 5
+  operations:
+  - createOpportunity
+  - getDealRoomSigners
+  - getQuoteById
+  - getQuoteDocument
+  - getQuotes
+- capability: Billing
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 49
+  operations:
+  - addAndApplyPayment
+  - addAutomatedInvoiceRule
+  - addBillingSchedule
+  - addSubscriptionChargeAlias
+  - applyCreditMemo
+  - createBulkInvoiceRun
+  - createInvoiceDocument
+  - deleteBillingSchedule
+  - deleteInvoice
+  - deleteSubscriptionChargeAlias
+  - deleteVoidedInvoice
+  - emailInvoice
+  - generateInvoice
+  - getAccountReceivableContact
+  - getApplicablePaymentBankAccountsForInvoicePayment
+  - getAutomatedInvoiceRule
+  - getAutomatedInvoiceRuleByInternalId
+  - getAutomatedInvoiceRules
+  - getBillingSchedules
+  - getBulkInvoiceRun
+  - getBulkInvoiceRunItems
+  - getCanDeleteInvoice
+  - getDunningSetting
+  - getInvoice
+  - getInvoiceBalance
+  - getInvoiceDocumentPdf
+  - getInvoices
+  - getRawInvoiceDocumentJson
+  - getSettlementApplication
+  - getSettlementApplications
+  operations_truncated: true
+- capability: Accounts
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 17
+  operations:
+  - addAccount
+  - addAccountContact
+  - addErpDetails
+  - deleteAccount
+  - deleteAccountContact
+  - getAccount
+  - getAccountContact
+  - getAccountContacts
+  - getAccountMetrics
+  - getAccountPaymentConfig
+  - getAccounts
+  - getPaymentMethod
+  - importCrmAccount
+  - updateAccount
+  - updateAccountContact
+  - updateAccountCrmId
+  - upsertAccountPaymentConfig
+- capability: Intelligent Sales Room
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 48
+  operations:
+  - acceptSalesRoom
+  - acceptSalesRoom_1
+  - accessViaShareLink
+  - activateSalesRoom
+  - addAccountContactViaShareLink
+  - createCompositeOrderDocumentForSalesRoom
+  - createOrderDocumentForSalesRoom
+  - createSalesRoom
+  - createWidget
+  - deleteFile
+  - deleteWidget
+  - downloadImageViaShareLink
+  - extractTheme
+  - generateAIContent
+  - getAIContentViaShareLink
+  - getAccountContactViaShareLink
+  - getActivityLogs
+  - getCustomFieldsViaShareLink
+  - getCustomFields_1
+  - getEngagementSummary
+  - getFileDownloadUrl
+  - getFileDownloadUrlViaShareLink
+  - getFiles
+  - getFilesViaShareLink
+  - getOrderDocument
+  - getOrderMetadata
+  - getSalesRoomById
+  - getSalesRoomByOrderId
+  - getSalesRoomViaShareLink
+  - getShareLinkAccesses
+  operations_truncated: true
+- capability: Accounting
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 7
+  operations:
+  - getAccountingEvents
+  - getCurrentAccountingPeriod
+  - getJournalEntries
+  - getJournalEntriesSummary
+  - getLedgerAccounts
+  - getRunningBalances
+  - specifyCurrentAccountingPeriod
+- capability: AI Agent
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 7
+  operations:
+  - chatMessages
+  - chatResponse
+  - chatResponseAsync
+  - createAgentSession
+  - generateSubscriptionSummary
+  - generateZeppaArtifact
+  - getAgentSession
+- capability: Experimental
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 21
+  operations:
+  - addUsecase
+  - buildOrderFromAnswers
+  - chatMessages
+  - chatResponse
+  - chatResponseAsync
+  - createAgentSession
+  - deleteUsecase
+  - explainProration
+  - explainProrationAsync
+  - fetchNextQuestion
+  - fetchNextQuestions
+  - generateOrderSummary
+  - generateSubscriptionSummary
+  - generateZeppaArtifact
+  - getAgentSession
+  - getAnswersFromAi
+  - getUsecase
+  - getUsecaseScript
+  - listUsecases
+  - putQScript
+  - updateUsecase
+- capability: AI Summary
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 3
+  operations:
+  - explainProration
+  - explainProrationAsync
+  - generateOrderSummary
+- capability: Integrations
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 43
+  operations:
+  - addIntegration
+  - addIntegration_1
+  - authorizationCodeCallback
+  - authorizationCodeCallback_1
+  - completeIntegration
+  - deleteIntegration
+  - deleteIntegration_1
+  - deleteIntegration_2
+  - getAccountById
+  - getAccountsByName
+  - getCrmContactsByAccountId
+  - getIntegration
+  - getIntegrationByTenant
+  - getIntegration_1
+  - getIntegration_2
+  - getOpportunitiesByAccountId
+  - importAccount
+  - importAccountFromHubspot
+  - initiateIntegration
+  - initiateIntegration_1
+  - initiateIntegration_2
+  - integrate
+  - opportunityNameChangeNotification
+  - ping
+  - reauthenticateIntegration
+  - setupHubSpot
+  - syncAccountToSalesforce
+  - syncDeletedOrdersToSalesforce
+  - syncEsignDetailsForOrderToHubSpot
+  - syncHubspotSubscription
+  operations_truncated: true
+- capability: Authentication
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 8
+  operations:
+  - addSamlIntegration
+  - createApiKey
+  - deleteSamlIntegration
+  - getAllApiKeys
+  - getApiKeyById
+  - getSamlIntegration
+  - revokeApiKey
+  - revokeApiKeyById
+- capability: Approvals
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 23
+  operations:
+  - addApprovalFlow
+  - addApprovalRole
+  - addApprovalSegment
+  - deleteApprovalFlow
+  - deleteApprovalRole
+  - deleteApprovalSegment
+  - getAllImportDetails
+  - getApprovalFlowById
+  - getApprovalFlows
+  - getApprovalMatrixAsCsv
+  - getApprovalRoleById
+  - getApprovalRoles
+  - getApprovalSegmentById
+  - getApprovalSegments
+  - getImportDetailsById
+  - getImportPreview
+  - getImportResult
+  - getOrderApprovalHistory
+  - submitApprovalMatrixCSV
+  - updateApprovalFlow
+  - updateApprovalRole
+  - updateApprovalSegment
+  - uploadApprovalMatrixCSV
+- capability: Attachments
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 6
+  operations:
+  - addAttachmentToAccount
+  - deleteAttachmentFromAccount
+  - getAttachment
+  - getMaximumNumberOfAttachmentsPerAccount
+  - listAccountAttachments
+  - modifyAttachment
+- capability: Usage
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 11
+  operations:
+  - addAndApplyBulkPaymentsCsv
+  - addUsage
+  - bankTransactionsMatch
+  - getUsageAggregatesForSubscription
+  - getUsageArrivalTimeCheckpoint
+  - getUsageStatsForAllSubscriptionsCsv
+  - getUsageStatsForSubscription
+  - getUsageStatsForSubscriptionCsv
+  - getUsageStatsForSubscriptionPdf
+  - performOnDemandUsageAggregation
+  - uploadSubscriptionUsageCSV
+- capability: BankTransactions
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 3
+  operations:
+  - bankTransactionsCsv
+  - deleteBankTransaction
+  - getBankTransactionPotentialInvoices
+- capability: Product Catalog
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 34
+  operations:
+  - activatePlan
+  - addCharge
+  - addPlan
+  - addProduct
+  - addProductCategory
+  - backfillRevRecFields
+  - deactivatePlan
+  - deleteCharge
+  - deletePlan
+  - deleteProduct
+  - deleteProductCategory
+  - deprecatePlan
+  - duplicatePlan
+  - exportProductCatalog
+  - getCharge
+  - getChargeLedgerAccounts
+  - getPlan
+  - getPlans
+  - getPlansFilterByCustomFields
+  - getProduct
+  - getProductCategories
+  - getProductCategory
+  - getProducts
+  - getReplacedPlans
+  - getRevRecFieldsAsCsv
+  - mapLedgerAccountsToCharge
+  - patchCharge
+  - reactivatePlan
+  - updateCharge
+  - updatePlan
+  operations_truncated: true
+- capability: Orders
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 29
+  operations:
+  - addOrder
+  - createCompositeOrderDocument
+  - createOrderDocument
+  - deleteCompositeOrder
+  - deleteOpportunityByCrmId
+  - deleteOrder
+  - executeOrder
+  - executeOrder_1
+  - forceExecuteOrder
+  - getCompositeOrder
+  - getCompositeOrderDocument
+  - getCustomBillingSchedule
+  - getOpportunities
+  - getOpportunityByCrmOpportunityId
+  - getOpportunityByOpportunityId
+  - getOrder
+  - getOrderDocumentDoc
+  - getOrderDocumentDocx
+  - getOrderDocument_1
+  - getOrderLineMetrics
+  - getOrderMetrics
+  - getOrders
+  - getOrdersByCrmOpportunityId
+  - getSpecificOrderDocument
+  - rebaseAmendment
+  - updateCompositeOrderStatus
+  - updateOrder
+  - updateOrderAttributes
+  - updateOrderStatus
+- capability: Credit Memo
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 13
+  operations:
+  - convertNegativeDraftInvoice
+  - createCreditMemoDocument
+  - createStandaloneCreditMemo
+  - deleteCreditMemo
+  - getCreditBalance
+  - getCreditMemo
+  - getCreditMemoConfiguration
+  - getCreditMemoDocumentPdf
+  - getCreditMemoForAccount
+  - postCreditMemo
+  - updateCreditMemoConfiguration
+  - updateDraftCreditMemo
+  - voidCreditMemo
+- capability: CRM field mapping
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 7
+  operations:
+  - getAllImportDetails_1
+  - getCrmFieldMappingAsCsv
+  - getImportDetailsById_1
+  - getImportPreview_1
+  - getImportResult_1
+  - submitCrmFieldMappingImport
+  - uploadCrmFieldMappingCsv
+- capability: Custom Field
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 9
+  operations:
+  - createCustomFieldDefinition
+  - deleteCustomFieldDefinition
+  - forceUpdateCustomField
+  - forceUpdateCustomFields
+  - getCustomFieldDefinitions
+  - getCustomFields
+  - updateCustomField
+  - updateCustomFieldDefinition
+  - updateCustomFields
+- capability: Customization
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 4
+  operations:
+  - addOrderCreationCustomization
+  - addSelectionCustomization
+  - getOrderCreationCustomization
+  - getSelectionCustomization
+- capability: Deal Pulse
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 3
+  operations:
+  - getAllDealPulses
+  - getDealPulse
+  - trackDealPulseEvent
+- capability: Discounts
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 6
+  operations:
+  - addDiscount
+  - deleteDiscount
+  - getDiscount
+  - getDiscounts
+  - updateDiscount
+  - updateDiscountStatus
+- capability: Documents
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 8
+  operations:
+  - addDocumentTemplate
+  - deleteDocumentTemplate
+  - getDocumentTemplate
+  - getDocumentTemplateVersion
+  - getDocumentTemplateVersions
+  - getDocumentTemplates
+  - updateDocumentTemplate
+  - updateDocumentTemplateStatus
+- capability: Email
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 4
+  operations:
+  - addEmailSetting
+  - deleteEmailSetting
+  - getEmailSettings
+  - updateEmailSetting
+- capability: Entities
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 6
+  operations:
+  - create
+  - deleteEntity
+  - getEntities
+  - getEntityById
+  - getLogo
+  - uploadLogo
+- capability: ERP
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 9
+  operations:
+  - getInvoiceErpSyncData
+  - getPaymentErpSyncData
+  - isSyncInvoiceToErpEnabled
+  - processDeleteTasks
+  - processSyncTasks
+  - syncCreditMemoToErp
+  - syncInvoiceToErp
+  - syncInvoicesToErp
+  - syncVoidInvoiceToErp
+- capability: Import
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 11
+  operations:
+  - createFlatfileWorkbook
+  - getAccountContactsInImportFormat
+  - getAmendmentOrderExportInImportFormat
+  - getAvailableSchemas
+  - getCatalogDataInImportFormat
+  - getDataImportById
+  - getDataImports
+  - getImportResult_2
+  - getNewOrderExportInImportFormat
+  - processImport
+  - validateMultiPartFileImport
+- capability: MetricsReporting
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 4
+  operations:
+  - addExternalArrMetrics
+  - getExternalArrMetrics
+  - getExternalArrMetrics_1
+  - populateArrMetricsForSubscription
+- capability: Notifications
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 4
+  operations:
+  - addTargetAndEventsSubscriptions
+  - getAllNotificationSubscriptionsForTenant
+  - subscribeExistingNotificationTargetToEvent
+  - unsubscribeTargetOrEvent
+- capability: Opportunity
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 4
+  operations:
+  - createOpportunity
+  - getOpportunitiesByAccountCrmId
+  - resetOpportunityClosedState
+  - updateOpportunity
+- capability: Payments
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 21
+  operations:
+  - canDeletePayment
+  - deleteBankAccount
+  - deletePayment
+  - deletePaymentRetryConfig
+  - getAccountPayment
+  - getAccountPaymentManagementLink
+  - getBankAccount
+  - getLedgerAccountsForPaymentBankAccount
+  - getPayment
+  - getPaymentBalance
+  - getPaymentConfiguration
+  - getPaymentIntegrations
+  - getPaymentRetryConfig
+  - getPayments
+  - importStripePaymentMethodCSV
+  - manualPaymentRetry
+  - processPaymentForInvoice
+  - updatePaymentConfiguration
+  - upsertBankAccount
+  - upsertPaymentRetryConfig
+  - voidPayment
+- capability: Health
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 1
+  operations:
+  - ping_1
+- capability: Platform Feature
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 1
+  operations:
+  - isAccountingFeatureEnabled
+- capability: Settings
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 44
+  operations:
+  - activateUnitOfMeasure
+  - addBillingCycleDefinition
+  - addTaxRate
+  - addTaxRateStrategy
+  - addTermSection
+  - addUnitOfMeasure
+  - deleteAllTaxRateStrategiesById
+  - deleteTaxRate
+  - deleteTaxRateStrategy
+  - deleteTenantUICustomizationConfig
+  - deleteTermSection
+  - deleteUnitOfMeasure
+  - deprecateUnitOfMeasure
+  - getAutoReplacePlans
+  - getBillingCycleDefinition
+  - getBillingCycleDefinitions
+  - getPaymentTermSettings
+  - getSupportedCurrencies
+  - getTaxRate
+  - getTaxRateStrategies
+  - getTaxRateStrategiesById
+  - getTaxRateStrategy
+  - getTaxRates
+  - getTenant
+  - getTenantLogo
+  - getTenantSetting
+  - getTenantUICustomizationConfig
+  - getTermSection
+  - getTermSections
+  - getUnitsOfMeasure
+  operations_truncated: true
+- capability: Prismatic
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 6
+  operations:
+  - generateMarketplaceJwt
+  - getAppUrl
+  - getSchema
+  - isSyncInvoiceEnabled
+  - syncInvoice
+  - syncInvoices
+- capability: RateCard
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 6
+  operations:
+  - addRateCardCsv
+  - getPriceAttributesCsv
+  - getRateCardPriceTable
+  - getRateCards
+  - importPriceAttributes
+  - updateRateCardCsv
+- capability: Refunds
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 3
+  operations:
+  - createAndApplyRefund
+  - getRefundById
+  - getRefunds
+- capability: Reports
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 4
+  operations:
+  - generate
+  - getPredefinedReportDefs
+  - getReportOutput
+  - run
+- capability: Revenue Enablement
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 9
+  operations:
+  - areAccountingEventsPresentForAllTransactionTypes
+  - areAllChargesTaggedWithGLAccounts
+  - areAllChargesTaggedWithRevenueRules
+  - deleteAllAccountingAndRevenueRecognitionData
+  - doAllOrderLinesHaveSchedules
+  - doesOpenAccountingPeriodExist
+  - enableRevenueRecognition
+  - getRevenueEnablementProgress
+  - upsertRevenueEnablementProgress
+- capability: Revenue Recognition
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 11
+  operations:
+  - addRecognitionRule
+  - createBulkRevenueRecognition
+  - createRecognitionEvent
+  - deleteRule
+  - getBulkRevenueRecognition
+  - getBulkRevenueRecognitionItems
+  - getRecognitionEventsBySubscriptionIdChargeId
+  - getRecognitionRuleById
+  - getRecognitionRuleById_1
+  - getRevenueWaterfall
+  - uploadCompletionEvents
+- capability: Subscriptions
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 21
+  operations:
+  - amendSubscription
+  - cancelSubscription
+  - deleteSubscription
+  - getAllChangeEventsForSubscription
+  - getDraftAmendment
+  - getDraftRenewal
+  - getSubscriptionBillingPeriods
+  - getSubscriptionById
+  - getSubscriptionById_1
+  - getSubscriptionLines
+  - getSubscriptionMetrics
+  - getSubscriptions
+  - getSubscriptionsWithDetail
+  - getSubscriptions_1
+  - renewSubscription
+  - revertSubscription
+  - sendTestNotificationsForSubscription
+  - subscriptionModifiable
+  - subscriptionReversible
+  - updateRenewalOpportunity
+  - updateSubscription
+- capability: TemplateScript
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 3
+  operations:
+  - addTemplateScript
+  - disableTemplateScript
+  - getTemplateScripts
+- capability: Jobs
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 4
+  operations:
+  - cancelTenantJob
+  - dispatch
+  - executeTenantJob
+  - getTenantJob
+- capability: Foreign Exchange
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 4
+  operations:
+  - getExchangeRateAsOf
+  - getLatestExchangeRates
+  - refreshExchangeRatePair
+  - refreshExchangeRates
+- capability: Users
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 15
+  operations:
+  - acceptTermsForCurrentUser
+  - addUser
+  - addUserGroup
+  - deleteUserGroup
+  - disableUser
+  - enableUser
+  - getUser
+  - getUserGroup
+  - getUserGroups
+  - getUsers
+  - resendEmailForExistingUser
+  - updateUser
+  - updateUserGroup
+  - updateUserSSOConfig
+  - uploadCSV
+- capability: Account
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 9
+  operations:
+  - addCpqSourcedAccount
+  - addCpqSourcedAccountContact
+  - getCpqSourcedAccount
+  - getCpqSourcedAccountContact
+  - getCpqSourcedAccountContacts
+  - getCpqSourcedAccounts
+  - getCpqSourcedAccountsByUvcaCfacId
+  - updateCpqSourcedAccount
+  - updateCpqSourcedAccountContact
+- capability: Invoice
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 1
+  operations:
+  - getCpqSourcedAccountInvoices
+- capability: Order
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 3
+  operations:
+  - getMemoizedInvoiceItems
+  - getOrder_1
+  - postBillableOrder
+- capability: Search
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 2
+  operations:
+  - search
+  - searchPost
+- capability: Product Provisioning
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 1
+  operations:
+  - syncSkus
+- capability: Tenant
+  spec: openapi/dealhub-subskribe-api-openapi.yml
+  api: Subskribe API
+  operation_count: 1
+  operations:
+  - createRevHubTenant
+- capability: User Management
+  spec: openapi/dealhub-user-api-openapi.yml
+  api: User API
+  operation_count: 5
+  operations:
+  - createOrUpdateUsersV2
+  - getUserById
+  - getUserByLogin
+  - getUsers
+  - updateUsersV1
+- capability: Version Management
+  spec: openapi/dealhub-version-api-openapi.yml
+  api: Version API
+  operation_count: 5
+  operations:
+  - activateVersion
+  - duplicateVersion
+  - getVersionById
+  - getVersionByName
+  - getVersions
+- capability: Playbook
+  spec: openapi/dealhub-version-api-openapi.yml
+  api: Version API
+  operation_count: 2
+  operations:
+  - exportPlaybookData
+  - getGenerateQuoteTemplate
+- capability: Product Catalog
+  spec: openapi/dealhub-version-api-openapi.yml
+  api: Version API
+  operation_count: 8
+  operations:
+  - deleteAllProducts
+  - deleteProductsBySku
+  - extractProductsExcel
+  - getProductCatalog
+  - getProductsBySku
+  - getVersionProducts
+  - updateProductCatalogItems
+  - uploadProductCatalog
+- capability: Product Hierarchy (Beta)
+  spec: openapi/dealhub-version-api-openapi.yml
+  api: Version API
+  operation_count: 3
+  operations:
+  - deleteFromProductHierarchy
+  - getProductHierarchy
+  - updateProductHierarchy
+- capability: Asynchronous Operations
+  spec: openapi/dealhub-version-api-openapi.yml
+  api: Version API
+  operation_count: 2
+  operations:
+  - getAsyncRequestStatus
+  - getAsyncRequestSummary
+coverage:
+  tools_named: 0
+  tools_bound: 0
+  mcp_only: 0
+  rest_operations_total: 616
+  rest_operations_with_a_tool: 0
+  rest_operation_coverage_pct: 0.0
+  capability_groups: 64
+  note: capability_groups counts tag groups; an operation carrying two tags appears in two groups, so the sum of
+    operation_count across rest_only exceeds the unique operation total.

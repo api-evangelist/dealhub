@@ -1,0 +1,97 @@
+# DealHub
+
+> DealHub is an agentic quote-to-revenue platform unifying CPQ, CLM, DealRoom digital
+> sales rooms, subscription management, usage-based billing and revenue recognition.
+> It publishes eleven OpenAPI 3.0.3 contracts covering 616 operations across
+> api.dealhub.io (CPQ) and api.app.subskribe.com (billing, acquired with Subskribe),
+> plus an 18-event webhook catalog. Authentication is a static admin-issued bearer
+> token; there is no OAuth, no idempotency contract, and no published rate limits.
+
+Provenance: generated 2026-08-12 by the API Evangelist enrichment pipeline from
+apis.yml and the artifacts in this repository. DealHub's own developer llms.txt is
+saved verbatim alongside this file as dealhub-developer-llms.txt (fetched from
+https://developers.dealhub.io/llms.txt, HTTP 200, 2026-08-12).
+
+## APIs
+- [DealHub Quote API](https://developers.dealhub.io/docs/quote-overview): Read quotes,
+  quote documents and DealRoom signers; create renewal opportunities. Base
+  https://api.dealhub.io
+- [DealHub Headless Quote API](https://developers.dealhub.io/docs/headless-api-overview):
+  Simulate, generate, submit, publish and externally sign quotes from a backend.
+- [DealHub CRM API](https://developers.dealhub.io/docs/overview-and-flow-of-events):
+  Authenticate a CRM user with a 60-second one-time token and redirect into a quote.
+- [DealHub CRM Import API](https://developers.dealhub.io/docs/crm-import-overview):
+  Asynchronous import of buyer accounts and contacts from the connected CRM.
+- [DealHub User API](https://developers.dealhub.io/docs/user-api-overview): Read and
+  upsert DealHub users, keyed on an immutable login.
+- [DealHub Partner API](https://developers.dealhub.io/docs/partner-api-overview): PRM
+  integration — authenticate a partner user and redirect into DealHub CPQ.
+- [DealHub Pricing API](https://developers.dealhub.io/docs/retrieving-product-data):
+  Pricing parameters and calculated price per SKU.
+- [DealHub Version API](https://developers.dealhub.io/docs/version-api-overview):
+  Versions, playbooks, product catalog, product hierarchy, async request tracking.
+- [DealHub Subskribe API](https://developers.dealhub.io/docs/orders-and-subscriptions):
+  Subscriptions, orders, usage, invoicing, payments and revenue recognition. Base
+  https://api.app.subskribe.com — 561 operations.
+- [DealHub External Query](https://developers.dealhub.io/docs/external-query-overview):
+  Inbound callback contract the CUSTOMER implements so DealHub can pull external data
+  into a quote's playbook.
+- [DealHub Callout API](https://developers.dealhub.io/docs/callouts-api-overview):
+  Inbound callback contract the CUSTOMER implements so DealHub can pull real-time
+  prices from an ERP during quote generation.
+
+## Specs
+- openapi/dealhub-quote-api-openapi.yml
+- openapi/dealhub-headless-api-openapi.yml
+- openapi/dealhub-crm-api-openapi.yml
+- openapi/dealhub-crm-import-api-openapi.yml
+- openapi/dealhub-user-api-openapi.yml
+- openapi/dealhub-partner-api-openapi.yml
+- openapi/dealhub-pricing-api-openapi.yml
+- openapi/dealhub-version-api-openapi.yml
+- openapi/dealhub-subskribe-api-openapi.yml
+- openapi/dealhub-external-query-openapi.yml
+- openapi/dealhub-callout-api-openapi.yml
+
+## Agent surface
+- mcp/dealhub-mcp.yml: A live MCP endpoint at https://developers.dealhub.io/mcp
+  returns "Authorization required" to an anonymous tools/list. It is the ReadMe
+  documentation MCP server, not a DealHub-authored server over the business APIs.
+  DealHub markets "Native MCP" without publishing an endpoint.
+- mcp/dealhub-tool-crosswalk.yml: The 616-operation REST surface a DealHub MCP server
+  would need to cover, grouped by capability. crosswalk[] is empty because no tool
+  list is published.
+- skills/_index.yml: three generated agent skills grounded in verified operationIds.
+- No A2A agent card is served on any DealHub host.
+
+## Runtime semantics
+- authentication/dealhub-authentication.yml: bearer token (CPQ) + X-API-Key (billing).
+- conventions/dealhub-conventions.yml: offset/limit pagination (default 50), `feature`
+  opt-in sparse fieldsets, request_id async pattern, NO idempotency key.
+- errors/dealhub-problem-types.yml: proprietary JSON errors, not RFC 9457. 403 for
+  auth failure, 400 for a missing entity.
+- rate-limits/dealhub-rate-limits.yml: no published limits, no headers, no 429.
+- asyncapi/dealhub-webhooks.yml: 18 documented events; no AsyncAPI document.
+- lifecycle/dealhub-lifecycle.yml: v1 and v2 coexist; no deprecation policy, no status
+  page, no changelog.
+- data-model/dealhub-data-model.yml: 426 entities derived from the spec $ref graph.
+
+## Docs
+- [Developer portal](https://developers.dealhub.io/)
+- [Introduction to DealHub APIs](https://developers.dealhub.io/docs/introduction-to-dealhub-apis)
+- [Authentication](https://developers.dealhub.io/docs/authentication-overview)
+- [Error reference (v2)](https://developers.dealhub.io/docs/v2-error-reference)
+- [Error reference (v1)](https://developers.dealhub.io/docs/v1-error-reference)
+- [Webhooks overview](https://developers.dealhub.io/docs/webhooks-overview)
+- [Handle asynchronous requests](https://developers.dealhub.io/docs/handling-asynchronous-requests)
+- [DealHub llms.txt (verbatim)](https://developers.dealhub.io/llms.txt)
+
+## Company
+- [Website](https://dealhub.io/)
+- [Security assurance](https://dealhub.io/security/) — ISO 42001, ISO 27701, ISO 27001,
+  ISO 22301, SOC 1 Type II, SOC 2 Type II, CSA STAR Level 1, STAR for AI Level 1,
+  GDPR, CCPA
+- [Trust center](https://trust.dealhub.io/)
+- [Pricing](https://dealhub.io/pricing/) — no published prices; contact sales
+- [Blog](https://dealhub.io/blog/)
+- [Support](https://support.dealhub.io/support/home/)

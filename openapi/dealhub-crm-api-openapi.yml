@@ -1,0 +1,725 @@
+openapi: 3.0.3
+info:
+  title: CRM API
+  description: 'This API allows external CRM systems to integrate with DealHub''s CPQ functionality.
+
+    The primary flow involves two steps:
+
+    1. A server-to-server authentication call to get a short-lived, one-time access token.
+
+    2. A client-side call using that token to a specific DealHub endpoint (e.g., to create, open, or view a quote). This call
+    returns a URL.
+
+    3. The client application (CRM) then redirects the user''s browser to the returned URL, providing a seamless transition
+    into the DealHub UI.'
+  version: 1.0.0
+servers:
+- url: https://api.dealhub.io
+  description: The base URL for your DealHub instance.
+  variables:
+    your-dealhub-instance:
+      default: app
+      description: Your specific DealHub instance name (e.g., 'app', 'service-eu1').
+security:
+- secretToken: []
+- oneTimeAccessToken: []
+tags:
+- name: CRM Integration
+  description: Endpoints for integrating external CRM systems with DealHub.
+paths:
+  /api/v1/user/authenticate:
+    post:
+      tags:
+      - CRM Integration
+      summary: Authenticate User
+      description: Authenticates a user from an external CRM and returns a short-lived (60 seconds) one-time access token.
+        This is a server-to-server call that uses a long-lived secret token for authorization. If the user does not exist
+        in DealHub, a new user with a `Sales` role is created.
+      operationId: authenticateUser
+      security:
+      - secretToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthenticationRequest'
+            examples:
+              authenticateUserExample:
+                summary: Authenticate a user
+                value:
+                  user_information:
+                    external_user_id: qwerty1234356
+                    login: david.s@domain.com
+                    email: david.s@domain.com
+                    name: David Solomon
+                    position: Sales
+                    phone: 03-12345678
+                    mobile: 058-12345678
+                    fax: 03-12345679
+                    company: Acme Partnerl
+                    street: 12nd Broadway
+                    city: New York
+                    state: NY
+                    country: USA
+                    postal_code: '1234567'
+                    user_manager_login: manager@domain.com
+      responses:
+        '200':
+          description: Authentication successful.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthenticationResponse'
+              examples:
+                authSuccess:
+                  summary: Successful authentication
+                  value:
+                    access_token: 4D114DAD97361C84B154A828FF991
+                    dealhub_user_id: '555455484454'
+                    errors: []
+        '403':
+          description: Unauthenticated. The secret token is missing or invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1.1/quote/create:
+    post:
+      tags:
+      - CRM Integration
+      summary: Create Quote
+      description: Creates a new quote in DealHub and returns a URL to redirect the user to. This is a client-side call that
+        must be authenticated with the one-time access token obtained from the `/user/authenticate` endpoint. This version
+        supports subscription renewals via the `repeatable_groups` parameter.
+      operationId: createQuote
+      security:
+      - oneTimeAccessToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateQuoteRequest'
+            examples:
+              createQuoteCustomFieldsExample:
+                summary: Custom fields — all supported types
+                value:
+                  dealhub_user_id: DH-USER-001
+                  external_opportunity_id: opp-98765
+                  external_opportunity_name: Acme Renewal 2025
+                  external_customer_id: cust-001
+                  customer_name: Acme Corp
+                  geo_code: us
+                  currency: USD
+                  custom_fields:
+                  - name: opportunity_type
+                    value:
+                    - renewal_opportunity
+                  - name: product_lines
+                    value:
+                    - CPQ
+                    - CLM
+                    - DealRoom
+                  - name: deal_size
+                    value: 75000
+                  - name: contract_start_date
+                    value: '2025-01-01'
+              createQuoteExample:
+                summary: Create a new quote for an opportunity
+                value:
+                  dealhub_user_id: 111
+                  external_opportunity_id: gdfg123
+                  external_opportunity_name: sisco321
+                  opportunity_owner:
+                    external_user_id: qwerty1234356
+                    login: david.s@domain.com
+                    email: david.s@domain.com
+                    name: David Solomon
+                    position: Sales
+                    phone: 03-12345678
+                    mobile: 058-12345678
+                    fax: 03-12345679
+                    company: Acme Partnerl
+                    street: 12nd Broadway
+                    city: New York
+                    state: NY
+                    country: USA
+                    postal_code: '1234567'
+                    user_manager_login: manager@domain.com
+                  external_quote_id: qr564
+                  external_customer_id: br768
+                  customer_name: aviv alush
+                  customer_shipping_address:
+                    street: balfur
+                    city: tel aviv
+                    state: israel
+                    country: israel
+                    postal_code: bdfje34
+                  customer_billing_address:
+                    street: harokmim
+                    city: holon
+                    state: israel
+                    country: israel
+                    postal_code: 2345sd
+                  customer_contacts:
+                  - salutation: Mr
+                    first_name: Eyal
+                    last_name: Meshulam
+                    title: СТО
+                    email: email@gmail.com
+                    phone: '+9725684242'
+                    account_name: '12345'
+                    mailing_address: 123 Heirloom ST
+                    primary_contact: true
+                  geo_code: geo
+                  currency: USD
+                  custom_fields:
+                  - name: custom field a
+                    value:
+                    - '5'
+                    - '10'
+                  repeatable_groups:
+                  - group_id: qg1
+                    questions:
+                    - idl: idl val
+                      id2: id2_vall;id2_val2;id2_val3
+                      id3: id3_val
+                    - idl: idl val
+                      id2: id2 valA; valB;val2
+                      id3: id3 val
+                  - group_id: qg2
+                    questions:
+                    - idl: idl val
+                      id2: A; ;C
+                      id3: some val
+                    - idl: idl val
+                      id2: A, D,N
+                      id3: another_val
+      responses:
+        '200':
+          description: Request accepted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RedirectResponse'
+              examples:
+                redirectExample:
+                  summary: Successful redirect response
+                  value:
+                    url: https://service-eul.dealhub.io/..../
+                    errors: []
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Unauthenticated. The one-time access token is missing, invalid, or expired.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v2/quote/open:
+    post:
+      tags:
+      - CRM Integration
+      summary: Open Quote
+      description: Retrieves a URL for an existing quote in DealHub. The user can then be redirected to this URL to view or
+        edit the quote. This call can optionally update opportunity information for quotes in 'draft' status.
+      operationId: openQuote
+      security:
+      - oneTimeAccessToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OpenQuoteRequest'
+            examples:
+              openWithUpdate:
+                summary: Open a quote and update opportunity info
+                value:
+                  dealhub_user_id: 111
+                  dealhub_quote_id: '87948759384759'
+                  external_opportunity_id: gdfg123
+                  opportunity_info:
+                    external_opportunity_name: system321
+                    external_customer_id: br768
+                    customer_name: Vadim Testl
+                    customer_contacts:
+                    - first_name: Eyal
+                      last_name: Meshulam
+                      email: email@gmail.com
+                      primary_contact: true
+                    geo_code: geo
+                    currency: USD
+      responses:
+        '200':
+          description: Success. The response contains the URL for redirection.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RedirectResponse'
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Unauthenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v2/quotes:
+    post:
+      tags:
+      - CRM Integration
+      summary: View Quotes for an Opportunity
+      description: Retrieves a URL that redirects the user to the **My Proposals** page for a specific opportunity, showing
+        all associated quotes.
+      operationId: viewQuotesForOpportunity
+      security:
+      - oneTimeAccessToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ViewQuotesRequest'
+            examples:
+              viewQuotesExample:
+                summary: View quotes for a specific opportunity
+                value:
+                  dealhub_user_id: '387483488378'
+                  external_opportunity_id: 1kdash231hr2jkk2
+              viewQuotesWithUpdateExample:
+                summary: View quotes and update opportunity info
+                value:
+                  dealhub_user_id: '387483488378'
+                  external_opportunity_id": lkdash23lhr2jkk2
+                  opportunity_info":
+                    external_opportunity_name: sis321
+                    external_customer_id: br768
+                    customer_name: Vadim Test1
+                    customer_contacts:
+                    - first_name: Eyal
+                      last_name: Meshulam
+                      email: email@gmail.com
+                      primary_contact: true
+                    geo_code: geo
+                    currency: USD
+      responses:
+        '200':
+          description: Success. The response contains the URL for redirection.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RedirectResponse'
+        '400':
+          description: Bad Request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '403':
+          description: Unauthenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/v1/opportunities:
+    post:
+      tags:
+      - CRM Integration
+      summary: View My Opportunities
+      description: Retrieves a URL that redirects the user to their main "My Opportunities" dashboard in DealHub.
+      operationId: viewMyOpportunities
+      security:
+      - oneTimeAccessToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ViewOpportunitiesRequest'
+            examples:
+              viewOpportunitiesExample:
+                summary: View all opportunities for a user
+                value:
+                  dealhub_user_id: '387483488378'
+      responses:
+        '200':
+          description: Success. The response contains the URL for redirection.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RedirectResponse'
+        '403':
+          description: Unauthenticated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  securitySchemes:
+    secretToken:
+      type: http
+      scheme: bearer
+      description: The long-lived secret token provided by a DealHub admin for server-to-server authentication.
+    oneTimeAccessToken:
+      type: http
+      scheme: bearer
+      description: The short-lived (60s) one-time access token returned by the `/user/authenticate` endpoint, used for client-side
+        requests.
+  schemas:
+    UserInformation:
+      type: object
+      properties:
+        external_user_id:
+          type: string
+          maxLength: 200
+          description: CRM user ID (employee of the organization that integrates with DealHub).
+        login:
+          type: string
+          maxLength: 100
+          description: Login of the user. If a new user is created and login is not provided, the email will be used as the
+            login.
+        email:
+          type: string
+          format: email
+          maxLength: 100
+          description: Primary email of the user.
+        name:
+          type: string
+          maxLength: 300
+          description: User's full name.
+        position:
+          type: string
+          maxLength: 300
+          description: The role of the user in the organization (job title).
+        phone:
+          type: string
+          maxLength: 50
+          description: User's phone number.
+        mobile:
+          type: string
+          maxLength: 100
+          description: User's mobile phone number.
+        company:
+          type: string
+          maxLength: 100
+          description: User's company name.
+        street:
+          type: string
+          maxLength: 128
+          description: Street name.
+        city:
+          type: string
+          maxLength: 32
+          description: City name.
+        state:
+          type: string
+          maxLength: 32
+          description: State name.
+        country:
+          type: string
+          maxLength: 32
+          description: Country name.
+        postal_code:
+          type: string
+          maxLength: 16
+          description: Postal code.
+        user_manager_login:
+          type: string
+          maxLength: 100
+          description: Login of the user's manager.
+      required:
+      - external_user_id
+      - email
+      - name
+    AuthenticationRequest:
+      type: object
+      properties:
+        user_information:
+          $ref: '#/components/schemas/UserInformation'
+          description: Information required to create a user in DealHub.
+      required:
+      - user_information
+    AuthenticationResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: A one-time access token, which expires after 60 seconds.
+        dealhub_user_id:
+          type: string
+          description: The unique identifier for the user in DealHub.
+        errors:
+          type: array
+          items:
+            type: string
+    RedirectResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: The URL to which the user's browser should be redirected.
+        errors:
+          type: array
+          items:
+            type: string
+    ErrorResponse:
+      type: object
+      description: A generic error response. The specific message will vary based on the context.
+      properties:
+        message:
+          type: string
+          example: Unauthenticated
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          maxLength: 128
+          description: Street name.
+        city:
+          type: string
+          maxLength: 32
+          description: City name.
+        state:
+          type: string
+          maxLength: 32
+          description: State name.
+        country:
+          type: string
+          maxLength: 32
+          description: Country name.
+        postal_code:
+          type: string
+          maxLength: 16
+          description: Postal code.
+    Contact:
+      type: object
+      properties:
+        salutation:
+          type: string
+          maxLength: 50
+          description: Salutation (e.g., Mr., Ms.).
+        first_name:
+          type: string
+          maxLength: 128
+          description: First name of the contact.
+        last_name:
+          type: string
+          maxLength: 128
+          description: Last name of the contact.
+        title:
+          type: string
+          maxLength: 400
+          description: Job title of the contact.
+        email:
+          type: string
+          format: email
+          maxLength: 100
+          description: Primary email of the contact.
+        phone:
+          type: string
+          maxLength: 50
+          description: Phone number of the contact.
+        account_name:
+          type: string
+          maxLength: 100
+          description: Name of the contact's company.
+        mailing_address:
+          type: string
+          maxLength: 250
+          description: Postal address of the contact person.
+        primary_contact:
+          type: boolean
+          default: false
+          description: Flag indicating if this is the primary contact.
+      required:
+      - first_name
+      - last_name
+      - email
+    CustomField:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 200
+          description: The name of the custom field, which must be pre-configured in the DealHub version.
+        value:
+          oneOf:
+          - type: array
+            items:
+              type: string
+              maxLength: 8192
+          - type: number
+          - type: array
+            items:
+              type: string
+          description: 'The value of the custom field. The format depends on the field type configured in DealHub:
+
+
+            * `Text`: Must be sent as an array containing a single string, for example, `["renewal_opportunity"]`. Sending
+            a plain string will not be accepted.
+
+            * `Text list`: An array of one or more string values.
+
+            * `Numeric`: A single numeric value.
+
+            * `UTC`: A date string in `yyyy-mm-dd` format.'
+      required:
+      - name
+      - value
+    OpportunityInfo:
+      type: object
+      description: A schema representing the data that can be sent to create or update an opportunity and its related quote.
+      properties:
+        external_opportunity_name:
+          type: string
+          maxLength: 200
+          description: CRM opportunity name.
+        opportunity_owner:
+          $ref: '#/components/schemas/UserInformation'
+          description: Details of the opportunity owner, which are required when a quote is created by a user other than the
+            actual opportunity owner.
+        external_quote_id:
+          type: string
+          maxLength: 50
+          description: CRM quote ID.
+        external_customer_id:
+          type: string
+          maxLength: 50
+          description: CRM customer ID (buyer account).
+        customer_name:
+          type: string
+          maxLength: 256
+          description: CRM customer name.
+        customer_shipping_address:
+          $ref: '#/components/schemas/Address'
+          description: Customer shipping address information.
+        customer_billing_address:
+          $ref: '#/components/schemas/Address'
+          description: Customer billing address information.
+        customer_contacts:
+          type: array
+          description: List of customer contacts.
+          items:
+            $ref: '#/components/schemas/Contact'
+        geo_code:
+          type: string
+          maxLength: 100
+          description: Geographic code.
+        currency:
+          type: string
+          maxLength: 3
+          description: The currency ISO code. This is immutable once an opportunity/quote is created.
+        custom_fields:
+          type: array
+          description: "A list of custom fields, where each object contains a key/value pair. This parameter supports the\
+            \ following data types:\n\n* `Numeric`: A single numeric value. An empty value will be treated as `0`.\n* `Text`:\
+            \ The value is captured and presented to the user exactly as received. The `value` field must be an array with\
+            \ a single string.\n* `Text list`: Can contain one or more values. This can be used in two modes:\n    * Single-select:\
+            \ Only one value can be chosen from the list.\n    * Multi-select: Multiple values from the list can be selected.\n\
+            * `UTC`: A date and time value. The format must be `yyyy-mm-dd`. An empty value will be treated as `NULL`."
+          items:
+            $ref: '#/components/schemas/CustomField'
+        repeatable_groups:
+          type: array
+          description: Used for subscription renewals. The system will attempt to render this data into the playbook; items
+            that cannot be rendered will be ignored without error.
+          items:
+            type: object
+            properties:
+              group_id:
+                type: string
+              questions:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: true
+            required:
+            - group_id
+            - questions
+      required:
+      - external_opportunity_name
+      - external_customer_id
+      - customer_name
+      - geo_code
+      - currency
+    CreateQuoteRequest:
+      allOf:
+      - $ref: '#/components/schemas/OpportunityInfo'
+      - type: object
+        properties:
+          dealhub_user_id:
+            type: string
+            maxLength: 16
+            description: ID of the user in the DealHub system (as returned from the Authentication request).
+          external_opportunity_id:
+            type: string
+            maxLength: 50
+            description: CRM opportunity ID.
+          version_id:
+            type: string
+            description: For admin use only. DealHub version ID. If not specified, the system will use the active version.
+            maxLength: 16
+        required:
+        - dealhub_user_id
+        - external_opportunity_id
+    OpenQuoteRequest:
+      type: object
+      properties:
+        dealhub_user_id:
+          type: string
+          maxLength: 16
+          description: ID of user in the DealHub system (as returned from Authentication request).
+        dealhub_quote_id:
+          type: string
+          maxLength: 16
+          description: DealHub quote ID.
+        external_opportunity_id:
+          type: string
+          maxLength: 50
+          description: CRM opportunity ID.
+        opportunity_info:
+          $ref: '#/components/schemas/OpportunityInfo'
+      required:
+      - dealhub_user_id
+      - dealhub_quote_id
+      - external_opportunity_id
+    ViewQuotesRequest:
+      type: object
+      properties:
+        dealhub_user_id:
+          type: string
+          maxLength: 16
+          description: ID of user in the DealHub system (as returned from Authentication request).
+        external_opportunity_id:
+          type: string
+          maxLength: 50
+          description: CRM opportunity ID.
+        opportunity_info:
+          $ref: '#/components/schemas/OpportunityInfo'
+      required:
+      - dealhub_user_id
+      - external_opportunity_id
+    ViewOpportunitiesRequest:
+      type: object
+      properties:
+        dealhub_user_id:
+          type: string
+          maxLength: 16
+          description: ID of user in the DealHub system (as returned from Authentication request).
+      required:
+      - dealhub_user_id
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

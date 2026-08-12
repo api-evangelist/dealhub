@@ -1,0 +1,30 @@
+generated: '2026-08-12'
+method: searched
+source: https://dealhub.io/pricing/
+plan_count: 0
+currency: null
+published: false
+model: quote-only / contact sales
+note: >-
+  DealHub publishes NO pricing. https://dealhub.io/pricing/ returns HTTP 200 and is
+  titled "DealHub AI Pricing", but the page contains no tiers, no prices, no billing
+  periods, no seat or quota allowances and no named plans — only the platform
+  positioning ("Agentic Quote-to-Revenue Platform"), a capability list including
+  "MCP Extensibility" and "Enterprise-Grade Security", customer testimonials, and two
+  calls to action: "Request Pricing" and "View the Platform". Pricing is available
+  only by contacting sales through the demo/request form. This is plan_count: 0 as a
+  measured fact, not an unchecked field. It is a notable posture for a CPQ vendor —
+  the company sells software for publishing configurable prices while publishing none
+  of its own.
+plans: []
+evidence:
+- url: https://dealhub.io/pricing/
+  http_status: 200
+  fetched: '2026-08-12'
+  found: [Request Pricing, View the Platform]
+  not_found: [tier names, prices, currency, billing period, quotas, overage]
+api_pricing:
+  metered: false
+  note: No API-specific pricing, no per-call or per-quote metering, and no add-on price
+    for API access is published. API access is governed by the DealHub Authentication
+    Token an administrator issues, with no published entitlement tiers.

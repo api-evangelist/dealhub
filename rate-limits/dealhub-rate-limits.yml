@@ -1,0 +1,39 @@
+generated: '2026-08-12'
+method: searched
+source: https://developers.dealhub.io/llms.txt
+limit_count: 0
+published: false
+note: >-
+  DealHub publishes NO API rate limits. A full-text search of the developer portal
+  index (developers.dealhub.io/llms.txt, 687 lines covering 73 guides and 615 API
+  reference operations) returns zero matches for "rate limit", "throttle", "quota",
+  "429" or "Retry-After", and none of the eleven OpenAPI documents declares a 429
+  response on any of their 616 operations. No RateLimit-* or X-RateLimit-* response
+  header is documented. Consumers therefore have no published runtime signal for
+  backpressure — the only load guidance DealHub gives is advisory prose.
+limits: []
+headers: []
+exhaustion_status_code: null
+advisory_guidance:
+- guidance: 'Poll asynchronous request status every 5–10 seconds initially, then widen
+    the interval as the job runs longer, "to reduce API traffic". Alternatively subscribe
+    to the completion webhook instead of polling.'
+  scope: asynchronous request status polling
+  source: https://developers.dealhub.io/docs/handling-asynchronous-requests
+- guidance: 'Keep the number of SKUs per asynchronous catalog request below 500 and split
+    larger catalogs into batches. Above ~500 SKUs requests may stall in queued status.'
+  scope: product catalog upload
+  type: payload-size guidance rather than a rate limit
+  source: https://developers.dealhub.io/docs/handling-asynchronous-requests
+documented_size_limits:
+- {scope: getQuotes, field: limit, default: 50, note: 'Default page size; no documented maximum.'}
+- {scope: Product Hierarchy, limit: 50000, unit: products or labels}
+- {scope: Product Hierarchy, limit: 10, unit: levels of depth}
+- {scope: Product SKU, limit: 200, unit: characters}
+- {scope: Product label name, limit: 50, unit: characters}
+- {scope: SKU fetch request, limit: '<MAX_LIMIT>', note: 'DealHub returns "The number of
+    requested items exceeds the allowed limit of <MAX_LIMIT>." but does not publish the
+    numeric value of MAX_LIMIT.'}
+evidence:
+- {url: 'https://developers.dealhub.io/llms.txt', http_status: 200, fetched: '2026-08-12', matches_for_rate_limit_terms: 0}
+- {url: 'https://developers.dealhub.io/docs/handling-asynchronous-requests', http_status: 200, fetched: '2026-08-12'}

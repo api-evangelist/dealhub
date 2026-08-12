@@ -1,0 +1,133 @@
+generated: '2026-08-12'
+method: searched
+source: https://developers.dealhub.io/docs/authentication-overview
+docs:
+- https://developers.dealhub.io/docs/introduction-to-dealhub-apis
+- https://developers.dealhub.io/docs/authentication-overview
+- https://developers.dealhub.io/docs/handling-asynchronous-requests
+- https://developers.dealhub.io/docs/v2-error-reference
+derived_from: openapi/ (all 11 DealHub OpenAPI documents)
+authentication:
+  style: static bearer token (CPQ APIs) + API key header (billing API)
+  cpq:
+    header: 'Authorization: Bearer <DealHub Authentication Token>'
+    issuance: A CPQ administrator generates the secret token in Control Panel > System
+      Settings > API Settings. It is shown once and cannot be retrieved again.
+    rotation: not documented
+    expiry: long-lived / no documented TTL
+    failure: HTTP 403 with body message "Unauthenticated"
+  billing:
+    header: 'X-API-Key'
+    spec: openapi/dealhub-subskribe-api-openapi.yml
+  crm_and_partner:
+    flow: two-step. A server-to-server POST to /api/v1/authenticate/user (or
+      /api/v1/authenticate/partner/user) with a long-lived key returns a ONE-TIME access
+      token valid for 60 seconds; the client then presents that token as a bearer to
+      /api/v1/open/quote or /api/v1/create/quote from the browser so DealHub can set a
+      session cookie and return a redirect URL.
+    token_ttl_seconds: 60
+  oauth2: false
+  openid_connect: false
+  note: No OAuth 2.0, no OIDC, no scopes. There is no scopes/ artifact for DealHub because
+    there is no scope surface — authorization is all-or-nothing per admin-issued token.
+idempotency:
+  supported: false
+  header: null
+  note: >-
+    DealHub documents NO idempotency key, no request-deduplication header, and no
+    Idempotency-Key parameter appears in any of the 616 operations across the eleven
+    OpenAPI documents. Retrying a POST is not safe by contract. The closest published
+    mechanism is the asynchronous request_id, which is a TRACKING id for an already
+    accepted job, not a client-supplied deduplication key — with one partial exception:
+    retryCrmImport re-runs only the failed and unfinished ids of a CRM import under the
+    SAME request_id, which makes that one operation replay-safe by design. No
+    `Idempotency` pointer is wired into apis.yml, because there is no idempotency
+    contract to point at.
+pagination:
+  style: offset/limit
+  parameters: [offset, limit]
+  default_limit: 50
+  applies_to: [getQuotes, getVersionProducts, getProductCatalog, getActivityLogs]
+  response_fields: not standardized across endpoints
+  empty_result: 'A query that matches nothing returns HTTP 200 with an empty array (e.g.
+    an empty `quotes` array), not a 404.'
+  source: https://developers.dealhub.io/reference/getquotes
+sparse_fieldsets:
+  supported: true
+  mechanism: '`feature` query parameter'
+  note: >-
+    The Quote API inverts the usual default: with no `feature` parameter, getQuoteById
+    and getQuotes return only dealhub_quote_id, status and quote_upgrade_required. Callers
+    must opt IN to each block of detail by repeating the `feature` query parameter. This
+    is a response-shaping control, not a filter.
+  source: https://developers.dealhub.io/reference/getquotebyid
+asynchrony:
+  pattern: 202/200 + request_id + poll or webhook
+  tracking_id: request_id
+  status_endpoint: GET /api/v1/request/{request_id}/status (getAsyncRequestStatus)
+  summary_endpoint: getAsyncRequestSummary
+  states: [queued, in-progress, done, failed]
+  polling_guidance: 'Documented backoff — poll every 5–10 seconds initially, then widen the
+    interval. Alternatively subscribe to the completion webhook.'
+  failure_delivery: Asynchronous failures are NOT returned on the HTTP response; they arrive
+    via the "Failure WebHook v1" event and on the status endpoint as status=failed with
+    error_description and error_code.
+  known_issue: 'Requests carrying more than roughly 500 SKUs may stall in `queued` and never
+    advance to `in-progress`. DealHub documents this as an open known issue and advises
+    batching below 500 SKUs per request.'
+  source: https://developers.dealhub.io/docs/handling-asynchronous-requests
+versioning:
+  scheme: uri-path
+  versions_in_use: [v1, v2]
+  note: >-
+    Version is carried in the path (/api/v1/..., /api/v2/...). v1 and v2 run side by side
+    with SEPARATE error references, and the split is per-endpoint rather than per-API — the
+    Quote API serves v2 quote reads alongside v1 document and opportunity endpoints. There
+    is no published version-deprecation schedule.
+  api_version_field: Webhook payloads carry event_info.api_version, currently "1.0" — a
+    payload contract version independent of the URI path version.
+  configuration_versioning: >-
+    Distinct from API versioning and far more load-bearing: DealHub's "Version" entity
+    encapsulates products, pricing, playbooks and API configuration. Most calls execute
+    against the ACTIVE Version when version_id is omitted, so the same request can return
+    different results after an admin activates a new Version. A draft quote built on a
+    now-inactive Version returns quote_upgrade_required=true and DealHub will withhold all
+    requested feature data for that quote.
+error_envelope:
+  format: proprietary JSON with a human-readable message string
+  rfc9457: false
+  machine_readable_code: false
+  auth_failure_status: 403
+  missing_entity_status: 400
+  note: 'DealHub returns 403 (not 401) for authentication failure and 400 (not 404) for a
+    missing entity on the CPQ APIs. Message strings carry runtime-substituted placeholders
+    such as <PARAM_NAME>, <entity_id>, <MAX_LENGTH> and [SKU].'
+  catalog: errors/dealhub-problem-types.yml
+rate_limiting:
+  documented: false
+  headers: []
+  note: See rate-limits/dealhub-rate-limits.yml — no published limits, no RateLimit headers,
+    no 429 response documented in any of the eleven specs.
+request_tracing:
+  correlation_header: null
+  note: No request-id or correlation header is documented for synchronous calls. The
+    async request_id is the only end-to-end correlation identifier DealHub publishes, and
+    it exists only on asynchronous jobs.
+date_formats:
+  cpq: 'yyyy-mm-dd hh:mm:ss (Quote API response values)'
+  callouts: 'ISO 8601, UTC — yyyy-MM-dd''T''HH:mm:ss.SSS''Z'''
+  note: The two formats are inconsistent across surfaces; consumers must not assume one.
+inbound_callbacks:
+  note: >-
+    Two of DealHub's published contracts invert the direction — External Query and the
+    Callout API define endpoints the CUSTOMER implements and DealHub calls. Their servers[]
+    entries are documented placeholders (your-external-system.com); the real URL is set per
+    tenant in DealHub Version Settings. Outbound auth (Token/Basic/None) is chosen by the
+    administrator per configuration.
+cross_links:
+  authentication: authentication/dealhub-authentication.yml
+  errors: errors/dealhub-problem-types.yml
+  lifecycle: lifecycle/dealhub-lifecycle.yml
+  rate_limits: rate-limits/dealhub-rate-limits.yml
+  webhooks: asyncapi/dealhub-webhooks.yml
+  data_model: data-model/dealhub-data-model.yml

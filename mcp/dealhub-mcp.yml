@@ -1,0 +1,58 @@
+generated: '2026-08-12'
+method: probed
+status: published
+source: https://developers.dealhub.io/mcp
+server:
+  name: dealhub-developer-docs
+  transport: http
+  url: https://developers.dealhub.io/mcp
+  protocol: JSON-RPC 2.0 (MCP)
+  auth_required: true
+x-evidence:
+  fetched: '2026-08-12'
+  url: https://developers.dealhub.io/mcp
+  method: POST
+  request: '{"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+  http_status: 401
+  content_type: application/json; charset=utf-8
+  body: '{"jsonrpc":"2.0","error":{"code":-32001,"message":"Authorization required"},"id":null}'
+  response_headers_of_note:
+  - 'access-control-allow-headers includes x-readme-conversation-id, x-readme-user-id,
+    x-readme-project-id, x-readme-message-id, x-readme-ai-metadata'
+  - x-render-origin-server: Render
+tools_listed: 0
+tools: []
+notes:
+- >-
+  A live MCP endpoint IS served from DealHub's own developer host at
+  https://developers.dealhub.io/mcp. It answers JSON-RPC with a well-formed MCP
+  error object rather than an HTML 404, which distinguishes it from a catch-all.
+  `tools/list` returns -32001 "Authorization required" anonymously, so the real tool
+  set and its inputSchemas cannot be enumerated without credentials. NO tool list is
+  recorded here rather than a guessed one.
+- >-
+  The endpoint is the documentation MCP server that the ReadMe platform provisions
+  for a hosted developer hub (confirmed by the x-readme-* CORS headers and the
+  Render origin), not a DealHub-authored MCP server over the CPQ/billing APIs. Its
+  tools are expected to be documentation search/retrieval over the same content the
+  llms.txt indexes, not quote or subscription operations.
+- >-
+  DealHub markets "DealHub Native MCP" on https://dealhub.io/ai/ ("build & connect
+  agents", "revenue capabilities for your agents") and lists "MCP Extensibility" on
+  https://dealhub.io/pricing/, but publishes NO endpoint URL, no installation
+  instructions, no tool catalog, and no MCP page in the developer portal
+  (developers.dealhub.io/llms.txt contains zero MCP references). mcp.dealhub.io does
+  not resolve; https://api.dealhub.io/mcp and https://dealhub.io/mcp both 404. The
+  marketed native MCP surface is therefore NOT publicly documented and is not
+  recorded here as existing.
+- >-
+  A third-party MCP server, `dealhub-admin-mcp` on npm, wraps the DealHub Version
+  API locally. It is catalogued in packages/dealhub-packages.yml and is explicitly
+  not first-party.
+probes:
+- {url: 'https://developers.dealhub.io/mcp', method: POST, status: 401, result: MCP JSON-RPC error, auth required}
+- {url: 'https://api.dealhub.io/mcp', method: POST, status: 404}
+- {url: 'https://dealhub.io/mcp', method: POST, status: 404}
+- {url: 'https://mcp.dealhub.io/', method: POST, status: 000, result: DNS does not resolve}
+- {url: 'https://developers.dealhub.io/.well-known/oauth-protected-resource', status: 404}
+- {url: 'https://developers.dealhub.io/.well-known/oauth-authorization-server', status: 404}

@@ -1,0 +1,97 @@
+generated: '2026-08-12'
+method: searched
+source: https://developers.dealhub.io/docs/webhooks-overview
+docs:
+- https://developers.dealhub.io/docs/webhooks-overview
+- https://developers.dealhub.io/docs/how-to-configure-webhooks
+- https://developers.dealhub.io/docs/dealroom-webhook-events-reference
+spec_type: none
+asyncapi_published: false
+asyncapi_note: >-
+  DealHub documents a real, catalogued webhook surface in prose and tables but
+  publishes NO AsyncAPI document. /asyncapi.yaml, /asyncapi.json and an event-catalog
+  page were not found on developers.dealhub.io, and the ReadMe hub index
+  (developers.dealhub.io/llms.txt) contains no AsyncAPI entry. The event catalog
+  below is captured verbatim from the published documentation — nothing here is
+  synthesized into a spec.
+transport:
+  style: HTTP POST
+  content_type: application/json
+  destination: customer-configured HTTPS endpoint URL
+  direction: DealHub -> subscriber
+  delivery: at-event, no documented retry/backoff policy
+security:
+  note: >-
+    Outbound authentication is configured per webhook by the DealHub administrator
+    and must match what the receiving endpoint requires. One of three modes.
+  modes:
+  - {mode: Token, detail: 'DealHub sends a secret bearer token in the Authorization header.'}
+  - {mode: Basic, detail: 'DealHub sends a username and password for HTTP Basic authentication.'}
+  - {mode: None, detail: 'No Authorization header. Used when the endpoint is unsecured or
+      relies on a token embedded in the URL (e.g. an Azure SAS token).'}
+  signature_verification: false
+  signature_note: DealHub does not document a payload signature or timestamp header, so
+    subscribers cannot cryptographically verify origin — only the configured shared
+    credential distinguishes a genuine call.
+envelope:
+  event_info:
+  - {field: webhook_id, description: Unique identifier of the webhook configuration.}
+  - {field: event_id, description: Unique identifier for this specific event notification.}
+  - {field: api_version, description: 'Version of the API that sent the event. Currently 1.0.'}
+  - {field: request_id, description: Present only when the event was triggered by an
+      asynchronous API call (product upload, version activation). Correlates back to
+      getAsyncRequestStatus.}
+  common_fields:
+  - {field: execution_date, description: GMT date and time the action occurred.}
+  - {field: executed_by, description: 'Login/email of the user who performed the action, or
+      SYSTEM for automated actions.'}
+  - {field: impersonated_by, description: Login of the admin who performed the action on
+      behalf of another user.}
+  quote_fields:
+  - {field: dealhub_quote_id, description: Use to call the Quote API for full detail.}
+  - {field: dealhub_opportunity_id}
+  - {field: additional_data, description: Optional. Answers to specific playbook questions,
+      configured per webhook.}
+event_count: 16
+events:
+- {name: draftQuote, entity: Quote, trigger: A user creates a quote and saves it as a draft,
+    or modifies an existing draft.}
+- {name: primaryQuote, entity: Quote, trigger: A user or the system marks a specific quote
+    as the Primary quote.}
+- {name: quotePendingApproval, entity: Quote, trigger: A user submits a quote that requires
+    approval. Also published as each approver approves their part of the flow.}
+- {name: quoteReady, entity: Quote, trigger: A quote is ready to be shared with the customer —
+    either fully approved, or submitted when no approval is required.}
+- {name: quoteRejected, entity: Quote, trigger: An approver rejects the quote.}
+- {name: quoteRecalled, entity: Quote, trigger: A user explicitly cancels (recalls) the quote.}
+- {name: quotePublished, entity: Quote, trigger: The quote is published to a DealRoom.}
+- {name: quoteUnpublished, entity: Quote, trigger: A user unpublishes the DealRoom.}
+- {name: quoteWon, entity: Quote, trigger: The quote is signed, either via DealRoom or
+    externally.}
+- {name: version, entity: Version, action: created, trigger: An administrator creates a new
+    version from scratch or duplicates an existing version.}
+- {name: version, entity: Version, action: activated, trigger: An administrator activates a
+    specific version.}
+- {name: version, entity: Version, action: reactivated, trigger: An administrator reactivates
+    a version.}
+- {name: user, entity: User, action: created, trigger: 'A user was created — manually by an
+    admin, via API, or on first authentication.'}
+- {name: user, entity: User, action: modified, trigger: A user was modified (fields updated,
+    or active status changed by an admin).}
+- {name: user, entity: User, action: deleted, trigger: A user was deleted from the system.}
+- {name: productsUpload, entity: Product Catalog, trigger: 'An SFTP product file upload or
+    Open API upload completed. Payload indicates success or error.'}
+- {name: Failure WebHook v1, entity: AsyncRequest, trigger: 'The system failed to execute an
+    asynchronous API request (e.g. duplicating or activating a version).'}
+- {name: crmImport, entity: CRM Import, trigger: 'A CRM Import (buyer account and contact
+    migration) completed. Payload carries total/succeeded/failed/skipped counts and the
+    originating request_id in event_info.'}
+dealroom_events:
+  envelope: DEALROOM_EVENT
+  discriminator: action_summary
+  reference: https://developers.dealhub.io/docs/dealroom-webhook-events-reference
+  note: >-
+    DealRoom (digital sales room) activity — document actions, signatures, redline
+    sessions and related buyer-side activity — is delivered under a separate common
+    DEALROOM_EVENT envelope with an action_summary object identifying the specific
+    activity, rather than as distinct top-level event names.

@@ -1,0 +1,687 @@
+# DealHub API Documentation
+
+> Documentation for DealHub API
+
+## Guides
+- [Introduction to DealHub APIs](https://developers.dealhub.io/docs/introduction-to-dealhub-apis.md)
+- [Authentication](https://developers.dealhub.io/docs/authentication-overview.md)
+- [Error Reference](https://developers.dealhub.io/docs/v2-error-reference.md)
+- [Error Reference (v1)](https://developers.dealhub.io/docs/v1-error-reference.md)
+- [Quote Overview](https://developers.dealhub.io/docs/quote-overview.md)
+- [Quote Lifecycle](https://developers.dealhub.io/docs/quote-lifecycle.md)
+- [Get a Specific Quote](https://developers.dealhub.io/docs/retrieve-a-quote.md)
+- [Get a List of Quotes](https://developers.dealhub.io/docs/retrieving-quotes.md)
+- [Get Quote Document](https://developers.dealhub.io/docs/get-quote-document.md)
+- [Manage Quotes Versions](https://developers.dealhub.io/docs/manage-quotes.md)
+- [Create an Opportunity](https://developers.dealhub.io/docs/create-opportunity.md)
+- [Get DealRoom Signers](https://developers.dealhub.io/docs/get-dealroom-signers.md)
+- [Webhooks Overview](https://developers.dealhub.io/docs/webhooks-overview.md)
+- [How to Configure Webhooks](https://developers.dealhub.io/docs/how-to-configure-webhooks.md)
+- [DealRoom Webhook Events Reference](https://developers.dealhub.io/docs/dealroom-webhook-events-reference.md)
+- [External Query Overview](https://developers.dealhub.io/docs/external-query-overview.md)
+- [Creating an External Query](https://developers.dealhub.io/docs/creating-a-external-query.md)
+- [Use an External Query in a Playbook](https://developers.dealhub.io/docs/use-external-query-in-a-playbook.md)
+- [External Data Query](https://developers.dealhub.io/docs/external-query-api-reference.md)
+- [Callouts API Overview](https://developers.dealhub.io/docs/callouts-api-overview.md)
+- [How to Create and Use a Callout](https://developers.dealhub.io/docs/how-to-create-and-use-an-callout.md)
+- [Retrieve Real-Time Pricing](https://developers.dealhub.io/docs/callouts-api-reference.md)
+- [Headless API Overview](https://developers.dealhub.io/docs/headless-api-overview.md)
+- [Creating an API Playbook](https://developers.dealhub.io/docs/creating-an-api-playbook.md)
+- [Generate a Quote](https://developers.dealhub.io/docs/generate-a-quote-via-api.md)
+- [Simulate a Quote](https://developers.dealhub.io/docs/simulate-a-quote.md)
+- [Using the Actions API](https://developers.dealhub.io/docs/actions-api.md)
+- [CRM Integration Overview](https://developers.dealhub.io/docs/overview-and-flow-of-events.md)
+- [Authenticate User](https://developers.dealhub.io/docs/authenticate-user.md)
+- [Create or Open Quote](https://developers.dealhub.io/docs/create-or-open-quote.md)
+- [View Quotes and Opportunities](https://developers.dealhub.io/docs/view-quotes-and-opportunities.md)
+- [How to Use Custom Fields in Integration](https://developers.dealhub.io/docs/how-to-use-custom-fields-in-integration.md)
+- [CRM Import Overview](https://developers.dealhub.io/docs/crm-import-overview.md)
+- [Start a CRM Import](https://developers.dealhub.io/docs/start-a-crm-import.md)
+- [Track Import Progress](https://developers.dealhub.io/docs/track-import-progress.md)
+- [Retry a Failed Import](https://developers.dealhub.io/docs/retry-a-failed-import.md)
+- [User API Overview](https://developers.dealhub.io/docs/user-api-overview.md)
+- [Retrieve a User](https://developers.dealhub.io/docs/retrieve-a-user.md)
+- [Get a List of Users](https://developers.dealhub.io/docs/get-a-list-of-users.md)
+- [Update Users (v1)](https://developers.dealhub.io/docs/update-users-v1.md)
+- [Create or Update Users (v2)](https://developers.dealhub.io/docs/create-or-update-users-v2.md)
+- [Partner API Overview](https://developers.dealhub.io/docs/partner-api-overview.md)
+- [Authenticate Partner User](https://developers.dealhub.io/docs/authenticate-the-partner-user.md)
+- [Open DealHub CPQ](https://developers.dealhub.io/docs/open-dealhub-cpq.md)
+- [Version API Overview](https://developers.dealhub.io/docs/version-api-overview.md)
+- [Manage Versions](https://developers.dealhub.io/docs/managing-versions.md)
+- [Export Playbook Data](https://developers.dealhub.io/docs/exporting-playbook-data.md)
+- [Handle Asynchronous Requests](https://developers.dealhub.io/docs/handling-asynchronous-requests.md)
+- [Retrieve Product Data](https://developers.dealhub.io/docs/retrieving-product-data.md)
+- [Update the Product Catalog](https://developers.dealhub.io/docs/updating-the-product-catalog.md)
+- [Patching Product Catalog Items](https://developers.dealhub.io/docs/patching-product-catalog-items.md)
+- [Manage Product Hierarchy (BETA)](https://developers.dealhub.io/docs/managing-product-hierarchy-beta.md)
+- [Product Catalot](https://developers.dealhub.io/docs/product-catalot.md)
+- [Products](https://developers.dealhub.io/docs/products.md)
+- [Charge types and models](https://developers.dealhub.io/docs/charge-types-and-models.md)
+- [Orders and subscriptions](https://developers.dealhub.io/docs/orders-and-subscriptions.md)
+- [Order lifecycle](https://developers.dealhub.io/docs/order-lifecycle.md)
+- [Create a subscription](https://developers.dealhub.io/docs/create-a-subscription.md)
+- [Step 1: Create order](https://developers.dealhub.io/docs/step-1-create-order.md): This tutorial walks you through the steps required to create a new order using the Subskribe API.
+- [Step 2: Update order](https://developers.dealhub.io/docs/step-2-update-order.md): This tutorial walks you through the steps required to update an existing order using the Subskribe API.
+- [Step 3: Execute order](https://developers.dealhub.io/docs/step-3-execute-order.md): This tutorial walks you through the steps required to update an order's status to `EXECUTED` using the Subskribe API.
+- [Amend a subscription](https://developers.dealhub.io/docs/amend-a-subscription.md): This tutorial walks you through the steps required to amend an existing subscription using the Subskribe API.
+- [Renew a subscription](https://developers.dealhub.io/docs/renew-a-subscription.md): This tutorial walks you through the steps required to renew an expired subscription using the Subskribe API.
+- [Set up a self-serve portal](https://developers.dealhub.io/docs/set-up-a-self-serve-portal.md)
+- [Create product catalog](https://developers.dealhub.io/docs/create-product-catalog.md): This tutorial walks you through the steps required to create a product catalog using the Subskribe API.
+
+## API Reference
+- [Get a Specific Quote](https://developers.dealhub.io/reference/getquotebyid.md): Retrieves the details of a single existing quote by its DealHub Quote ID.  This endpoint allows you to fetch specific data points for any quote in DealHub. The level of detail in the response is controlled by the **`feature`** query parameter.  -   **Minimal Response**: If you don't specify any `feature` parameters, the API returns a basic response containing only the `dealhub_quote_id`, its current `status`, and the `quote_upgrade_required` flag. -   **Detailed Response**: To get more information, you must include one or more `feature` query parameters in your request.  If a Draft quote was created using an older one, now-inactive version, the `quote_upgrade_required` flag will be `true`. When this occurs, the API will not return any requested `feature` data for that quote.  > 📘 Date Formats > > All date values in the response are returned in `yyyy-mm-dd hh:mm:ss` format.
+- [Get a List of Quotes](https://developers.dealhub.io/reference/getquotes.md): Retrieves a list of quotes, with options for filtering and pagination.   Use the `external_opportunity_id` query parameter to retrieve only the quotes linked to a specific opportunity in your CRM.  The level of detail returned for each quote is controlled by the `feature` query parameter.  Use the `offset` and `limit` parameters to page through large sets of quotes. The default `limit` is 50 quotes per request.  If no quotes match the specified criteria, the API will return a `200 OK` status with an empty `quotes` array.  > 📘 Date Formats > > All date values in the response are returned in `yyyy-mm-dd hh:mm:ss` format.
+- [Create an Opportunity](https://developers.dealhub.io/reference/createopportunity.md): Creates a new opportunity within DealHub, typically used for renewal automation.
+- [Get Quote Document](https://developers.dealhub.io/reference/getquotedocument.md): Retrieves the output document (e.g., PDF, Word) for a submitted quote. Use this endpoint to archive contracts or integrate quote documents into other systems.  By default, the endpoint returns the document in the format and template that the salesperson originally generated. You can use the optional `document_type` query parameter to request the document in a different format (e.g., `PDF`, `WORD`). However, this is only possible if the requested format has been enabled for the quote's playbook in the CPQ settings.  > 📘 Excel Files > > A quote document can only be retrieved in `EXCEL` format if the quote was explicitly configured to allow an Excel file output.
+- [Get DealRoom Signers](https://developers.dealhub.io/reference/getdealroomsigners.md): Retrieves information about who has signed a contract within a DealRoom for a specific opportunity.
+- [External Data Query](https://developers.dealhub.io/reference/fulfillexternalquery.md): > ❗️ Important  > > This is not an endpoint provided by DealHub. This page present the endpoint definition you need to make available so DealHub can call it.   DealHub uses this endpoint to send requests that share data from the current quote’s playbook and product list. Your endpoint should process this data and return information that will be populated back into the quote’s playbook.  The specific URL for this endpoint is configured by the administrator in the DealHub UI.  > 📘 Authentication > > When DealHub calls your endpoint, it will include an `Authorization` header based on the configuration set by an administrator in the DealHub UI. Your endpoint must be prepared to handle one of the following methods: > - **Token (Bearer):** DealHub sends a secret bearer token. Your endpoint should validate this token. > - **Basic:** DealHub sends a username and password for Basic Authentication. > - **None:** No `Authorization` header is sent. This is used when the endpoint is unsecured or uses a different security method, such as a token embedded in the URL.
+- [Retrieve Real-Time Pricing](https://developers.dealhub.io/reference/getpricing.md): > ❗️ Important > > This is not an endpoint provided by DealHub. This page present the endpoint definition you need to make available so DealHub can call it.  This endpoint enables DealHub to retrieve real-time product prices and attributes from your external system while a quote is being generated.  The specific URL for this endpoint is configured by the administrator in the DealHub UI.  > 📘 Date Formats > > All date and time values are provided in ISO 8601 format and standardized to UTC (Coordinated Universal Time) `yyyy-MM-dd'T'HH:mm:ss.SSS'Z'` (e.g., `2025-09-01T15:39:25Z`).
+- [Simulate a Quote](https://developers.dealhub.io/reference/simulatequote.md): Synchronously calculates quote pricing and details based on the provided configuration without creating a persistent quote object in DealHub. Ideal for real-time price calculations.  Use this endpoint to calculate real-time pricing and quote details without creating a permanent record in DealHub. You have to inform the product and configuration data to receive the calculated line items and a financial summary.   To run a simulation, your request must include a `version_id` to specify which pricing and product rules to use. You also need to provide one of the following options:  - `external_opportunity_id`: Use this to base the simulation on an existing opportunity in your CRM. - `geo_code` and `currency`: Use this combination for simulations that do not depend on specific CRM data.  > 📘 Required data >  > You must provide either the `external_opportunity_id` or both the `geo_code` and `currency` parameters. Providing both in the same request will result in an error.  > ❗️ `quote_data` is required > The `quote_data` field is required and must always be present in the request body. If you do not have any line items to include, send it as an empty array: `"quote_data": []` <br/><br/> Omitting the `quote_data` field entirely will result in an error. Note that the auto-generated code example on this page may not include `quote_data` when no line item values are provided, but the field itself must still be present in your request.
+- [Generate a Quote](https://developers.dealhub.io/reference/generatequote.md)
+- [Submit a Quote](https://developers.dealhub.io/reference/submitquote.md): Asynchronously submits an existing `Draft` quote for approval.
+- [Publish a Quote](https://developers.dealhub.io/reference/publishquote.md): Asynchronously publishes an existing `Ready to be sent` quote to a DealRoom.
+- [Sign a Quote Externally](https://developers.dealhub.io/reference/signquoteexternally.md): Asynchronously marks an existing quote as `Won`. The quote must be in a `Ready to be sent` or `Published` status.
+- [Get DealHub Quote ID](https://developers.dealhub.io/reference/getquoteid.md): Retrieves the `dealhub_quote_id` using the `dealhub_proposal_id` (the ID visible in the UI).
+- [Authenticate User](https://developers.dealhub.io/reference/authenticateuser.md): Authenticates a user from an external CRM and returns a short-lived (60 seconds) one-time access token. This is a server-to-server call that uses a long-lived secret token for authorization. If the user does not exist in DealHub, a new user with a `Sales` role is created.
+- [Create Quote](https://developers.dealhub.io/reference/createquote.md): Creates a new quote in DealHub and returns a URL to redirect the user to. This is a client-side call that must be authenticated with the one-time access token obtained from the `/user/authenticate` endpoint. This version supports subscription renewals via the `repeatable_groups` parameter.
+- [Open Quote](https://developers.dealhub.io/reference/openquote.md): Retrieves a URL for an existing quote in DealHub. The user can then be redirected to this URL to view or edit the quote. This call can optionally update opportunity information for quotes in 'draft' status.
+- [View Quotes for an Opportunity](https://developers.dealhub.io/reference/viewquotesforopportunity.md): Retrieves a URL that redirects the user to the **My Proposals** page for a specific opportunity, showing all associated quotes.
+- [View My Opportunities](https://developers.dealhub.io/reference/viewmyopportunities.md): Retrieves a URL that redirects the user to their main "My Opportunities" dashboard in DealHub.
+- [Start CRM Import](https://developers.dealhub.io/reference/startcrmimport.md): Starts (or joins) an asynchronous import of buyer accounts and their contacts from the tenant's connected CRM into DealHub. Accepts a list of buyer-account CRM ids; duplicates are ignored. Returns a `request_id` immediately, the import runs in the background. If an import is already running for the tenant, its `request_id` is returned instead of starting a new one.
+- [Get CRM Import Status](https://developers.dealhub.io/reference/getcrmimportstatus.md): Retrieves the summary of a CRM import: aggregate counts (total, processed, succeeded, failed, skipped) plus a flat list of per-id failures with reasons. This is the service to poll. If `request_id` is omitted, the tenant's most recent import is returned.
+- [Get CRM Import Detail](https://developers.dealhub.io/reference/getcrmimportdetail.md): Retrieves the full picture of a CRM import: the same summary as the status service, plus every buyer account and each of its contacts with their own state and failure reason. Use this to see exactly which contacts within an account did or did not migrate.
+- [Lookup CRM Import Id](https://developers.dealhub.io/reference/lookupcrmimportid.md): Resolves a single CRM id within an import (whether it is a buyer account, or a contact, or not part of the import) along with its state and failure reason. For a contact match, the buyer-account CRM id it belongs to is also returned.
+- [Retry CRM Import](https://developers.dealhub.io/reference/retrycrmimport.md): Re-runs the failed ids of a CRM import (plus any unfinished ids from an interruption) under the same `request_id`. Already-imported accounts are skipped. Asynchronous like Start CRM Import, returns the `request_id` immediately; poll the status service for the outcome.
+- [Get User by Login](https://developers.dealhub.io/reference/getuserbylogin.md): Retrieves a single user's details based on their login name. Fields with null values will not be included in the response.
+- [Get User by ID](https://developers.dealhub.io/reference/getuserbyid.md): Retrieves a single user's details based on their DealHub user ID. Fields with null values will not be included in the response.
+- [Get a List of Users](https://developers.dealhub.io/reference/getusers.md): Retrieves a list of users. If no parameters are provided, it will retrieve all users. Fields with null values will not be included in the response.
+- [Update Users (v1)](https://developers.dealhub.io/reference/updateusersv1.md): Updates one or more existing users in DealHub. This operation identifies users by their `login`, which is an immutable field.
+- [Create or Update Users (v2)](https://developers.dealhub.io/reference/createorupdateusersv2.md): Creates new users or updates existing ones. The operation uses the `login` field to identify existing users.
+- [Authenticate Partner User](https://developers.dealhub.io/reference/authenticatepartneruser.md): Authenticates a partner user from a PRM system and returns a short-lived (60 seconds) one-time access token. This is a server-to-server call that does not require a bearer token in the header, instead, the long-lived authentication key is sent in the request body.
+- [Get URL to Create a New Quote](https://developers.dealhub.io/reference/createpartnerquote.md): Retrieves a URL that redirects an authenticated partner user to the quote creation page within DealHub for a specific opportunity. This is a client-side call using the one-time access token.
+- [Get URL to Open an Existing Quote](https://developers.dealhub.io/reference/openpartnerquote.md): Retrieves a URL that redirects an authenticated partner user to an existing quote within DealHub. This is a client-side call using the one-time access token.
+- [Get URL to View an Opportunity's Quotes](https://developers.dealhub.io/reference/openpartneropportunity.md): Retrieves a URL that redirects an authenticated partner user to the opportunity details page in DealHub, listing all associated quotes. This is a client-side call using the one-time access token.
+- [Get Products Parameters](https://developers.dealhub.io/reference/getproductsparameters.md): This service returns a list of parameters required to calculate the price for each SKU.
+- [Get Products Pricing](https://developers.dealhub.io/reference/getproductspricing.md): This service returns a price for each SKU in the request.
+- [Get Version by ID](https://developers.dealhub.io/reference/getversionbyid.md): Retrieve a specific Version based on its unique DealHub ID.
+- [Get Version by Name](https://developers.dealhub.io/reference/getversionbyname.md): Retrieve a specific Version based on its name.
+- [Get a List of Versions](https://developers.dealhub.io/reference/getversions.md): Retrieve a list of Versions, with an option to filter by status. If no parameters are provided, it returns all versions.
+- [Duplicate a Version](https://developers.dealhub.io/reference/duplicateversion.md): Asynchronously creates a new Version entity based on an existing one. This operation returns a `request_id` for tracking.
+- [Activate a Version](https://developers.dealhub.io/reference/activateversion.md): Asynchronously activates a `DRAFT` Version. This operation returns a `request_id` for tracking.
+- [Get Playbook Data](https://developers.dealhub.io/reference/exportplaybookdata.md): Retrieves the details of the requested Playbook in a specific version, exporting the Playbook configuration and data in JSON format.
+- [Get Generate Quote Template](https://developers.dealhub.io/reference/getgeneratequotetemplate.md): Returns a preformatted JSON template for API quote generation based on the Playbook structure.
+- [Get Products of a Version](https://developers.dealhub.io/reference/getversionproducts.md): Retrieves a paginated list of products for a specific version, returning basic product attributes and price details. - `DRAFT` Status: Returns the full product list. - `ACTIVE`/`DEACTIVATED` Status: Can return either all products or only products that were new or modified compared to the previously active version.
+- [Get Products by SKU](https://developers.dealhub.io/reference/getproductsbysku.md): Retrieves basic details for a specific list of products from the catalog based on their SKUs.  > 📘 > If some SKUs could not be found in a specific Version the system will return status 200, with error in the `info` structure.
+- [Extract Products to Excel](https://developers.dealhub.io/reference/extractproductsexcel.md): Retrieves all product-related information for a specific version in an Excel file format.
+- [Get Product Catalog](https://developers.dealhub.io/reference/getproductcatalog.md): Retrieves paginated information about products and bundles in the catalog, including attributes, assignments, and pricing details.
+- [Create or Update Product Catalog](https://developers.dealhub.io/reference/uploadproductcatalog.md): This endpoint asynchronously uploads a complete product catalog to a `DRAFT` version. Each product and bundle is created or updated based on the details in the request JSON.  If a SKU already exists in the catalog, it will be completely replaced with the new data from the request, including its pricing, assignments, and other details. If the replacement process fails for any reason, the system will revert to the old product definition.  This operation returns a `request_id` for you to track the progress. Note that requests targeting an `ACTIVE` or `DEACTIVATED` catalog version will fail.
+- [Update Product Catalog Items](https://developers.dealhub.io/reference/updateproductcatalog.md): This endpoint asynchronously updates specific data elements for existing SKUs in a `DRAFT` version's product catalog. Unlike the POST endpoint, this endpoint does not create new products — it only modifies data elements for SKUs that already exist in the catalog.  The `mode` query parameter controls the update behavior: `UPDATE` merges the provided data with existing data, while `REPLACE` replaces all entries within each included data category.  This operation returns a `request_id` for tracking. Requests targeting an `ACTIVE` or `DEACTIVATED` version will fail.
+- [Delete All Products from Catalog](https://developers.dealhub.io/reference/deleteallproducts.md): Deletes all products and the entire product hierarchy tree from a `DRAFT` version. * This operation can only be triggered for a catalog version with a **`DRAFT`** status. * Requests made for an `ACTIVE` or `DEACTIVATED` catalog version will fail with a `400 Bad Request` HTTP error.
+- [Delete Specific Products by SKU](https://developers.dealhub.io/reference/deleteproductsbysku.md): Deletes specific products from the product catalog of a `DRAFT` version.  * This operation can only be triggered for a catalog version with a **`DRAFT`** status. * Requests made for an `ACTIVE` or `DEACTIVATED` catalog version will fail with a `400 Bad Request` HTTP error.  A product cannot be deleted if it is: * A parent to another product in the hierarchy. * Marked as mandatory. * Set as an alternative in the hierarchy tree.
+- [Get Asynchronous Request Status](https://developers.dealhub.io/reference/getasyncrequeststatus.md): Polls and retrieves the current status of a specific asynchronous request (e.g., duplicate version, activate version).
+- [Get Asynchronous Request Execution Summary](https://developers.dealhub.io/reference/getasyncrequestsummary.md): Retrieves a summary of a completed asynchronous process, including success, error, and warning counts. This is particularly useful for operations like product catalog uploads.
+- [Get Product Hierarchy](https://developers.dealhub.io/reference/getproducthierarchy.md): Retrieves the product hierarchy tree for a specific version.
+- [Create or Update Product Hierarchy](https://developers.dealhub.io/reference/updateproducthierarchy.md): Asynchronously creates or updates the product hierarchy for a 'DRAFT' version. This operation returns a `request_id` for tracking.
+- [Delete from Product Hierarchy](https://developers.dealhub.io/reference/deletefromproducthierarchy.md): Asynchronously deletes specified items (products, bundles, or labels) from the product hierarchy of a 'DRAFT' version.
+- [Get the contact for accounts receivable](https://developers.dealhub.io/reference/getaccountreceivablecontact-1.md): Returns the details of the account receivable contact for your tenant
+- [Set the contact for accounts receivable](https://developers.dealhub.io/reference/putaccountreceivablecontact-1.md): Sets the details of the account receivable contact for your tenant
+- [Get the details of an alias](https://developers.dealhub.io/reference/getsubscriptionchargealias-1.md): Returns the details of the specified alias id including the subscription id and the charge id it is mapped to.
+- [Create an alias for a subscription id/charge id pair](https://developers.dealhub.io/reference/addsubscriptionchargealias-1.md): This allows you to specify a string alias for a subscription id and a charge id. This can be useful when, for example, you want to upload usage statistics and would rather specify your own id (or another external id), rather than referring to Subskribe's internal ids.
+- [Delete the specified alias](https://developers.dealhub.io/reference/deletesubscriptionchargealias-1.md): Deletes the specified alias mapping
+- [Get aliases for a subscription](https://developers.dealhub.io/reference/listaliasesforsubscription-1.md): Returns all aliases for the specified subscription id.
+- [Get automated invoice rule details](https://developers.dealhub.io/reference/getautomatedinvoicerule-1.md): Returns the details of the specified automated invoice rule
+- [Update automated invoice rule details](https://developers.dealhub.io/reference/updateautomatedinvoicerule-1.md): Updates the details of the specified automated invoice rule
+- [Get automated invoice rule details via internal id](https://developers.dealhub.io/reference/getautomatedinvoicerulebyinternalid.md): Returns the details of the specified automated invoice rule
+- [/automatedInvoiceRules/internal/{id}](https://developers.dealhub.io/reference/updateautomatedinvoiceruleusinginternalid.md)
+- [Get automated invoice rules for a tenant](https://developers.dealhub.io/reference/getautomatedinvoicerules-1.md): Returns all the configured automated invoice rules for the tenant
+- [Create an automated invoice rule](https://developers.dealhub.io/reference/addautomatedinvoicerule-1.md): Creates an automated invoice rule with the specified parameters
+- [Send an Invoice Reminder](https://developers.dealhub.io/reference/sendinvoicereminder-1.md): Sends a reminder email for the specified invoice
+- [Send a test email](https://developers.dealhub.io/reference/sendtestdunningemail-1.md): Sends a test email for dunning to the use associated with this API call. Note A user bound api key is required for this operation.
+- [Get dunning settings](https://developers.dealhub.io/reference/getdunningsetting-1.md): Returns the dunning settings for your tenant
+- [Update dunning settings](https://developers.dealhub.io/reference/updatedunningsetting-1.md): Updates the dunning settings for your tenant
+- [Get bulk invoice run details](https://developers.dealhub.io/reference/getbulkinvoicerun-1.md): Returns the details of the specified bulk invoice run
+- [Get items for bulk invoice run](https://developers.dealhub.io/reference/getbulkinvoicerunitems-1.md): Returns the items associated with the specified bulk invoice run
+- [Get invoice balance](https://developers.dealhub.io/reference/getinvoicebalance-1.md): Returns the balance of the specified invoice number
+- [Get invoice details](https://developers.dealhub.io/reference/getinvoice-1.md): Returns the details of the specified invoice number
+- [Update invoice details](https://developers.dealhub.io/reference/updateinvoice-1.md): Updates the details of the specified invoice.
+- [Delete invoice](https://developers.dealhub.io/reference/deleteinvoice-1.md): Deletes the specified invoice
+- [Generate subscription invoices](https://developers.dealhub.io/reference/generateinvoice-1.md): Generates the invoices for the given subscription
+- [Preview invoices](https://developers.dealhub.io/reference/previewinvoicebyorderperiod-1.md): Returns a preview of invoice for the specified order id OR subscription id
+- [Get unbilled usage](https://developers.dealhub.io/reference/previewinvoicebyorderperiod_1.md): Returns the unbilled usage invoice items for the specified subscription
+- [Get all invoices for a subscription](https://developers.dealhub.io/reference/getinvoices-1.md): Returns all invoices for a subscription. The result is paginated. Use the cursor returned from a request in subsequent calls to retrieve all results.
+- [Delete voided invoice](https://developers.dealhub.io/reference/deletevoidedinvoice-1.md): Deletes the specified invoice
+- [Mark invoice as posted](https://developers.dealhub.io/reference/postinvoice-1.md): Marks the specified invoice as posted
+- [Mark invoice as voided](https://developers.dealhub.io/reference/voidinvoice-1.md): Marks the specified invoice as voided
+- [Download invoice PDF](https://developers.dealhub.io/reference/getinvoicedocumentpdf-1.md): Downloads the PDF for an invoice after it has been generated via a POST to /{invoiceNumber}/pdf. The data return will be the PDF document contents.
+- [Generate invoice PDF](https://developers.dealhub.io/reference/createinvoicedocument-1.md): Generates a PDF version of the specified invoice. Once generated, PDF can be later fetched via a call to /{invoiceNumber}/pdf.
+- [Delete an existing billing schedule](https://developers.dealhub.io/reference/deletebillingschedule-1.md): Billing schedules must be deleted in reverse chronological order.
+- [Get billing schedules for a subscription line item](https://developers.dealhub.io/reference/getbillingschedules-1.md): Retrieve all billing schedules for a subscription line item
+- [Add a new billing schedule for subscription line item](https://developers.dealhub.io/reference/addbillingschedule-1.md): Creates a new billing schedule entry for an event based charge
+- [Posts invoices for a bulk run](https://developers.dealhub.io/reference/postinvoicesforbulkinvoicerun-1.md): Marks all invoices associated with the specified bulk run as posted
+- [Send emails for multiple invoices](https://developers.dealhub.io/reference/sendbulkinvoiceemail-1.md): Trigger tasks for sending emails for the given list of invoice IDs
+- [Update invoice sequence](https://developers.dealhub.io/reference/updateinvoicesequence-1.md): Updates the invoice sequence by invoice config id.
+- [Preview all invoices](https://developers.dealhub.io/reference/previewallinvoice-1.md): Returns a preview of invoice for the specified order id OR subscription id
+- [Get usage](https://developers.dealhub.io/reference/getusageforsubscriptioncharge-1.md): Returns the usage invoice items for the specified subscription and charge
+- [Check if invoice can be deleted](https://developers.dealhub.io/reference/getcandeleteinvoice-1.md): Response contains flag to indicate if the invoice can be deleted and reason if it cannot be deleted
+- [Get the invoice document JSON that is used to render invoice PDF](https://developers.dealhub.io/reference/getrawinvoicedocumentjson-1.md): Invoice document JSON that contains all details required to render full Invoice document
+- [Send invoice email to contacts](https://developers.dealhub.io/reference/emailinvoice-1.md): Send the invoice to recipients via email with invoice PDF as attachment.
+- [Create a bulk invoice run](https://developers.dealhub.io/reference/createbulkinvoicerun-1.md): Creates a bulk invoice run as specified by the input parameters. On success the id of the run is returned.
+- [Get applicable payment bank accounts for invoice payment](https://developers.dealhub.io/reference/getapplicablepaymentbankaccountsforinvoicepayment-1.md): Returns a list of applicable payment bank accounts that can be used for payment for a given invoice number
+- [Get settlement application details](https://developers.dealhub.io/reference/getsettlementapplication-1.md): Gets the details of specified settlement application.
+- [Get settlement applications](https://developers.dealhub.io/reference/getsettlementapplications-1.md): Returns the settlement applications for the specified invoice number or payment object.
+- [Apply a payment on a specific invoice](https://developers.dealhub.io/reference/addandapplypayment-1.md): Apply a payment per the specified parameters.
+- [Apply a credit memo](https://developers.dealhub.io/reference/applycreditmemo-1.md): Applies a credit memo per the specified parameters
+- [Unapply a credit memo](https://developers.dealhub.io/reference/unapplycreditmemo-1.md): Unapplies a credit memo per the specified parameters
+- [Get all accounts](https://developers.dealhub.io/reference/getaccounts.md): Returns a paginated list of accounts
+- [Add a new account](https://developers.dealhub.io/reference/addaccount.md): Create an account with the specified parameters. On success, the id of the newly created account is returned
+- [Get an account by id](https://developers.dealhub.io/reference/getaccount.md): Retrieves detailed information about a specific account using its unique identifier. It could be Account_ID, CRM_ID or External_ID. This endpoint provides comprehensive data for a particular account, enabling users to access full account details.
+- [Update an account](https://developers.dealhub.io/reference/updateaccount-1.md): Updates an existing account with the specified parameters
+- [Delete an account](https://developers.dealhub.io/reference/deleteaccount-1.md): Deletes the account associated with the passed ID
+- [Get contacts for an account](https://developers.dealhub.io/reference/getaccountcontacts.md): Returns a list of contacts associated with the specified account id
+- [Add a contact for an account](https://developers.dealhub.io/reference/addaccountcontact.md): Creates and adds a new contact for the specified account and returns the new contact ID.
+- [Update CRM ID](https://developers.dealhub.io/reference/updateaccountcrmid.md): API to update CRM ID for an account
+- [Returns metrics for the specified account](https://developers.dealhub.io/reference/getaccountmetrics.md): Fetches metrics such as ARR, TCV, etc for the specified account as of the specified target date
+- [Get the details of a payment method](https://developers.dealhub.io/reference/getpaymentmethod.md): Returns the details of the payment method for the specified account id and payment method id
+- [Update account ERP details](https://developers.dealhub.io/reference/adderpdetails.md): Update ERP details for an account specified by the account id
+- [Gets contact details](https://developers.dealhub.io/reference/getaccountcontact.md): Returns the details of the specified contact
+- [Update a contact](https://developers.dealhub.io/reference/updateaccountcontact.md): Updates the contact specified by the account id and contact id with the passed information
+- [Delete a contact](https://developers.dealhub.io/reference/deleteaccountcontact.md): Deletes the contact specified by the account id and contact id
+- [Import an account from a CRM](https://developers.dealhub.io/reference/importcrmaccount.md): Ensures an account exists which matches the passed details.If an account exists that has a matching CRM Id, it will be updated, if not, it will be created
+- [Get account payment configuration](https://developers.dealhub.io/reference/getaccountpaymentconfig.md): Retrieves the payment configuration for the specified account
+- [Upsert account payment configuration](https://developers.dealhub.io/reference/upsertaccountpaymentconfig.md): Creates or updates the payment configuration for the specified account
+- [Get account contacts via sales room share link](https://developers.dealhub.io/reference/getaccountcontactviasharelink.md): Gets account contacts via sales room share link
+- [Create account contact via share link](https://developers.dealhub.io/reference/addaccountcontactviasharelink.md): Creates account contact via share link
+- [Update account contact via share link](https://developers.dealhub.io/reference/updateaccountcontactviasharelink.md): Updates account contact via share link
+- [Generate a composite order PDF via Sales Room Share Link](https://developers.dealhub.io/reference/createcompositeorderdocumentforsalesroom.md): Generate and retrieve a PDF representation of the composite order details for a specific sales room using share link.
+- [Delete a file](https://developers.dealhub.io/reference/deletefile.md): Deletes an uploaded file
+- [Get all files for a sales room](https://developers.dealhub.io/reference/getfiles.md): Returns all uploaded files
+- [Upload a file](https://developers.dealhub.io/reference/uploadfile.md): Uploads a file to the sales room
+- [Create a new intelligent sales room](https://developers.dealhub.io/reference/createsalesroom.md): Creates a new sales room for the specified order
+- [Get sales room by order ID](https://developers.dealhub.io/reference/getsalesroombyorderid.md): Returns the sales room for the specified order, creating one if it doesn't exist
+- [Get sales room by ID](https://developers.dealhub.io/reference/getsalesroombyid.md): Returns the sales room details
+- [Update a widget](https://developers.dealhub.io/reference/updatewidget.md): Updates widget name and content
+- [Delete a widget](https://developers.dealhub.io/reference/deletewidget.md): Deletes a user-generated widget
+- [Reorder widgets](https://developers.dealhub.io/reference/reorderwidgets.md): Updates the sort order of all widgets
+- [Get sales room theme](https://developers.dealhub.io/reference/gettheme.md): Returns the current theme settings
+- [Update theme manually](https://developers.dealhub.io/reference/updatetheme.md): Updates theme with user-provided values
+- [Generate AI content for widget](https://developers.dealhub.io/reference/generateaicontent.md): Generates AI content based on order context
+- [Update AI generated content](https://developers.dealhub.io/reference/updateaicontent.md): Updates AI content with user edits
+- [Activate sales room](https://developers.dealhub.io/reference/activatesalesroom.md): Moves sales room from READY_TO_SHARE to ACTIVE status
+- [Retract sales room](https://developers.dealhub.io/reference/retractsalesroom.md): Moves sales room from ACTIVE to READY_TO_SHARE status
+- [Accept sales room proposal (using share link)](https://developers.dealhub.io/reference/acceptsalesroom.md): Moves sales room (using share link) to ACCEPTED status
+- [Accept sales room proposal](https://developers.dealhub.io/reference/acceptsalesroom_1.md): Moves sales room to ACCEPTED status
+- [Get engagement summary](https://developers.dealhub.io/reference/getengagementsummary.md): Returns engagement metrics and summary
+- [Get activity logs](https://developers.dealhub.io/reference/getactivitylogs.md): Returns activity logs with optional date filtering and pagination
+- [Get share link access records](https://developers.dealhub.io/reference/getsharelinkaccesses.md): Returns all users who have accessed via share link
+- [Get unique visitor count](https://developers.dealhub.io/reference/getuniquevisitorcount.md): Returns the number of unique visitors
+- [Update customer information](https://developers.dealhub.io/reference/updatecustomerinformation.md): Updates billing and/or shipping contact information
+- [Fetch custom fields for an Intelligent Sales Room](https://developers.dealhub.io/reference/getcustomfields_1.md): Retrieves the custom fields for the specified Intelligent Sales Room.
+- [Update custom fields for an Intelligent Sales Room](https://developers.dealhub.io/reference/updatecustomfields_1.md): Updates the custom fields for the specified Intelligent Sales Room.
+- [Track user event](https://developers.dealhub.io/reference/trackevent.md): Records user interaction events
+- [Fetch custom fields for an Intelligent Sales Room (via share link)](https://developers.dealhub.io/reference/getcustomfieldsviasharelink.md): Retrieves the custom fields for the specified Intelligent Sales Room (via share link).
+- [Update custom fields for an Intelligent Sales Room (via share link)](https://developers.dealhub.io/reference/updatecustomfieldsviasharelink.md): Updates the custom fields for the specified Intelligent Sales Room (via share link).
+- [Get all widgets for a sales room](https://developers.dealhub.io/reference/getwidgets.md): Returns all widgets ordered by sort order
+- [Create a new widget](https://developers.dealhub.io/reference/createwidget.md): Creates a new user-generated widget with type-specific content structure.  Content format by widget type: - RICH_TEXT: {"html": "HTML content"} - AI_GENERATED_TEXT: {} (empty object - content is generated by calling the AI generation endpoint after widget creation) - MEDIA_CONTENT: {"type": "YOUTUBE_VIDEO|LINK|FILE_UPLOAD|GOOGLE_WORKSPACE|PDF_UPLOAD", "url": "...", "fileId": "...", "title": "..."} - USER_PDF: {"fileId": "uploaded-file-uuid"}  Media content types: - YOUTUBE_VIDEO: YouTube video URLs - LINK: Generic web links - FILE_UPLOAD: References uploaded files via fileId - GOOGLE_WORKSPACE: Google Docs/Sheets/Slides URLs - PDF_UPLOAD: References uploaded PDF files via fileId  AI Generated content structure after generation: - type: "AI_GENERATED_TEXT" - aiContentId: UUID of the generated content record - displayContent: The actual generated text content
+- [Extract theme from website](https://developers.dealhub.io/reference/extracttheme.md): Automatically extracts branding from website using AI
+- [Get file download URL](https://developers.dealhub.io/reference/getfiledownloadurl.md): Returns a presigned URL for file download
+- [Fetch order form PDF for an Intelligent Sales Room](https://developers.dealhub.io/reference/getorderdocument.md): Downloads the order form PDF for the specified Intelligent Sales Room.
+- [Access sales room via share link](https://developers.dealhub.io/reference/accessviasharelink.md): End-user access to sales room using share link
+- [Get widgets via share link](https://developers.dealhub.io/reference/getwidgetsviasharelink.md): End-user access to sales room widgets
+- [Get theme via share link](https://developers.dealhub.io/reference/getthemeviasharelink.md): End-user access to sales room theme
+- [Get files via share link](https://developers.dealhub.io/reference/getfilesviasharelink.md): End-user access to sales room files
+- [Get file download URL via share link](https://developers.dealhub.io/reference/getfiledownloadurlviasharelink.md): End-user access to file download
+- [Get sales room details via share link](https://developers.dealhub.io/reference/getsalesroomviasharelink.md): End-user access to basic sales room information
+- [Get AI content via share link](https://developers.dealhub.io/reference/getaicontentviasharelink.md): End-user access to AI generated content
+- [Update customer information via share link](https://developers.dealhub.io/reference/updatecustomerinformationviasharelink.md): End-user update of customer information via share link
+- [Download image file via share link](https://developers.dealhub.io/reference/downloadimageviasharelink.md): Downloads image file for public access
+- [Send email for e-signature via share link](https://developers.dealhub.io/reference/sendemailforesignviasharelink.md): Sends email for eSign for Sales Room via share link
+- [Fetch order metadata for an Intelligent Sales Room](https://developers.dealhub.io/reference/getordermetadata.md): Retrieves the corder metadata for the specified Intelligent Sales Room.
+- [Generate an order PDF via Sales Room Share Link](https://developers.dealhub.io/reference/createorderdocumentforsalesroom.md): Generate and retrieve a PDF representation of the order details for a specific sales room using share link.
+- [Specify the current accounting period](https://developers.dealhub.io/reference/specifycurrentaccountingperiod-1.md): Specify the start date of and open an accounting period, making it current
+- [Get the current accounting period](https://developers.dealhub.io/reference/getcurrentaccountingperiod-1.md)
+- [Return Journal Entry summary](https://developers.dealhub.io/reference/getjournalentriessummary-1.md): Returns Journal Entry summary for the optionally specified accounting period as text/csv. If no period is specified, Journal Entry summary for 12 recent periods are returned.
+- [Get running balances of revenue schedule](https://developers.dealhub.io/reference/getrunningbalances-1.md): Returns deferred revenue and contract asset balances for the given revenue schedule, as of the given date.If no date is provided, the balances are returned as of the current date.
+- [Get accounting events for the specified dates](https://developers.dealhub.io/reference/getaccountingevents-1.md): Returns all accounting related events between the from and to dates. Since there can be a large number of these, the results are paginated. To retrieve subsequent pages of events, pass in the pageToken returned from the prior call.
+- [Return Journal Entries](https://developers.dealhub.io/reference/getjournalentries-1.md): Returns all Journal Entries for the optionally specified accounting period as text/csv. If no period is specified, Journal Entries for 12 recent periods are returned.
+- [Get ledger accounts](https://developers.dealhub.io/reference/getledgeraccounts-1.md): Get list of all ledger accounts (GL accounts), optionally filtered by type
+- [Generate zeppa artifact based on the description provided](https://developers.dealhub.io/reference/generatezeppaartifact.md): Generate zeppa code or documentation based on the input provided
+- [Get the agent session given the id, NOTE: at the moment there is no response body](https://developers.dealhub.io/reference/getagentsession.md): Get the agent session given the id, NOTE: at the moment there is no response body, if 200 is returned then session exists
+- [Generate a summary of the subscription in plain english in markdown format](https://developers.dealhub.io/reference/generatesubscriptionsummary.md): Generate a complete summary of the subscription with the given id, a full detailed summary will be generated including metrics
+- [Create new conversational AI agent session](https://developers.dealhub.io/reference/createagentsession.md): Create a new conversation session with Subskribe AI agent, this resource will return a session id which will be used for future conversations
+- [Chat with a given session id and get back a response for a given message](https://developers.dealhub.io/reference/chatresponse.md): The API responds user message, a session id is required to identify the session this message needs to be posted
+- [Chat with a given session id and get back a response for a given message in a async manner in the form of server side events](https://developers.dealhub.io/reference/chatresponseasync.md): The API responds to user message, a session id is required to identify the session this message needs to be posted
+- [List the messages belong to this session](https://developers.dealhub.io/reference/chatmessages.md): The message will be returned in the most recent order, with the latest being the first
+- [/guidedSelling/usecase/{id}/qscript](https://developers.dealhub.io/reference/getusecasescript.md)
+- [/guidedSelling/usecase/{id}/qscript](https://developers.dealhub.io/reference/putqscript.md)
+- [/guidedSelling/usecase](https://developers.dealhub.io/reference/listusecases.md)
+- [/guidedSelling/usecase](https://developers.dealhub.io/reference/addusecase.md)
+- [Get Next Question for Guided Selling](https://developers.dealhub.io/reference/fetchnextquestion.md): Get the next question given a set of answers to questions so far
+- [Get The next set of questions based on the answers provided so far](https://developers.dealhub.io/reference/fetchnextquestions.md): Get the ordered list of all relevant questions to answer based on the answers provided so far
+- [/guidedSelling/usecase/{id}](https://developers.dealhub.io/reference/getusecase.md)
+- [/guidedSelling/usecase/{id}](https://developers.dealhub.io/reference/updateusecase.md)
+- [/guidedSelling/usecase/{id}](https://developers.dealhub.io/reference/deleteusecase.md)
+- [Build an order using the guided selling answers](https://developers.dealhub.io/reference/buildorderfromanswers.md): For a given use case this API allows building the order, given account id. you can also save the order
+- [Use AI to get answers for guided selling questions](https://developers.dealhub.io/reference/getanswersfromai.md): Get the answer to guided selling questions form the deal desk AI, when all questions are answered then return the Answers for the guided selling
+- [Generate an explanation of the proration calculation](https://developers.dealhub.io/reference/explainprorationasync.md): Generate an explanation of the proration calculation for the given order line item.
+- [Generate an explanation of the proration calculation](https://developers.dealhub.io/reference/explainproration.md): Generate an explanation of the proration calculation for the given order line item.
+- [Generate a summary of the order in plain english in markdown format](https://developers.dealhub.io/reference/generateordersummary.md): Generate a complete summary of the order with the given id, a full detailed summary will be generated including metrics
+- [Add a Anrok integration](https://developers.dealhub.io/reference/addintegration.md): Returns the integration ID if successful
+- [Test an integration is valid](https://developers.dealhub.io/reference/testintegration.md)
+- [Validate an address with Anrok](https://developers.dealhub.io/reference/validateaddress.md)
+- [Get integration details](https://developers.dealhub.io/reference/getintegration.md): Gets the integration details of the specified integration id
+- [Pings Avalara](https://developers.dealhub.io/reference/ping.md): Once an integration is set up Avalara can be pinged to ensure it is working correctly. On success "PONG" is returned.
+- [Gets Avalara integration details](https://developers.dealhub.io/reference/getintegration_1.md): Gets the integration details of the specified integration id
+- [Gets Avalara integration details](https://developers.dealhub.io/reference/getintegrationbytenant.md): Returns the details of the Avalara integration for your tenant
+- [Create an Avalara integration](https://developers.dealhub.io/reference/integrate.md): Creates an integration with Avalara according to the specified details. On success the id of the integration is returned
+- [Opportunity name change notification](https://developers.dealhub.io/reference/opportunitynamechangenotification.md): Subskribe is notified for the opportunity name change happening in Crm systems. This is used to update the opportunity name in Subskribe.
+- [Fetch all associated CRM contacts for an account](https://developers.dealhub.io/reference/getcrmcontactsbyaccountid.md)
+- [Upsert CRM contacts for an account](https://developers.dealhub.io/reference/upsertcrmcontacts.md)
+- [Complete Docusign integration](https://developers.dealhub.io/reference/completeintegration.md): Complete the docusign integration. This should be called after the integration has been created and an authorization code has been received from Docusign.
+- [Create Docusign integration](https://developers.dealhub.io/reference/initiateintegration.md): Creates an integration with Docusign. On success a redirect URL is returned.
+- [Delete Docusign integration](https://developers.dealhub.io/reference/deleteintegration.md): Removes integration with Docusign from your tenant
+- [Re-authenticate Docusign integration](https://developers.dealhub.io/reference/reauthenticateintegration.md): Generates a fresh DocuSign authorization URL for the existing integration so an administrator can re-authenticate.
+- [Handle HubSpot authorization code](https://developers.dealhub.io/reference/authorizationcodecallback.md): Endpoint to handle and process a HubSpot authorization code
+- [Initiate a HubSpot integration](https://developers.dealhub.io/reference/initiateintegration_1.md): Initiates an integration with HubSpot. On success redirect URL is returned.
+- [Delete HubSpot Integration](https://developers.dealhub.io/reference/deleteintegration_1.md): Deletes your integration with HubSpot.
+- [Add custom properties to HubSpot](https://developers.dealhub.io/reference/setuphubspot.md): Add custom properties to HubSpot
+- [Verify HubSpot setup](https://developers.dealhub.io/reference/verifysetup.md): Verify custom objects and properties
+- [Sync esign details for order id](https://developers.dealhub.io/reference/syncesigndetailsforordertohubspot.md)
+- [Sync order to Hubspot](https://developers.dealhub.io/reference/syncorder.md)
+- [Import account from HubSpot](https://developers.dealhub.io/reference/importaccountfromhubspot.md)
+- [Sync subscription to Hubspot](https://developers.dealhub.io/reference/synchubspotsubscription.md)
+- [Sync subscription status to Hubspot](https://developers.dealhub.io/reference/synchubspotsubscriptionstatus.md)
+- [Callback for the authorization code](https://developers.dealhub.io/reference/authorizationcodecallback_1.md): Handles the authorization code callback from Salesforce
+- [Initiate integration with Salesforce](https://developers.dealhub.io/reference/initiateintegration_2.md): Initiate a Salesforce integration. On success a redirect url is returned.
+- [Delete Salesforce integration](https://developers.dealhub.io/reference/deleteintegration_2.md): Removes the Salesforce integration for the tenant.
+- [Get Salesforce accounts](https://developers.dealhub.io/reference/getaccountsbyname.md): Returns Salesforce accounts matching the specified name.
+- [Import account from Salesforce](https://developers.dealhub.io/reference/importaccount.md): Imports an account from Salesforce. On success a redirect uri is returned.
+- [Get Salesforce account](https://developers.dealhub.io/reference/getaccountbyid.md): Gets a Salesforce account by its id.
+- [Make an order primary](https://developers.dealhub.io/reference/updateprimaryorderidforopportunity.md): Marks an order as the primary order for its opportunity.
+- [Get Salesforce opportunities](https://developers.dealhub.io/reference/getopportunitiesbyaccountid.md): Returns the Salesforce opportunities associated withe the specified account.
+- [Sync order to Salesforce](https://developers.dealhub.io/reference/syncordertosalesforce.md): Syncs the specified order to Salesforce.
+- [Sync orders to Salesforce](https://developers.dealhub.io/reference/syncorderstosalesforce.md): Syncs the specified order to Salesforce.
+- [Sync whole tenant to Salesforce in a paginated fashion](https://developers.dealhub.io/reference/synctenanttosalesforce.md): Syncs the specified tenant to Salesforce. Returns paginated JSON of accounts which were synced
+- [Sync orders to Salesforce](https://developers.dealhub.io/reference/syncdeletedorderstosalesforce.md): Syncs the specified order to Salesforce.
+- [Sync an account to Salesforce](https://developers.dealhub.io/reference/syncaccounttosalesforce.md): Syncs the account ARR and its orders to Salesforce.
+- [Sync subscription to Salesforce](https://developers.dealhub.io/reference/syncsubscriptiontosalesforce.md): Syncs the specified subscription to Salesforce.
+- [Add a TaxJar integration](https://developers.dealhub.io/reference/addintegration_1.md): Returns the integration ID if successful
+- [Test an integration is valid](https://developers.dealhub.io/reference/testintegration_1.md)
+- [Validate an address with TaxJar](https://developers.dealhub.io/reference/validateaddress_1.md): Returns a suggested addresses if found
+- [Get integration details](https://developers.dealhub.io/reference/getintegration_2.md): Gets the integration details of the specified integration id
+- [revoke all keys](https://developers.dealhub.io/reference/revokeapikey.md): Revokes all keys for your tenant
+- [Retrieve an API key by id](https://developers.dealhub.io/reference/getapikeybyid.md): Retrieve an api key referenced by its id
+- [Retrieves all API keys](https://developers.dealhub.io/reference/getallapikeys.md): Retrieves a list of (maximum 500 items) all API keys (including expired and deactivated keys)
+- [Create a new api key](https://developers.dealhub.io/reference/createapikey.md): Create a new api key with the specified parameters. The new key is returned
+- [revoke an API key by id](https://developers.dealhub.io/reference/revokeapikeybyid.md): Revoke an api key referenced by its id
+- [Get SAML Integration Status](https://developers.dealhub.io/reference/getsamlintegration.md): Retrieves SAML integration status
+- [Add a saml integration](https://developers.dealhub.io/reference/addsamlintegration.md): Adds a saml integration
+- [Delete SAML Integration](https://developers.dealhub.io/reference/deletesamlintegration.md): Deletes existing SAML integration
+- [Get approval flows](https://developers.dealhub.io/reference/getapprovalflows.md): Gets all approval flows
+- [Add an approval flow](https://developers.dealhub.io/reference/addapprovalflow.md): Adds an approval flow to the order execution hierarchy and returns its ID
+- [Get Details of an approval flow](https://developers.dealhub.io/reference/getapprovalflowbyid.md): Returns the details of the specified approval flow
+- [Update an approval flow](https://developers.dealhub.io/reference/updateapprovalflow.md): Updates the details of the specified approval flow
+- [Delete an approval flow](https://developers.dealhub.io/reference/deleteapprovalflow.md): Deletes an approval flow
+- [Get approval matrix details](https://developers.dealhub.io/reference/getallimportdetails.md): Returns details regarding the approval matrices that have been uploaded
+- [Upload an Approval Matrix](https://developers.dealhub.io/reference/uploadapprovalmatrixcsv.md): Upload a csv containing the order approval matrix to be used on order execution. The csv should have the following format:  Segment, ApprovalRoleName1, ApprovalRoleName2 ... SegmentName1, UserEmailOrGroupName1, UserEmailOrGroupName2 ... Roles, userEmails, userGroups are expected to be added before putting them in this csv. Any new segment names defined here will add a new segment. If a segment isn't added, it shall be deleted.
+- [Download approval matrix](https://developers.dealhub.io/reference/getapprovalmatrixascsv.md): Downloads your order approval matrix as a csv
+- [Get import details](https://developers.dealhub.io/reference/getimportdetailsbyid.md): Gets the details of an import specified by the passed ID
+- [Download the csv for an import](https://developers.dealhub.io/reference/getimportresult.md): Downloads the CSV for an import activity specified by the passed ID
+- [Preview import changes](https://developers.dealhub.io/reference/getimportpreview.md): Preview the changes that a specified approval matrix import will have once applied
+- [Finalize an import](https://developers.dealhub.io/reference/submitapprovalmatrixcsv.md): Submit and finalize the import for the specified import operation.
+- [Get approval roles](https://developers.dealhub.io/reference/getapprovalroles.md): Gets all approval roles
+- [Add an approval role](https://developers.dealhub.io/reference/addapprovalrole.md): Adds an approval role to the order execution hierarchy and returns its ID
+- [Get Details of an approval role](https://developers.dealhub.io/reference/getapprovalrolebyid.md): Returns the details of the specified approval role
+- [Update an approval role](https://developers.dealhub.io/reference/updateapprovalrole.md): Updates the details of the specified approval role
+- [Delete an approval role](https://developers.dealhub.io/reference/deleteapprovalrole.md): Deletes an approval role
+- [Get approval segments](https://developers.dealhub.io/reference/getapprovalsegments.md): Get all approval segments
+- [Add an approval segment](https://developers.dealhub.io/reference/addapprovalsegment.md): Define and add an approval segment which can be later specified in an approval matrix. The ID of the segment is returned.
+- [Get approval segment details](https://developers.dealhub.io/reference/getapprovalsegmentbyid.md): Gets the details of the specified approval segment
+- [Update an approval segment](https://developers.dealhub.io/reference/updateapprovalsegment.md): Update the details of the specified approval segment
+- [Delete a segment](https://developers.dealhub.io/reference/deleteapprovalsegment.md): Deletes the segment specified by the id
+- [Get complete approval history for an order](https://developers.dealhub.io/reference/getorderapprovalhistory.md): Returns comprehensive approval workflow history including all submission attempts and approver activity.   **Important:** This endpoint returns ONLY approval domain data with user IDs and comment IDs as references. To get full details: - User details: Call GET /users with user IDs from this response - Order details: Call GET /orders/{orderId} - Comment messages: Call GET /orders/{orderId}/comments  The response includes: - All submission attempts (if order was rejected and resubmitted) - All workflows triggered for each submission - Detailed approval states with approver user IDs (not names) - Summary statistics across all attempts
+- [Get the maximum number of attachments allowed for an account](https://developers.dealhub.io/reference/getmaximumnumberofattachmentsperaccount.md): Gets the maximum number of files allowed to be attached to any account
+- [Get attachment contents](https://developers.dealhub.io/reference/getattachment.md): Gets the contents of the specified attachment
+- [Delete an attachment](https://developers.dealhub.io/reference/deleteattachmentfromaccount.md): Unattaches and deletes the specified document
+- [Get attachments for an account](https://developers.dealhub.io/reference/listaccountattachments.md): Lists all the documents attached to an account
+- [Add an attachment](https://developers.dealhub.io/reference/addattachmenttoaccount.md): Attaches a document to the specified account. The post body should contain the body of the document that is to be attached. On success the Id of the attachment is returned.
+- [Update the details of an attachment](https://developers.dealhub.io/reference/modifyattachment.md): Updates the details of the specified document
+- [Match bank transactions](https://developers.dealhub.io/reference/banktransactionsmatch-1.md): Match bank transactions
+- [Add and apply bulk payments to invoices CSV](https://developers.dealhub.io/reference/addandapplybulkpaymentscsv.md): Bulk upload payments to invoices in CSV file
+- [Aggregate raw usage](https://developers.dealhub.io/reference/performondemandusageaggregation-1.md): Trigger the process to aggregate any remaining raw usage records
+- [Upload usage record CSV](https://developers.dealhub.io/reference/uploadsubscriptionusagecsv-1.md): Upload usage records in CSV file. Each row of the file represents a single usage record
+- [Add usage record](https://developers.dealhub.io/reference/addusage-1.md): Load usage records into the system
+- [Get aggregated usage](https://developers.dealhub.io/reference/getusageaggregatesforsubscription-1.md): Retrieve the current aggregated usage data for a subscription between 2 instants
+- [Get prepaid drawdown usage stats for subscription](https://developers.dealhub.io/reference/getusagestatsforsubscription-1.md): Retrieve the current prepaid drawdown statistics for a subscription
+- [Get prepaid drawdown usage stats CSV](https://developers.dealhub.io/reference/getusagestatsforsubscriptioncsv-1.md): Retrieve the current prepaid drawdown statistics for a subscription in CSV format
+- [Get prepaid drawdown usage stats PDF](https://developers.dealhub.io/reference/getusagestatsforsubscriptionpdf-1.md): Retrieve the current prepaid drawdown statistics for a subscription in PDF format
+- [Get all prepaid drawdown usage stats CSV](https://developers.dealhub.io/reference/getusagestatsforallsubscriptionscsv-1.md): Retrieve the current prepaid drawdown statistics for all subscriptions for a time range in CSV format
+- [Get usage arrival checkpoint](https://developers.dealhub.io/reference/getusagearrivaltimecheckpoint-1.md): Retrieve the latest usage record upload to the system as epoch seconds
+- [Get paginated bank transaction records](https://developers.dealhub.io/reference/getbanktransactionpotentialinvoices-1.md): Returns all bank transaction records in a paginated fashion
+- [Delete given bank transaction record](https://developers.dealhub.io/reference/deletebanktransaction-1.md): Delete given bank transaction record
+- [Import bank transactions via CSV](https://developers.dealhub.io/reference/banktransactionscsv-1.md): Import bank transactions via CSV
+- [Get charge details](https://developers.dealhub.io/reference/getcharge.md): Gets the details of the specified charge.
+- [Download revenue recognition fields](https://developers.dealhub.io/reference/getrevrecfieldsascsv.md): Downloads your charge revenue recognition fields as a csv
+- [Backfill revenue recognition fields](https://developers.dealhub.io/reference/backfillrevrecfields.md): Backfill API to update revenue recognition fields on charges
+- [Get ledger accounts](https://developers.dealhub.io/reference/getchargeledgeraccounts.md): Gets the ledger accounts mapped to the specified charge
+- [Map ledger accounts](https://developers.dealhub.io/reference/mapledgeraccountstocharge.md): Map ledger accounts to the specified charge for the specified plan.
+- [Get replaced plans](https://developers.dealhub.io/reference/getreplacedplans.md)
+- [Get plans](https://developers.dealhub.io/reference/getplans.md): Returns all plans for a product. The result is paginated. To retrieve all results pass the cursor returned from a call to the next call until all results are returned.
+- [Create a plan](https://developers.dealhub.io/reference/addplan.md): Creates a plan. On success the id of the new plan is returned.
+- [Get plan details](https://developers.dealhub.io/reference/getplan.md): Returns the details of the specified plan.
+- [Update plan](https://developers.dealhub.io/reference/updateplan.md): Updates the details of the specified plan. Note you can't update the details of a plan once it's in use.
+- [Delete a plan](https://developers.dealhub.io/reference/deleteplan.md): Deletes a plan. Note you can't delete a plan that's in use.
+- [Update plan terms](https://developers.dealhub.io/reference/updateplanterms.md): Updates predefined terms associated with the specified plan.
+- [Update plan metadata](https://developers.dealhub.io/reference/updateplanmetadata.md): Update plan metadata. For now, this can be used only to change the entities assigned to a plan
+- [Revert a plan to draft](https://developers.dealhub.io/reference/deactivateplan.md): Marks a plan as draft
+- [Add charge to plan](https://developers.dealhub.io/reference/addcharge.md): Adds a charge to the specified plan.  Success response contains ID of the new charge.
+- [Update non-financial charge details](https://developers.dealhub.io/reference/patchcharge.md): Updates certain details of the specified charge which won't impact its financial treatment
+- [Activate a plan](https://developers.dealhub.io/reference/activateplan.md): Marks a plan as active
+- [Deprecate a plan](https://developers.dealhub.io/reference/deprecateplan.md): Marks a plan as deprecated. Once deprecated a plan may not be attached to new orders.
+- [Reactivate a plan](https://developers.dealhub.io/reference/reactivateplan.md): Reactivates a deprecated plan.
+- [Duplicate a plan](https://developers.dealhub.io/reference/duplicateplan.md): Duplicates the specified plan. On success the new plan id is returned.
+- [Update charge details](https://developers.dealhub.io/reference/updatecharge.md): Updates the details of the specified charge on the specified plan.
+- [Delete a charge](https://developers.dealhub.io/reference/deletecharge.md): Removes a charge from a plan.
+- [Get Plans that have a specific value for a custom field](https://developers.dealhub.io/reference/getplansfilterbycustomfields.md): Gets Plans that have a specific value for a custom field
+- [Get product category details](https://developers.dealhub.io/reference/getproductcategory.md): Gets the details of the specified product category
+- [Update product category details](https://developers.dealhub.io/reference/updateproductcategory.md): Updates the details of a product category
+- [Delete a product category](https://developers.dealhub.io/reference/deleteproductcategory.md): Deletes the specified product category. Note that a product category can't be delete once it's in use.
+- [Get product Categories](https://developers.dealhub.io/reference/getproductcategories.md): Gets all product categories for your tenant. The results are paginated. To fetch all results pass the cursor returned from a call to the subsequent calls until all results are returned. Initially the cursor should not be specified.
+- [Create a product category](https://developers.dealhub.io/reference/addproductcategory.md): Creates a product category. On success the id of the category is returned.
+- [Get product details](https://developers.dealhub.io/reference/getproduct.md): Gets the details of the specified product.
+- [Update product details](https://developers.dealhub.io/reference/updateproduct.md): Updates the details of the specified product
+- [Delete a product](https://developers.dealhub.io/reference/deleteproduct.md): Delete the specified product.
+- [Export product catalog](https://developers.dealhub.io/reference/exportproductcatalog.md): Export the product catalog in CSV format.
+- [Get products](https://developers.dealhub.io/reference/getproducts.md): Returns all products for your tenant. The results on paginated. To fetch them all pass the cursor returned from a call to the subsequent call until all results are fetched. Initially the cursor should not be specified.
+- [Create a product](https://developers.dealhub.io/reference/addproduct.md): Creates a product for your tenant. The success response contains the ID of the product.
+- [Update composite order status](https://developers.dealhub.io/reference/updatecompositeorderstatus.md): Update the status of a specific composite order by its ID.
+- [Fetch composite order](https://developers.dealhub.io/reference/getcompositeorder.md): Fetches the composite order with the specified id.
+- [Delete composite order](https://developers.dealhub.io/reference/deletecompositeorder.md): Deletes the composite order with the specified id.
+- [Mark composite order as executed.](https://developers.dealhub.io/reference/executeorder.md): Marks the composite order as executed. This also executes the individual orders contained. Optionally, the execution time can be specified using the executedOn query parameter.
+- [Fetch composite order form PDF](https://developers.dealhub.io/reference/getcompositeorderdocument.md): Downloads the order form PDF for the specified order. This PDF must have been generated via a POST to /{id}/pdf. The response is the PDF document.
+- [Generate a composite order PDF](https://developers.dealhub.io/reference/createcompositeorderdocument.md): Generates a composite order form PDF. When completed this document can be downloaded via a get to /{id}/pdf.
+- [Return all opportunities](https://developers.dealhub.io/reference/getopportunities.md): Returns all opportunities associated with the specified account. The results are paginated. To fetch all results, pass the cursor returned from a call to subsequent calls.
+- [Return details of an opportunity](https://developers.dealhub.io/reference/getopportunitybycrmopportunityid.md): Returns the details of a specified opportunity
+- [Delete an opportunity with given CRM ID](https://developers.dealhub.io/reference/deleteopportunitybycrmid.md): Delete an opportunity with given CRM ID if there are no associated orders
+- [Return details of an opportunity](https://developers.dealhub.io/reference/getopportunitybyopportunityid.md): Returns the details of a specified opportunity
+- [Return a list of orders associated with a CRM opportunity id](https://developers.dealhub.io/reference/getordersbycrmopportunityid.md): Returns the details of orders
+- [Get order details](https://developers.dealhub.io/reference/getorder.md): Retrieve details of a specific order by its ID.
+- [Delete an order](https://developers.dealhub.io/reference/deleteorder.md): Delete a specific order by its ID.
+- [Get all Orders](https://developers.dealhub.io/reference/getorders.md): Gets all orders for your tenant. The results are paginated. To fetch all results, take the cursor returned from a call and pass it to subsequent calls.
+- [Create an order](https://developers.dealhub.io/reference/addorder.md): creates an order with the specified parameters. On success the order id is returned.
+- [Update order details](https://developers.dealhub.io/reference/updateorder.md): Updates the details of the specified order.
+- [Update order status](https://developers.dealhub.io/reference/updateorderstatus.md): Update the status of a specific order by its ID.
+- [Get order metrics](https://developers.dealhub.io/reference/getordermetrics.md): Retrieve the metrics for a specific order by its ID. Metrics can be filtered by a target date.
+- [Rebase amendment against latest subscription version](https://developers.dealhub.io/reference/rebaseamendment.md): Rebase a specific order by its ID. Rebasing an order involves recalculating its metrics or values based on updated data or criteria.
+- [Update order attributes for non-draft orders](https://developers.dealhub.io/reference/updateorderattributes.md): Update order attributes for non-draft orders
+- [Fetch order form PDF](https://developers.dealhub.io/reference/getorderdocument_1.md): Retrieves the PDF version of the order form for a specific order identified by its ID.
+- [Generate an order PDF](https://developers.dealhub.io/reference/createorderdocument.md): Generate and retrieve a PDF representation of the order details for a specific order by its ID.
+- [Fetch specific order form PDF on order](https://developers.dealhub.io/reference/getspecificorderdocument.md): Retrieves specific PDF of the order form for a specific order identified by its orderId.
+- [Download word doc version of order form](https://developers.dealhub.io/reference/getorderdocumentdoc.md): Download a Microsoft Word document of the order form for a specific order by its ID.
+- [Download word docx version of order form](https://developers.dealhub.io/reference/getorderdocumentdocx.md): Download a Microsoft Word document of the order form for a specific order by its ID.
+- [Mark order as executed.](https://developers.dealhub.io/reference/executeorder_1.md): Marks the order as executed. Optionally, the execution time can be specified using the executedOn query parameter.
+- [Mark order as executed](https://developers.dealhub.io/reference/forceexecuteorder.md): Forcefully executes an order. This endpoint bypasses approval checks and immediately executes the order.
+- [Get order line metrics](https://developers.dealhub.io/reference/getorderlinemetrics.md): Retrieves metrics for all line items associated with the specified order.
+- [Get custom billing schedule for the order](https://developers.dealhub.io/reference/getcustombillingschedule.md): Get the custom billing schedule for the order
+- [Mark Credit Memo as voided](https://developers.dealhub.io/reference/voidcreditmemo.md): Marks the specified Credit Memo as voided
+- [Get credit memos for an account](https://developers.dealhub.io/reference/getcreditmemoforaccount-1.md): Returns a paginated list of credit memos for the specified account. Pass the cursor returned to subsequent calls to retrieve all data.
+- [Create a standalone credit memo](https://developers.dealhub.io/reference/createstandalonecreditmemo-1.md): Creates a standalone credit memo for a specified account. On success the number of the new memo is returned
+- [Get credit memo details](https://developers.dealhub.io/reference/getcreditmemo-1.md): Returns the details of the specified credit memo
+- [Update a credit memo](https://developers.dealhub.io/reference/updatedraftcreditmemo-1.md): Updates the details of a credit memo in DRAFT status
+- [Delete a credit memo](https://developers.dealhub.io/reference/deletecreditmemo-1.md): Deletes the specified credit memo. The credit memo must be in DRAFT status
+- [Post a credit memo](https://developers.dealhub.io/reference/postcreditmemo-1.md): Sets the status of the specified credit memo to POSTED
+- [Download credit memo pdf](https://developers.dealhub.io/reference/getcreditmemodocumentpdf-1.md): Downloads the pdf version of the credit memo. Note the credit memo must already have been created. If the credit memo is still in the process of being created, HTTP 202 is returned.
+- [Create a credit memo document](https://developers.dealhub.io/reference/createcreditmemodocument-1.md): Creates a pdf version of the credit memo
+- [Get credit memo configuration for the tenant](https://developers.dealhub.io/reference/getcreditmemoconfiguration-1.md): Returns the credit memo configuration for your tenant
+- [Update credit memo configuration](https://developers.dealhub.io/reference/updatecreditmemoconfiguration-1.md): Updates the credit memo configuration for you tenant.
+- [Convert invoice to credit memo](https://developers.dealhub.io/reference/convertnegativedraftinvoice-1.md): Converts the specified invoice to a credit memo. Note the invoice must be in DRAFT status and have a negative balance.
+- [Get credit memo balance](https://developers.dealhub.io/reference/getcreditbalance-1.md): Gets the balance of the specified credit memo
+- [Get CRM field mapping upload list](https://developers.dealhub.io/reference/getallimportdetails_1.md): Returns details regarding the CRM field mappings that have been uploaded
+- [Upload of CRM field mappings](https://developers.dealhub.io/reference/uploadcrmfieldmappingcsv.md): crmType: HUBSPOT, SALESFORCE     crmObjectType: OPPORTUNITY, ACCOUNT, ORDER     direction: INBOUND, OUTBOUND     crmFieldName     subskribeFieldName
+- [Get import details](https://developers.dealhub.io/reference/getimportdetailsbyid_1.md): Gets the details of an import specified by the passed ID
+- [Download the csv for an import](https://developers.dealhub.io/reference/getimportresult_1.md): Downloads the CSV for an import activity specified by the passed ID
+- [Preview import changes](https://developers.dealhub.io/reference/getimportpreview_1.md): Preview the changes that a CRM field mapping import will have once applied
+- [Download CRM field mappings](https://developers.dealhub.io/reference/getcrmfieldmappingascsv.md): Downloads your CRM field mappings as a csv
+- [Finalize an import](https://developers.dealhub.io/reference/submitcrmfieldmappingimport.md): Submit and finalize the import for the specified import operation.
+- [Create a custom field definition](https://developers.dealhub.io/reference/createcustomfielddefinition.md): Creates a new custom field definition for your tenant. On success the id of the custom field definition is returned.
+- [Get custom field definitions](https://developers.dealhub.io/reference/getcustomfielddefinitions.md): Returns all custom field definitions for a specific parent object type
+- [Update an existing custom field definition](https://developers.dealhub.io/reference/updatecustomfielddefinition.md): Updates an existing custom field definition for your tenant. On success the update custom field definition is returned.
+- [Delete a custom field definition](https://developers.dealhub.io/reference/deletecustomfielddefinition.md): Deletes an existing custom field definition for your tenant. On success the deleted custom field definition object is returned.
+- [Update an existing set of custom fields](https://developers.dealhub.io/reference/updatecustomfield.md): Updates an existing set of custom fields for a given parent object type and id. On success the update custom fields are returned.
+- [Get custom fields by type and parent object id](https://developers.dealhub.io/reference/getcustomfields.md): Returns all custom fields for a specific parent object type and id
+- [Update an existing set of custom fields](https://developers.dealhub.io/reference/updatecustomfields.md): Updates an existing set of custom fields for a given parent object type and id. On success the update custom fields are returned.
+- [Update an existing set of custom fields](https://developers.dealhub.io/reference/forceupdatecustomfields.md): Updates an existing set of custom fields for a given parent object type and id. On success the update custom fields are returned.
+- [Update an existing set of custom fields](https://developers.dealhub.io/reference/forceupdatecustomfield.md): Updates an existing set of custom fields for a given parent object type and id. On success the update custom fields are returned.
+- [Get the current selection customization defined](https://developers.dealhub.io/reference/getselectioncustomization.md): returns a .zeppa source file for the current selection customization if present, 404 if customization is not defined
+- [Add or Update selection customization script](https://developers.dealhub.io/reference/addselectioncustomization.md): Add or Update the selection customization zeppa script in the platform.   - once the update happens new selection customization script will take effect   - the updated version of the script is returned with the API call  NOTE: the account id required for this is only for test before submission  NOTE: it *does not mean* that this customization is run only for this account.
+- [Get the current order creation customization defined](https://developers.dealhub.io/reference/getordercreationcustomization.md): returns a .zeppa source file for the current order creation customization if present, 404 if customization is not defined
+- [Add or Update order creation customization script](https://developers.dealhub.io/reference/addordercreationcustomization.md): Add or Update the order creation customization zeppa script in the platform.  - once the update happens new this script will take effect for all order creations  - the updated version of the script is returned with the API call NOTE: the order id required for this is only for test before submission NOTE: it *does not mean* that this customization is run only for this order.
+- [Get all deal pulses for tenant](https://developers.dealhub.io/reference/getalldealpulses.md): Returns all deal pulses for the current tenant, sorted by pulse score (highest first) and last updated
+- [Get deal pulse for a specific sales room](https://developers.dealhub.io/reference/getdealpulse.md): Returns the calculated deal pulse score, category, AI recommendations, and engagement details for a sales room
+- [Track deal pulse event](https://developers.dealhub.io/reference/trackdealpulseevent.md): Records a deal pulse event and triggers pulse score recalculation
+- [Get discounts](https://developers.dealhub.io/reference/getdiscounts.md): Returns all discounts that have been defined
+- [Create a discount](https://developers.dealhub.io/reference/adddiscount.md): Creates a discount with the specified details. On success, the ID of the new discount is returned.
+- [Get discount](https://developers.dealhub.io/reference/getdiscount.md): Returns the details of the specified discount.
+- [Update discount details](https://developers.dealhub.io/reference/updatediscount.md): Updates the details of the specified discount. Note that a discount cannot be updated once it is in use by an order.
+- [Delete a discount](https://developers.dealhub.io/reference/deletediscount.md): Deletes a discount. Note that a discount may not be deleted if it is in use.
+- [Update discount status](https://developers.dealhub.io/reference/updatediscountstatus.md): Updates the status of a discount
+- [Get predefined terms](https://developers.dealhub.io/reference/getdocumenttemplates.md): Returns predefined terms by type. These templates can be attached to orders as part of PDF document generation.
+- [Add new predefined terms](https://developers.dealhub.io/reference/adddocumenttemplate.md): Add a new predefined terms that can be attached to an order as part of PDF document generation.
+- [Get predefined terms versions](https://developers.dealhub.io/reference/getdocumenttemplateversions.md): Returns predefined terms versions by Id.
+- [Get predefined terms detail](https://developers.dealhub.io/reference/getdocumenttemplate.md): Returns a specific predefined terms by Id.
+- [Update predefined terms](https://developers.dealhub.io/reference/updatedocumenttemplate.md): Updates a predefined terms
+- [Delete predefined terms](https://developers.dealhub.io/reference/deletedocumenttemplate.md): Deletes the predefined terms specified.
+- [Update predefined terms status](https://developers.dealhub.io/reference/updatedocumenttemplatestatus.md): Updates the status of a predefined terms
+- [Get predefined terms version detail](https://developers.dealhub.io/reference/getdocumenttemplateversion.md): Returns a specific predefined terms by Id and version.
+- [Fetch the email settings](https://developers.dealhub.io/reference/getemailsettings.md): Returns a list of email settings
+- [Add a new email setting](https://developers.dealhub.io/reference/addemailsetting.md)
+- [Update an existing email setting](https://developers.dealhub.io/reference/updateemailsetting.md)
+- [Delete an email setting](https://developers.dealhub.io/reference/deleteemailsetting.md)
+- [Gets entities](https://developers.dealhub.io/reference/getentities.md): Gets all entities
+- [Create an entity](https://developers.dealhub.io/reference/create.md): Create an entity. On success return the created entity.
+- [Gets entity details](https://developers.dealhub.io/reference/getentitybyid.md): Gets the entity details of the specified entity id
+- [Delete entity](https://developers.dealhub.io/reference/deleteentity.md): Delete the entity if there is no data associated with it.
+- [Get entity logo](https://developers.dealhub.io/reference/getlogo.md): Get the current logo stored for the given entity
+- [Update entity logo](https://developers.dealhub.io/reference/uploadlogo.md): Updates the logo used in external facing communication such as order forms and invoices
+- [Trigger ERP journal entry sync task](https://developers.dealhub.io/reference/processsynctasks-1.md): Trigger ERP journal entry sync task for given accounting period id
+- [Trigger ERP journal entry deletion task](https://developers.dealhub.io/reference/processdeletetasks-1.md): Trigger ERP journal entry deletion task for the given accounting period id
+- [Trigger ERP invoice sync task](https://developers.dealhub.io/reference/syncinvoicetoerp-1.md): Trigger ERP invoice sync task for the given invoice id
+- [Check if invoice sync to ERP is enabled](https://developers.dealhub.io/reference/issyncinvoicetoerpenabled-1.md): Checks if invoice sync to ERP is enabled
+- [Trigger ERP invoice sync tasks for multiple invoices](https://developers.dealhub.io/reference/syncinvoicestoerp-1.md): Trigger ERP invoice sync tasks for the given list of invoice IDs
+- [Trigger ERP credit memo sync task](https://developers.dealhub.io/reference/synccreditmemotoerp-1.md): Trigger ERP credit memo sync task for the given credit memo number
+- [Trigger ERP void invoice sync task](https://developers.dealhub.io/reference/syncvoidinvoicetoerp-1.md): Trigger ERP void invoice sync task for the given invoice number
+- [/rh/invoices/{invoiceId}/erpSync](https://developers.dealhub.io/reference/getinvoiceerpsyncdata.md)
+- [/rh/payments/{paymentId}/erpSync](https://developers.dealhub.io/reference/getpaymenterpsyncdata.md)
+- [Get import details](https://developers.dealhub.io/reference/getimportresult_2.md): Returns the details of an import by its ID
+- [Gets all import items](https://developers.dealhub.io/reference/getdataimports.md): Gets all items that was imported
+- [Validate import file](https://developers.dealhub.io/reference/validatemultipartfileimport.md): Validates a multi-part import file. Returns an import ID on success.
+- [Gets an import item](https://developers.dealhub.io/reference/getdataimportbyid.md): Gets an item that was imported by its ID
+- [Get new orders in import CSV format](https://developers.dealhub.io/reference/getneworderexportinimportformat.md): Gets new orders in a format appropriate for re-import. On success, the output is a csv containing the orders.
+- [Get amendment orders in import CSV format](https://developers.dealhub.io/reference/getamendmentorderexportinimportformat.md): Gets amendment orders in a format appropriate for re-import for the given generation. On success, the output is a csv containing the orders.
+- [Get account contacts for export](https://developers.dealhub.io/reference/getaccountcontactsinimportformat.md): Gets account contacts in a format appropriate for re-import. On success, the output is a csv containing the account and contacts.
+- [Get catalog data for export](https://developers.dealhub.io/reference/getcatalogdatainimportformat.md): Gets catalog data in a format appropriate for re-import. On success, the output is a csv containing the catalog data containing Product, Plan and Charge data.
+- [Process an import by ID](https://developers.dealhub.io/reference/processimport.md): Processes the import specified.
+- [Return available schemas](https://developers.dealhub.io/reference/getavailableschemas.md): Returns the set of schemas available for import
+- [Create a Flatfile workbook](https://developers.dealhub.io/reference/createflatfileworkbook.md): Creates a Flatfile workbook and adds it to a space
+- [gets external arr metrics request for the provided id](https://developers.dealhub.io/reference/getexternalarrmetrics.md): returns the external arr metrics request for the provided id
+- [gets external arr metrics requests submitted](https://developers.dealhub.io/reference/getexternalarrmetrics_1.md): returns the paginated list of external arr metrics requests
+- [submit request to generate external arr metrics](https://developers.dealhub.io/reference/addexternalarrmetrics.md): returns the request with its captured id. Arr metrics will be generated as a backend job
+- [submit request to generate/regenerate arr metrics for a subscription](https://developers.dealhub.io/reference/populatearrmetricsforsubscription.md): returns 200 if the result is successfully submitted to a background task
+- [Get all notifications](https://developers.dealhub.io/reference/getallnotificationsubscriptionsfortenant.md): Returns all notification subscriptions for your tenant
+- [Add a notification target](https://developers.dealhub.io/reference/addtargetandeventssubscriptions.md): Adds a notification target and events according to the specified parameters
+- [Attach an event to a notification](https://developers.dealhub.io/reference/subscribeexistingnotificationtargettoevent.md): Attaches a notification event to the target specified by the notification id
+- [Unsubscribe from an event](https://developers.dealhub.io/reference/unsubscribetargetorevent.md): Unsubscribes the specified notification target from the specified event
+- [Creates a standalone opportunity](https://developers.dealhub.io/reference/createopportunity-1.md): Returns the details of a specified opportunity
+- [Updates a standalone opportunity](https://developers.dealhub.io/reference/updateopportunity.md): Returns the details of the updated opportunity
+- [Opens an opportunity](https://developers.dealhub.io/reference/resetopportunityclosedstate.md): Returns the details of the updated opportunity
+- [Get opportunities by account CRM ID](https://developers.dealhub.io/reference/getopportunitiesbyaccountcrmid.md): Returns the opportunities for an account with a specific CRM ID
+- [Get a payment bank account by id](https://developers.dealhub.io/reference/getbankaccount-1.md)
+- [Get a payment bank account by id](https://developers.dealhub.io/reference/deletebankaccount-1.md)
+- [Manually retries a payment](https://developers.dealhub.io/reference/manualpaymentretry-1.md): Manually retries a payment based on the provided payment ID and last attempt ID
+- [Gets the list of payment integrations](https://developers.dealhub.io/reference/getpaymentintegrations-1.md): Gets the list of all active and completed payment integrations for the tenant
+- [Gets cash and expense ledger accounts for bank account creation](https://developers.dealhub.io/reference/getledgeraccountsforpaymentbankaccount-1.md): The bank account would be mapped to a cash and an expense ledger account from this list
+- [Processes one time payment for an invoice if there is an automatic payment set up for the account](https://developers.dealhub.io/reference/processpaymentforinvoice-1.md): The automatic payment is processed via Stripe for this invoice
+- [Gets a payment retry configuration](https://developers.dealhub.io/reference/getpaymentretryconfig-1.md): Gets the latest payment retry configuration for the tenant, or by the grouping id if specified
+- [Creates or updates a payment retry configuration](https://developers.dealhub.io/reference/upsertpaymentretryconfig-1.md): Creates or updates a payment retry configuration for the tenant
+- [Deletes a payment retry configuration](https://developers.dealhub.io/reference/deletepaymentretryconfig-1.md): Deletes a payment retry configuration for the tenant
+- [Get payment details](https://developers.dealhub.io/reference/getpayment-1.md): Gets the details of the specified payment
+- [Delete payment by payment id](https://developers.dealhub.io/reference/deletepayment-1.md): Deletes the specified payment if the payment has been voided. This operation also deletes any applications of this payment
+- [Get payments](https://developers.dealhub.io/reference/getaccountpayment-1.md): Returns the payments for the specified account
+- [Get payment configuration](https://developers.dealhub.io/reference/getpaymentconfiguration-1.md): Returns the payment configuration for your tenant
+- [Update payment configuration](https://developers.dealhub.io/reference/updatepaymentconfiguration-1.md): Updates the payment configuration for your tenant.
+- [Get account payment management link](https://developers.dealhub.io/reference/getaccountpaymentmanagementlink-1.md): Returns a payment management link for an account
+- [Adds a new payment bank account](https://developers.dealhub.io/reference/upsertbankaccount-1.md): The bank account would be mapped to a cash and an expense ledger account
+- [Get all payments](https://developers.dealhub.io/reference/getpayments-1.md): Returns all payments for you tenant. The results are paginated. To fetch all take the cursor returned from a call and pass it to a subsequent call.
+- [Check if the payment object can be deleted](https://developers.dealhub.io/reference/candeletepayment-1.md): Payment can be deleted if it has been voided and does not have journal entries associated
+- [Get payment balance](https://developers.dealhub.io/reference/getpaymentbalance-1.md): Gets the balance of a payment
+- [Voids a payment](https://developers.dealhub.io/reference/voidpayment-1.md): Voids the specified payment per the specified parameters
+- [Import Stripe payment method via CSV](https://developers.dealhub.io/reference/importstripepaymentmethodcsv-1.md): Associate an existing Stripe payment method with an account
+- [Simple ping with auth to check if everything is working fine](https://developers.dealhub.io/reference/ping_1.md): Call this resource to make sure API auth is setup correctly, a simple PONG message is returned and the assumption is that auth succeed
+- [Check if the tenant has accounting feature enabled](https://developers.dealhub.io/reference/isaccountingfeatureenabled.md): Returns whether the tenant has accounting feature enabled.
+- [Get predefined terms section detail](https://developers.dealhub.io/reference/gettermsection.md): Returns predefined terms section detail.
+- [Update predefined terms section](https://developers.dealhub.io/reference/updatetermsection.md): Updates the predefined terms section specified.
+- [Delete predefined terms section](https://developers.dealhub.io/reference/deletetermsection.md): Deletes the predefined terms section specified.
+- [Get predefined terms sections](https://developers.dealhub.io/reference/gettermsections.md): Returns predefined terms sections.
+- [Add predefined terms section](https://developers.dealhub.io/reference/addtermsection.md): Adds a predefined terms section.
+- [Get tax rate strategy by Id and Country Code](https://developers.dealhub.io/reference/gettaxratestrategy.md): Retrieves the tax rate strategy object by Id and Country Code
+- [Update tax rate strategy](https://developers.dealhub.io/reference/updatetaxratestrategy.md): Updates the specific tax rate strategy object
+- [Delete tax rate strategy](https://developers.dealhub.io/reference/deletetaxratestrategy.md): Deletes the tax rate strategy object by Id and Country Code
+- [Get tax rates](https://developers.dealhub.io/reference/gettaxrates.md): Get all available tax rates. The result is paginated. To retrieve all results pass the cursor returned from a call to the next call until all results are returned.
+- [Add tax rate](https://developers.dealhub.io/reference/addtaxrate.md): Add a new tax rate object
+- [Get tax rate by Id](https://developers.dealhub.io/reference/gettaxrate.md): Retrieves the tax rate object by Id
+- [Update tax rate](https://developers.dealhub.io/reference/updatetaxrate.md): Updates the specific tax rate object
+- [Delete tax rate](https://developers.dealhub.io/reference/deletetaxrate.md): Deletes the tax rate object by Id. If successful the deleted tax rate object is returned
+- [Get tax rate strategies](https://developers.dealhub.io/reference/gettaxratestrategies.md): Get all available tax rate strategies. The result is paginated unless fetchAll=true. To retrieve all results pass the cursor returned from a call to the next call until all results are returned.
+- [Add tax rate strategy](https://developers.dealhub.io/reference/addtaxratestrategy.md): Add a new tax rate strategy object
+- [Get all tax rate strategies by Id](https://developers.dealhub.io/reference/gettaxratestrategiesbyid.md): Retrieves all tax rate strategy objects with the given Id
+- [Delete all tax rate strategies by Id](https://developers.dealhub.io/reference/deletealltaxratestrategiesbyid.md): Deletes all tax rate strategy objects with the given Id
+- [Get tenant details](https://developers.dealhub.io/reference/gettenant.md): Get the details of the current tenant
+- [Update tenant details](https://developers.dealhub.io/reference/updatetenant.md): Updates the details of the current tenant based on the input
+- [Get tenant logo](https://developers.dealhub.io/reference/gettenantlogo.md): Get the current logo stored
+- [Update tenant logo](https://developers.dealhub.io/reference/uploadtenantlogo.md): Updates the logo used in external facing communication such as order forms and invoices
+- [Fetch UI customization config for the tenant](https://developers.dealhub.io/reference/gettenantuicustomizationconfig.md)
+- [Update UI customization config for the tenant](https://developers.dealhub.io/reference/updatetenantuicustomizationconfig.md)
+- [Remove UI customization config for the tenant](https://developers.dealhub.io/reference/deletetenantuicustomizationconfig.md)
+- [Update DOCX settings](https://developers.dealhub.io/reference/updatedocxsettings.md): Update DOCX settings for your tenant
+- [Get plan replacement settings](https://developers.dealhub.io/reference/getautoreplaceplans.md): Gets plan replacement settings
+- [Update plan replacement settings](https://developers.dealhub.io/reference/updateautoreplaceplans.md): Update plan replacement settings
+- [Get payment term settings](https://developers.dealhub.io/reference/getpaymenttermsettings.md)
+- [Update payment term settings](https://developers.dealhub.io/reference/updatepaymenttermsettings.md)
+- [Get current billing cycle definitions](https://developers.dealhub.io/reference/getbillingcycledefinitions.md)
+- [Add new billing cycle definition](https://developers.dealhub.io/reference/addbillingcycledefinition.md)
+- [Get billing cycle definition by id](https://developers.dealhub.io/reference/getbillingcycledefinition.md)
+- [Update billing cycle definition](https://developers.dealhub.io/reference/updatebillingcycledefinition.md)
+- [Get tenant settings](https://developers.dealhub.io/reference/gettenantsetting.md): Returns all tenant settings for your tenant.
+- [Update tenant settings](https://developers.dealhub.io/reference/updatetenantsetting.md): Updates settings for your tenant.
+- [Set billing cycle with given id as default](https://developers.dealhub.io/reference/setdefaultbillingcycledefinition.md)
+- [Get supported currencies](https://developers.dealhub.io/reference/getsupportedcurrencies.md): Get supported currencies for your tenant
+- [Update supported currencies](https://developers.dealhub.io/reference/updatesupportedcurrencies.md): Update supported currencies for your tenant
+- [Get units of measure](https://developers.dealhub.io/reference/getunitsofmeasure.md): Returns a paginated list of units of measure
+- [Add unit of measure](https://developers.dealhub.io/reference/addunitofmeasure.md): Add a new instance of unit of measure as specified by the input
+- [Update unit of measure](https://developers.dealhub.io/reference/updateunitofmeasure.md): Update the unit of measure by Id provided.
+- [Delete unit of measure](https://developers.dealhub.io/reference/deleteunitofmeasure.md): Delete the unit of measure by Id provided. Returns the deleted unit of measure object if successful.
+- [Activate unit of measure](https://developers.dealhub.io/reference/activateunitofmeasure.md): Activates the specified unit of measure making it available to be attached to charges
+- [Deprecate unit of measure](https://developers.dealhub.io/reference/deprecateunitofmeasure.md): Deprecates the specified unit of measure making it unavailable to be attached to charges going forward
+- [Get JSON Schema for a Prismatic object type](https://developers.dealhub.io/reference/getschema.md): Returns JSON Schema for ACCOUNT, INVOICE, or CREDIT_MEMO objects. Used by Prismatic to render field mappings.
+- [Get Prismatic app URL](https://developers.dealhub.io/reference/getappurl.md): Returns the Prismatic app URL if the Prismatic feature is enabled, null otherwise
+- [Generate Prismatic marketplace JWT](https://developers.dealhub.io/reference/generatemarketplacejwt.md): Generates a signed JWT for authenticating the current user with Prismatic's embedded marketplace
+- [Trigger Prismatic invoice sync task](https://developers.dealhub.io/reference/syncinvoice.md): Trigger Prismatic invoice sync task for the given invoice id
+- [Check if Prismatic invoice sync is enabled](https://developers.dealhub.io/reference/issyncinvoiceenabled.md): Checks if Prismatic invoice sync is enabled
+- [Trigger Prismatic invoice sync tasks for multiple invoices](https://developers.dealhub.io/reference/syncinvoices.md): Trigger Prismatic invoice sync tasks for the given list of invoice IDs
+- [create a rate card using CSV price table multipart form data](https://developers.dealhub.io/reference/updateratecardcsv.md): create a rate card using the multipart form data, where a CSV can be passed in for the price table
+- [Fetch the list of rate cards stored in the system](https://developers.dealhub.io/reference/getratecards.md): Fetch the list of rate cards stored in the system
+- [create a rate card using CSV price table multipart form data](https://developers.dealhub.io/reference/addratecardcsv.md): create a rate card using the multipart form data, where a CSV can be passed in for the price table
+- [Fetch the price attributes defined in the system in CSV format](https://developers.dealhub.io/reference/getpriceattributescsv.md): Get all the price attributes in the system in CSV format one per row
+- [Import price attributes into the system](https://developers.dealhub.io/reference/importpriceattributes.md): Import the price attributes from an input CSV file, the output provides details on each row of the input
+- [Fetch the price table for the rate card given the id](https://developers.dealhub.io/reference/getratecardpricetable.md): Get the price table for the rate card given the id
+- [Get refunds](https://developers.dealhub.io/reference/getrefunds.md): Get all refunds for the specified account, OR if a credit memo number is specified in addition to the account id, get the details of only that.
+- [Create and apply refund](https://developers.dealhub.io/reference/createandapplyrefund.md): Creates and applies a refund per the specified parameters. On success the id of the refund is returned.
+- [Get refund details](https://developers.dealhub.io/reference/getrefundbyid.md): Get the details of the specified refund.
+- [Run a report](https://developers.dealhub.io/reference/run.md): Runs the specified report and returns the result as a csv.
+- [Generate a report](https://developers.dealhub.io/reference/generate.md): Generates a report with the specified parameters. This report can later be downloaded via /reports/{reportRunId}/result
+- [Run a generated report](https://developers.dealhub.io/reference/getreportoutput.md): Runs a report generated with /generate. On success a csv of the report is returned.
+- [Get report definitions](https://developers.dealhub.io/reference/getpredefinedreportdefs.md): Returns the definitions of the reports defined for your tenant.
+- [Enable revenue recognition](https://developers.dealhub.io/reference/enablerevenuerecognition.md): This will enable revenue recognition
+- [Check if an open accounting period exists](https://developers.dealhub.io/reference/doesopenaccountingperiodexist.md): This will check if an open accounting period exists
+- [Check if all charges are tagged with revenue rules](https://developers.dealhub.io/reference/areallchargestaggedwithrevenuerules.md): This will check if all charges are tagged with revenue rules
+- [Check if all charges are tagged with GL accounts](https://developers.dealhub.io/reference/areallchargestaggedwithglaccounts.md): This will check if all charges are tagged with GL accounts
+- [Check if all order lines have schedules](https://developers.dealhub.io/reference/doallorderlineshaveschedules.md): This will check if all order lines have schedules
+- [Check if accounting events are present for all transaction types](https://developers.dealhub.io/reference/areaccountingeventspresentforalltransactiontypes.md): This will check if accounting events are present for all transaction types
+- [Get revenue enablement progress](https://developers.dealhub.io/reference/getrevenueenablementprogress.md): This will get revenue enablement progress
+- [Update revenue enablement progress](https://developers.dealhub.io/reference/upsertrevenueenablementprogress.md): This will update revenue enablement progress
+- [Delete all accounting and revenue recognition data](https://developers.dealhub.io/reference/deleteallaccountingandrevenuerecognitiondata.md): This will delete all accounting and revenue recognition data except for the charge configuration and ledger accounts
+- [Get revenue recognition events](https://developers.dealhub.io/reference/getrecognitioneventsbysubscriptionidchargeid-1.md): Gets revenue recognition events for the specified subscription and charge.
+- [Create a revenue recognition event](https://developers.dealhub.io/reference/createrecognitionevent-1.md): Creates a revenue recognition event, only if it is different from the previous event for same subscription and charge.
+- [Get revenue recognition rules](https://developers.dealhub.io/reference/getrecognitionrulebyid-1.md): Get revenue recognition rules.
+- [Create a revenue recognition rule](https://developers.dealhub.io/reference/addrecognitionrule-1.md): Creates a revenue recognition rule.
+- [Get revenue recognition rule](https://developers.dealhub.io/reference/getrecognitionrulebyid_1.md): Get a revenue recognition rule using id.
+- [Delete a recognition rule](https://developers.dealhub.io/reference/deleterule-1.md): Deletes a recognition rule. Note you can't delete a recognition rule that's in use.
+- [Create a bulk revenue recognition](https://developers.dealhub.io/reference/createbulkrevenuerecognition-1.md): Creates a bulk revenue recognition as specified by the input parameters. On success the id of the bulk revenue recognition is returned.
+- [Get bulk revenue recognition details](https://developers.dealhub.io/reference/getbulkrevenuerecognition-1.md): Returns the details of the specified bulk revenue recognition
+- [Get items for bulk revenue recognition](https://developers.dealhub.io/reference/getbulkrevenuerecognitionitems-1.md): Returns the items associated with the specified bulk revenue recognition
+- [Download waterfall report](https://developers.dealhub.io/reference/getrevenuewaterfall-1.md): Downloads a revenue waterfall report in csv format.
+- [Upload revenue events](https://developers.dealhub.io/reference/uploadcompletionevents-1.md): Uploads revenue events from a csv file. The format of the file is Subscription.Id,Charge.Id,Alias.Id,RevrecEvent.PercentComplete Percent complete should be a decimal.
+- [Get subscription details](https://developers.dealhub.io/reference/getsubscriptionbyid.md): Gets the details of the specified subscription.
+- [Update subscription details](https://developers.dealhub.io/reference/updatesubscription.md): Updates the details of the specified subscription.
+- [Generate draft amendment order](https://developers.dealhub.io/reference/getdraftamendment.md): Generate a draft amendment object for the given subscription. The draft amendment is composed of current subscription charges as the default line items.
+- [Generate draft renewal order](https://developers.dealhub.io/reference/getdraftrenewal.md): Generate a draft renewal order object for the given subscription. The draft renewal is composed of current subscription charges as the default line items.
+- [Subscription can be modified](https://developers.dealhub.io/reference/subscriptionmodifiable.md): Returns true if subscription can be deleted.
+- [Subscription can be reverted](https://developers.dealhub.io/reference/subscriptionreversible.md): Returns true if subscription can be reverted to a prior version.
+- [Get billing periods](https://developers.dealhub.io/reference/getsubscriptionbillingperiods.md): Gets the billing periods for the specified subscription.
+- [Send test notifications for subscription](https://developers.dealhub.io/reference/sendtestnotificationsforsubscription.md): Sends test notifications for the specified subscription to the specified notification target.
+- [Get change events for subscription](https://developers.dealhub.io/reference/getallchangeeventsforsubscription.md): Returns the scheduled change events for the specified subscription.
+- [Get paginated subscriptions](https://developers.dealhub.io/reference/getsubscriptions.md): returns all Subscriptions in the system in a paginated fashion
+- [Delete subscription](https://developers.dealhub.io/reference/deletesubscription.md): Deletes the subscription for given subscription Id if invoices have not been generated and revenue has not been recognized
+- [Revert subscription](https://developers.dealhub.io/reference/revertsubscription.md): Reverts the subscription for given subscription Id and version to it's previous version. Operation is allowed only if invoices have not been generated and revenue has not been recognized
+- [Link renewal opportunity to subscription](https://developers.dealhub.io/reference/updaterenewalopportunity.md): Update renewal opportunity CRM id on subscription
+- [Get subscription metrics](https://developers.dealhub.io/reference/getsubscriptionmetrics.md): Returns the metrics associated with the specified subscription. Metrics include ACV, ARR, etc.
+- [Renew an existing subscription](https://developers.dealhub.io/reference/renewsubscription.md): Create a renewal order for an existing subscription
+- [Get subscriptions](https://developers.dealhub.io/reference/getsubscriptions_1.md): Get a paginated list of subscriptions (without line items) for a buyer account
+- [Get subscription details](https://developers.dealhub.io/reference/getsubscriptionbyid_1.md): Gets the details of the specified subscription.
+- [Get subscription lines](https://developers.dealhub.io/reference/getsubscriptionlines.md): Get the line items for an existing subscription
+- [Get subscriptions with detail](https://developers.dealhub.io/reference/getsubscriptionswithdetail.md): Get a paginated list of subscriptions with full details for a buyer account
+- [Amend an existing subscription](https://developers.dealhub.io/reference/amendsubscription.md): Create an amendment order for an existing subscription
+- [Cancel an existing subscription](https://developers.dealhub.io/reference/cancelsubscription.md): Create a cancellation order for an existing subscription
+- [Fetch template scripts](https://developers.dealhub.io/reference/gettemplatescripts.md): Returns a list of template scripts of a certain type
+- [Add a new template script](https://developers.dealhub.io/reference/addtemplatescript.md)
+- [Disable a template script](https://developers.dealhub.io/reference/disabletemplatescript.md)
+- [Dispatch tenant job](https://developers.dealhub.io/reference/dispatch.md): Executes a tenant job
+- [Retry tenant job](https://developers.dealhub.io/reference/executetenantjob.md): Executes a tenant job
+- [Cancel tenant job](https://developers.dealhub.io/reference/canceltenantjob.md): Cancels a tenant job. Any pending future tasks will be skipped
+- [Get tenant job](https://developers.dealhub.io/reference/gettenantjob.md): Get tenant job by id
+- [Refresh transactional exchange rates](https://developers.dealhub.io/reference/refreshexchangerates.md): Refresh transactional exchange rates for all supported currencies to functional currencies for the given effective date
+- [Get latest transactional exchange rates](https://developers.dealhub.io/reference/getlatestexchangerates.md): Get latest transactional exchange rates for all currency pairs of supported currencies to functional currencies
+- [Get as of transactional exchange rate for a currency pair](https://developers.dealhub.io/reference/getexchangerateasof.md): Get transactional exchange rate for a currency pair as of a specific date
+- [Refresh transactional exchange rate by currency pair](https://developers.dealhub.io/reference/refreshexchangeratepair.md): Fetch and store transactional exchange rate for given currency pair and effective date from exchange rate provider
+- [Get user groups](https://developers.dealhub.io/reference/getusergroups.md): Get all available user groups
+- [Add user group](https://developers.dealhub.io/reference/addusergroup.md): Create a new user group based on the parameters in the input
+- [Update user group](https://developers.dealhub.io/reference/updateusergroup.md): Updates the specified user group according to the input
+- [Get user group](https://developers.dealhub.io/reference/getusergroup.md): Retrieve a user group by Id
+- [Delete user group](https://developers.dealhub.io/reference/deleteusergroup.md): Delete the user group by Id
+- [Bulk user upload](https://developers.dealhub.io/reference/uploadcsv.md): Loads a list of users to be added to in CSV format.
+- [Resend welcome email](https://developers.dealhub.io/reference/resendemailforexistinguser.md): Resend welcome email conditioning temporary credentials. This is required if the user does not register within 24 hours of user activation
+- [Get users list](https://developers.dealhub.io/reference/getusers-1.md): Returns a paginated list of users
+- [Add a new user](https://developers.dealhub.io/reference/adduser.md): Add a new user to the system. Users in the system must have unique emails. If successful, the path to the new user object is returned and a welcome email containing a temporary password will be sent to the email associated with the user. The login credentials expires in 24 hours. If the user does not login to the system within that time, a new invitation is required.
+- [Accept terms and conditions](https://developers.dealhub.io/reference/accepttermsforcurrentuser.md): Before a user gains access to the application, they must accept Subskribe's terms and conditions. This operation requires user bound access tokens.
+- [Disable user](https://developers.dealhub.io/reference/disableuser.md): Disables a user by Id. If successful, returns the user just disabled
+- [Enable user](https://developers.dealhub.io/reference/enableuser.md): Enables a user by Id. If successful, returns the user just enabled
+- [Get user by Id](https://developers.dealhub.io/reference/getuser.md): Returns a specific user by Id
+- [Update user](https://developers.dealhub.io/reference/updateuser.md): Updates the user information. Email cannot be updated.
+- [Update user SSO configuration](https://developers.dealhub.io/reference/updateuserssoconfig.md): Toggle user SSO configuration by user Id.
+- [Get an order by its identifier](https://developers.dealhub.io/reference/getorder_1.md)
+- [Compute memoized invoice line items for given order](https://developers.dealhub.io/reference/getmemoizedinvoiceitems.md)
+- [/rh/orders](https://developers.dealhub.io/reference/postbillableorder.md)
+- [Run a search query](https://developers.dealhub.io/reference/search-1.md): Runs the specified search query
+- [Run a search query (POST)](https://developers.dealhub.io/reference/searchpost.md): Same as GET /rh/search but accepts the query in the request body. Use when the query JSON is too large to fit in a URL (e.g. terms clauses with hundreds of ids).
+- [/rh/accounts/{accountId}](https://developers.dealhub.io/reference/getcpqsourcedaccount.md)
+- [/rh/accounts/{accountId}](https://developers.dealhub.io/reference/updatecpqsourcedaccount.md)
+- [/rh/accounts](https://developers.dealhub.io/reference/addcpqsourcedaccount.md)
+- [/rh/accounts/bulk](https://developers.dealhub.io/reference/getcpqsourcedaccounts.md)
+- [/rh/accounts/cfac-id](https://developers.dealhub.io/reference/getcpqsourcedaccountsbyuvcacfacid.md)
+- [/rh/accounts/{accountId}/contacts](https://developers.dealhub.io/reference/getcpqsourcedaccountcontacts.md)
+- [/rh/accounts/{accountId}/contacts](https://developers.dealhub.io/reference/addcpqsourcedaccountcontact.md)
+- [/rh/accounts/{accountId}/contacts/{contactId}](https://developers.dealhub.io/reference/getcpqsourcedaccountcontact.md)
+- [/rh/accounts/{accountId}/contacts/{contactId}](https://developers.dealhub.io/reference/updatecpqsourcedaccountcontact.md)
+- [/rh/invoices](https://developers.dealhub.io/reference/getcpqsourcedaccountinvoices.md)
+- [/rh/product-provisioning](https://developers.dealhub.io/reference/syncskus.md)
+- [/rh/tenants](https://developers.dealhub.io/reference/createrevhubtenant.md)

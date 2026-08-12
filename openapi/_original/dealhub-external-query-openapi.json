@@ -1,0 +1,323 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "External Query",
+    "description": "This API defines the contract for an external system that DealHub calls to retrieve data in real-time during quote creation.\nA DealHub administrator configures an \"External Query\" object, specifying the endpoint URL, authentication, and the data to be sent. When a sales rep triggers this query from the DealHub Playbook, DealHub sends a POST request to the defined endpoint. The external system is expected to process the request and return data that will be populated back into the Playbook.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://your-external-system.com/api/data-query",
+      "description": "This is a placeholder URL. The actual, full endpoint URL that DealHub calls is configured by an administrator in the DealHub Version Settings."
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    },
+    {
+      "basicAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "External Query"
+    }
+  ],
+  "paths": {
+    "/": {
+      "post": {
+        "tags": [
+          "External Query"
+        ],
+        "summary": "External Data Query",
+        "description": "> \u2757\ufe0f Important \n>\n> This is not an endpoint provided by DealHub. This page present the endpoint definition you need to make available so DealHub can call it. \n\nDealHub uses this endpoint to send requests that share data from the current quote\u2019s playbook and product list. Your endpoint should process this data and return information that will be populated back into the quote\u2019s playbook.\n\nThe specific URL for this endpoint is configured by the administrator in the DealHub UI.\n\n> \ud83d\udcd8 Authentication\n>\n> When DealHub calls your endpoint, it will include an `Authorization` header based on the configuration set by an administrator in the DealHub UI. Your endpoint must be prepared to handle one of the following methods:\n> - **Token (Bearer):** DealHub sends a secret bearer token. Your endpoint should validate this token.\n> - **Basic:** DealHub sends a username and password for Basic Authentication.\n> - **None:** No `Authorization` header is sent. This is used when the endpoint is unsecured or uses a different security method, such as a token embedded in the URL.",
+        "operationId": "fulfillExternalQuery",
+        "security": [
+          {
+            "bearerAuth": []
+          },
+          {
+            "basicAuth": []
+          },
+          {}
+        ],
+        "requestBody": {
+          "description": "A request from DealHub containing playbook and product data.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExternalQueryRequest"
+              },
+              "examples": {
+                "basicQueryWithProducts": {
+                  "summary": "Basic query with products",
+                  "value": {
+                    "playbook_data": {
+                      "general.currency": "USD",
+                      "general.geo": "North America",
+                      "group1.customer_type\"": "Enterprise",
+                      "group2.number": 4323.11,
+                      "group3.proposal_date": "2021-03-25T15:39:25Z"
+                    },
+                    "product_data": [
+                      {
+                        "ITEM NAME": "Whiteboard",
+                        "SKU": "B-12345-W",
+                        "attribute1": "1237"
+                      },
+                      {
+                        "ITEM NAME": "Junior Kit",
+                        "SKU": "B-56-TRIPLE",
+                        "bundle_line_items": [
+                          {
+                            "ITEM NAME": "Pencil",
+                            "SKU": "sku-1",
+                            "attribute1": "9"
+                          },
+                          {
+                            "ITEM NAME": "Eraser",
+                            "SKU\"": "sku-2",
+                            "attribute1\"": "2"
+                          },
+                          {
+                            "ITEM NAME": "Sharpener",
+                            "SKU\"": "sku-3"
+                          }
+                        ]
+                      },
+                      {
+                        "ITEM NAME": "Sharpener",
+                        "SKU": "sku-3"
+                      }
+                    ]
+                  }
+                },
+                "repeatableNumericQuestion": {
+                  "summary": "Repeatable numeric question",
+                  "value": {
+                    "playbook_data": {
+                      "general.currency": "USD",
+                      "general.geo": "North America",
+                      "group1.customer_type": "Enterprise",
+                      "group2.number_of_something": 4323.11,
+                      "group3.proposal_date": "2021-03-25T15:39:25Z",
+                      "group5.repeatableNumericQuestion": [
+                        "1702339200000",
+                        "1702399200000",
+                        "1702339298000",
+                        "1502339200000"
+                      ]
+                    }
+                  }
+                },
+                "repeatableWithEmptyValue": {
+                  "summary": "Repeatable question with an empty value",
+                  "value": {
+                    "playbook_data": {
+                      "general.currency": "USD",
+                      "general.geo": "North America",
+                      "group1.customer_type": "Enterprise",
+                      "group2.number_of_something": 4323.11,
+                      "group3.proposal_date": "2021-03-25T15:39:25Z",
+                      "group5.repeatableQuestion": [
+                        "op2",
+                        "",
+                        "op1",
+                        "op2"
+                      ]
+                    }
+                  }
+                },
+                "repeatableMultiSelect": {
+                  "summary": "Repeatable multi-select",
+                  "value": {
+                    "playbook_data": {
+                      "general.currency": "USD",
+                      "general.geo": "North America",
+                      "group1.customer_type": "Enterprise",
+                      "group2.number_of_something": 4323.11,
+                      "group3.proposal_date": "2021-03-25T15:39:25Z",
+                      "group5.repeatableMultiSelectTextListQuestion": [
+                        "op2; op4",
+                        "op4",
+                        "op1; op2; op3",
+                        ""
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful response containing the data to be populated into the DealHub playbook.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalQueryResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. An error occurred while processing the request. The response should contain a clear error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "A Bearer Token provided by the administrator during the External Query setup in DealHub."
+      },
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "Username and password credentials for Basic Authentication, provided during setup."
+      }
+    },
+    "schemas": {
+      "ExternalQueryRequest": {
+        "type": "object",
+        "properties": {
+          "playbook_data": {
+            "type": "object",
+            "description": "A key-value map of playbook answers configured by the admin. The key is a string in the format `<group_id>.<question_id>`.\n\nThe value type depends on the question type:\n\n- **Text**: a plain string (e.g., `\"USD\"`).\n- **Numeric**: an integer or floating-point number (e.g., `42.5`).\n- **Date (integer)**: a Unix timestamp in milliseconds as an integer (e.g., `1698418023000`). This is **not** an ISO 8601 string.\n- **Array**: for repeatable questions; each element can be a string, number, or date timestamp.",
+            "example": {
+              "general.currency": "USD",
+              "general.cost_limit": 42.5,
+              "general.created_at_ms": 1698418023000,
+              "group5.repeatable_ids": [
+                "op2",
+                1698418023123
+              ]
+            },
+            "additionalProperties": {
+              "oneOf": [
+                {
+                  "type": "string",
+                  "description": "Plain text value."
+                },
+                {
+                  "type": "number",
+                  "description": "Integer or floating point number."
+                },
+                {
+                  "type": "integer",
+                  "format": "int64",
+                  "description": "Unix timestamp in milliseconds (e.g., 1698418023000).",
+                  "example": 1698418023000
+                },
+                {
+                  "type": "array",
+                  "items": {
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "description": "Plain text value."
+                      },
+                      {
+                        "type": "number",
+                        "description": "Integer or floating point number."
+                      },
+                      {
+                        "type": "integer",
+                        "format": "int64",
+                        "description": "Unix timestamp in milliseconds (e.g., 1698418023000).",
+                        "example": 1698418023000
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "product_data": {
+            "type": "array",
+            "description": "An array of products and bundles currently in the quote.",
+            "items": {
+              "$ref": "#/components/schemas/ProductDataItem"
+            }
+          }
+        }
+      },
+      "ProductDataItem": {
+        "type": "object",
+        "description": "Represents a single product or bundle. The properties are dynamic and configured by the admin (e.g., SKU, ITEM NAME, custom attributes).",
+        "properties": {
+          "bundle_line_items": {
+            "type": "array",
+            "description": "A list of child items if this item is a bundle.",
+            "items": {
+              "$ref": "#/components/schemas/ProductDataItem"
+            }
+          }
+        },
+        "additionalProperties": true,
+        "example": {
+          "ITEM_NAME": "Junior Kit",
+          "SKU": "B-56-TRIPLE",
+          "bundle_line_items": [
+            {
+              "ITEM_NAME": "Pencil",
+              "SKU": "sku-1",
+              "attribute1": "9"
+            }
+          ]
+        }
+      },
+      "ExternalQueryResponse": {
+        "type": "object",
+        "properties": {
+          "playbook_data": {
+            "type": "array",
+            "description": "An array of objects to be populated into the playbook. For a repeatable group, multiple objects can be returned. For a non-repeatable group, a single object should be returned in the array.",
+            "items": {
+              "$ref": "#/components/schemas/PlaybookResponseItem"
+            }
+          }
+        }
+      },
+      "PlaybookResponseItem": {
+        "type": "object",
+        "description": "A key-value map where each key is a Question ID in the target playbook group, and the value is the data to be populated.",
+        "additionalProperties": true,
+        "example": {
+          "id1": "id1_val",
+          "id2": "A;B;C",
+          "id3": "some_val"
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "A formatted error message from the external system that will be displayed to the user in the DealHub UI."
+          }
+        },
+        "required": [
+          "message"
+        ]
+      }
+    }
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  }
+}

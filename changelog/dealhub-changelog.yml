@@ -1,0 +1,20 @@
+generated: '2026-08-12'
+method: searched
+source: https://developers.dealhub.io/llms.txt
+published: false
+entry_count: 0
+scheme: null
+current_version: null
+url: null
+note: >-
+  DealHub publishes no dated developer changelog or release-notes feed. The ReadMe hub
+  has no /changelog route (404), no changelog page in its index, and the index contains
+  no "release notes" or "what's new" entry. Documentation freshness is only observable
+  from the per-page updatedAt stamp the platform emits, which is recorded in
+  lifecycle/dealhub-lifecycle.yml rather than treated as a changelog. No `ChangeLog`
+  pointer is wired into apis.yml, because there is no changelog to point at.
+entries: []
+probed:
+- {url: 'https://developers.dealhub.io/changelog', status: 404}
+- {url: 'https://developers.dealhub.io/docs/changelog', status: 404}
+- {url: 'https://developers.dealhub.io/llms.txt', status: 200, matches_for_changelog_terms: 0}

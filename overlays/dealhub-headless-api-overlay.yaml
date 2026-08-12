@@ -1,0 +1,24 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for DealHub Headless API
+  version: 1.0.0
+extends: openapi/dealhub-headless-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: dealhub
+    x-apievangelist-source: https://developers.dealhub.io/
+    x-apievangelist-harvested: '2026-08-12'
+    x-apievangelist-harvest-method: extracted verbatim from the embedded OpenAPI definition served by the DealHub
+      ReadMe developer hub
+    x-apievangelist-artifacts:
+      authentication: authentication/dealhub-authentication.yml
+      conventions: conventions/dealhub-conventions.yml
+      errors: errors/dealhub-problem-types.yml
+      lifecycle: lifecycle/dealhub-lifecycle.yml
+      webhooks: asyncapi/dealhub-webhooks.yml
+      data_model: data-model/dealhub-data-model.yml
+- target: $
+  update:
+    x-apievangelist-tags:
+    - Headless Quoting

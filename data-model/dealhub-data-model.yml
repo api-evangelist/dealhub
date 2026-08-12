@@ -1,0 +1,3216 @@
+generated: '2026-08-12'
+method: derived
+source: openapi/ (all 11 DealHub OpenAPI documents) — components.schemas $ref graph
+summary:
+  entities: 426
+  relationships: 299
+  core_cpq_entities:
+  - Quote
+  - Opportunity
+  - DealRoom
+  - Version
+  - Playbook
+  - Product
+  - SKU
+  - Product Hierarchy
+  - User
+  - Partner User
+  - CRM Import
+  core_billing_entities:
+  - Account
+  - Order
+  - Subscription
+  - Plan
+  - RatePlan
+  - Charge
+  - UsageRecord
+  - Invoice
+  - CreditMemo
+  - Payment
+  - PaymentMethod
+  - JournalEntry
+  - AccountingPeriod
+identifiers:
+- id: dealhub_quote_id
+  entity: Quote
+  note: DealHub-internal quote id; the id used by every quote API and carried on webhook payloads.
+- id: dealhub_proposal_id
+  entity: Quote
+  note: The quote id visible in the DealHub UI; resolve to dealhub_quote_id via getQuoteId.
+- id: external_opportunity_id
+  entity: Opportunity
+  note: The opportunity id that originates in the customer CRM. DealHub is CRM-governed, so most flows key off this
+    rather than a DealHub id.
+- id: dealhub_opportunity_id
+  entity: Opportunity
+- id: version_id
+  entity: Version
+  note: Products, pricing, playbooks and API configuration are all scoped to a Version. Most calls resolve against
+    the ACTIVE version when version_id is omitted.
+- id: request_id
+  entity: AsyncRequest
+  note: Returned by every asynchronous operation; polled on getAsyncRequestStatus and echoed in webhook event_info.
+- id: SKU
+  entity: Product
+  note: Product catalog key, max 200 characters.
+- id: login
+  entity: User
+  note: Immutable natural key for a DealHub user; the v1/v2 user upsert endpoints identify users by login.
+constraints:
+- entity: Product Hierarchy
+  rule: maximum depth 10 levels
+  source: https://developers.dealhub.io/docs/v2-error-reference
+- entity: Product Hierarchy
+  rule: maximum 50,000 products or labels
+  source: https://developers.dealhub.io/docs/v2-error-reference
+- entity: Product
+  rule: SKU maximum 200 characters; label name maximum 50 characters
+  source: https://developers.dealhub.io/docs/v2-error-reference
+- entity: Product Catalog upload
+  rule: keep SKUs per asynchronous request below 500 — larger payloads are a known issue and can stall in queued
+    status
+  source: https://developers.dealhub.io/docs/handling-asynchronous-requests
+entities:
+- entity: OrderJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 60
+- entity: OrderRequestJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 47
+  description: JSON object containing information required to create an order.
+- entity: ChargeJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 46
+  description: JSON object representing the charge details.
+- entity: InvoiceJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 35
+- entity: SubscriptionJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 34
+- entity: OrderLineItemJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 31
+- entity: InvoiceItemJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 25
+- entity: PricingRuleProduct
+  specs:
+  - dealhub-version-api
+  fields: 24
+  description: 'List of the product pricing rules. The order of the elements in this list determines the sequence
+    in which the pricing rules are evaluated by the CPQ system. </br> If <code>advanced</code>: false`, the <code>pricing_rule'
+- entity: QuoteInfo
+  specs:
+  - dealhub-quote-api
+  fields: 23
+- entity: Order
+  specs:
+  - dealhub-subskribe-api
+  fields: 23
+- entity: LineItem
+  specs:
+  - dealhub-headless-api
+  - dealhub-quote-api
+  fields: 22
+- entity: BulkInvoiceRunItem
+  specs:
+  - dealhub-subskribe-api
+  fields: 22
+- entity: OrderLineItemRequestJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 22
+- entity: AccountJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 21
+- entity: ChargePartialJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 21
+  description: JSON object representing the charge details.
+- entity: CreditMemoJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 20
+- entity: IntelligentSalesRoomOverviewResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 20
+- entity: NewOrderInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 20
+- entity: AutomatedInvoiceRule
+  specs:
+  - dealhub-subskribe-api
+  fields: 19
+- entity: TenantJob
+  specs:
+  - dealhub-subskribe-api
+  fields: 19
+- entity: AccountContact
+  specs:
+  - dealhub-subskribe-api
+  fields: 18
+- entity: SubscriptionChargeJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 18
+- entity: NewAccountJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 18
+- entity: RenewalOrderInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 18
+- entity: Subscription
+  specs:
+  - dealhub-subskribe-api
+  fields: 18
+- entity: UserJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 17
+- entity: SettlementApplication
+  specs:
+  - dealhub-subskribe-api
+  fields: 17
+- entity: OrderLineItem
+  specs:
+  - dealhub-subskribe-api
+  fields: 17
+- entity: User
+  specs:
+  - dealhub-user-api
+  fields: 17
+- entity: UserUpdateV2
+  specs:
+  - dealhub-user-api
+  fields: 17
+- entity: BankTransactionPotentialInvoice
+  specs:
+  - dealhub-subskribe-api
+  fields: 16
+- entity: BulkInvoiceRun
+  specs:
+  - dealhub-subskribe-api
+  fields: 16
+- entity: RevenueEnablementProgress
+  specs:
+  - dealhub-subskribe-api
+  fields: 16
+- entity: TenantJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 16
+- entity: ModificationLineItem
+  specs:
+  - dealhub-subskribe-api
+  fields: 16
+- entity: UserInformation
+  specs:
+  - dealhub-crm-api
+  - dealhub-partner-api
+  fields: 15
+  description: A list of fields required to create a user in DealHub.
+- entity: GenerateQuoteRequest
+  specs:
+  - dealhub-headless-api
+  fields: 15
+- entity: OpportunityOwner
+  specs:
+  - dealhub-headless-api
+  - dealhub-quote-api
+  fields: 15
+  description: Information about the opportunity owner.
+- entity: AccountingPeriod
+  specs:
+  - dealhub-subskribe-api
+  fields: 15
+- entity: OpportunityJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 15
+- entity: Entity
+  specs:
+  - dealhub-subskribe-api
+  fields: 15
+- entity: PaymentJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 15
+- entity: PlanJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 15
+  description: A plan is a collection of charges that dictates how a product is priced.
+- entity: Refund
+  specs:
+  - dealhub-subskribe-api
+  fields: 15
+- entity: Opportunity
+  specs:
+  - dealhub-subskribe-api
+  fields: 15
+- entity: PrepaidStats
+  specs:
+  - dealhub-subskribe-api
+  fields: 15
+- entity: RenewalLineItemInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 15
+- entity: SubscriptionLine
+  specs:
+  - dealhub-subskribe-api
+  fields: 15
+- entity: CancelLineItemInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 15
+- entity: UserUpdateV1
+  specs:
+  - dealhub-user-api
+  fields: 15
+- entity: AutomatedInvoiceRuleRequestJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 14
+- entity: EntityJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 14
+- entity: IntelligentSalesRoomEngagementSession
+  specs:
+  - dealhub-subskribe-api
+  fields: 14
+- entity: RefundDetail
+  specs:
+  - dealhub-subskribe-api
+  fields: 14
+- entity: NewOrderLineItemInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 14
+- entity: BundleCatalogItem
+  specs:
+  - dealhub-version-api
+  fields: 14
+- entity: QuoteTemplateLineItem
+  specs:
+  - dealhub-version-api
+  fields: 14
+- entity: GenerateQuoteTemplateResponse
+  specs:
+  - dealhub-version-api
+  fields: 14
+  description: Preformatted JSON template for the Generate Quote API, based on the Playbook structure.
+- entity: CompositeOrderJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 13
+- entity: StandaloneCreditMemoRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 13
+- entity: UpdateCrmFieldMappingDetail
+  specs:
+  - dealhub-subskribe-api
+  fields: 13
+- entity: CrmContact
+  specs:
+  - dealhub-subskribe-api
+  fields: 13
+- entity: DealPulseOverview
+  specs:
+  - dealhub-subskribe-api
+  fields: 13
+- entity: DataImport
+  specs:
+  - dealhub-subskribe-api
+  fields: 13
+- entity: BulkPaymentUploadData
+  specs:
+  - dealhub-subskribe-api
+  fields: 13
+- entity: RecognitionRule
+  specs:
+  - dealhub-subskribe-api
+  fields: 13
+- entity: NewAccountContactJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 13
+- entity: OpportunityInfo
+  specs:
+  - dealhub-crm-api
+  fields: 12
+  description: A schema representing the data that can be sent to create or update an opportunity and its related
+    quote.
+- entity: AccountContactJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 12
+- entity: SubskribeSalesforceContact
+  specs:
+  - dealhub-subskribe-api
+  fields: 12
+- entity: IntelligentSalesRoomFile
+  specs:
+  - dealhub-subskribe-api
+  fields: 12
+- entity: PaymentBankAccountJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 12
+- entity: AccountingEvent
+  specs:
+  - dealhub-subskribe-api
+  fields: 12
+- entity: OpportunityRestJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 12
+- entity: ProductJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 12
+- entity: RecognitionEventCompletion
+  specs:
+  - dealhub-subskribe-api
+  fields: 12
+- entity: SkuProductAttributes
+  specs:
+  - dealhub-subskribe-api
+  fields: 12
+- entity: AccountAddress
+  specs:
+  - dealhub-subskribe-api
+  fields: 11
+- entity: Integration
+  specs:
+  - dealhub-subskribe-api
+  fields: 11
+- entity: BankTransactionsUploadData
+  specs:
+  - dealhub-subskribe-api
+  fields: 11
+- entity: DocumentTemplateJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 11
+- entity: OpportunityInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 11
+- entity: BulkRevenueRecognition
+  specs:
+  - dealhub-subskribe-api
+  fields: 11
+- entity: TenantSettingJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 11
+- entity: SimulateQuoteRequest
+  specs:
+  - dealhub-headless-api
+  fields: 10
+- entity: MetricsJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 10
+- entity: Attachment
+  specs:
+  - dealhub-subskribe-api
+  fields: 10
+- entity: CustomFieldEntry
+  specs:
+  - dealhub-subskribe-api
+  fields: 10
+- entity: CreditMemoLineItemJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 10
+- entity: CustomFieldDefinitionJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 10
+- entity: IntelligentSalesRoomWidget
+  specs:
+  - dealhub-subskribe-api
+  fields: 10
+- entity: IntelligentSalesRoomTheme
+  specs:
+  - dealhub-subskribe-api
+  fields: 10
+- entity: ExternalArrScheduleJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 10
+- entity: PredefinedReportDefChartJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 10
+- entity: SubscriptionChargeChangeSchedule
+  specs:
+  - dealhub-subskribe-api
+  fields: 10
+- entity: UserInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 10
+- entity: ProductCatalogItem
+  specs:
+  - dealhub-version-api
+  fields: 10
+- entity: Contact
+  specs:
+  - dealhub-crm-api
+  fields: 9
+- entity: ResponseLineItem
+  specs:
+  - dealhub-headless-api
+  fields: 9
+- entity: OpportunityData
+  specs:
+  - dealhub-headless-api
+  fields: 9
+  description: Opportunity context required when the DealHub tenant uses the CRM API integration type.
+- entity: CustomerContact
+  specs:
+  - dealhub-headless-api
+  fields: 9
+  description: Details about a customer contact person.
+- entity: Quote
+  specs:
+  - dealhub-quote-api
+  fields: 9
+- entity: CustomFieldValue
+  specs:
+  - dealhub-subskribe-api
+  fields: 9
+- entity: DocumentTemplateRequestJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 9
+- entity: ApplyPaymentRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 9
+- entity: LedgerAccount
+  specs:
+  - dealhub-subskribe-api
+  fields: 9
+- entity: ApprovalSubmissionJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 9
+  description: Single approval submission attempt (approval domain only)
+- entity: BulkRevenueRecognitionItem
+  specs:
+  - dealhub-subskribe-api
+  fields: 9
+- entity: SubscriptionUpdateJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 9
+- entity: SubscriptionStatusChangeSchedule
+  specs:
+  - dealhub-subskribe-api
+  fields: 9
+- entity: UsageAggregateOutput
+  specs:
+  - dealhub-subskribe-api
+  fields: 9
+- entity: AmendmentOrderInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 9
+- entity: CancelOrderInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 9
+- entity: CrmImportStatusResponse
+  specs:
+  - dealhub-crm-import-api
+  fields: 8
+- entity: ResponseAdditionalData
+  specs:
+  - dealhub-headless-api
+  fields: 8
+- entity: OutboundEvent
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+- entity: ApprovalFlowJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+- entity: OrderTerms
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+- entity: CustomFieldDefinitionCreateInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+- entity: IntelligentSalesRoomAIGeneratedContent
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+- entity: IntelligentSalesRoomShareLinkAccess
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+- entity: TaxRateJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+- entity: ByteBuffer
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+- entity: ApproverJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+  description: Individual approver with timeline data (approval domain only)
+- entity: WorkflowJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+  description: Approval workflow with approver details (approval domain only)
+- entity: OrderAttributesUpdateRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+- entity: BillingPeriod
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+- entity: CustomBillingScheduleOutput
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+- entity: ProductInputJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+- entity: RefundRequestJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+- entity: Customization
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+- entity: TransactionalExchangeRate
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+- entity: SkuSyncInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 8
+- entity: PlaybookMetadata
+  specs:
+  - dealhub-version-api
+  fields: 8
+- entity: Item
+  specs:
+  - dealhub-callout-api
+  fields: 7
+  description: Represents a single product or a bundle within the quote. Can contain additional, customer-defined
+    product attributes configured by the admin.
+- entity: QuoteResponse
+  specs:
+  - dealhub-headless-api
+  fields: 7
+- entity: PlaybookAnswer
+  specs:
+  - dealhub-quote-api
+  fields: 7
+- entity: Approval
+  specs:
+  - dealhub-quote-api
+  fields: 7
+- entity: AccountAddressJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 7
+- entity: ApprovalStateJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 7
+- entity: AvalaraIntegration
+  specs:
+  - dealhub-subskribe-api
+  fields: 7
+- entity: TenantDiscountLineItemJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 7
+- entity: QuestionDefinition
+  specs:
+  - dealhub-subskribe-api
+  fields: 7
+- entity: IntelligentSalesRoomThemeResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 7
+- entity: IntelligentSalesRoomEngagementSummaryResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 7
+- entity: BulkInvoiceRunInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 7
+- entity: ProductCategory
+  specs:
+  - dealhub-subskribe-api
+  fields: 7
+- entity: PredefinedReportParam
+  specs:
+  - dealhub-subskribe-api
+  fields: 7
+- entity: PredefinedReportParamObject
+  specs:
+  - dealhub-subskribe-api
+  fields: 7
+- entity: TaxJarIntegration
+  specs:
+  - dealhub-subskribe-api
+  fields: 7
+- entity: TemplateScript
+  specs:
+  - dealhub-subskribe-api
+  fields: 7
+- entity: RawUsage
+  specs:
+  - dealhub-subskribe-api
+  fields: 7
+  description: A raw usage record
+- entity: Info
+  specs:
+  - dealhub-version-api
+  fields: 7
+- entity: ProductBasic
+  specs:
+  - dealhub-version-api
+  fields: 7
+- entity: BaseResponseItem
+  specs:
+  - dealhub-callout-api
+  fields: 6
+  description: Common properties for any item returned in the response.
+- entity: CrmImportLookupResponse
+  specs:
+  - dealhub-crm-import-api
+  fields: 6
+- entity: CreateOpportunityRequest
+  specs:
+  - dealhub-quote-api
+  fields: 6
+- entity: AccountPaymentMethodJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: AccountingPeriodCalculation
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: UserGroupJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: ApprovalTransitionRuleJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: ApprovalMatrixImportDataJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: DiscountDetailJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: RuleTraceJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: TenantDiscountJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: CrmFieldMappingImportDataJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: InvoiceItemPreviewJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: InvoicePreviewJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: UpdateInvoiceRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: CreditMemoApplicationJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: CreditMemoUnapplicationJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: NotificationTargetAndSubscriptions
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: OrderApprovalHistoryResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+  description: Complete approval history for an order (approval domain only)
+- entity: DocumentSection
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: SalesforceAccount
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: UserGroupRequestJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 6
+- entity: AssignmentRuleProduct
+  specs:
+  - dealhub-version-api
+  fields: 6
+- entity: AssignmentRule
+  specs:
+  - dealhub-version-api
+  fields: 6
+- entity: BundleItem
+  specs:
+  - dealhub-version-api
+  fields: 6
+- entity: Address
+  specs:
+  - dealhub-crm-api
+  fields: 5
+- entity: ResponseSummary
+  specs:
+  - dealhub-headless-api
+  fields: 5
+- entity: CustomerAddress
+  specs:
+  - dealhub-headless-api
+  fields: 5
+  description: Address details for a customer.
+- entity: ParametersRequest
+  specs:
+  - dealhub-pricing-api
+  fields: 5
+- entity: PricingRequest
+  specs:
+  - dealhub-pricing-api
+  fields: 5
+- entity: QuoteSummary
+  specs:
+  - dealhub-quote-api
+  fields: 5
+- entity: Signer
+  specs:
+  - dealhub-quote-api
+  fields: 5
+- entity: AccountReceivableContactJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: ApprovalSegmentJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: MediaType
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: ApprovalMatrixImportPreview
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: ApprovalRoleJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: AvalaraIntegrationInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: InvoiceBankTransactionMatchResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: PotentialInvoice
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: LedgerAccountMapping
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: CustomPredefinedTemplateOnOrder
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: UpsertCRMContactResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: CustomFieldDefinitionUpdateInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: DiscountJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: DocuSignIntegrationResponseJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: EmailSetting
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: CompanyContactJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: NumberConfig
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: Question
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: IntelligentSalesRoomUpdateThemeRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: IntelligentSalesRoomActivityLog
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: EmailContact
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: TenantInvoiceConfig
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: ApprovalSummaryJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+  description: Summary statistics across all approval attempts
+- entity: Duration
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: VoidPaymentJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: PredefinedReportDefJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: SalesforceAccountBillingAddress
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: BillingCycleDefinitionJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 5
+- entity: ConditionalName
+  specs:
+  - dealhub-version-api
+  fields: 5
+- entity: ProductHierarchyNode
+  specs:
+  - dealhub-version-api
+  fields: 5
+- entity: ProductCatalogPatchBundle
+  specs:
+  - dealhub-version-api
+  fields: 5
+  description: Represents an existing bundle whose data elements should be updated. Only `sku` is required. Include
+    only the data categories (`product_attributes`, `product_assignments`, `product_pricing`, `bundle_items`) that
+    should b
+- entity: PlaybookQuestion
+  specs:
+  - dealhub-version-api
+  fields: 5
+- entity: PlaybookGroup
+  specs:
+  - dealhub-version-api
+  fields: 5
+- entity: CalloutRequest
+  specs:
+  - dealhub-callout-api
+  fields: 4
+- entity: OpenQuoteRequest
+  specs:
+  - dealhub-crm-api
+  fields: 4
+- entity: CrmImportContactResult
+  specs:
+  - dealhub-crm-import-api
+  fields: 4
+- entity: CrmImportAccountResult
+  specs:
+  - dealhub-crm-import-api
+  fields: 4
+- entity: PricingResponse
+  specs:
+  - dealhub-pricing-api
+  fields: 4
+- entity: SkuPrice
+  specs:
+  - dealhub-pricing-api
+  fields: 4
+- entity: SubscriptionChargeAlias
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: ApprovalRoleSegmentChange
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: PaginatedBankTransactionPotentialInvoiceResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: BankTransactionsUploadResult
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: CreditMemoLineItemRequestJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: TenantCreditMemoConfigurationJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: CreditMemoBalanceJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: TimeZone
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: QuestionSchema
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: GuidedSellingUsecase
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: MessagesAndAnswer
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: InvoiceBalanceJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: BillingEventEntry
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: BillingEventInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: AccountingEventPaginatedResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: CustomBillingPeriodInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: CustomBillingScheduleInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: DocumentCustomContent
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: CustomBillingPeriodOutput
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: TemporalUnit
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: PaymentBalanceJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: PredefinedReportJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: ReportJobResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: BulkRevenueRecognitionInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: SalesforceClientIntegrationRequestJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: TaxRateStrategyJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: TaxRateStrategyPaginatedResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: UnitOfMeasureJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: UsageBatchInsertResult
+  specs:
+  - dealhub-subskribe-api
+  fields: 4
+- entity: Version
+  specs:
+  - dealhub-version-api
+  fields: 4
+- entity: DuplicateVersionRequest
+  specs:
+  - dealhub-version-api
+  fields: 4
+- entity: ProductAssignment
+  specs:
+  - dealhub-version-api
+  fields: 4
+- entity: BundleAssignment
+  specs:
+  - dealhub-version-api
+  fields: 4
+- entity: ProductCatalogPatchProduct
+  specs:
+  - dealhub-version-api
+  fields: 4
+  description: Represents an existing product whose data elements should be updated. Only `sku` is required. Include
+    only the data categories (`product_attributes`, `product_assignments`, `product_pricing`) that should be updated;
+    omit
+- entity: RequestStatus
+  specs:
+  - dealhub-version-api
+  fields: 4
+- entity: RequestSummary
+  specs:
+  - dealhub-version-api
+  fields: 4
+- entity: AuthenticationResponse
+  specs:
+  - dealhub-crm-api
+  - dealhub-partner-api
+  fields: 3
+- entity: ViewQuotesRequest
+  specs:
+  - dealhub-crm-api
+  fields: 3
+- entity: SkuPricingRequest
+  specs:
+  - dealhub-pricing-api
+  fields: 3
+- entity: PaginationInfo
+  specs:
+  - dealhub-quote-api
+  fields: 3
+- entity: DealRoomSignersResponse
+  specs:
+  - dealhub-quote-api
+  fields: 3
+- entity: PaginatedAccountsResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: AccountPaymentConfigurationJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: EntityRef
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: Message
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: AuthSamlIntegrationJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: PriceTierJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: CreditableAmount
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: OrderCreationCustomizationOutputJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: PricingOverrideJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: CreditMemoPaginationResponseJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: CrmFieldMappingImportPreview
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: CrmOpportunityNameChangeNotificationRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: TrackDealPulseEventRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: DocuSignIntegrationRequestJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: Answer
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: NextQuestions
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: GuidedSellingInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: IntelligentSalesRoomTrackEventRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: IntelligentSalesRoomCreateWidgetRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: EmailNotifiersList
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: InvoiceJsonPaginationResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: BulkPaymentUploadResult
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: OpportunityPaginationResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: OrderJsonPaginationResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: Period
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: Recurrence
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: PaymentRetryResult
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: PaymentRetryPolicy
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: PaymentJsonPaginationResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: PlanJsonPaginationResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: ProductCategoryPaginationResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: ProductJsonPaginationResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: PaginatedSubscriptionsResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: PurchaseOrder
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: TaxRatePaginationResponseJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: Condition
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: PaymentTermSettingsJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: BillingCycleDefinitionAdd
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: UnitOfMeasurePaginationResponseJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: Entry
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: UserPaginationResponseJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: Factor
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: OrderPeriodMetadata
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: PaginatedResult
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: PaginatedResultSubscriptionHead
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: PaginatedResultSubscription
+  specs:
+  - dealhub-subskribe-api
+  fields: 3
+- entity: ProductsBySkuRequest
+  specs:
+  - dealhub-version-api
+  fields: 3
+- entity: ProductFactor
+  specs:
+  - dealhub-version-api
+  fields: 3
+- entity: ProposalAttribute
+  specs:
+  - dealhub-version-api
+  fields: 3
+- entity: ProductCatalogGetResponse
+  specs:
+  - dealhub-version-api
+  fields: 3
+- entity: QuoteTemplatePartnerProgramData
+  specs:
+  - dealhub-version-api
+  fields: 3
+  description: Partner program-specific discounts.
+- entity: AuthenticationRequest
+  specs:
+  - dealhub-crm-api
+  - dealhub-partner-api
+  fields: 2
+- entity: RedirectResponse
+  specs:
+  - dealhub-crm-api
+  - dealhub-partner-api
+  fields: 2
+- entity: CustomField
+  specs:
+  - dealhub-crm-api
+  - dealhub-subskribe-api
+  fields: 2
+- entity: CrmImportFailure
+  specs:
+  - dealhub-crm-import-api
+  fields: 2
+- entity: ExternalQueryRequest
+  specs:
+  - dealhub-external-query
+  fields: 2
+- entity: QuoteData
+  specs:
+  - dealhub-headless-api
+  fields: 2
+- entity: PartnerProgram
+  specs:
+  - dealhub-headless-api
+  fields: 2
+- entity: SkuParameters
+  specs:
+  - dealhub-pricing-api
+  fields: 2
+- entity: ParameterDefinition
+  specs:
+  - dealhub-pricing-api
+  fields: 2
+- entity: ParameterValue
+  specs:
+  - dealhub-pricing-api
+  fields: 2
+- entity: PaginatedQuotesResponse
+  specs:
+  - dealhub-quote-api
+  fields: 2
+- entity: CustomFieldDefault
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: TimeSeriesAmountJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: CrmAccountImportResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: ApprovalRuleConditions
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: MatchBankTransactionsRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: RecurrenceJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: AttributeReference
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: OrderLineActionsPerformedJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: OrderLineRuleWarningsJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: RuleActionPerformedJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: VoidCreditMemoRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: UpsertCrmContactsRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: CustomFieldUpdateInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: DealPulseListResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: DunningSettingJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: NextQuestion
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: FlatfileWorkbookResponseData
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: IntelligentSalesRoomUpdateWidgetRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: IntelligentSalesRoomShareLinkAccessRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: BulkInvoiceRunExclusions
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: VoidInvoiceRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: InvoiceDeletableResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: CustomBillingRecurrence
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: PaymentRetryConfigOutput
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: ScheduleEntry
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: PaymentRetryConfigInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: PaymentDeletableResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: ReportDuration
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: SubscriptionSchedules
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: TaxJarIntegrationInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: BackendConfig
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: DefaultValueDefinition
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: TenantUiCustomization
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: DocxSettings
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: BillingCycleDefinitionUpdateJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: NewOrderRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 2
+- entity: UserUpdateError
+  specs:
+  - dealhub-user-api
+  fields: 2
+- entity: VersionProductsResponse
+  specs:
+  - dealhub-version-api
+  fields: 2
+- entity: ProductAttribute
+  specs:
+  - dealhub-version-api
+  fields: 2
+- entity: ProductPricingProduct
+  specs:
+  - dealhub-version-api
+  fields: 2
+- entity: ProductPricing
+  specs:
+  - dealhub-version-api
+  fields: 2
+- entity: InheritedAttribute
+  specs:
+  - dealhub-version-api
+  fields: 2
+- entity: ProductCatalogPostRequest
+  specs:
+  - dealhub-version-api
+  fields: 2
+- entity: ProductCatalogPatchRequest
+  specs:
+  - dealhub-version-api
+  fields: 2
+  description: Request body for the PATCH product catalog endpoint. Include only the products and/or bundles whose
+    data elements should be updated.
+- entity: RequestSummaryResponse
+  specs:
+  - dealhub-version-api
+  fields: 2
+- entity: PlaybookSyncSettings
+  specs:
+  - dealhub-version-api
+  fields: 2
+- entity: PlaybookExportResponse
+  specs:
+  - dealhub-version-api
+  fields: 2
+- entity: QuoteTemplatePartnerProgram
+  specs:
+  - dealhub-version-api
+  fields: 2
+- entity: QuoteTemplateQuoteData
+  specs:
+  - dealhub-version-api
+  fields: 2
+- entity: PlaybookErrorResponse
+  specs:
+  - dealhub-version-api
+  fields: 2
+- entity: CalloutResponse
+  specs:
+  - dealhub-callout-api
+  fields: 1
+- entity: ErrorResponse
+  specs:
+  - dealhub-callout-api
+  - dealhub-crm-api
+  - dealhub-crm-import-api
+  - dealhub-external-query
+  - dealhub-headless-api
+  fields: 1
+  description: A generic error response. The specific message will vary based on the context.
+- entity: ViewOpportunitiesRequest
+  specs:
+  - dealhub-crm-api
+  fields: 1
+- entity: StartCrmImportRequest
+  specs:
+  - dealhub-crm-import-api
+  fields: 1
+- entity: CrmImportRequestResponse
+  specs:
+  - dealhub-crm-import-api
+  fields: 1
+- entity: ProductDataItem
+  specs:
+  - dealhub-external-query
+  fields: 1
+  description: Represents a single product or bundle. The properties are dynamic and configured by the admin (e.g.,
+    SKU, ITEM NAME, custom attributes).
+- entity: ExternalQueryResponse
+  specs:
+  - dealhub-external-query
+  fields: 1
+- entity: ActionRequest
+  specs:
+  - dealhub-headless-api
+  fields: 1
+- entity: ParametersResponse
+  specs:
+  - dealhub-pricing-api
+  fields: 1
+- entity: DealRoomInfo
+  specs:
+  - dealhub-quote-api
+  fields: 1
+- entity: ErpInputJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 1
+- entity: Type
+  specs:
+  - dealhub-subskribe-api
+  fields: 1
+- entity: AnrokIntegrationInput
+  specs:
+  - dealhub-subskribe-api
+  fields: 1
+- entity: JSONObject
+  specs:
+  - dealhub-subskribe-api
+  fields: 1
+- entity: ApprovalStateActionJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 1
+- entity: DocuSignReauthenticationResponseJson
+  specs:
+  - dealhub-subskribe-api
+  fields: 1
+- entity: FlatfileWorkbookResponse
+  specs:
+  - dealhub-subskribe-api
+  fields: 1
+- entity: IntelligentSalesRoomReorderWidgetsRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 1
+- entity: IntelligentSalesRoomUpdateAIContentRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 1
+- entity: IntelligentSalesRoomExtractThemeRequest
+  specs:
+  - dealhub-subskribe-api
+  fields: 1
+- entity: BulkInvoiceRunSelector
+  specs:
+  - dealhub-subskribe-api
+  fields: 1
+- entity: InvoiceNumberPrefix
+  specs:
+  - dealhub-subskribe-api
+  fields: 1
+relationships:
+- from: CalloutRequest
+  to: Item
+  cardinality: has_many
+  via: items
+  spec: dealhub-callout-api
+- from: Item
+  to: Item
+  cardinality: has_many
+  via: bundle_items
+  spec: dealhub-callout-api
+- from: CalloutResponse
+  to: ResponseItem
+  cardinality: has_many
+  via: items
+  spec: dealhub-callout-api
+- from: AuthenticationRequest
+  to: UserInformation
+  cardinality: has_one
+  via: user_information
+  spec: dealhub-crm-api
+- from: OpportunityInfo
+  to: UserInformation
+  cardinality: has_one
+  via: opportunity_owner
+  spec: dealhub-crm-api
+- from: OpportunityInfo
+  to: Address
+  cardinality: has_one
+  via: customer_shipping_address
+  spec: dealhub-crm-api
+- from: OpportunityInfo
+  to: Address
+  cardinality: has_one
+  via: customer_billing_address
+  spec: dealhub-crm-api
+- from: OpportunityInfo
+  to: Contact
+  cardinality: has_many
+  via: customer_contacts
+  spec: dealhub-crm-api
+- from: OpportunityInfo
+  to: CustomField
+  cardinality: has_many
+  via: custom_fields
+  spec: dealhub-crm-api
+- from: OpenQuoteRequest
+  to: OpportunityInfo
+  cardinality: has_one
+  via: opportunity_info
+  spec: dealhub-crm-api
+- from: ViewQuotesRequest
+  to: OpportunityInfo
+  cardinality: has_one
+  via: opportunity_info
+  spec: dealhub-crm-api
+- from: CrmImportStatusResponse
+  to: CrmImportFailure
+  cardinality: has_many
+  via: failures
+  spec: dealhub-crm-import-api
+- from: CrmImportAccountResult
+  to: CrmImportContactResult
+  cardinality: has_many
+  via: contacts
+  spec: dealhub-crm-import-api
+- from: ExternalQueryRequest
+  to: ProductDataItem
+  cardinality: has_many
+  via: product_data
+  spec: dealhub-external-query
+- from: ProductDataItem
+  to: ProductDataItem
+  cardinality: has_many
+  via: bundle_line_items
+  spec: dealhub-external-query
+- from: ExternalQueryResponse
+  to: PlaybookResponseItem
+  cardinality: has_many
+  via: playbook_data
+  spec: dealhub-external-query
+- from: SimulateQuoteRequest
+  to: PartnerProgram
+  cardinality: has_many
+  via: partner_program
+  spec: dealhub-headless-api
+- from: SimulateQuoteRequest
+  to: QuoteData
+  cardinality: has_many
+  via: quote_data
+  spec: dealhub-headless-api
+- from: SimulateQuoteRequest
+  to: LineItem
+  cardinality: has_many
+  via: line_items
+  spec: dealhub-headless-api
+- from: GenerateQuoteRequest
+  to: PartnerProgram
+  cardinality: has_many
+  via: partner_program
+  spec: dealhub-headless-api
+- from: GenerateQuoteRequest
+  to: QuoteData
+  cardinality: has_many
+  via: quote_data
+  spec: dealhub-headless-api
+- from: GenerateQuoteRequest
+  to: LineItem
+  cardinality: has_many
+  via: line_items
+  spec: dealhub-headless-api
+- from: GenerateQuoteRequest
+  to: OpportunityData
+  cardinality: has_one
+  via: opportunity_data
+  spec: dealhub-headless-api
+- from: QuoteResponse
+  to: ResponseSummary
+  cardinality: has_one
+  via: summary
+  spec: dealhub-headless-api
+- from: QuoteResponse
+  to: ResponseLineItem
+  cardinality: has_many
+  via: line_items
+  spec: dealhub-headless-api
+- from: ResponseLineItem
+  to: ResponseAdditionalData
+  cardinality: has_one
+  via: additional_data
+  spec: dealhub-headless-api
+- from: OpportunityData
+  to: OpportunityOwner
+  cardinality: has_one
+  via: opportunity_owner
+  spec: dealhub-headless-api
+- from: OpportunityData
+  to: CustomerAddress
+  cardinality: has_one
+  via: customer_shipping_address
+  spec: dealhub-headless-api
+- from: OpportunityData
+  to: CustomerAddress
+  cardinality: has_one
+  via: customer_billing_address
+  spec: dealhub-headless-api
+- from: OpportunityData
+  to: CustomerContact
+  cardinality: has_many
+  via: customer_contacts
+  spec: dealhub-headless-api
+- from: AuthenticationRequest
+  to: UserInformation
+  cardinality: has_one
+  via: user_information
+  spec: dealhub-partner-api
+- from: ParametersResponse
+  to: SkuParameters
+  cardinality: has_many
+  via: skus
+  spec: dealhub-pricing-api
+- from: PricingRequest
+  to: SkuPricingRequest
+  cardinality: has_many
+  via: skus
+  spec: dealhub-pricing-api
+- from: SkuPricingRequest
+  to: ParameterValue
+  cardinality: has_many
+  via: parameters
+  spec: dealhub-pricing-api
+- from: PricingResponse
+  to: SkuPrice
+  cardinality: has_many
+  via: skus
+  spec: dealhub-pricing-api
+- from: Quote
+  to: QuoteInfo
+  cardinality: has_one
+  via: info
+  spec: dealhub-quote-api
+- from: Quote
+  to: QuoteSummary
+  cardinality: has_one
+  via: summary
+  spec: dealhub-quote-api
+- from: Quote
+  to: DealRoomInfo
+  cardinality: has_one
+  via: deal_room_info
+  spec: dealhub-quote-api
+- from: Quote
+  to: LineItem
+  cardinality: has_many
+  via: line_items
+  spec: dealhub-quote-api
+- from: Quote
+  to: PlaybookAnswer
+  cardinality: has_many
+  via: answers
+  spec: dealhub-quote-api
+- from: Quote
+  to: Approval
+  cardinality: has_many
+  via: approvals
+  spec: dealhub-quote-api
+- from: PaginatedQuotesResponse
+  to: PaginationInfo
+  cardinality: has_one
+  via: info
+  spec: dealhub-quote-api
+- from: PaginatedQuotesResponse
+  to: Quote
+  cardinality: has_many
+  via: quotes
+  spec: dealhub-quote-api
+- from: CreateOpportunityRequest
+  to: OpportunityOwner
+  cardinality: has_one
+  via: opportunity_owner
+  spec: dealhub-quote-api
+- from: DealRoomSignersResponse
+  to: Signer
+  cardinality: has_many
+  via: buyer_signers
+  spec: dealhub-quote-api
+- from: DealRoomSignersResponse
+  to: Signer
+  cardinality: has_many
+  via: seller_signers
+  spec: dealhub-quote-api
+- from: AccountReceivableContactJson
+  to: AccountAddressJson
+  cardinality: has_one
+  via: address
+  spec: dealhub-subskribe-api
+- from: AccountJson
+  to: AccountAddressJson
+  cardinality: has_one
+  via: address
+  spec: dealhub-subskribe-api
+- from: CustomFieldValue
+  to: CustomFieldDefault
+  cardinality: has_one
+  via: defaultValue
+  spec: dealhub-subskribe-api
+- from: AccountContactJson
+  to: AccountAddressJson
+  cardinality: has_one
+  via: address
+  spec: dealhub-subskribe-api
+- from: PaginatedAccountsResponse
+  to: AccountJson
+  cardinality: has_many
+  via: data
+  spec: dealhub-subskribe-api
+- from: MetricsJson
+  to: TimeSeriesAmountJson
+  cardinality: has_many
+  via: arrTrend
+  spec: dealhub-subskribe-api
+- from: AccountingPeriod
+  to: AccountingPeriodCalculation
+  cardinality: has_one
+  via: calculation
+  spec: dealhub-subskribe-api
+- from: AccountingPeriod
+  to: UserJson
+  cardinality: has_one
+  via: openedByUser
+  spec: dealhub-subskribe-api
+- from: AccountingPeriod
+  to: UserJson
+  cardinality: has_one
+  via: closedByUser
+  spec: dealhub-subskribe-api
+- from: UserJson
+  to: UserGroupJson
+  cardinality: has_many
+  via: userGroups
+  spec: dealhub-subskribe-api
+- from: UserJson
+  to: ApprovalSegmentJson
+  cardinality: has_many
+  via: approvalSegments
+  spec: dealhub-subskribe-api
+- from: UserJson
+  to: EntityRef
+  cardinality: has_many
+  via: availableEntities
+  spec: dealhub-subskribe-api
+- from: OutboundEvent
+  to: MediaType
+  cardinality: has_one
+  via: mediaType
+  spec: dealhub-subskribe-api
+- from: OutboundEvent
+  to: Type
+  cardinality: has_one
+  via: genericType
+  spec: dealhub-subskribe-api
+- from: Integration
+  to: JSONObject
+  cardinality: has_one
+  via: metadata
+  spec: dealhub-subskribe-api
+- from: ApprovalFlowJson
+  to: ApprovalStateJson
+  cardinality: has_many
+  via: states
+  spec: dealhub-subskribe-api
+- from: ApprovalFlowJson
+  to: ApprovalTransitionRuleJson
+  cardinality: has_many
+  via: transitionRules
+  spec: dealhub-subskribe-api
+- from: ApprovalStateJson
+  to: ApprovalStateActionJson
+  cardinality: has_one
+  via: action
+  spec: dealhub-subskribe-api
+- from: ApprovalTransitionRuleJson
+  to: ApprovalRuleConditions
+  cardinality: has_one
+  via: ruleConditions
+  spec: dealhub-subskribe-api
+- from: ApprovalMatrixImportPreview
+  to: ApprovalRoleSegmentChange
+  cardinality: has_many
+  via: approvalRoleSegmentChanges
+  spec: dealhub-subskribe-api
+- from: BankTransactionPotentialInvoice
+  to: PotentialInvoice
+  cardinality: has_many
+  via: potentialInvoices
+  spec: dealhub-subskribe-api
+- from: PaginatedBankTransactionPotentialInvoiceResponse
+  to: BankTransactionPotentialInvoice
+  cardinality: has_many
+  via: data
+  spec: dealhub-subskribe-api
+- from: BankTransactionsUploadResult
+  to: BankTransactionsUploadData
+  cardinality: has_many
+  via: bankTransactionsUploadData
+  spec: dealhub-subskribe-api
+- from: ChargeJson
+  to: RecurrenceJson
+  cardinality: has_one
+  via: recurrence
+  spec: dealhub-subskribe-api
+- from: ChargeJson
+  to: PriceTierJson
+  cardinality: has_many
+  via: priceTiers
+  spec: dealhub-subskribe-api
+- from: ChargeJson
+  to: LedgerAccountMapping
+  cardinality: has_one
+  via: ledgerAccountMapping
+  spec: dealhub-subskribe-api
+- from: CompositeOrderJson
+  to: OrderJson
+  cardinality: has_many
+  via: orders
+  spec: dealhub-subskribe-api
+- from: CustomFieldEntry
+  to: CustomFieldDefault
+  cardinality: has_one
+  via: defaultValue
+  spec: dealhub-subskribe-api
+- from: OpportunityJson
+  to: CustomFieldEntry
+  cardinality: has_many
+  via: customFields
+  spec: dealhub-subskribe-api
+- from: OrderCreationCustomizationOutputJson
+  to: RuleTraceJson
+  cardinality: has_many
+  via: ruleTraces
+  spec: dealhub-subskribe-api
+- from: OrderJson
+  to: TenantDiscountJson
+  cardinality: has_many
+  via: predefinedDiscounts
+  spec: dealhub-subskribe-api
+- from: OrderJson
+  to: CreditableAmount
+  cardinality: has_many
+  via: creditableAmounts
+  spec: dealhub-subskribe-api
+- from: OrderJson
+  to: OrderLineItemJson
+  cardinality: has_many
+  via: lineItems
+  spec: dealhub-subskribe-api
+- from: OrderJson
+  to: OrderLineItemJson
+  cardinality: has_many
+  via: lineItemsNetEffect
+  spec: dealhub-subskribe-api
+- from: OrderJson
+  to: RecurrenceJson
+  cardinality: has_one
+  via: termLength
+  spec: dealhub-subskribe-api
+- from: OrderJson
+  to: RecurrenceJson
+  cardinality: has_one
+  via: billingCycle
+  spec: dealhub-subskribe-api
+- from: OrderJson
+  to: OrderTerms
+  cardinality: has_many
+  via: orderTerms
+  spec: dealhub-subskribe-api
+- from: OrderJson
+  to: CustomFieldEntry
+  cardinality: has_many
+  via: customFields
+  spec: dealhub-subskribe-api
+- from: OrderJson
+  to: CustomPredefinedTemplateOnOrder
+  cardinality: has_many
+  via: customPredefinedTemplatesOnOrder
+  spec: dealhub-subskribe-api
+- from: OrderJson
+  to: OpportunityJson
+  cardinality: has_one
+  via: opportunity
+  spec: dealhub-subskribe-api
+- from: OrderJson
+  to: OrderCreationCustomizationOutputJson
+  cardinality: has_one
+  via: zeppaOutput
+  spec: dealhub-subskribe-api
+- from: OrderLineActionsPerformedJson
+  to: RuleActionPerformedJson
+  cardinality: has_many
+  via: actionsPerformed
+  spec: dealhub-subskribe-api
+- from: OrderLineItemJson
+  to: DiscountDetailJson
+  cardinality: has_many
+  via: discounts
+  spec: dealhub-subskribe-api
+- from: OrderLineItemJson
+  to: TenantDiscountLineItemJson
+  cardinality: has_many
+  via: predefinedDiscounts
+  spec: dealhub-subskribe-api
+- from: OrderLineItemJson
+  to: AttributeReference
+  cardinality: has_many
+  via: attributeReferences
+  spec: dealhub-subskribe-api
+- from: OrderLineItemJson
+  to: PricingOverrideJson
+  cardinality: has_one
+  via: pricingOverride
+  spec: dealhub-subskribe-api
+- from: OrderLineItemJson
+  to: CustomFieldEntry
+  cardinality: has_many
+  via: customFields
+  spec: dealhub-subskribe-api
+- from: PricingOverrideJson
+  to: PriceTierJson
+  cardinality: has_many
+  via: priceTiers
+  spec: dealhub-subskribe-api
+- from: RuleTraceJson
+  to: RuleActionPerformedJson
+  cardinality: has_many
+  via: orderActionsPerformed
+  spec: dealhub-subskribe-api
+- from: RuleTraceJson
+  to: OrderLineActionsPerformedJson
+  cardinality: has_many
+  via: orderLineActionsPerformed
+  spec: dealhub-subskribe-api
+- from: RuleTraceJson
+  to: OrderLineRuleWarningsJson
+  cardinality: has_many
+  via: orderLineRuleWarnings
+  spec: dealhub-subskribe-api
+- from: CreditMemoJson
+  to: CreditMemoLineItemJson
+  cardinality: has_many
+  via: lineItems
+  spec: dealhub-subskribe-api
+- from: CreditMemoPaginationResponseJson
+  to: CreditMemoJson
+  cardinality: has_many
+  via: data
+  spec: dealhub-subskribe-api
+- from: StandaloneCreditMemoRequest
+  to: CreditMemoLineItemRequestJson
+  cardinality: has_many
+  via: lineItems
+  spec: dealhub-subskribe-api
+- from: CrmFieldMappingImportPreview
+  to: UpdateCrmFieldMappingDetail
+  cardinality: has_many
+  via: crmFieldMappingChanges
+  spec: dealhub-subskribe-api
+- from: UpsertCRMContactResponse
+  to: SubskribeSalesforceContact
+  cardinality: has_one
+  via: salesforceContact
+  spec: dealhub-subskribe-api
+- from: UpsertCRMContactResponse
+  to: CrmContact
+  cardinality: has_one
+  via: crmContact
+  spec: dealhub-subskribe-api
+- from: UpsertCRMContactResponse
+  to: AccountContactJson
+  cardinality: has_one
+  via: upsertedContact
+  spec: dealhub-subskribe-api
+- from: CustomFieldDefinitionCreateInput
+  to: CustomFieldDefault
+  cardinality: has_one
+  via: defaultValue
+  spec: dealhub-subskribe-api
+- from: CustomFieldDefinitionJson
+  to: CustomFieldDefault
+  cardinality: has_one
+  via: defaultValue
+  spec: dealhub-subskribe-api
+- from: CustomFieldDefinitionUpdateInput
+  to: CustomFieldDefault
+  cardinality: has_one
+  via: defaultValue
+  spec: dealhub-subskribe-api
+- from: DealPulseListResponse
+  to: DealPulseOverview
+  cardinality: has_many
+  via: dealPulses
+  spec: dealhub-subskribe-api
+- from: CompanyContactJson
+  to: AccountAddressJson
+  cardinality: has_one
+  via: address
+  spec: dealhub-subskribe-api
+- from: EntityJson
+  to: NumberConfig
+  cardinality: has_one
+  via: invoiceConfig
+  spec: dealhub-subskribe-api
+- from: EntityJson
+  to: NumberConfig
+  cardinality: has_one
+  via: creditMemoConfig
+  spec: dealhub-subskribe-api
+- from: EntityJson
+  to: CompanyContactJson
+  cardinality: has_one
+  via: companyContact
+  spec: dealhub-subskribe-api
+- from: EntityJson
+  to: AccountReceivableContactJson
+  cardinality: has_one
+  via: accountReceivableContact
+  spec: dealhub-subskribe-api
+- from: AccountContact
+  to: AccountAddress
+  cardinality: has_one
+  via: address
+  spec: dealhub-subskribe-api
+- from: Entity
+  to: NumberConfig
+  cardinality: has_one
+  via: invoiceConfig
+  spec: dealhub-subskribe-api
+- from: Entity
+  to: TimeZone
+  cardinality: has_one
+  via: timezone
+  spec: dealhub-subskribe-api
+- from: Entity
+  to: AccountContact
+  cardinality: has_one
+  via: companyContact
+  spec: dealhub-subskribe-api
+- from: Entity
+  to: AccountContact
+  cardinality: has_one
+  via: accountReceivableContact
+  spec: dealhub-subskribe-api
+- from: NextQuestion
+  to: Question
+  cardinality: has_one
+  via: nextQuestion
+  spec: dealhub-subskribe-api
+- from: Question
+  to: QuestionSchema
+  cardinality: has_one
+  via: schema
+  spec: dealhub-subskribe-api
+- from: NextQuestions
+  to: Question
+  cardinality: has_many
+  via: questions
+  spec: dealhub-subskribe-api
+- from: GuidedSellingUsecase
+  to: QuestionDefinition
+  cardinality: has_many
+  via: questions
+  spec: dealhub-subskribe-api
+- from: QuestionDefinition
+  to: QuestionSchema
+  cardinality: has_one
+  via: schema
+  spec: dealhub-subskribe-api
+- from: QuestionDefinition
+  to: Answer
+  cardinality: has_many
+  via: dependsAnd
+  spec: dealhub-subskribe-api
+- from: MessagesAndAnswer
+  to: Message
+  cardinality: has_many
+  via: messages
+  spec: dealhub-subskribe-api
+- from: MessagesAndAnswer
+  to: Answer
+  cardinality: has_many
+  via: answers
+  spec: dealhub-subskribe-api
+- from: GuidedSellingInput
+  to: Message
+  cardinality: has_many
+  via: messagesSoFar
+  spec: dealhub-subskribe-api
+- from: FlatfileWorkbookResponse
+  to: FlatfileWorkbookResponseData
+  cardinality: has_one
+  via: data
+  spec: dealhub-subskribe-api
+- from: IntelligentSalesRoomOverviewResponse
+  to: IntelligentSalesRoomThemeResponse
+  cardinality: has_one
+  via: theme
+  spec: dealhub-subskribe-api
+- from: IntelligentSalesRoomOverviewResponse
+  to: AccountAddressJson
+  cardinality: has_one
+  via: tenantAddress
+  spec: dealhub-subskribe-api
+- from: BulkInvoiceRun
+  to: BulkInvoiceRunSelector
+  cardinality: has_one
+  via: invoiceSelector
+  spec: dealhub-subskribe-api
+- from: BulkInvoiceRunExclusions
+  to: AccountJson
+  cardinality: has_many
+  via: accounts
+  spec: dealhub-subskribe-api
+- from: BulkInvoiceRunSelector
+  to: BulkInvoiceRunExclusions
+  cardinality: has_one
+  via: exclusions
+  spec: dealhub-subskribe-api
+- from: InvoiceItemJson
+  to: TaxRateJson
+  cardinality: has_one
+  via: taxRate
+  spec: dealhub-subskribe-api
+- from: InvoiceJson
+  to: InvoiceItemJson
+  cardinality: has_many
+  via: invoiceItems
+  spec: dealhub-subskribe-api
+- from: InvoiceJson
+  to: AccountContactJson
+  cardinality: has_one
+  via: billingContact
+  spec: dealhub-subskribe-api
+- from: InvoiceJson
+  to: AccountContactJson
+  cardinality: has_one
+  via: shippingContact
+  spec: dealhub-subskribe-api
+- from: InvoiceJson
+  to: EmailNotifiersList
+  cardinality: has_one
+  via: emailNotifiersList
+  spec: dealhub-subskribe-api
+- from: InvoicePreviewJson
+  to: InvoiceItemPreviewJson
+  cardinality: has_many
+  via: lineItems
+  spec: dealhub-subskribe-api
+- from: InvoicePreviewJson
+  to: InvoiceItemJson
+  cardinality: has_many
+  via: invoiceItems
+  spec: dealhub-subskribe-api
+- from: InvoiceJsonPaginationResponse
+  to: InvoiceJson
+  cardinality: has_many
+  via: data
+  spec: dealhub-subskribe-api
+- from: UpdateInvoiceRequest
+  to: EmailNotifiersList
+  cardinality: has_one
+  via: emailNotifiersList
+  spec: dealhub-subskribe-api
+- from: TenantInvoiceConfig
+  to: InvoiceNumberPrefix
+  cardinality: has_one
+  via: invoiceNumberPrefix
+  spec: dealhub-subskribe-api
+- from: BulkPaymentUploadResult
+  to: BulkPaymentUploadData
+  cardinality: has_many
+  via: bulkPaymentUploadData
+  spec: dealhub-subskribe-api
+- from: AccountingEvent
+  to: ByteBuffer
+  cardinality: has_one
+  via: sourceEventPayload
+  spec: dealhub-subskribe-api
+- from: AccountingEventPaginatedResponse
+  to: AccountingEvent
+  cardinality: has_many
+  via: data
+  spec: dealhub-subskribe-api
+- from: OpportunityPaginationResponse
+  to: OpportunityJson
+  cardinality: has_many
+  via: data
+  spec: dealhub-subskribe-api
+- from: ApprovalSubmissionJson
+  to: WorkflowJson
+  cardinality: has_many
+  via: workflows
+  spec: dealhub-subskribe-api
+- from: OrderApprovalHistoryResponse
+  to: ApprovalSubmissionJson
+  cardinality: has_one
+  via: currentSubmission
+  spec: dealhub-subskribe-api
+- from: OrderApprovalHistoryResponse
+  to: ApprovalSubmissionJson
+  cardinality: has_many
+  via: approvalHistory
+  spec: dealhub-subskribe-api
+- from: OrderApprovalHistoryResponse
+  to: ApprovalSummaryJson
+  cardinality: has_one
+  via: summary
+  spec: dealhub-subskribe-api
+- from: WorkflowJson
+  to: ApproverJson
+  cardinality: has_many
+  via: approvers
+  spec: dealhub-subskribe-api
+- from: OrderJsonPaginationResponse
+  to: OrderJson
+  cardinality: has_many
+  via: data
+  spec: dealhub-subskribe-api
+- from: CustomBillingPeriodInput
+  to: CustomBillingRecurrence
+  cardinality: has_one
+  via: recurrenceWithCount
+  spec: dealhub-subskribe-api
+- from: CustomBillingRecurrence
+  to: RecurrenceJson
+  cardinality: has_one
+  via: recurrence
+  spec: dealhub-subskribe-api
+- from: CustomBillingScheduleInput
+  to: CustomBillingPeriodInput
+  cardinality: has_many
+  via: schedules
+  spec: dealhub-subskribe-api
+- from: OpportunityInput
+  to: CustomFieldEntry
+  cardinality: has_many
+  via: customFields
+  spec: dealhub-subskribe-api
+- from: OrderLineItemRequestJson
+  to: DiscountJson
+  cardinality: has_many
+  via: discounts
+  spec: dealhub-subskribe-api
+- from: OrderLineItemRequestJson
+  to: PricingOverrideJson
+  cardinality: has_one
+  via: pricingOverride
+  spec: dealhub-subskribe-api
+- from: OrderLineItemRequestJson
+  to: AttributeReference
+  cardinality: has_many
+  via: attributeReferences
+  spec: dealhub-subskribe-api
+- from: OrderLineItemRequestJson
+  to: CustomFieldEntry
+  cardinality: has_many
+  via: customFields
+  spec: dealhub-subskribe-api
+- from: OrderRequestJson
+  to: TenantDiscountJson
+  cardinality: has_many
+  via: predefinedDiscounts
+  spec: dealhub-subskribe-api
+- from: OrderRequestJson
+  to: CreditableAmount
+  cardinality: has_many
+  via: creditableAmounts
+  spec: dealhub-subskribe-api
+- from: OrderRequestJson
+  to: OrderLineItemRequestJson
+  cardinality: has_many
+  via: lineItems
+  spec: dealhub-subskribe-api
+- from: OrderRequestJson
+  to: RecurrenceJson
+  cardinality: has_one
+  via: termLength
+  spec: dealhub-subskribe-api
+- from: OrderRequestJson
+  to: RecurrenceJson
+  cardinality: has_one
+  via: billingCycle
+  spec: dealhub-subskribe-api
+- from: OrderRequestJson
+  to: DocumentCustomContent
+  cardinality: has_one
+  via: documentCustomContent
+  spec: dealhub-subskribe-api
+- from: OrderRequestJson
+  to: CustomFieldEntry
+  cardinality: has_many
+  via: customFields
+  spec: dealhub-subskribe-api
+- from: OrderRequestJson
+  to: CustomBillingScheduleInput
+  cardinality: has_one
+  via: customBillingSchedule
+  spec: dealhub-subskribe-api
+- from: OrderRequestJson
+  to: CustomPredefinedTemplateOnOrder
+  cardinality: has_many
+  via: customPredefinedTemplatesOnOrder
+  spec: dealhub-subskribe-api
+- from: OrderRequestJson
+  to: OpportunityInput
+  cardinality: has_one
+  via: opportunityInput
+  spec: dealhub-subskribe-api
+- from: BillingPeriod
+  to: Period
+  cardinality: has_one
+  via: period
+  spec: dealhub-subskribe-api
+- from: BillingPeriod
+  to: Period
+  cardinality: has_one
+  via: fullPeriod
+  spec: dealhub-subskribe-api
+- from: BillingPeriod
+  to: Recurrence
+  cardinality: has_one
+  via: recurrence
+  spec: dealhub-subskribe-api
+- from: BillingPeriod
+  to: Duration
+  cardinality: has_one
+  via: fullPeriodDuration
+  spec: dealhub-subskribe-api
+- from: CustomBillingPeriodOutput
+  to: CustomBillingRecurrence
+  cardinality: has_one
+  via: recurrenceWithCount
+  spec: dealhub-subskribe-api
+- from: CustomBillingPeriodOutput
+  to: BillingPeriod
+  cardinality: has_many
+  via: periods
+  spec: dealhub-subskribe-api
+- from: CustomBillingScheduleOutput
+  to: CustomBillingPeriodOutput
+  cardinality: has_many
+  via: schedules
+  spec: dealhub-subskribe-api
+- from: Duration
+  to: TemporalUnit
+  cardinality: has_many
+  via: units
+  spec: dealhub-subskribe-api
+- from: TemporalUnit
+  to: Duration
+  cardinality: has_one
+  via: duration
+  spec: dealhub-subskribe-api
+- from: PaymentRetryConfigOutput
+  to: PaymentRetryPolicy
+  cardinality: has_one
+  via: policy
+  spec: dealhub-subskribe-api
+- from: PaymentRetryConfigInput
+  to: PaymentRetryPolicy
+  cardinality: has_one
+  via: policy
+  spec: dealhub-subskribe-api
+- from: PaymentJsonPaginationResponse
+  to: PaymentJson
+  cardinality: has_many
+  via: data
+  spec: dealhub-subskribe-api
+- from: PlanJson
+  to: ChargeJson
+  cardinality: has_many
+  via: charges
+  spec: dealhub-subskribe-api
+- from: PlanJsonPaginationResponse
+  to: PlanJson
+  cardinality: has_many
+  via: data
+  spec: dealhub-subskribe-api
+- from: ProductCategoryPaginationResponse
+  to: ProductCategory
+  cardinality: has_many
+  via: data
+  spec: dealhub-subskribe-api
+- from: ProductJson
+  to: ProductCategory
+  cardinality: has_one
+  via: productCategory
+  spec: dealhub-subskribe-api
+- from: ProductJsonPaginationResponse
+  to: ProductJson
+  cardinality: has_many
+  via: data
+  spec: dealhub-subskribe-api
+- from: PredefinedReportJson
+  to: ReportDuration
+  cardinality: has_one
+  via: duration
+  spec: dealhub-subskribe-api
+- from: PredefinedReportDefJson
+  to: PredefinedReportParamObject
+  cardinality: has_many
+  via: filters
+  spec: dealhub-subskribe-api
+- from: PredefinedReportDefJson
+  to: PredefinedReportDefChartJson
+  cardinality: has_one
+  via: chart
+  spec: dealhub-subskribe-api
+- from: PredefinedReportDefsJson
+  to: PredefinedReportDefJson
+  cardinality: has_many
+  via: reportDefs
+  spec: dealhub-subskribe-api
+- from: SalesforceAccount
+  to: SalesforceAccountBillingAddress
+  cardinality: has_one
+  via: billingAddress
+  spec: dealhub-subskribe-api
+- from: Opportunity
+  to: CustomField
+  cardinality: has_one
+  via: customFields
+  spec: dealhub-subskribe-api
+- from: SubscriptionUpdateJson
+  to: EmailNotifiersList
+  cardinality: has_one
+  via: emailNotifiersList
+  spec: dealhub-subskribe-api
+- from: SubscriptionSchedules
+  to: SubscriptionChargeChangeSchedule
+  cardinality: has_many
+  via: chargeChangeSchedules
+  spec: dealhub-subskribe-api
+- from: SubscriptionSchedules
+  to: SubscriptionStatusChangeSchedule
+  cardinality: has_many
+  via: statusChangeSchedules
+  spec: dealhub-subskribe-api
+- from: PaginatedSubscriptionsResponse
+  to: SubscriptionJson
+  cardinality: has_many
+  via: data
+  spec: dealhub-subskribe-api
+- from: SubscriptionChargeJson
+  to: DiscountJson
+  cardinality: has_many
+  via: discounts
+  spec: dealhub-subskribe-api
+- from: SubscriptionChargeJson
+  to: TenantDiscountLineItemJson
+  cardinality: has_many
+  via: predefinedDiscounts
+  spec: dealhub-subskribe-api
+- from: SubscriptionChargeJson
+  to: AttributeReference
+  cardinality: has_many
+  via: attributeReferences
+  spec: dealhub-subskribe-api
+- from: SubscriptionChargeJson
+  to: PricingOverrideJson
+  cardinality: has_one
+  via: pricingOverride
+  spec: dealhub-subskribe-api
+- from: SubscriptionJson
+  to: RecurrenceJson
+  cardinality: has_one
+  via: termLength
+  spec: dealhub-subskribe-api
+- from: SubscriptionJson
+  to: RecurrenceJson
+  cardinality: has_one
+  via: billingCycle
+  spec: dealhub-subskribe-api
+- from: SubscriptionJson
+  to: SubscriptionChargeJson
+  cardinality: has_many
+  via: charges
+  spec: dealhub-subskribe-api
+- from: SubscriptionJson
+  to: TenantDiscountJson
+  cardinality: has_many
+  via: predefinedDiscounts
+  spec: dealhub-subskribe-api
+- from: SubscriptionJson
+  to: PurchaseOrder
+  cardinality: has_many
+  via: purchaseOrders
+  spec: dealhub-subskribe-api
+- from: TaxRatePaginationResponseJson
+  to: TaxRateJson
+  cardinality: has_many
+  via: data
+  spec: dealhub-subskribe-api
+- from: TaxRateStrategyPaginatedResponse
+  to: TaxRateStrategyJson
+  cardinality: has_many
+  via: data
+  spec: dealhub-subskribe-api
+- from: TenantJson
+  to: AccountAddressJson
+  cardinality: has_one
+  via: address
+  spec: dealhub-subskribe-api
+- from: TenantJson
+  to: TenantSettingJson
+  cardinality: has_one
+  via: tenantSetting
+  spec: dealhub-subskribe-api
+- from: BackendConfig
+  to: Condition
+  cardinality: has_many
+  via: conditions
+  spec: dealhub-subskribe-api
+- from: Customization
+  to: DefaultValueDefinition
+  cardinality: has_many
+  via: defaultValueSetters
+  spec: dealhub-subskribe-api
+- from: Customization
+  to: BackendConfig
+  cardinality: has_one
+  via: backend
+  spec: dealhub-subskribe-api
+- from: TenantUiCustomization
+  to: Customization
+  cardinality: has_many
+  via: customizations
+  spec: dealhub-subskribe-api
+- from: BillingCycleDefinitionJson
+  to: RecurrenceJson
+  cardinality: has_one
+  via: recurrence
+  spec: dealhub-subskribe-api
+- from: BillingCycleDefinitionAdd
+  to: RecurrenceJson
+  cardinality: has_one
+  via: recurrence
+  spec: dealhub-subskribe-api
+- from: UnitOfMeasurePaginationResponseJson
+  to: UnitOfMeasureJson
+  cardinality: has_many
+  via: data
+  spec: dealhub-subskribe-api
+- from: UsageBatchInsertResult
+  to: Entry
+  cardinality: has_many
+  via: entries
+  spec: dealhub-subskribe-api
+- from: RawUsage
+  to: AttributeReference
+  cardinality: has_many
+  via: attributeReferences
+  spec: dealhub-subskribe-api
+- from: RawUsagesData
+  to: RawUsage
+  cardinality: has_many
+  via: data
+  spec: dealhub-subskribe-api
+- from: UsageAggregateOutput
+  to: AttributeReference
+  cardinality: has_many
+  via: attributeReferences
+  spec: dealhub-subskribe-api
+- from: UserPaginationResponseJson
+  to: UserJson
+  cardinality: has_many
+  via: data
+  spec: dealhub-subskribe-api
+- from: NewAccountJson
+  to: AccountAddressJson
+  cardinality: has_one
+  via: shippingAddress
+  spec: dealhub-subskribe-api
+- from: NewAccountJson
+  to: AccountAddressJson
+  cardinality: has_one
+  via: billingAddress
+  spec: dealhub-subskribe-api
+- from: NewAccountContactJson
+  to: AccountAddressJson
+  cardinality: has_one
+  via: address
+  spec: dealhub-subskribe-api
+- from: Order
+  to: OrderPeriodMetadata
+  cardinality: has_many
+  via: periodMetadata
+  spec: dealhub-subskribe-api
+- from: Order
+  to: RecurrenceJson
+  cardinality: has_one
+  via: billingCycle
+  spec: dealhub-subskribe-api
+- from: Order
+  to: OrderLineItem
+  cardinality: has_many
+  via: orderLineItems
+  spec: dealhub-subskribe-api
+- from: OrderLineItem
+  to: Factor
+  cardinality: has_many
+  via: factors
+  spec: dealhub-subskribe-api
+- from: OrderLineItem
+  to: RecurrenceJson
+  cardinality: has_one
+  via: billingCycle
+  spec: dealhub-subskribe-api
+- from: NewOrderInput
+  to: OrderPeriodMetadata
+  cardinality: has_many
+  via: periodMetadata
+  spec: dealhub-subskribe-api
+- from: NewOrderInput
+  to: RecurrenceJson
+  cardinality: has_one
+  via: billingCycle
+  spec: dealhub-subskribe-api
+- from: NewOrderInput
+  to: NewOrderLineItemInput
+  cardinality: has_many
+  via: orderLineItems
+  spec: dealhub-subskribe-api
+- from: NewOrderLineItemInput
+  to: Factor
+  cardinality: has_many
+  via: factors
+  spec: dealhub-subskribe-api
+- from: NewOrderLineItemInput
+  to: RecurrenceJson
+  cardinality: has_one
+  via: billingCycle
+  spec: dealhub-subskribe-api
+- from: NewOrderRequest
+  to: NewOrderInput
+  cardinality: has_one
+  via: order
+  spec: dealhub-subskribe-api
+- from: NewSkuSyncRequest
+  to: SkuSyncInput
+  cardinality: has_many
+  via: skus
+  spec: dealhub-subskribe-api
+- from: SkuSyncInput
+  to: SkuProductAttributes
+  cardinality: has_one
+  via: productAttributes
+  spec: dealhub-subskribe-api
+- from: RenewalLineItemInput
+  to: Factor
+  cardinality: has_many
+  via: factors
+  spec: dealhub-subskribe-api
+- from: RenewalLineItemInput
+  to: RecurrenceJson
+  cardinality: has_one
+  via: billingCycle
+  spec: dealhub-subskribe-api
+- from: RenewalOrderInput
+  to: OrderPeriodMetadata
+  cardinality: has_many
+  via: periodMetadata
+  spec: dealhub-subskribe-api
+- from: RenewalOrderInput
+  to: RecurrenceJson
+  cardinality: has_one
+  via: billingCycle
+  spec: dealhub-subskribe-api
+- from: RenewalOrderInput
+  to: RenewalLineItemInput
+  cardinality: has_many
+  via: renewalLineItems
+  spec: dealhub-subskribe-api
+- from: RenewalOrderRequest
+  to: RenewalOrderInput
+  cardinality: has_one
+  via: order
+  spec: dealhub-subskribe-api
+- from: Subscription
+  to: OrderPeriodMetadata
+  cardinality: has_many
+  via: periodMetadata
+  spec: dealhub-subskribe-api
+- from: Subscription
+  to: RecurrenceJson
+  cardinality: has_one
+  via: billingCycle
+  spec: dealhub-subskribe-api
+- from: Subscription
+  to: SubscriptionLine
+  cardinality: has_many
+  via: lines
+  spec: dealhub-subskribe-api
+- from: SubscriptionLine
+  to: Factor
+  cardinality: has_many
+  via: factors
+  spec: dealhub-subskribe-api
+- from: SubscriptionLine
+  to: RecurrenceJson
+  cardinality: has_one
+  via: billingCycle
+  spec: dealhub-subskribe-api
+- from: AmendmentOrderInput
+  to: ModificationLineItem
+  cardinality: has_many
+  via: modificationLineItems
+  spec: dealhub-subskribe-api
+- from: AmendmentOrderRequest
+  to: AmendmentOrderInput
+  cardinality: has_one
+  via: order
+  spec: dealhub-subskribe-api
+- from: ModificationLineItem
+  to: Factor
+  cardinality: has_many
+  via: factors
+  spec: dealhub-subskribe-api
+- from: ModificationLineItem
+  to: RecurrenceJson
+  cardinality: has_one
+  via: billingCycle
+  spec: dealhub-subskribe-api
+- from: CancelLineItemInput
+  to: Factor
+  cardinality: has_many
+  via: factors
+  spec: dealhub-subskribe-api
+- from: CancelLineItemInput
+  to: RecurrenceJson
+  cardinality: has_one
+  via: billingCycle
+  spec: dealhub-subskribe-api
+- from: CancelOrderInput
+  to: CancelLineItemInput
+  cardinality: has_many
+  via: cancelLineItems
+  spec: dealhub-subskribe-api
+- from: CancelOrderRequest
+  to: CancelOrderInput
+  cardinality: has_one
+  via: order
+  spec: dealhub-subskribe-api
+- from: UserUpdateErrorResponse
+  to: UserUpdateError
+  cardinality: has_many
+  via: errors
+  spec: dealhub-user-api
+- from: VersionProductsResponse
+  to: Info
+  cardinality: has_one
+  via: info
+  spec: dealhub-version-api
+- from: VersionProductsResponse
+  to: ProductBasic
+  cardinality: has_many
+  via: products
+  spec: dealhub-version-api
+- from: PricingRuleProduct
+  to: VolumeDiscount
+  cardinality: has_one
+  via: volume_discount
+  spec: dealhub-version-api
+- from: ProductPricingProduct
+  to: PricingRuleProduct
+  cardinality: has_many
+  via: pricing_rules
+  spec: dealhub-version-api
+- from: ProductPricing
+  to: PricingRuleProduct
+  cardinality: has_many
+  via: pricing_rules
+  spec: dealhub-version-api
+- from: AssignmentRuleProduct
+  to: ProductFactor
+  cardinality: has_many
+  via: product_factors
+  spec: dealhub-version-api
+- from: AssignmentRuleProduct
+  to: ProposalAttribute
+  cardinality: has_many
+  via: proposal_attributes
+  spec: dealhub-version-api
+- from: AssignmentRule
+  to: ProductFactor
+  cardinality: has_many
+  via: product_factors
+  spec: dealhub-version-api
+- from: AssignmentRule
+  to: ProposalAttribute
+  cardinality: has_many
+  via: proposal_attributes
+  spec: dealhub-version-api
+- from: ProductAssignment
+  to: AssignmentRuleProduct
+  cardinality: has_many
+  via: assignment_rules
+  spec: dealhub-version-api
+- from: BundleAssignment
+  to: AssignmentRule
+  cardinality: has_many
+  via: assignment_rules
+  spec: dealhub-version-api
+- from: BundleItem
+  to: ProductFactor
+  cardinality: has_many
+  via: product_factors
+  spec: dealhub-version-api
+- from: BundleItem
+  to: InheritedAttribute
+  cardinality: has_many
+  via: inherit_proposal_attributes
+  spec: dealhub-version-api
+- from: ProductCatalogItem
+  to: ProductAssignment
+  cardinality: has_many
+  via: product_assignments
+  spec: dealhub-version-api
+- from: ProductCatalogItem
+  to: ProductPricingProduct
+  cardinality: has_one
+  via: product_pricing
+  spec: dealhub-version-api
+- from: ProductCatalogItem
+  to: ConditionalName
+  cardinality: has_many
+  via: product_conditional_names
+  spec: dealhub-version-api
+- from: BundleCatalogItem
+  to: BundleAssignment
+  cardinality: has_many
+  via: product_assignments
+  spec: dealhub-version-api
+- from: BundleCatalogItem
+  to: ProductPricing
+  cardinality: has_one
+  via: product_pricing
+  spec: dealhub-version-api
+- from: BundleCatalogItem
+  to: ConditionalName
+  cardinality: has_many
+  via: product_conditional_names
+  spec: dealhub-version-api
+- from: BundleCatalogItem
+  to: BundleItem
+  cardinality: has_many
+  via: bundle_items
+  spec: dealhub-version-api
+- from: ProductHierarchyNode
+  to: ProductHierarchyNode
+  cardinality: has_many
+  via: children
+  spec: dealhub-version-api
+- from: ProductCatalogGetResponse
+  to: Info
+  cardinality: has_one
+  via: info
+  spec: dealhub-version-api
+- from: ProductCatalogGetResponse
+  to: ProductCatalogItem
+  cardinality: has_many
+  via: products
+  spec: dealhub-version-api
+- from: ProductCatalogGetResponse
+  to: BundleCatalogItem
+  cardinality: has_many
+  via: bundles
+  spec: dealhub-version-api
+- from: ProductCatalogPostRequest
+  to: ProductCatalogItem
+  cardinality: has_many
+  via: products
+  spec: dealhub-version-api
+- from: ProductCatalogPostRequest
+  to: BundleCatalogItem
+  cardinality: has_many
+  via: bundles
+  spec: dealhub-version-api
+- from: ProductCatalogPatchProduct
+  to: ProductAssignment
+  cardinality: has_many
+  via: product_assignments
+  spec: dealhub-version-api
+- from: ProductCatalogPatchProduct
+  to: ProductPricingProduct
+  cardinality: has_one
+  via: product_pricing
+  spec: dealhub-version-api
+- from: ProductCatalogPatchBundle
+  to: BundleAssignment
+  cardinality: has_many
+  via: product_assignments
+  spec: dealhub-version-api
+- from: ProductCatalogPatchBundle
+  to: ProductPricing
+  cardinality: has_one
+  via: product_pricing
+  spec: dealhub-version-api
+- from: ProductCatalogPatchBundle
+  to: BundleItem
+  cardinality: has_many
+  via: bundle_items
+  spec: dealhub-version-api
+- from: ProductCatalogPatchRequest
+  to: ProductCatalogPatchProduct
+  cardinality: has_many
+  via: products
+  spec: dealhub-version-api
+- from: ProductCatalogPatchRequest
+  to: ProductCatalogPatchBundle
+  cardinality: has_many
+  via: bundles
+  spec: dealhub-version-api
+- from: RequestSummaryResponse
+  to: RequestSummary
+  cardinality: has_one
+  via: summary
+  spec: dealhub-version-api
+- from: PlaybookGroup
+  to: PlaybookQuestion
+  cardinality: has_many
+  via: question_data
+  spec: dealhub-version-api
+- from: PlaybookExportResponse
+  to: PlaybookGroup
+  cardinality: has_many
+  via: playbook_data
+  spec: dealhub-version-api
+- from: QuoteTemplateLineItem
+  to: QuoteTemplatePartnerProgramData
+  cardinality: has_many
+  via: partner_program_data
+  spec: dealhub-version-api
+- from: GenerateQuoteTemplateResponse
+  to: QuoteTemplatePartnerProgram
+  cardinality: has_many
+  via: partner_program
+  spec: dealhub-version-api
+- from: GenerateQuoteTemplateResponse
+  to: QuoteTemplateQuoteData
+  cardinality: has_many
+  via: quote_data
+  spec: dealhub-version-api
+- from: GenerateQuoteTemplateResponse
+  to: QuoteTemplateLineItem
+  cardinality: has_many
+  via: line_items
+  spec: dealhub-version-api
+relationships_truncated: false

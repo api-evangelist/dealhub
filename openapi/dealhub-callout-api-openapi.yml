@@ -1,0 +1,335 @@
+openapi: 3.0.3
+info:
+  title: Callout API
+  description: 'This API defines the contract for an external system that DealHub calls out to for retrieving real-time prices
+    and product attributes. This is known as the "Callouts API".
+
+    When a sales representative adds a product configured for "ERP Pricing" to a quote, DealHub sends a POST request to the
+    endpoint defined here. The external system is expected to process the request and return the calculated values for each
+    line item.'
+  version: 1.0.1
+servers:
+- url: https://your-external-system.com/api/pricing
+  description: This is a placeholder URL. The actual, full endpoint URL that DealHub calls is configured by an administrator
+    in the DealHub Version Settings > Advanced Settings > Callouts UI.
+security:
+- bearerAuth: []
+- basicAuth: []
+paths:
+  /:
+    post:
+      tags:
+      - Callouts
+      summary: Retrieve Real-Time Pricing
+      description: '> ❗️ Important
+
+        >
+
+        > This is not an endpoint provided by DealHub. This page present the endpoint definition you need to make available
+        so DealHub can call it.
+
+
+        This endpoint enables DealHub to retrieve real-time product prices and attributes from your external system while
+        a quote is being generated.
+
+
+        The specific URL for this endpoint is configured by the administrator in the DealHub UI.
+
+
+        > 📘 Date Formats
+
+        >
+
+        > All date and time values are provided in ISO 8601 format and standardized to UTC (Coordinated Universal Time) `yyyy-MM-dd''T''HH:mm:ss.SSS''Z''`
+        (e.g., `2025-09-01T15:39:25Z`).'
+      operationId: getPricing
+      requestBody:
+        description: A request from DealHub containing quote context and a list of items requiring pricing.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalloutRequest'
+            examples:
+              calloutRequestExample:
+                summary: Request example
+                value:
+                  request_id: RANDOM-32bit-string
+                  authentication: DASFE$df422ffg
+                  playbook_answers:
+                    general.currency: USD
+                    general.geo: North America
+                    group1.customer_type: Enterprise
+                    group2.number_of_something: 4323.11
+                    group3.proposal_date: '2021-03-25T15:39:25Z'
+                  items:
+                  - id: 1
+                    sku: A-1
+                    type: product
+                    quantity: 15
+                    duration: 12
+                    family: hardware
+                    returned_attributes:
+                      price: number
+                      MSRP: number
+                      partner_discount1: percentage
+                      partner_discount2: percentage
+                      start_date: date
+                  - id: 2
+                    sku: B-1
+                    type: bundle
+                    quantity: 2
+                    duration: 24
+                    family: software
+                    returned_attributes:
+                      MSRP: number
+                      start_date: date
+                    bundle_items:
+                    - id: 3
+                      sku: B-111
+                      type: product
+                      quantity: 15
+                      duration: 12
+                      family: hardware
+                      returned_attributes:
+                        price: number
+                        MSRP: number
+                        partner_discount1: percentage
+                        partner_discount2: percentage
+                        start_date: date
+                    - id: 4
+                      sku: B-222
+                      type: product
+                      quantity: 15
+                      duration: 12
+                      family: hardware
+                      returned_attributes:
+                        price: number
+                        MSRP: number
+                        partner_discount1: percentage
+                        partner_discount2: percentage
+                        start_date: date
+                    - id: 5
+                      sku: B-333
+                      type: product
+                      quantity: 15
+                      duration: 12
+                      family: hardware
+                      returned_attributes:
+                        price: number
+                        MSRP: number
+                        partner_discount1: percentage
+                        partner_discount2: percentage
+                        start_date: date
+      responses:
+        '200':
+          description: Successful response containing the calculated prices and attributes for each item.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalloutResponse'
+              examples:
+                calloutResponseExample:
+                  summary: Expected response example
+                  value:
+                    items:
+                    - id: 1
+                      sku: A-1
+                      list_price: 100
+                      MSRP: 200
+                      partner_discount1: 10
+                      partner_discount2: 10
+                      start_date: '2021-03-25T15:39:25Z'
+                    - id: 2
+                      sku: B-1
+                      MSRP: 600
+                      start_date: ''
+                      bundle_items:
+                      - id: 3
+                        sku: B-111
+                        list_price: 100
+                        MSRP: 200
+                        partner_discount1: 10
+                        partner_discount2: 10
+                        start_date: '2021-03-25T15:39:25Z'
+                      - id: 4
+                        sku: B-222
+                        list_price: 100
+                        MSRP: 200
+                        partner_discount1: 10
+                        partner_discount2: 10
+                        start_date: '2021-03-25T15:39:25Z'
+                      - id: 5
+                        sku: B-333
+                        list_price: 100
+                        MSRP: 200
+                        partner_discount1: 10
+                        partner_discount2: 10
+                        start_date: '2021-03-25T15:39:25Z'
+        '400':
+          description: Bad Request. An error occurred in the external system. The response should contain a clear error message.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer token authentication. The token is provided by the DealHub admin during Callout configuration.
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Basic authentication with username and password. Credentials are provided by the DealHub admin during Callout
+        configuration.
+  schemas:
+    CalloutRequest:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: A unique, randomly generated string to identify the request.
+        authentication:
+          type: string
+          description: Authentication details passed in the request body. This value mirrors the content of the `Authorization`
+            header.
+        playbook_answers:
+          type: object
+          description: A key-value map of playbook answers selected by the administrator in the Callout configuration. The
+            keys and value types are customer-specific.
+          additionalProperties: true
+        items:
+          type: array
+          description: List of items (products or bundles) for pricing.
+          items:
+            $ref: '#/components/schemas/Item'
+      required:
+      - items
+      - request_id
+    Item:
+      type: object
+      description: Represents a single product or a bundle within the quote. Can contain additional, customer-defined product
+        attributes configured by the admin.
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: A unique number that identifies the item within this request. Must be returned in the response.
+        sku:
+          type: string
+          description: The SKU of the product or bundle.
+        type:
+          type: string
+          enum:
+          - product
+          - bundle
+          description: The type of the item.
+        quantity:
+          type: number
+        duration:
+          type: number
+        returned_attributes:
+          type: object
+          description: A list of attributes and their expected data types that DealHub is configured to receive for this item.
+            This serves as a guide for the expected response structure.
+          additionalProperties:
+            type: string
+            enum:
+            - number
+            - percentage
+            - date
+        bundle_items:
+          type: array
+          description: A list of child items. This is mandatory if the `type` is `bundle`.
+          items:
+            $ref: '#/components/schemas/Item'
+      required:
+      - id
+      - sku
+      - type
+      additionalProperties: true
+    CalloutResponse:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          description: The list of items with their calculated prices and attributes.
+          items:
+            $ref: '#/components/schemas/ResponseItem'
+    BaseResponseItem:
+      type: object
+      description: Common properties for any item returned in the response.
+      required:
+      - id
+      - sku
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Same 'id' as sent in the request payload.
+        sku:
+          type: string
+          description: Same 'sku' as sent in the request payload.
+        MSRP:
+          type: number
+          format: float
+          description: Manufacturer's Suggested Retail Price.
+        partner_discount1:
+          type: number
+          format: float
+          description: Partner discount value (e.g., 10 for 10%).
+        partner_discount2:
+          type: number
+          format: float
+          description: Partner discount value (e.g., 10 for 10%).
+        start_date:
+          type: string
+          format: date-time
+          description: A date value, expected in ISO 8601 format (e.g., "2025-09-01T15:39:25Z").
+      additionalProperties: true
+    ProductResponseItem:
+      description: Represents a single product with a mandatory price.
+      allOf:
+      - $ref: '#/components/schemas/BaseResponseItem'
+      - type: object
+        required:
+        - list_price
+        properties:
+          list_price:
+            type: number
+            format: float
+            description: List price of the line item. This field is mandatory for every product item.
+    BundleResponseItem:
+      description: Represents a bundle containing other items. The top-level bundle may not have a price itself.
+      allOf:
+      - $ref: '#/components/schemas/BaseResponseItem'
+      - type: object
+        required:
+        - bundle_items
+        properties:
+          bundle_items:
+            type: array
+            description: A list of child items within the bundle. Each item in this list must have a price.
+            items:
+              $ref: '#/components/schemas/ProductResponseItem'
+    ResponseItem:
+      oneOf:
+      - $ref: '#/components/schemas/ProductResponseItem'
+      - $ref: '#/components/schemas/BundleResponseItem'
+      description: An item in the response can be either a single product or a bundle.
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: A formatted error message from the external system that will be displayed to the user in the DealHub
+            UI.
+      required:
+      - message
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

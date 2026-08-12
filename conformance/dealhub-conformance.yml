@@ -1,0 +1,93 @@
+generated: '2026-08-12'
+method: derived
+source: openapi/ (all 11 DealHub OpenAPI documents) + https://developers.dealhub.io/docs/
+  + https://dealhub.io/security/
+standards:
+- id: openapi-3.0
+  conforms: true
+  evidence: 'All eleven published contracts declare `openapi: 3.0.3`.'
+- id: openapi-3.1
+  conforms: false
+  evidence: No 3.1 document is published; DealHub is one minor version behind.
+- id: asyncapi
+  conforms: false
+  evidence: A documented webhook surface exists (18 events) but no AsyncAPI document is
+    published. See asyncapi/dealhub-webhooks.yml.
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 securityScheme appears in any spec. Authentication is a static
+    admin-issued bearer token plus an X-API-Key header on the billing API.
+- id: oidc
+  conforms: false
+  evidence: No openIdConnect securityScheme; /.well-known/openid-configuration 404s on
+    every host. Note the customer-facing help portal (docs.dealhub.io) does sit behind
+    Azure AD B2C, but that is end-user SSO, not an API authorization surface.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: No operation returns application/problem+json. Errors are proprietary JSON
+    with a human-readable message string and no machine-readable code.
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: /.well-known/security.txt returns 404 on all seven hosts probed.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No deprecation policy and no Sunset/Deprecation header support is documented.
+- id: rfc8615-well-known
+  conforms: false
+  evidence: Every /.well-known/ path probed returned 404. See well-known/dealhub-well-known.yml.
+- id: rfc9727-api-catalog
+  conforms: false
+  evidence: /.well-known/api-catalog returns 404 on every host.
+- id: a2a-agent-card
+  conforms: false
+  evidence: Neither /.well-known/agent-card.json nor the legacy /.well-known/agent.json is
+    served on any host.
+- id: mcp
+  conforms: partial
+  evidence: A live MCP JSON-RPC endpoint is served at https://developers.dealhub.io/mcp but
+    requires authorization for tools/list, and it is the ReadMe platform's documentation MCP
+    server rather than a DealHub-authored server over the CPQ/billing APIs. DealHub markets
+    "Native MCP" without publishing an endpoint. See mcp/dealhub-mcp.yml.
+- id: llmstxt
+  conforms: true
+  evidence: Two llms.txt documents are served — https://developers.dealhub.io/llms.txt
+    (687 lines, the full developer index) and https://dealhub.io/llms.txt (marketing site,
+    Yoast-generated).
+- id: idempotency
+  conforms: false
+  evidence: No Idempotency-Key header or equivalent in any of 616 operations, and none
+    documented. See conventions/dealhub-conventions.yml.
+- id: pagination
+  conforms: true
+  evidence: offset/limit query parameters with a documented default limit of 50 on list
+    endpoints; an empty match returns 200 with an empty array rather than 404.
+- id: json-api
+  conforms: false
+  evidence: Responses are bespoke JSON objects, not JSON:API documents.
+- id: odata
+  conforms: false
+- id: scim2
+  conforms: false
+  evidence: User provisioning is proprietary (getUsers/updateUsersV1/createOrUpdateUsersV2
+    keyed on an immutable `login`), not SCIM 2.0 /Users with SCIM schemas.
+- id: webhooks-signed
+  conforms: false
+  evidence: Outbound webhook auth is a configured shared credential (Token/Basic/None);
+    no payload signature or timestamp header is documented, so subscribers cannot
+    cryptographically verify origin.
+compliance_program:
+  published: true
+  url: https://dealhub.io/security/
+  trust_center: https://trust.dealhub.io/
+  certifications: [ISO 42001, ISO 27701, ISO 27001, ISO 22301, SOC 1 Type II, SOC 2 Type II,
+    CSA STAR Level 1, CSA STAR for AI Level 1]
+  regulations: [GDPR, CCPA]
+  evidence: 'Named on https://dealhub.io/security/ (HTTP 200, fetched 2026-08-12); the
+    SOC 2 Type II report is made available through the trust center on request.'
+summary:
+  strong: Eleven real OpenAPI 3.0.3 contracts covering 616 operations; a full developer
+    llms.txt; a documented 18-event webhook catalog; and an unusually deep published
+    certification set for a company of this size, including ISO 42001 for AI management.
+  weak: No AsyncAPI, no OAuth/OIDC, no RFC 9457 errors, no idempotency, no published rate
+    limits, no security.txt, no status page, no changelog, no deprecation policy, no
+    first-party SDK, and no /.well-known/ surface of any kind.

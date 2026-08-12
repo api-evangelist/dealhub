@@ -1,0 +1,518 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Pricing API",
+    "description": "This API provides services to calculate prices for a given list of product SKUs. It involves a two-step process:\n1.  **Get Products Parameters:** First, call the `/api/v1/products/parameters` endpoint with a list of SKUs to determine the specific \"product factors\" and \"parameters\" required to calculate a price for each one.\n2.  **Get Products Pricing:** Next, call the `/api/v1/products/pricing` endpoint, providing the SKUs along with the required parameters (and their values) obtained from the first call. This will return the calculated price for each SKU.\n\nAll requests require a secret Bearer Token in the `Authorization` header.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.dealhub.io",
+      "description": "The base URL for your DealHub instance.",
+      "variables": {
+        "your-dealhub-instance": {
+          "default": "app",
+          "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1')."
+        }
+      }
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Pricing",
+      "description": "Endpoints for calculating product prices."
+    }
+  ],
+  "paths": {
+    "/api/v1/products/parameters": {
+      "post": {
+        "tags": [
+          "Get Products Information"
+        ],
+        "summary": "Get Products Parameters",
+        "description": "This service returns a list of parameters required to calculate the price for each SKU.",
+        "operationId": "getProductsParameters",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ParametersRequest"
+              },
+              "examples": {
+                "getParametersExample": {
+                  "summary": "Request parameters for two SKUs",
+                  "value": {
+                    "currency": "GBP",
+                    "geo": "UK",
+                    "version": "version 1",
+                    "playbook": "playbook name",
+                    "skus": [
+                      "A-2342342",
+                      "B-2342342"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success. Returns the required parameters for each SKU.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParametersResponse"
+                },
+                "examples": {
+                  "parametersResponseExample": {
+                    "summary": "Successful response with required parameters",
+                    "value": {
+                      "skus": [
+                        {
+                          "sku": "A-2342342",
+                          "parameters_for": {
+                            "product_factors": [
+                              {
+                                "name": "duration",
+                                "type": "number"
+                              },
+                              {
+                                "name": "quantity",
+                                "type": "number"
+                              }
+                            ],
+                            "parameters": [
+                              {
+                                "name": "user.a-parameters",
+                                "type": "number"
+                              },
+                              {
+                                "name": "qg2.another-parameter",
+                                "type": "number"
+                              },
+                              {
+                                "name": "qg5.my-question",
+                                "type": "number"
+                              },
+                              {
+                                "name": "qg5.text-question",
+                                "type": "text"
+                              }
+                            ]
+                          }
+                        },
+                        {
+                          "sku": "B-2342342",
+                          "parameters_for": {
+                            "product_factors": [
+                              {
+                                "name": "quantity",
+                                "type": "number"
+                              },
+                              {
+                                "name": "duration",
+                                "type": "number"
+                              }
+                            ],
+                            "parameters": [
+                              {
+                                "name": "user.a-parameters",
+                                "type": "number"
+                              },
+                              {
+                                "name": "qg2.another-parameter",
+                                "type": "number"
+                              }
+                            ]
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request."
+          },
+          "403": {
+            "description": "Forbidden. The authentication token is missing or invalid."
+          }
+        }
+      }
+    },
+    "/api/v1/products/pricing": {
+      "post": {
+        "tags": [
+          "Get Products Information"
+        ],
+        "summary": "Get Products Pricing",
+        "description": "This service returns a price for each SKU in the request.",
+        "operationId": "getProductsPricing",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PricingRequest"
+              },
+              "examples": {
+                "getPricingExample": {
+                  "summary": "Request pricing for two SKUs with parameters",
+                  "value": {
+                    "currency": "GBP",
+                    "geo": "UK",
+                    "version": "version 1",
+                    "playbook": "playbook name",
+                    "skus": [
+                      {
+                        "id": "1",
+                        "sku": "A-2342342",
+                        "parameters": [
+                          {
+                            "name": "user.user_dur_hours",
+                            "value": 24
+                          },
+                          {
+                            "name": "qg3.counter_dur_hours",
+                            "value": 10
+                          },
+                          {
+                            "name": "user.a-parameters",
+                            "value": 1345
+                          },
+                          {
+                            "name": "qg2.another-parameter",
+                            "value": 19.4
+                          },
+                          {
+                            "name": "qg5.my-question",
+                            "value": 46
+                          },
+                          {
+                            "name": "qg5.text-question",
+                            "value": "Enterprise"
+                          },
+                          {
+                            "name": "general.geo",
+                            "value": "LATAM"
+                          },
+                          {
+                            "name": "general.currency",
+                            "value": "USD"
+                          },
+                          {
+                            "name": "qg6.question-name",
+                            "value": 247
+                          }
+                        ]
+                      },
+                      {
+                        "id": "2",
+                        "sku": "B-2342342",
+                        "parameters": [
+                          {
+                            "name": "user.user_dur_hours",
+                            "value": 24
+                          },
+                          {
+                            "name": "qg5.parameter3",
+                            "value": 46
+                          },
+                          {
+                            "name": "user.a-parameters",
+                            "value": 42
+                          },
+                          {
+                            "name": "qg2.another-parameter",
+                            "value": 6
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success. Returns the calculated price for each SKU.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PricingResponse"
+                },
+                "examples": {
+                  "pricingResponseExample": {
+                    "summary": "Successful pricing calculation with one error",
+                    "value": {
+                      "currency": "GBP",
+                      "version": "version 1",
+                      "playbook": "playbook name",
+                      "skus": [
+                        {
+                          "id": "1",
+                          "sku": "A-2342342",
+                          "price": 134.24,
+                          "error": null
+                        },
+                        {
+                          "id": "2",
+                          "sku": "B-2342342",
+                          "price": 0,
+                          "error": "Pricing could not be calculated"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. The request is malformed or a SKU could not be found."
+          },
+          "403": {
+            "description": "Forbidden. The authentication token is missing or invalid."
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "A secret token generated by a CPQ administrator."
+      }
+    },
+    "schemas": {
+      "ParametersRequest": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "description": "The currency ISO code to evaluate the rules upon."
+          },
+          "geo": {
+            "type": "string",
+            "description": "The geography to be used for the pricing calculation."
+          },
+          "version": {
+            "type": "string",
+            "description": "The version name to retrieve the parameters for. If not provided, the system will use the active version."
+          },
+          "playbook": {
+            "type": "string",
+            "description": "The playbook name (not display name) in case there is more than one playbook."
+          },
+          "skus": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The list of SKUs to evaluate."
+          }
+        },
+        "required": [
+          "currency",
+          "geo",
+          "skus"
+        ]
+      },
+      "ParametersResponse": {
+        "type": "object",
+        "properties": {
+          "skus": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SkuParameters"
+            }
+          }
+        }
+      },
+      "SkuParameters": {
+        "type": "object",
+        "properties": {
+          "sku": {
+            "type": "string"
+          },
+          "parameters_for": {
+            "type": "object",
+            "properties": {
+              "product_factors": {
+                "type": "array",
+                "description": "A list of product-specific factors required for price calculation of the given SKU.",
+                "items": {
+                  "$ref": "#/components/schemas/ParameterDefinition"
+                }
+              },
+              "parameters": {
+                "type": "array",
+                "description": "The list of parameters needed to resolve all of the relevant pricing formulas.",
+                "items": {
+                  "$ref": "#/components/schemas/ParameterDefinition"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ParameterDefinition": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the parameter to return."
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "number",
+              "text"
+            ],
+            "description": "The expected value type."
+          }
+        }
+      },
+      "PricingRequest": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "description": "The currency ISO code to base the pricing on."
+          },
+          "geo": {
+            "type": "string",
+            "description": "The geographic region to be used for the pricing calculation."
+          },
+          "version": {
+            "type": "string",
+            "description": "The version name to retrieve the parameters for. If not provided, the system will use the active version."
+          },
+          "playbook": {
+            "type": "string",
+            "description": "The playbook name in case multiple playbooks exist."
+          },
+          "skus": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SkuPricingRequest"
+            }
+          }
+        },
+        "required": [
+          "currency",
+          "geo",
+          "skus"
+        ]
+      },
+      "SkuPricingRequest": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "A unique identifier that represents the ordinal position of this SKU in the request."
+          },
+          "sku": {
+            "type": "string",
+            "description": "SKU of the product."
+          },
+          "parameters": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ParameterValue"
+            },
+            "description": "List of parameters required for price calculation."
+          }
+        },
+        "required": [
+          "id",
+          "sku",
+          "parameters"
+        ]
+      },
+      "ParameterValue": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "value": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          }
+        },
+        "required": [
+          "name",
+          "value"
+        ]
+      },
+      "PricingResponse": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string",
+            "description": "The currency in which the prices are shown."
+          },
+          "version": {
+            "type": "string",
+            "description": "The version for which the prices are related."
+          },
+          "playbook": {
+            "type": "string",
+            "description": "The playbook name for which the prices are related."
+          },
+          "skus": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SkuPrice"
+            }
+          }
+        }
+      },
+      "SkuPrice": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The identifier that represents the ordinal position as sent in the request."
+          },
+          "sku": {
+            "type": "string",
+            "description": "The product's SKU."
+          },
+          "price": {
+            "type": "number",
+            "description": "The calculated price per unit in the requested currency (0 if there was an error)."
+          },
+          "error": {
+            "type": "string",
+            "description": "An error message in case something went wrong (e.g., \"Pricing could not be calculated\")."
+          }
+        }
+      }
+    }
+  },
+  "x-readme": {
+    "explorer-enabled": true,
+    "proxy-enabled": true
+  }
+}
