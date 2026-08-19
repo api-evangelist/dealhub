@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "External Query",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "External Query",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "External Data Query",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://your-external-system.com/api/data-query/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "> ❗️ Important \n>\n> This is not an endpoint provided by DealHub. This page present the endpoint definition you need to make available so DealHub can call it. \n\nDealHub uses this endpoint to send requests that share data from the current quote’s playbook and product list. Your endpoint should process this data and return information that will be populated back into the quote’s playbook.\n\nThe specific URL for this endpoint is configured by the administrator in the DealHub UI.\n\n> 📘 Authentication\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

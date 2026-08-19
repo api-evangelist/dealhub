@@ -1,0 +1,1166 @@
+{
+  "item": [
+    {
+      "id": "0527e102-cfc9-4641-83a3-2d03c8b930c5",
+      "name": "CRM Integration",
+      "description": {
+        "content": "Endpoints for integrating external CRM systems with DealHub.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c9eff3cb-e46c-4f2a-b7be-a903dcecc8f1",
+          "name": "Authenticate User",
+          "request": {
+            "name": "Authenticate User",
+            "description": {
+              "content": "Authenticates a user from an external CRM and returns a short-lived (60 seconds) one-time access token. This is a server-to-server call that uses a long-lived secret token for authorization. If the user does not exist in DealHub, a new user with a `Sales` role is created.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "user",
+                "authenticate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                  "type": "any",
+                  "value": "{{your-dealhub-instance}}",
+                  "key": "your-dealhub-instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_information\": {\n    \"external_user_id\": \"<string>\",\n    \"email\": \"<email>\",\n    \"name\": \"<string>\",\n    \"login\": \"<string>\",\n    \"position\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"mobile\": \"<string>\",\n    \"company\": \"<string>\",\n    \"street\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"country\": \"<string>\",\n    \"postal_code\": \"<string>\",\n    \"user_manager_login\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8e18fec5-833e-4765-8b28-19286650e316",
+              "name": "Authentication successful.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "user",
+                    "authenticate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_information\": {\n    \"external_user_id\": \"qwerty1234356\",\n    \"login\": \"david.s@domain.com\",\n    \"email\": \"david.s@domain.com\",\n    \"name\": \"David Solomon\",\n    \"position\": \"Sales\",\n    \"phone\": \"03-12345678\",\n    \"mobile\": \"058-12345678\",\n    \"fax\": \"03-12345679\",\n    \"company\": \"Acme Partnerl\",\n    \"street\": \"12nd Broadway\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"country\": \"USA\",\n    \"postal_code\": \"1234567\",\n    \"user_manager_login\": \"manager@domain.com\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"access_token\": \"4D114DAD97361C84B154A828FF991\",\n  \"dealhub_user_id\": \"555455484454\",\n  \"errors\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "84f70f6f-ee2d-4947-a30e-ba713ec80944",
+              "name": "Unauthenticated. The secret token is missing or invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "user",
+                    "authenticate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"user_information\": {\n    \"external_user_id\": \"qwerty1234356\",\n    \"login\": \"david.s@domain.com\",\n    \"email\": \"david.s@domain.com\",\n    \"name\": \"David Solomon\",\n    \"position\": \"Sales\",\n    \"phone\": \"03-12345678\",\n    \"mobile\": \"058-12345678\",\n    \"fax\": \"03-12345679\",\n    \"company\": \"Acme Partnerl\",\n    \"street\": \"12nd Broadway\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"country\": \"USA\",\n    \"postal_code\": \"1234567\",\n    \"user_manager_login\": \"manager@domain.com\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Unauthenticated\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "385d9381-c7ad-4934-be20-e22267e71ad8",
+          "name": "Create Quote",
+          "request": {
+            "name": "Create Quote",
+            "description": {
+              "content": "Creates a new quote in DealHub and returns a URL to redirect the user to. This is a client-side call that must be authenticated with the one-time access token obtained from the `/user/authenticate` endpoint. This version supports subscription renewals via the `repeatable_groups` parameter.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1.1",
+                "quote",
+                "create"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                  "type": "any",
+                  "value": "{{your-dealhub-instance}}",
+                  "key": "your-dealhub-instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"currency\": \"<string>\",\n  \"customer_name\": \"<string>\",\n  \"dealhub_user_id\": \"<string>\",\n  \"external_customer_id\": \"<string>\",\n  \"external_opportunity_id\": \"<string>\",\n  \"external_opportunity_name\": \"<string>\",\n  \"geo_code\": \"<string>\",\n  \"opportunity_owner\": {\n    \"external_user_id\": \"<string>\",\n    \"email\": \"<email>\",\n    \"name\": \"<string>\",\n    \"login\": \"<string>\",\n    \"position\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"mobile\": \"<string>\",\n    \"company\": \"<string>\",\n    \"street\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"country\": \"<string>\",\n    \"postal_code\": \"<string>\",\n    \"user_manager_login\": \"<string>\"\n  },\n  \"external_quote_id\": \"<string>\",\n  \"customer_shipping_address\": {\n    \"street\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"country\": \"<string>\",\n    \"postal_code\": \"<string>\"\n  },\n  \"customer_billing_address\": {\n    \"street\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"country\": \"<string>\",\n    \"postal_code\": \"<string>\"\n  },\n  \"customer_contacts\": [\n    {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\",\n      \"email\": \"<email>\",\n      \"salutation\": \"<string>\",\n      \"title\": \"<string>\",\n      \"phone\": \"<string>\",\n      \"account_name\": \"<string>\",\n      \"mailing_address\": \"<string>\",\n      \"primary_contact\": false\n    },\n    {\n      \"first_name\": \"<string>\",\n      \"last_name\": \"<string>\",\n      \"email\": \"<email>\",\n      \"salutation\": \"<string>\",\n      \"title\": \"<string>\",\n      \"phone\": \"<string>\",\n      \"account_name\": \"<string>\",\n      \"mailing_address\": \"<string>\",\n      \"primary_contact\": false\n    }\n  ],\n  \"custom_fields\": [\n    {\n      \"name\": \"<string>\",\n      \"value\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"name\": \"<string>\",\n      \"value\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ],\n  \"repeatable_groups\": [\n    {\n      \"group_id\": \"<string>\",\n      \"questions\": [\n        {\n          \"key_0\": \"string\",\n          \"key_1\": 7619\n        },\n        {\n          \"key_0\": true,\n          \"key_1\": 1631.3611858265276\n        }\n      ]\n    },\n    {\n      \"group_id\": \"<string>\",\n      \"questions\": [\n        {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        },\n        {\n          \"key_0\": true,\n          \"key_1\": false,\n          \"key_2\": false\n        }\n      ]\n    }\n  ],\n  \"version_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "72de219a-05a2-49b0-ae77-d00c956b7d70",
+              "name": "Request accepted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1.1",
+                    "quote",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dealhub_user_id\": \"DH-USER-001\",\n  \"external_opportunity_id\": \"opp-98765\",\n  \"external_opportunity_name\": \"Acme Renewal 2025\",\n  \"external_customer_id\": \"cust-001\",\n  \"customer_name\": \"Acme Corp\",\n  \"geo_code\": \"us\",\n  \"currency\": \"USD\",\n  \"custom_fields\": [\n    {\n      \"name\": \"opportunity_type\",\n      \"value\": [\n        \"renewal_opportunity\"\n      ]\n    },\n    {\n      \"name\": \"product_lines\",\n      \"value\": [\n        \"CPQ\",\n        \"CLM\",\n        \"DealRoom\"\n      ]\n    },\n    {\n      \"name\": \"deal_size\",\n      \"value\": 75000\n    },\n    {\n      \"name\": \"contract_start_date\",\n      \"value\": \"2025-01-01\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"https://service-eul.dealhub.io/..../\",\n  \"errors\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "16689c21-9b89-4367-80ac-8e29ecb19f23",
+              "name": "Bad Request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1.1",
+                    "quote",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dealhub_user_id\": \"DH-USER-001\",\n  \"external_opportunity_id\": \"opp-98765\",\n  \"external_opportunity_name\": \"Acme Renewal 2025\",\n  \"external_customer_id\": \"cust-001\",\n  \"customer_name\": \"Acme Corp\",\n  \"geo_code\": \"us\",\n  \"currency\": \"USD\",\n  \"custom_fields\": [\n    {\n      \"name\": \"opportunity_type\",\n      \"value\": [\n        \"renewal_opportunity\"\n      ]\n    },\n    {\n      \"name\": \"product_lines\",\n      \"value\": [\n        \"CPQ\",\n        \"CLM\",\n        \"DealRoom\"\n      ]\n    },\n    {\n      \"name\": \"deal_size\",\n      \"value\": 75000\n    },\n    {\n      \"name\": \"contract_start_date\",\n      \"value\": \"2025-01-01\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Unauthenticated\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3b36cca3-b71f-4287-8494-67fac9a8c585",
+              "name": "Unauthenticated. The one-time access token is missing, invalid, or expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1.1",
+                    "quote",
+                    "create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dealhub_user_id\": \"DH-USER-001\",\n  \"external_opportunity_id\": \"opp-98765\",\n  \"external_opportunity_name\": \"Acme Renewal 2025\",\n  \"external_customer_id\": \"cust-001\",\n  \"customer_name\": \"Acme Corp\",\n  \"geo_code\": \"us\",\n  \"currency\": \"USD\",\n  \"custom_fields\": [\n    {\n      \"name\": \"opportunity_type\",\n      \"value\": [\n        \"renewal_opportunity\"\n      ]\n    },\n    {\n      \"name\": \"product_lines\",\n      \"value\": [\n        \"CPQ\",\n        \"CLM\",\n        \"DealRoom\"\n      ]\n    },\n    {\n      \"name\": \"deal_size\",\n      \"value\": 75000\n    },\n    {\n      \"name\": \"contract_start_date\",\n      \"value\": \"2025-01-01\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Unauthenticated\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "30c17948-7159-4654-a248-5ede4fc812e6",
+          "name": "Open Quote",
+          "request": {
+            "name": "Open Quote",
+            "description": {
+              "content": "Retrieves a URL for an existing quote in DealHub. The user can then be redirected to this URL to view or edit the quote. This call can optionally update opportunity information for quotes in 'draft' status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "quote",
+                "open"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                  "type": "any",
+                  "value": "{{your-dealhub-instance}}",
+                  "key": "your-dealhub-instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dealhub_user_id\": \"<string>\",\n  \"dealhub_quote_id\": \"<string>\",\n  \"external_opportunity_id\": \"<string>\",\n  \"opportunity_info\": {\n    \"external_opportunity_name\": \"<string>\",\n    \"external_customer_id\": \"<string>\",\n    \"customer_name\": \"<string>\",\n    \"geo_code\": \"<string>\",\n    \"currency\": \"<string>\",\n    \"opportunity_owner\": {\n      \"external_user_id\": \"<string>\",\n      \"email\": \"<email>\",\n      \"name\": \"<string>\",\n      \"login\": \"<string>\",\n      \"position\": \"<string>\",\n      \"phone\": \"<string>\",\n      \"mobile\": \"<string>\",\n      \"company\": \"<string>\",\n      \"street\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"country\": \"<string>\",\n      \"postal_code\": \"<string>\",\n      \"user_manager_login\": \"<string>\"\n    },\n    \"external_quote_id\": \"<string>\",\n    \"customer_shipping_address\": {\n      \"street\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"country\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    },\n    \"customer_billing_address\": {\n      \"street\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"country\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    },\n    \"customer_contacts\": [\n      {\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\",\n        \"email\": \"<email>\",\n        \"salutation\": \"<string>\",\n        \"title\": \"<string>\",\n        \"phone\": \"<string>\",\n        \"account_name\": \"<string>\",\n        \"mailing_address\": \"<string>\",\n        \"primary_contact\": false\n      },\n      {\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\",\n        \"email\": \"<email>\",\n        \"salutation\": \"<string>\",\n        \"title\": \"<string>\",\n        \"phone\": \"<string>\",\n        \"account_name\": \"<string>\",\n        \"mailing_address\": \"<string>\",\n        \"primary_contact\": false\n      }\n    ],\n    \"custom_fields\": [\n      {\n        \"name\": \"<string>\",\n        \"value\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"name\": \"<string>\",\n        \"value\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"repeatable_groups\": [\n      {\n        \"group_id\": \"<string>\",\n        \"questions\": [\n          {\n            \"key_0\": 7795,\n            \"key_1\": true\n          },\n          {\n            \"key_0\": 9003,\n            \"key_1\": \"string\",\n            \"key_2\": \"string\"\n          }\n        ]\n      },\n      {\n        \"group_id\": \"<string>\",\n        \"questions\": [\n          {\n            \"key_0\": true\n          },\n          {\n            \"key_0\": 122.57000668329022,\n            \"key_1\": 8891\n          }\n        ]\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e9a37e62-bc38-493e-8335-cbc25b142c82",
+              "name": "Success. The response contains the URL for redirection.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "quote",
+                    "open"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dealhub_user_id\": 111,\n  \"dealhub_quote_id\": \"87948759384759\",\n  \"external_opportunity_id\": \"gdfg123\",\n  \"opportunity_info\": {\n    \"external_opportunity_name\": \"system321\",\n    \"external_customer_id\": \"br768\",\n    \"customer_name\": \"Vadim Testl\",\n    \"customer_contacts\": [\n      {\n        \"first_name\": \"Eyal\",\n        \"last_name\": \"Meshulam\",\n        \"email\": \"email@gmail.com\",\n        \"primary_contact\": true\n      }\n    ],\n    \"geo_code\": \"geo\",\n    \"currency\": \"USD\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"https://nFGnOpcoXLUSgglIWThPBJ.nonbqyM+Pa4Ps63xClUk99pdodxmYmn9R2s9\",\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "39bd8026-514e-4d3f-9ae0-9584a4d36530",
+              "name": "Bad Request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "quote",
+                    "open"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dealhub_user_id\": 111,\n  \"dealhub_quote_id\": \"87948759384759\",\n  \"external_opportunity_id\": \"gdfg123\",\n  \"opportunity_info\": {\n    \"external_opportunity_name\": \"system321\",\n    \"external_customer_id\": \"br768\",\n    \"customer_name\": \"Vadim Testl\",\n    \"customer_contacts\": [\n      {\n        \"first_name\": \"Eyal\",\n        \"last_name\": \"Meshulam\",\n        \"email\": \"email@gmail.com\",\n        \"primary_contact\": true\n      }\n    ],\n    \"geo_code\": \"geo\",\n    \"currency\": \"USD\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Unauthenticated\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c416eec0-479f-45eb-b39b-bb1640eef89d",
+              "name": "Unauthenticated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "quote",
+                    "open"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dealhub_user_id\": 111,\n  \"dealhub_quote_id\": \"87948759384759\",\n  \"external_opportunity_id\": \"gdfg123\",\n  \"opportunity_info\": {\n    \"external_opportunity_name\": \"system321\",\n    \"external_customer_id\": \"br768\",\n    \"customer_name\": \"Vadim Testl\",\n    \"customer_contacts\": [\n      {\n        \"first_name\": \"Eyal\",\n        \"last_name\": \"Meshulam\",\n        \"email\": \"email@gmail.com\",\n        \"primary_contact\": true\n      }\n    ],\n    \"geo_code\": \"geo\",\n    \"currency\": \"USD\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Unauthenticated\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e0f8eede-bc8d-4303-a103-c077e19ea388",
+          "name": "View Quotes for an Opportunity",
+          "request": {
+            "name": "View Quotes for an Opportunity",
+            "description": {
+              "content": "Retrieves a URL that redirects the user to the **My Proposals** page for a specific opportunity, showing all associated quotes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "quotes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                  "type": "any",
+                  "value": "{{your-dealhub-instance}}",
+                  "key": "your-dealhub-instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dealhub_user_id\": \"<string>\",\n  \"external_opportunity_id\": \"<string>\",\n  \"opportunity_info\": {\n    \"external_opportunity_name\": \"<string>\",\n    \"external_customer_id\": \"<string>\",\n    \"customer_name\": \"<string>\",\n    \"geo_code\": \"<string>\",\n    \"currency\": \"<string>\",\n    \"opportunity_owner\": {\n      \"external_user_id\": \"<string>\",\n      \"email\": \"<email>\",\n      \"name\": \"<string>\",\n      \"login\": \"<string>\",\n      \"position\": \"<string>\",\n      \"phone\": \"<string>\",\n      \"mobile\": \"<string>\",\n      \"company\": \"<string>\",\n      \"street\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"country\": \"<string>\",\n      \"postal_code\": \"<string>\",\n      \"user_manager_login\": \"<string>\"\n    },\n    \"external_quote_id\": \"<string>\",\n    \"customer_shipping_address\": {\n      \"street\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"country\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    },\n    \"customer_billing_address\": {\n      \"street\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"country\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    },\n    \"customer_contacts\": [\n      {\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\",\n        \"email\": \"<email>\",\n        \"salutation\": \"<string>\",\n        \"title\": \"<string>\",\n        \"phone\": \"<string>\",\n        \"account_name\": \"<string>\",\n        \"mailing_address\": \"<string>\",\n        \"primary_contact\": false\n      },\n      {\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\",\n        \"email\": \"<email>\",\n        \"salutation\": \"<string>\",\n        \"title\": \"<string>\",\n        \"phone\": \"<string>\",\n        \"account_name\": \"<string>\",\n        \"mailing_address\": \"<string>\",\n        \"primary_contact\": false\n      }\n    ],\n    \"custom_fields\": [\n      {\n        \"name\": \"<string>\",\n        \"value\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      },\n      {\n        \"name\": \"<string>\",\n        \"value\": [\n          \"<string>\",\n          \"<string>\"\n        ]\n      }\n    ],\n    \"repeatable_groups\": [\n      {\n        \"group_id\": \"<string>\",\n        \"questions\": [\n          {\n            \"key_0\": 4474,\n            \"key_1\": 2958,\n            \"key_2\": true\n          },\n          {\n            \"key_0\": 3373,\n            \"key_1\": true,\n            \"key_2\": \"string\"\n          }\n        ]\n      },\n      {\n        \"group_id\": \"<string>\",\n        \"questions\": [\n          {\n            \"key_0\": false\n          },\n          {\n            \"key_0\": true,\n            \"key_1\": 1162\n          }\n        ]\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4195184e-427d-479c-8d50-a1ff55d83c68",
+              "name": "Success. The response contains the URL for redirection.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "quotes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dealhub_user_id\": \"387483488378\",\n  \"external_opportunity_id\": \"1kdash231hr2jkk2\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"https://eHqWe.ecobhji8CEZs7-4FtqUBMgwAtlYjIZ+-garLq6lB-IiQrwrFWk\",\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a3c5e80b-c321-4f30-b960-dee6023b88a7",
+              "name": "Bad Request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "quotes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dealhub_user_id\": \"387483488378\",\n  \"external_opportunity_id\": \"1kdash231hr2jkk2\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Unauthenticated\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "35d6ee25-f622-4660-a2af-f071d0d1183d",
+              "name": "Unauthenticated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "quotes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dealhub_user_id\": \"387483488378\",\n  \"external_opportunity_id\": \"1kdash231hr2jkk2\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Unauthenticated\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e4780dd8-c356-482e-8328-5e708c10b022",
+          "name": "View My Opportunities",
+          "request": {
+            "name": "View My Opportunities",
+            "description": {
+              "content": "Retrieves a URL that redirects the user to their main \"My Opportunities\" dashboard in DealHub.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "opportunities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                  "type": "any",
+                  "value": "{{your-dealhub-instance}}",
+                  "key": "your-dealhub-instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"dealhub_user_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "44306581-a472-4fdd-865a-f49e4ff4e14f",
+              "name": "Success. The response contains the URL for redirection.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "opportunities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dealhub_user_id\": \"387483488378\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"https://eHqWe.ecobhji8CEZs7-4FtqUBMgwAtlYjIZ+-garLq6lB-IiQrwrFWk\",\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a8095ec2-f7d8-4e4d-88f5-da5bf00453c0",
+              "name": "Unauthenticated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "opportunities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"dealhub_user_id\": \"387483488378\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Unauthenticated\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "app",
+      "key": "your-dealhub-instance"
+    },
+    {
+      "type": "string",
+      "value": "https://api.dealhub.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ee81d4e3-379c-4a8b-9cc9-a112c75838a9",
+    "name": "CRM API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This API allows external CRM systems to integrate with DealHub's CPQ functionality.\nThe primary flow involves two steps:\n1. A server-to-server authentication call to get a short-lived, one-time access token.\n2. A client-side call using that token to a specific DealHub endpoint (e.g., to create, open, or view a quote). This call returns a URL.\n3. The client application (CRM) then redirects the user's browser to the returned URL, providing a seamless transition into the DealHub UI.",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "item": [
+    {
+      "id": "a1a501c5-3f8d-433d-8dac-5d704644aa86",
+      "name": "Callouts",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7596b846-f45f-4ef7-bbc8-cbf4ff1713af",
+          "name": "Retrieve Real-Time Pricing",
+          "request": {
+            "name": "Retrieve Real-Time Pricing",
+            "description": {
+              "content": "> ❗️ Important\n>\n> This is not an endpoint provided by DealHub. This page present the endpoint definition you need to make available so DealHub can call it.\n\nThis endpoint enables DealHub to retrieve real-time product prices and attributes from your external system while a quote is being generated.\n\nThe specific URL for this endpoint is configured by the administrator in the DealHub UI.\n\n> 📘 Date Formats\n>\n> All date and time values are provided in ISO 8601 format and standardized to UTC (Coordinated Universal Time) `yyyy-MM-dd'T'HH:mm:ss.SSS'Z'` (e.g., `2025-09-01T15:39:25Z`).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"items\": [\n    {\n      \"id\": \"<long>\",\n      \"sku\": \"<string>\",\n      \"type\": \"<string>\",\n      \"quantity\": \"<number>\",\n      \"duration\": \"<number>\",\n      \"returned_attributes\": {\n        \"key_0\": \"<string>\"\n      },\n      \"bundle_items\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/Item detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/Item detected>\"\n        }\n      ]\n    },\n    {\n      \"id\": \"<long>\",\n      \"sku\": \"<string>\",\n      \"type\": \"<string>\",\n      \"quantity\": \"<number>\",\n      \"duration\": \"<number>\",\n      \"returned_attributes\": {\n        \"key_0\": \"<string>\",\n        \"key_1\": \"<string>\"\n      },\n      \"bundle_items\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/Item detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/Item detected>\"\n        }\n      ]\n    }\n  ],\n  \"request_id\": \"<string>\",\n  \"authentication\": \"<string>\",\n  \"playbook_answers\": {\n    \"key_0\": 3590\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d6c9495a-9b8b-4a4e-84af-c7891e63979b",
+              "name": "Successful response containing the calculated prices and attributes for each item.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"request_id\": \"RANDOM-32bit-string\",\n  \"authentication\": \"DASFE$df422ffg\",\n  \"playbook_answers\": {\n    \"general.currency\": \"USD\",\n    \"general.geo\": \"North America\",\n    \"group1.customer_type\": \"Enterprise\",\n    \"group2.number_of_something\": 4323.11,\n    \"group3.proposal_date\": \"2021-03-25T15:39:25Z\"\n  },\n  \"items\": [\n    {\n      \"id\": 1,\n      \"sku\": \"A-1\",\n      \"type\": \"product\",\n      \"quantity\": 15,\n      \"duration\": 12,\n      \"family\": \"hardware\",\n      \"returned_attributes\": {\n        \"price\": \"number\",\n        \"MSRP\": \"number\",\n        \"partner_discount1\": \"percentage\",\n        \"partner_discount2\": \"percentage\",\n        \"start_date\": \"date\"\n      }\n    },\n    {\n      \"id\": 2,\n      \"sku\": \"B-1\",\n      \"type\": \"bundle\",\n      \"quantity\": 2,\n      \"duration\": 24,\n      \"family\": \"software\",\n      \"returned_attributes\": {\n        \"MSRP\": \"number\",\n        \"start_date\": \"date\"\n      },\n      \"bundle_items\": [\n        {\n          \"id\": 3,\n          \"sku\": \"B-111\",\n          \"type\": \"product\",\n          \"quantity\": 15,\n          \"duration\": 12,\n          \"family\": \"hardware\",\n          \"returned_attributes\": {\n            \"price\": \"number\",\n            \"MSRP\": \"number\",\n            \"partner_discount1\": \"percentage\",\n            \"partner_discount2\": \"percentage\",\n            \"start_date\": \"date\"\n          }\n        },\n        {\n          \"id\": 4,\n          \"sku\": \"B-222\",\n          \"type\": \"product\",\n          \"quantity\": 15,\n          \"duration\": 12,\n          \"family\": \"hardware\",\n          \"returned_attributes\": {\n            \"price\": \"number\",\n            \"MSRP\": \"number\",\n            \"partner_discount1\": \"percentage\",\n            \"partner_discount2\": \"percentage\",\n            \"start_date\": \"date\"\n          }\n        },\n        {\n          \"id\": 5,\n          \"sku\": \"B-333\",\n          \"type\": \"product\",\n          \"quantity\": 15,\n          \"duration\": 12,\n          \"family\": \"hardware\",\n          \"returned_attributes\": {\n            \"price\": \"number\",\n            \"MSRP\": \"number\",\n            \"partner_discount1\": \"percentage\",\n            \"partner_discount2\": \"percentage\",\n            \"start_date\": \"date\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"items\": [\n    {\n      \"id\": 1,\n      \"sku\": \"A-1\",\n      \"list_price\": 100,\n      \"MSRP\": 200,\n      \"partner_discount1\": 10,\n      \"partner_discount2\": 10,\n      \"start_date\": \"2021-03-25T15:39:25Z\"\n    },\n    {\n      \"id\": 2,\n      \"sku\": \"B-1\",\n      \"MSRP\": 600,\n      \"start_date\": \"\",\n      \"bundle_items\": [\n        {\n          \"id\": 3,\n          \"sku\": \"B-111\",\n          \"list_price\": 100,\n          \"MSRP\": 200,\n          \"partner_discount1\": 10,\n          \"partner_discount2\": 10,\n          \"start_date\": \"2021-03-25T15:39:25Z\"\n        },\n        {\n          \"id\": 4,\n          \"sku\": \"B-222\",\n          \"list_price\": 100,\n          \"MSRP\": 200,\n          \"partner_discount1\": 10,\n          \"partner_discount2\": 10,\n          \"start_date\": \"2021-03-25T15:39:25Z\"\n        },\n        {\n          \"id\": 5,\n          \"sku\": \"B-333\",\n          \"list_price\": 100,\n          \"MSRP\": 200,\n          \"partner_discount1\": 10,\n          \"partner_discount2\": 10,\n          \"start_date\": \"2021-03-25T15:39:25Z\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a7c75a30-7b69-4236-b9c6-9f8084763e9f",
+              "name": "Bad Request. An error occurred in the external system. The response should contain a clear error message.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"request_id\": \"RANDOM-32bit-string\",\n  \"authentication\": \"DASFE$df422ffg\",\n  \"playbook_answers\": {\n    \"general.currency\": \"USD\",\n    \"general.geo\": \"North America\",\n    \"group1.customer_type\": \"Enterprise\",\n    \"group2.number_of_something\": 4323.11,\n    \"group3.proposal_date\": \"2021-03-25T15:39:25Z\"\n  },\n  \"items\": [\n    {\n      \"id\": 1,\n      \"sku\": \"A-1\",\n      \"type\": \"product\",\n      \"quantity\": 15,\n      \"duration\": 12,\n      \"family\": \"hardware\",\n      \"returned_attributes\": {\n        \"price\": \"number\",\n        \"MSRP\": \"number\",\n        \"partner_discount1\": \"percentage\",\n        \"partner_discount2\": \"percentage\",\n        \"start_date\": \"date\"\n      }\n    },\n    {\n      \"id\": 2,\n      \"sku\": \"B-1\",\n      \"type\": \"bundle\",\n      \"quantity\": 2,\n      \"duration\": 24,\n      \"family\": \"software\",\n      \"returned_attributes\": {\n        \"MSRP\": \"number\",\n        \"start_date\": \"date\"\n      },\n      \"bundle_items\": [\n        {\n          \"id\": 3,\n          \"sku\": \"B-111\",\n          \"type\": \"product\",\n          \"quantity\": 15,\n          \"duration\": 12,\n          \"family\": \"hardware\",\n          \"returned_attributes\": {\n            \"price\": \"number\",\n            \"MSRP\": \"number\",\n            \"partner_discount1\": \"percentage\",\n            \"partner_discount2\": \"percentage\",\n            \"start_date\": \"date\"\n          }\n        },\n        {\n          \"id\": 4,\n          \"sku\": \"B-222\",\n          \"type\": \"product\",\n          \"quantity\": 15,\n          \"duration\": 12,\n          \"family\": \"hardware\",\n          \"returned_attributes\": {\n            \"price\": \"number\",\n            \"MSRP\": \"number\",\n            \"partner_discount1\": \"percentage\",\n            \"partner_discount2\": \"percentage\",\n            \"start_date\": \"date\"\n          }\n        },\n        {\n          \"id\": 5,\n          \"sku\": \"B-333\",\n          \"type\": \"product\",\n          \"quantity\": 15,\n          \"duration\": 12,\n          \"family\": \"hardware\",\n          \"returned_attributes\": {\n            \"price\": \"number\",\n            \"MSRP\": \"number\",\n            \"partner_discount1\": \"percentage\",\n            \"partner_discount2\": \"percentage\",\n            \"start_date\": \"date\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://your-external-system.com/api/pricing",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "3e650c6f-f5fc-42c4-86c8-4d123ac93f3f",
+    "name": "Callout API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This API defines the contract for an external system that DealHub calls out to for retrieving real-time prices and product attributes. This is known as the \"Callouts API\".\nWhen a sales representative adds a product configured for \"ERP Pricing\" to a quote, DealHub sends a POST request to the endpoint defined here. The external system is expected to process the request and return the calculated values for each line item.",
+      "type": "text/plain"
+    }
+  }
+}

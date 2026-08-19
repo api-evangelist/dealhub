@@ -1,0 +1,1233 @@
+{
+  "item": [
+    {
+      "id": "b76030ef-226f-4bd2-a69d-b1b2b47847cb",
+      "name": "Headless Quoting",
+      "description": {
+        "content": "Endpoints for programmatic quote simulation, generation, and lifecycle actions.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "31c9e2f5-28bc-43b7-ab09-c3961aa79e3b",
+          "name": "Simulate a Quote",
+          "request": {
+            "name": "Simulate a Quote",
+            "description": {
+              "content": "Synchronously calculates quote pricing and details based on the provided configuration without creating a persistent quote object in DealHub. Ideal for real-time price calculations.\n\nUse this endpoint to calculate real-time pricing and quote details without creating a permanent record in DealHub. You have to inform the product and configuration data to receive the calculated line items and a financial summary. \n\nTo run a simulation, your request must include a `version_id` to specify which pricing and product rules to use. You also need to provide one of the following options:\n\n- `external_opportunity_id`: Use this to base the simulation on an existing opportunity in your CRM.\n- `geo_code` and `currency`: Use this combination for simulations that do not depend on specific CRM data.\n\n> 📘 Required data\n> \n> You must provide either the `external_opportunity_id` or both the `geo_code` and `currency` parameters. Providing both in the same request will result in an error.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "quote",
+                "simulate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quote_data\": [],\n  \"version_id\": \"<string>\",\n  \"external_opportunity_id\": \"<string>\",\n  \"geo_code\": \"<string>\",\n  \"currency\": \"<string>\",\n  \"line_item_details\": \"basic\",\n  \"playbook\": \"<string>\",\n  \"total_sales_discount\": \"<number>\",\n  \"partner_program\": [\n    {\n      \"partner_level_name\": \"<string>\",\n      \"program_name\": \"<string>\"\n    },\n    {\n      \"partner_level_name\": \"<string>\",\n      \"program_name\": \"<string>\"\n    }\n  ],\n  \"line_items\": [\n    {\n      \"sku\": \"<string>\",\n      \"item_name\": \"<string>\",\n      \"bundle_ref_sku\": \"<string>\",\n      \"bundle_ref_id\": \"<integer>\",\n      \"list_price\": \"<number>\",\n      \"net_price_per_unit\": \"<number>\",\n      \"net_price\": \"<number>\",\n      \"msrp\": \"<number>\",\n      \"msrp_discount\": \"<number>\",\n      \"sales_discount\": \"<number>\",\n      \"total_discount\": \"<number>\",\n      \"partner_program_data\": [\n        {\n          \"partner_program_name\": \"<string>\",\n          \"partner_level_item_price\": \"<number>\",\n          \"partner_level_item_discount\": \"<number>\"\n        },\n        {\n          \"partner_program_name\": \"<string>\",\n          \"partner_level_item_price\": \"<number>\",\n          \"partner_level_item_discount\": \"<number>\"\n        }\n      ],\n      \"product_factors\": {\n        \"key_0\": \"<integer>\"\n      },\n      \"attributes\": {\n        \"key_0\": \"<string>\"\n      }\n    },\n    {\n      \"sku\": \"<string>\",\n      \"item_name\": \"<string>\",\n      \"bundle_ref_sku\": \"<string>\",\n      \"bundle_ref_id\": \"<integer>\",\n      \"list_price\": \"<number>\",\n      \"net_price_per_unit\": \"<number>\",\n      \"net_price\": \"<number>\",\n      \"msrp\": \"<number>\",\n      \"msrp_discount\": \"<number>\",\n      \"sales_discount\": \"<number>\",\n      \"total_discount\": \"<number>\",\n      \"partner_program_data\": [\n        {\n          \"partner_program_name\": \"<string>\",\n          \"partner_level_item_price\": \"<number>\",\n          \"partner_level_item_discount\": \"<number>\"\n        },\n        {\n          \"partner_program_name\": \"<string>\",\n          \"partner_level_item_price\": \"<number>\",\n          \"partner_level_item_discount\": \"<number>\"\n        }\n      ],\n      \"product_factors\": {\n        \"key_0\": \"<integer>\",\n        \"key_1\": \"<integer>\"\n      },\n      \"attributes\": {\n        \"key_0\": \"<string>\",\n        \"key_1\": \"<string>\",\n        \"key_2\": \"<string>\"\n      }\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9dca28cf-8cb1-4bf9-8c67-335fd6b5d9b1",
+              "name": "Simulation successful.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quote",
+                    "simulate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"version_id\": \"20AFDC77E768B703\",\n  \"geo_code\": \"us\",\n  \"currency\": \"USD\",\n  \"line_item_details\": \"all\",\n  \"playbook\": \"playbook_api\",\n  \"total_sales_discount\": 10,\n  \"partner_program\": [\n    {\n      \"partner_level_name\": \"Silver\",\n      \"program_name\": \"Program Name Silver 1\"\n    },\n    {\n      \"partner_level_name\": \"Gold\",\n      \"program_name\": \"Program Name Gold 1\"\n    },\n    {\n      \"partner_level_name\": \"Platinum\",\n      \"program_name\": \"Program Name Platinuml\"\n    }\n  ],\n  \"quote_data\": [\n    {\n      \"group_id\": \"qg1\",\n      \"questions\": [\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"id2_vall;id2_val2;id2_val3\",\n          \"question_id_3\": \"id3_val\"\n        },\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"id2_valA;valB;val2\",\n          \"question_id_3\": \"id3_val\"\n        }\n      ]\n    },\n    {\n      \"group_id\": \"qg2\",\n      \"questions\": [\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"A;B;C\",\n          \"question_id_3\": \"some_val\"\n        },\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"A,D,N\",\n          \"question_id_3\": \"another_val\"\n        }\n      ]\n    }\n  ],\n  \"line_items\": [\n    {\n      \"sku\": \"product SKU\",\n      \"item_name\": \"Sweatpants\",\n      \"list_price\": 368,\n      \"net_price_per_unit\": 368,\n      \"net_price\": 1472,\n      \"msrp\": 0,\n      \"msrp_discount\": 0,\n      \"sales_discount\": 0,\n      \"total_discount\": 0,\n      \"product_factors\": {\n        \"Duration\": 2,\n        \"Quantity\": 2\n      },\n      \"attributes\": {\n        \"numeric PA\": \"50\",\n        \"currency PA\": \"50\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"approval_flows\": false,\n  \"summary\": {\n    \"currency\": \"USD\",\n    \"total_list_price\": 458154.42,\n    \"total_net_price\": 238042.66,\n    \"total_discount\": 48.04,\n    \"total_sales_discount\": 0\n  },\n  \"line_items\": [\n    {\n      \"id\": \"12345zWIwGV12347\",\n      \"sku\": \"999451\",\n      \"bundle_ref\": null,\n      \"name\": \"Gold Shield Pack\",\n      \"list_price\": 50.04,\n      \"net_price\": 22500.02,\n      \"product_factors\": {\n        \"Duration\": \"1.0\",\n        \"Quantity\": \"1.0\"\n      },\n      \"total_discount\": 55,\n      \"additional_data\": {\n        \"primary_tag\": \"PS\",\n        \"msrp\": 50000.04,\n        \"msrp_discount\": 55,\n        \"user_price\": 22.02,\n        \"net_per_unit\": 22.02,\n        \"partner_discounts\": [\n          {\n            \"name\": \"Program Name Silver 1\",\n            \"discount\": 20,\n            \"price\": 47.6\n          },\n          {\n            \"name\": \"Program Name Gold 1\",\n            \"discount\": 30,\n            \"price\": 59.5\n          }\n        ],\n        \"sales_discount\": 55,\n        \"attributes\": {\n          \"ARR\": \"22.02\",\n          \"Customer Discount\": \"49.07\",\n          \"Item Status\": \"Active\",\n          \"Inventory Category\": \"DEFAULT\",\n          \"Product Line\": \"Professional Services\"\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5232e9e0-c3a2-4374-b908-00adf6ef66ca",
+              "name": "Bad Request. The request payload is invalid or missing required information.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quote",
+                    "simulate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"version_id\": \"20AFDC77E768B703\",\n  \"geo_code\": \"us\",\n  \"currency\": \"USD\",\n  \"line_item_details\": \"all\",\n  \"playbook\": \"playbook_api\",\n  \"total_sales_discount\": 10,\n  \"partner_program\": [\n    {\n      \"partner_level_name\": \"Silver\",\n      \"program_name\": \"Program Name Silver 1\"\n    },\n    {\n      \"partner_level_name\": \"Gold\",\n      \"program_name\": \"Program Name Gold 1\"\n    },\n    {\n      \"partner_level_name\": \"Platinum\",\n      \"program_name\": \"Program Name Platinuml\"\n    }\n  ],\n  \"quote_data\": [\n    {\n      \"group_id\": \"qg1\",\n      \"questions\": [\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"id2_vall;id2_val2;id2_val3\",\n          \"question_id_3\": \"id3_val\"\n        },\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"id2_valA;valB;val2\",\n          \"question_id_3\": \"id3_val\"\n        }\n      ]\n    },\n    {\n      \"group_id\": \"qg2\",\n      \"questions\": [\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"A;B;C\",\n          \"question_id_3\": \"some_val\"\n        },\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"A,D,N\",\n          \"question_id_3\": \"another_val\"\n        }\n      ]\n    }\n  ],\n  \"line_items\": [\n    {\n      \"sku\": \"product SKU\",\n      \"item_name\": \"Sweatpants\",\n      \"list_price\": 368,\n      \"net_price_per_unit\": 368,\n      \"net_price\": 1472,\n      \"msrp\": 0,\n      \"msrp_discount\": 0,\n      \"sales_discount\": 0,\n      \"total_discount\": 0,\n      \"product_factors\": {\n        \"Duration\": 2,\n        \"Quantity\": 2\n      },\n      \"attributes\": {\n        \"numeric PA\": \"50\",\n        \"currency PA\": \"50\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f06abfaa-4159-48c4-84a1-4184ccd001c6",
+          "name": "Generate a Quote",
+          "request": {
+            "name": "Generate a Quote",
+            "description": {
+              "content": "Creates an official quote record in DealHub, links it to a CRM opportunity, and initiates any required approval workflows based on your active CPQ version.\n\nThis is an asynchronous endpoint. When you send a request, the API provides an immediate response to confirm that the quote generation process has started. The full processing, including data synchronization with your CRM, happens in the background.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "quote",
+                "generate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"external_opportunity_id\": \"<string>\",\n  \"request_action\": \"<string>\",\n  \"document_type\": \"<string>\",\n  \"quote_data\": [],\n  \"line_item_details\": \"basic\",\n  \"playbook\": \"<string>\",\n  \"quote_name\": \"<string>\",\n  \"dealroom_publish_name\": \"<string>\",\n  \"total_sales_discount\": \"<number>\",\n  \"expiration_date\": \"<long>\",\n  \"partner_program\": [\n    {\n      \"partner_level_name\": \"<string>\",\n      \"program_name\": \"<string>\"\n    },\n    {\n      \"partner_level_name\": \"<string>\",\n      \"program_name\": \"<string>\"\n    }\n  ],\n  \"timezone_offset\": \"<number>\",\n  \"sign_externally_comment\": \"<string>\",\n  \"line_items\": [\n    {\n      \"sku\": \"<string>\",\n      \"item_name\": \"<string>\",\n      \"bundle_ref_sku\": \"<string>\",\n      \"bundle_ref_id\": \"<integer>\",\n      \"list_price\": \"<number>\",\n      \"net_price_per_unit\": \"<number>\",\n      \"net_price\": \"<number>\",\n      \"msrp\": \"<number>\",\n      \"msrp_discount\": \"<number>\",\n      \"sales_discount\": \"<number>\",\n      \"total_discount\": \"<number>\",\n      \"partner_program_data\": [\n        {\n          \"partner_program_name\": \"<string>\",\n          \"partner_level_item_price\": \"<number>\",\n          \"partner_level_item_discount\": \"<number>\"\n        },\n        {\n          \"partner_program_name\": \"<string>\",\n          \"partner_level_item_price\": \"<number>\",\n          \"partner_level_item_discount\": \"<number>\"\n        }\n      ],\n      \"product_factors\": {\n        \"key_0\": \"<integer>\",\n        \"key_1\": \"<integer>\"\n      },\n      \"attributes\": {\n        \"key_0\": \"<string>\",\n        \"key_1\": \"<string>\"\n      }\n    },\n    {\n      \"sku\": \"<string>\",\n      \"item_name\": \"<string>\",\n      \"bundle_ref_sku\": \"<string>\",\n      \"bundle_ref_id\": \"<integer>\",\n      \"list_price\": \"<number>\",\n      \"net_price_per_unit\": \"<number>\",\n      \"net_price\": \"<number>\",\n      \"msrp\": \"<number>\",\n      \"msrp_discount\": \"<number>\",\n      \"sales_discount\": \"<number>\",\n      \"total_discount\": \"<number>\",\n      \"partner_program_data\": [\n        {\n          \"partner_program_name\": \"<string>\",\n          \"partner_level_item_price\": \"<number>\",\n          \"partner_level_item_discount\": \"<number>\"\n        },\n        {\n          \"partner_program_name\": \"<string>\",\n          \"partner_level_item_price\": \"<number>\",\n          \"partner_level_item_discount\": \"<number>\"\n        }\n      ],\n      \"product_factors\": {\n        \"key_0\": \"<integer>\",\n        \"key_1\": \"<integer>\"\n      },\n      \"attributes\": {\n        \"key_0\": \"<string>\",\n        \"key_1\": \"<string>\"\n      }\n    }\n  ],\n  \"opportunity_data\": {\n    \"external_opportunity_name\": \"<string>\",\n    \"opportunity_owner\": {\n      \"external_user_id\": \"<string>\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"login\": \"<string>\",\n      \"position\": \"<string>\",\n      \"phone\": \"<string>\",\n      \"mobile\": \"<string>\",\n      \"fax\": \"<string>\",\n      \"company\": \"<string>\",\n      \"street\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"country\": \"<string>\",\n      \"postal_code\": \"<string>\",\n      \"user_manager_login\": \"<string>\"\n    },\n    \"external_customer_id\": \"<string>\",\n    \"customer_name\": \"<string>\",\n    \"geo_code\": \"<string>\",\n    \"currency\": \"<string>\",\n    \"customer_shipping_address\": {\n      \"street\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"country\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    },\n    \"customer_billing_address\": {\n      \"street\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"country\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    },\n    \"customer_contacts\": [\n      {\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\",\n        \"email\": \"<string>\",\n        \"salutation\": \"<string>\",\n        \"title\": \"<string>\",\n        \"phone\": \"<string>\",\n        \"account_name\": \"<string>\",\n        \"mailing_address\": \"<string>\",\n        \"primary_contact\": \"<boolean>\"\n      },\n      {\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\",\n        \"email\": \"<string>\",\n        \"salutation\": \"<string>\",\n        \"title\": \"<string>\",\n        \"phone\": \"<string>\",\n        \"account_name\": \"<string>\",\n        \"mailing_address\": \"<string>\",\n        \"primary_contact\": \"<boolean>\"\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "72f686cb-9259-4913-b396-25c379472938",
+              "name": "Accepted. The quote generation process has been initiated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quote",
+                    "generate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"request_action\": \"publish\",\n  \"external_opportunity_id\": \"006J7000003wYhD\",\n  \"line_item_details\": \"all\",\n  \"playbook\": \"playbook_api\",\n  \"quote_name\": \"quote name\",\n  \"dealroom_publish_name\": \"Dealroom publish name\",\n  \"expiration_date\": 1793788799000,\n  \"document_type\": \"DealRoom\",\n  \"total_sales_discount\": 15,\n  \"timezone_offset\": 0,\n  \"partner_program\": [\n    {\n      \"partner_level_name\": \"Silver\",\n      \"program_name\": \"Program Name Silver 1\"\n    },\n    {\n      \"partner_level_name\": \"Gold\",\n      \"program_name\": \"Program Name Gold 1\"\n    },\n    {\n      \"partner_level_name\": \"Platinum\",\n      \"program_name\": \"Program Name Platinum 1\"\n    }\n  ],\n  \"quote_data\": [\n    {\n      \"group_id\": \"qg1\",\n      \"questions\": [\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"id2_vall;id2_val2;id2_val3\",\n          \"question_id_3\": \"id3_val\"\n        },\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"id2_valA;valB;val2\",\n          \"question_id_3\": \"id3_val\"\n        }\n      ]\n    },\n    {\n      \"group_id\": \"qg2\",\n      \"questions\": [\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"A;B;C\",\n          \"question_id_3\": \"some_val\"\n        },\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"A,D,N\",\n          \"question_id_3\": \"another_val\"\n        }\n      ]\n    }\n  ],\n  \"line_items\": [\n    {\n      \"sku\": \"product SKU\",\n      \"item_name\": \"Sweatpants\",\n      \"list_price\": 368,\n      \"net_price_per_unit\": 368,\n      \"net_price\": 1472,\n      \"msrp\": 0,\n      \"msrp_discount\": 0,\n      \"sales_discount\": 0,\n      \"total_discount\": 0,\n      \"product_factors\": {\n        \"Duration\": 2,\n        \"Quantity\": 2\n      },\n      \"attributes\": {\n        \"numeric PA\": \"50\",\n        \"currency PA\": \"50\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"publish\",\n  \"dealhub_proposal_id\": \"Q-12927\",\n  \"dealhub_quote_id\": \"12345zWIwGV12344\",\n  \"dealroom_url\": \"https://dealroom.deahub.io/xxxxxxx\",\n  \"approval_flows\": true,\n  \"summary\": {\n    \"currency\": \"USD\",\n    \"total_list_price\": 458154.42,\n    \"total_net_price\": 238042.66,\n    \"total_discount\": 48.04,\n    \"total_sales_discount\": 0\n  },\n  \"line_items\": [\n    {\n      \"id\": \"12345zWIwGV12347\",\n      \"sku\": \"999451\",\n      \"bundle_ref\": \"\",\n      \"name\": \"Gold Shield Pack\",\n      \"list_price\": 50.04,\n      \"net_price\": 22500.02,\n      \"product_factors\": {\n        \"duration\": \"1.0\",\n        \"quantity\": \"1.0\"\n      },\n      \"total_discount\": 55,\n      \"additional_data\": {\n        \"primary_tag\": \"PS\",\n        \"msrp\": 50000.04,\n        \"msrp_discount\": 55,\n        \"user_price\": 22.02,\n        \"net_per_unit\": 22.02,\n        \"partner_discounts\": [],\n        \"sales_discount\": 55,\n        \"attributes\": {\n          \"ARR\": \"22.02\",\n          \"Customer Discount\": \"49.07\",\n          \"Item Status\": \"Active\",\n          \"End Reseller Price\": \"-\",\n          \"Inventory Category\": \"DEFAULT\",\n          \"Product Line\": \"Professional Services\"\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d9d90560-9e4c-4d83-8cd7-0ac4714415c4",
+              "name": "Bad Request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quote",
+                    "generate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"request_action\": \"publish\",\n  \"external_opportunity_id\": \"006J7000003wYhD\",\n  \"line_item_details\": \"all\",\n  \"playbook\": \"playbook_api\",\n  \"quote_name\": \"quote name\",\n  \"dealroom_publish_name\": \"Dealroom publish name\",\n  \"expiration_date\": 1793788799000,\n  \"document_type\": \"DealRoom\",\n  \"total_sales_discount\": 15,\n  \"timezone_offset\": 0,\n  \"partner_program\": [\n    {\n      \"partner_level_name\": \"Silver\",\n      \"program_name\": \"Program Name Silver 1\"\n    },\n    {\n      \"partner_level_name\": \"Gold\",\n      \"program_name\": \"Program Name Gold 1\"\n    },\n    {\n      \"partner_level_name\": \"Platinum\",\n      \"program_name\": \"Program Name Platinum 1\"\n    }\n  ],\n  \"quote_data\": [\n    {\n      \"group_id\": \"qg1\",\n      \"questions\": [\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"id2_vall;id2_val2;id2_val3\",\n          \"question_id_3\": \"id3_val\"\n        },\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"id2_valA;valB;val2\",\n          \"question_id_3\": \"id3_val\"\n        }\n      ]\n    },\n    {\n      \"group_id\": \"qg2\",\n      \"questions\": [\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"A;B;C\",\n          \"question_id_3\": \"some_val\"\n        },\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"A,D,N\",\n          \"question_id_3\": \"another_val\"\n        }\n      ]\n    }\n  ],\n  \"line_items\": [\n    {\n      \"sku\": \"product SKU\",\n      \"item_name\": \"Sweatpants\",\n      \"list_price\": 368,\n      \"net_price_per_unit\": 368,\n      \"net_price\": 1472,\n      \"msrp\": 0,\n      \"msrp_discount\": 0,\n      \"sales_discount\": 0,\n      \"total_discount\": 0,\n      \"product_factors\": {\n        \"Duration\": 2,\n        \"Quantity\": 2\n      },\n      \"attributes\": {\n        \"numeric PA\": \"50\",\n        \"currency PA\": \"50\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "086a77b6-2b9e-4597-884a-618e6c433ea2",
+          "name": "Submit a Quote",
+          "request": {
+            "name": "Submit a Quote",
+            "description": {
+              "content": "Asynchronously submits an existing `Draft` quote for approval.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "quote",
+                ":dealhub_quote_id",
+                "submit"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dealhub_quote_id",
+                  "description": "(Required) The unique identifier of the quote in DealHub."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"line_item_details\": \"basic\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c1e474fc-4f98-4f14-b4ed-b53be1078d39",
+              "name": "Accepted. The submit action has been initiated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quote",
+                    ":dealhub_quote_id",
+                    "submit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dealhub_quote_id",
+                      "description": "(Required) The unique identifier of the quote in DealHub."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"line_item_details\": \"basic\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"string\",\n  \"dealhub_proposal_id\": \"string\",\n  \"dealhub_quote_id\": \"string\",\n  \"dealroom_url\": \"https://JLYmYdEyVaDfNXrY.wrhKRsC6.adnG7fthIy3JuA9GN5gHruvQ6RWIJPTUp930lf7uUezQhz6U\",\n  \"approval_flows\": false,\n  \"summary\": {\n    \"currency\": \"string\",\n    \"total_list_price\": 59.494235825735544,\n    \"total_net_price\": 6671.593822610275,\n    \"total_discount\": 8025.955095076698,\n    \"total_sales_discount\": 4220.215708141891\n  },\n  \"line_items\": [\n    {\n      \"id\": \"string\",\n      \"sku\": \"string\",\n      \"bundle_ref\": \"string\",\n      \"name\": \"string\",\n      \"list_price\": 6451.254143966254,\n      \"net_price\": 4764.931140434794,\n      \"product_factors\": {\n        \"key_0\": \"string\"\n      },\n      \"total_discount\": 3676.2954957620896,\n      \"additional_data\": {\n        \"primary_tag\": \"string\",\n        \"msrp\": 5594.057123632115,\n        \"msrp_discount\": 4950.163908319386,\n        \"user_price\": 2163.627079283452,\n        \"net_per_unit\": 3363.997756633641,\n        \"partner_discounts\": [\n          {\n            \"name\": \"string\",\n            \"discount\": 5514.292365101459,\n            \"price\": 5494.080217287164\n          },\n          {\n            \"name\": \"string\",\n            \"discount\": 1397.745468993251,\n            \"price\": 2148.994378263118\n          }\n        ],\n        \"sales_discount\": 2764.970831742034,\n        \"attributes\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        }\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"sku\": \"string\",\n      \"bundle_ref\": \"string\",\n      \"name\": \"string\",\n      \"list_price\": 7061.09026934781,\n      \"net_price\": 9168.10768780108,\n      \"product_factors\": {\n        \"key_0\": \"string\"\n      },\n      \"total_discount\": 2065.6859368639357,\n      \"additional_data\": {\n        \"primary_tag\": \"string\",\n        \"msrp\": 2521.529907866935,\n        \"msrp_discount\": 800.372091592193,\n        \"user_price\": 4890.54281130799,\n        \"net_per_unit\": 3583.3196562239746,\n        \"partner_discounts\": [\n          {\n            \"name\": \"string\",\n            \"discount\": 554.3563095783132,\n            \"price\": 3045.4453560000516\n          },\n          {\n            \"name\": \"string\",\n            \"discount\": 9463.039481437549,\n            \"price\": 6160.696478488263\n          }\n        ],\n        \"sales_discount\": 9796.90081452882,\n        \"attributes\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\",\n          \"key_3\": \"string\"\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9ee5ec1c-d790-4336-8396-570cb7542c3f",
+              "name": "Bad Request. The quote is not in a submittable state.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quote",
+                    ":dealhub_quote_id",
+                    "submit"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dealhub_quote_id",
+                      "description": "(Required) The unique identifier of the quote in DealHub."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"line_item_details\": \"basic\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9710373e-bd62-48cd-afd4-9168c6f90b4f",
+          "name": "Publish a Quote",
+          "request": {
+            "name": "Publish a Quote",
+            "description": {
+              "content": "Asynchronously publishes an existing `Ready to be sent` quote to a DealRoom.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "quote",
+                ":dealhub_quote_id",
+                "publish"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dealhub_quote_id",
+                  "description": "(Required) The unique identifier of the quote in DealHub."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"line_item_details\": \"basic\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a00dc8f9-85b1-43f1-9b79-c78e3e9d8370",
+              "name": "Accepted. The publish action has been initiated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quote",
+                    ":dealhub_quote_id",
+                    "publish"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dealhub_quote_id",
+                      "description": "(Required) The unique identifier of the quote in DealHub."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"line_item_details\": \"basic\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"string\",\n  \"dealhub_proposal_id\": \"string\",\n  \"dealhub_quote_id\": \"string\",\n  \"dealroom_url\": \"http://NjynxZXulFyyfx.qcmgv8rQONdKV0PF+rXvJPB4yIqbOkZl+-+Zc\",\n  \"approval_flows\": false,\n  \"summary\": {\n    \"currency\": \"string\",\n    \"total_list_price\": 1389.428331449698,\n    \"total_net_price\": 635.785458755893,\n    \"total_discount\": 1284.317461438258,\n    \"total_sales_discount\": 9913.902623803335\n  },\n  \"line_items\": [\n    {\n      \"id\": \"string\",\n      \"sku\": \"string\",\n      \"bundle_ref\": \"string\",\n      \"name\": \"string\",\n      \"list_price\": 1889.9512480113424,\n      \"net_price\": 935.966567837978,\n      \"product_factors\": {\n        \"key_0\": \"string\"\n      },\n      \"total_discount\": 9530.815923144337,\n      \"additional_data\": {\n        \"primary_tag\": \"string\",\n        \"msrp\": 6732.260663744277,\n        \"msrp_discount\": 50.96443120264915,\n        \"user_price\": 6679.236468122669,\n        \"net_per_unit\": 1939.3384411729974,\n        \"partner_discounts\": [\n          {\n            \"name\": \"string\",\n            \"discount\": 1835.112205909275,\n            \"price\": 5866.786632917785\n          },\n          {\n            \"name\": \"string\",\n            \"discount\": 2131.4351481901326,\n            \"price\": 5014.400229244838\n          }\n        ],\n        \"sales_discount\": 9923.508238972276,\n        \"attributes\": {\n          \"key_0\": \"string\"\n        }\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"sku\": \"string\",\n      \"bundle_ref\": \"string\",\n      \"name\": \"string\",\n      \"list_price\": 7977.9161621715475,\n      \"net_price\": 6278.586866070031,\n      \"product_factors\": {\n        \"key_0\": \"string\"\n      },\n      \"total_discount\": 8538.021861444508,\n      \"additional_data\": {\n        \"primary_tag\": \"string\",\n        \"msrp\": 1477.5545585438954,\n        \"msrp_discount\": 9926.816541480366,\n        \"user_price\": 3650.4905082303308,\n        \"net_per_unit\": 1611.18266855127,\n        \"partner_discounts\": [\n          {\n            \"name\": \"string\",\n            \"discount\": 9519.349022864102,\n            \"price\": 7509.7799783643695\n          },\n          {\n            \"name\": \"string\",\n            \"discount\": 4389.233834760045,\n            \"price\": 5412.185287103256\n          }\n        ],\n        \"sales_discount\": 4504.400291611446,\n        \"attributes\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a02d8422-36e5-4f0f-8385-dc0b78e83973",
+              "name": "Bad Request. The quote is not in a publishable state.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quote",
+                    ":dealhub_quote_id",
+                    "publish"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dealhub_quote_id",
+                      "description": "(Required) The unique identifier of the quote in DealHub."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"line_item_details\": \"basic\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ba175cb7-ce7e-4cb6-b37a-8d9194ee6a3c",
+          "name": "Sign a Quote Externally",
+          "request": {
+            "name": "Sign a Quote Externally",
+            "description": {
+              "content": "Asynchronously marks an existing quote as `Won`. The quote must be in a `Ready to be sent` or `Published` status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "quote",
+                ":dealhub_quote_id",
+                "sign_externally"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dealhub_quote_id",
+                  "description": "(Required) The unique identifier of the quote in DealHub."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sign_externally_comment\": \"<string>\",\n  \"line_item_details\": \"basic\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "44e760d0-c627-485b-9189-871f87f853ef",
+              "name": "Accepted. The sign externally action has been initiated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quote",
+                    ":dealhub_quote_id",
+                    "sign_externally"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dealhub_quote_id",
+                      "description": "(Required) The unique identifier of the quote in DealHub."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sign_externally_comment\": \"<string>\",\n  \"line_item_details\": \"basic\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"string\",\n  \"dealhub_proposal_id\": \"string\",\n  \"dealhub_quote_id\": \"string\",\n  \"dealroom_url\": \"http://NjynxZXulFyyfx.qcmgv8rQONdKV0PF+rXvJPB4yIqbOkZl+-+Zc\",\n  \"approval_flows\": false,\n  \"summary\": {\n    \"currency\": \"string\",\n    \"total_list_price\": 1389.428331449698,\n    \"total_net_price\": 635.785458755893,\n    \"total_discount\": 1284.317461438258,\n    \"total_sales_discount\": 9913.902623803335\n  },\n  \"line_items\": [\n    {\n      \"id\": \"string\",\n      \"sku\": \"string\",\n      \"bundle_ref\": \"string\",\n      \"name\": \"string\",\n      \"list_price\": 1889.9512480113424,\n      \"net_price\": 935.966567837978,\n      \"product_factors\": {\n        \"key_0\": \"string\"\n      },\n      \"total_discount\": 9530.815923144337,\n      \"additional_data\": {\n        \"primary_tag\": \"string\",\n        \"msrp\": 6732.260663744277,\n        \"msrp_discount\": 50.96443120264915,\n        \"user_price\": 6679.236468122669,\n        \"net_per_unit\": 1939.3384411729974,\n        \"partner_discounts\": [\n          {\n            \"name\": \"string\",\n            \"discount\": 1835.112205909275,\n            \"price\": 5866.786632917785\n          },\n          {\n            \"name\": \"string\",\n            \"discount\": 2131.4351481901326,\n            \"price\": 5014.400229244838\n          }\n        ],\n        \"sales_discount\": 9923.508238972276,\n        \"attributes\": {\n          \"key_0\": \"string\"\n        }\n      }\n    },\n    {\n      \"id\": \"string\",\n      \"sku\": \"string\",\n      \"bundle_ref\": \"string\",\n      \"name\": \"string\",\n      \"list_price\": 7977.9161621715475,\n      \"net_price\": 6278.586866070031,\n      \"product_factors\": {\n        \"key_0\": \"string\"\n      },\n      \"total_discount\": 8538.021861444508,\n      \"additional_data\": {\n        \"primary_tag\": \"string\",\n        \"msrp\": 1477.5545585438954,\n        \"msrp_discount\": 9926.816541480366,\n        \"user_price\": 3650.4905082303308,\n        \"net_per_unit\": 1611.18266855127,\n        \"partner_discounts\": [\n          {\n            \"name\": \"string\",\n            \"discount\": 9519.349022864102,\n            \"price\": 7509.7799783643695\n          },\n          {\n            \"name\": \"string\",\n            \"discount\": 4389.233834760045,\n            \"price\": 5412.185287103256\n          }\n        ],\n        \"sales_discount\": 4504.400291611446,\n        \"attributes\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4d878ed4-7583-4441-a21a-b40bd9082de4",
+              "name": "Bad Request. The quote cannot be signed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quote",
+                    ":dealhub_quote_id",
+                    "sign_externally"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dealhub_quote_id",
+                      "description": "(Required) The unique identifier of the quote in DealHub."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sign_externally_comment\": \"<string>\",\n  \"line_item_details\": \"basic\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "05e46eed-ddbc-4d86-aa9d-15089421d636",
+          "name": "Get DealHub Quote ID",
+          "request": {
+            "name": "Get DealHub Quote ID",
+            "description": {
+              "content": "Retrieves the `dealhub_quote_id` using the `dealhub_proposal_id` (the ID visible in the UI).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "quote",
+                "id",
+                ":dealhub_proposal_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dealhub_proposal_id",
+                  "description": "(Required) The unique identifier of the proposal in DealHub."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7efc8da1-0bd6-4740-be12-61381b527708",
+              "name": "Success.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quote",
+                    "id",
+                    ":dealhub_proposal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dealhub_proposal_id",
+                      "description": "(Required) The unique identifier of the proposal in DealHub."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"dealhub_quote_id\": \"12345zWIwGV12344\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f9063589-9416-407c-946d-ddefa4c29f72",
+              "name": "Bad Request. The proposal ID does not exist.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quote",
+                    "id",
+                    ":dealhub_proposal_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dealhub_proposal_id",
+                      "description": "(Required) The unique identifier of the proposal in DealHub."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8a4c44ce-909d-4e03-b2cb-25ca7cbdadd2",
+          "name": "Copy of Generate a Quote",
+          "request": {
+            "name": "Copy of Generate a Quote",
+            "description": {
+              "content": "Creates an official quote record in DealHub, links it to a CRM opportunity, and initiates any required approval workflows based on your active CPQ version.\n\nThis is an asynchronous endpoint. When you send a request, the API provides an immediate response to confirm that the quote generation process has started. The full processing, including data synchronization with your CRM, happens in the background.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "quote",
+                "generate-1"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"external_opportunity_id\": \"<string>\",\n  \"request_action\": \"<string>\",\n  \"document_type\": \"<string>\",\n  \"quote_data\": [],\n  \"line_item_details\": \"basic\",\n  \"playbook\": \"<string>\",\n  \"quote_name\": \"<string>\",\n  \"dealroom_publish_name\": \"<string>\",\n  \"total_sales_discount\": \"<number>\",\n  \"expiration_date\": \"<long>\",\n  \"partner_program\": [\n    {\n      \"partner_level_name\": \"<string>\",\n      \"program_name\": \"<string>\"\n    },\n    {\n      \"partner_level_name\": \"<string>\",\n      \"program_name\": \"<string>\"\n    }\n  ],\n  \"timezone_offset\": \"<number>\",\n  \"sign_externally_comment\": \"<string>\",\n  \"line_items\": [\n    {\n      \"sku\": \"<string>\",\n      \"item_name\": \"<string>\",\n      \"bundle_ref_sku\": \"<string>\",\n      \"bundle_ref_id\": \"<integer>\",\n      \"list_price\": \"<number>\",\n      \"net_price_per_unit\": \"<number>\",\n      \"net_price\": \"<number>\",\n      \"msrp\": \"<number>\",\n      \"msrp_discount\": \"<number>\",\n      \"sales_discount\": \"<number>\",\n      \"total_discount\": \"<number>\",\n      \"partner_program_data\": [\n        {\n          \"partner_program_name\": \"<string>\",\n          \"partner_level_item_price\": \"<number>\",\n          \"partner_level_item_discount\": \"<number>\"\n        },\n        {\n          \"partner_program_name\": \"<string>\",\n          \"partner_level_item_price\": \"<number>\",\n          \"partner_level_item_discount\": \"<number>\"\n        }\n      ],\n      \"product_factors\": {\n        \"key_0\": \"<integer>\"\n      },\n      \"attributes\": {\n        \"key_0\": \"<string>\"\n      }\n    },\n    {\n      \"sku\": \"<string>\",\n      \"item_name\": \"<string>\",\n      \"bundle_ref_sku\": \"<string>\",\n      \"bundle_ref_id\": \"<integer>\",\n      \"list_price\": \"<number>\",\n      \"net_price_per_unit\": \"<number>\",\n      \"net_price\": \"<number>\",\n      \"msrp\": \"<number>\",\n      \"msrp_discount\": \"<number>\",\n      \"sales_discount\": \"<number>\",\n      \"total_discount\": \"<number>\",\n      \"partner_program_data\": [\n        {\n          \"partner_program_name\": \"<string>\",\n          \"partner_level_item_price\": \"<number>\",\n          \"partner_level_item_discount\": \"<number>\"\n        },\n        {\n          \"partner_program_name\": \"<string>\",\n          \"partner_level_item_price\": \"<number>\",\n          \"partner_level_item_discount\": \"<number>\"\n        }\n      ],\n      \"product_factors\": {\n        \"key_0\": \"<integer>\",\n        \"key_1\": \"<integer>\"\n      },\n      \"attributes\": {\n        \"key_0\": \"<string>\"\n      }\n    }\n  ],\n  \"opportunity_data\": {\n    \"external_opportunity_name\": \"<string>\",\n    \"opportunity_owner\": {\n      \"external_user_id\": \"<string>\",\n      \"email\": \"<string>\",\n      \"name\": \"<string>\",\n      \"login\": \"<string>\",\n      \"position\": \"<string>\",\n      \"phone\": \"<string>\",\n      \"mobile\": \"<string>\",\n      \"fax\": \"<string>\",\n      \"company\": \"<string>\",\n      \"street\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"country\": \"<string>\",\n      \"postal_code\": \"<string>\",\n      \"user_manager_login\": \"<string>\"\n    },\n    \"external_customer_id\": \"<string>\",\n    \"customer_name\": \"<string>\",\n    \"geo_code\": \"<string>\",\n    \"currency\": \"<string>\",\n    \"customer_shipping_address\": {\n      \"street\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"country\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    },\n    \"customer_billing_address\": {\n      \"street\": \"<string>\",\n      \"city\": \"<string>\",\n      \"state\": \"<string>\",\n      \"country\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    },\n    \"customer_contacts\": [\n      {\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\",\n        \"email\": \"<string>\",\n        \"salutation\": \"<string>\",\n        \"title\": \"<string>\",\n        \"phone\": \"<string>\",\n        \"account_name\": \"<string>\",\n        \"mailing_address\": \"<string>\",\n        \"primary_contact\": \"<boolean>\"\n      },\n      {\n        \"first_name\": \"<string>\",\n        \"last_name\": \"<string>\",\n        \"email\": \"<string>\",\n        \"salutation\": \"<string>\",\n        \"title\": \"<string>\",\n        \"phone\": \"<string>\",\n        \"account_name\": \"<string>\",\n        \"mailing_address\": \"<string>\",\n        \"primary_contact\": \"<boolean>\"\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "dfa1ab4f-3467-4a6d-84aa-3b58384ae25f",
+              "name": "Accepted. The quote generation process has been initiated.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quote",
+                    "generate-1"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"request_action\": \"publish\",\n  \"external_opportunity_id\": \"006J7000003wYhD\",\n  \"line_item_details\": \"all\",\n  \"playbook\": \"playbook_api\",\n  \"quote_name\": \"quote name\",\n  \"dealroom_publish_name\": \"Dealroom publish name\",\n  \"expiration_date\": 1793788799000,\n  \"document_type\": \"DealRoom\",\n  \"total_sales_discount\": 15,\n  \"timezone_offset\": 0,\n  \"partner_program\": [\n    {\n      \"partner_level_name\": \"Silver\",\n      \"program_name\": \"Program Name Silver 1\"\n    },\n    {\n      \"partner_level_name\": \"Gold\",\n      \"program_name\": \"Program Name Gold 1\"\n    },\n    {\n      \"partner_level_name\": \"Platinum\",\n      \"program_name\": \"Program Name Platinum 1\"\n    }\n  ],\n  \"quote_data\": [\n    {\n      \"group_id\": \"qg1\",\n      \"questions\": [\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"id2_vall;id2_val2;id2_val3\",\n          \"question_id_3\": \"id3_val\"\n        },\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"id2_valA;valB;val2\",\n          \"question_id_3\": \"id3_val\"\n        }\n      ]\n    },\n    {\n      \"group_id\": \"qg2\",\n      \"questions\": [\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"A;B;C\",\n          \"question_id_3\": \"some_val\"\n        },\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"A,D,N\",\n          \"question_id_3\": \"another_val\"\n        }\n      ]\n    }\n  ],\n  \"line_items\": [\n    {\n      \"sku\": \"product SKU\",\n      \"item_name\": \"Sweatpants\",\n      \"list_price\": 368,\n      \"net_price_per_unit\": 368,\n      \"net_price\": 1472,\n      \"msrp\": 0,\n      \"msrp_discount\": 0,\n      \"sales_discount\": 0,\n      \"total_discount\": 0,\n      \"product_factors\": {\n        \"Duration\": 2,\n        \"Quantity\": 2\n      },\n      \"attributes\": {\n        \"numeric PA\": \"50\",\n        \"currency PA\": \"50\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"status\": \"publish\",\n  \"dealhub_proposal_id\": \"Q-12927\",\n  \"dealhub_quote_id\": \"12345zWIwGV12344\",\n  \"dealroom_url\": \"https://dealroom.deahub.io/xxxxxxx\",\n  \"approval_flows\": true,\n  \"summary\": {\n    \"currency\": \"USD\",\n    \"total_list_price\": 458154.42,\n    \"total_net_price\": 238042.66,\n    \"total_discount\": 48.04,\n    \"total_sales_discount\": 0\n  },\n  \"line_items\": [\n    {\n      \"id\": \"12345zWIwGV12347\",\n      \"sku\": \"999451\",\n      \"bundle_ref\": \"\",\n      \"name\": \"Gold Shield Pack\",\n      \"list_price\": 50.04,\n      \"net_price\": 22500.02,\n      \"product_factors\": {\n        \"duration\": \"1.0\",\n        \"quantity\": \"1.0\"\n      },\n      \"total_discount\": 55,\n      \"additional_data\": {\n        \"primary_tag\": \"PS\",\n        \"msrp\": 50000.04,\n        \"msrp_discount\": 55,\n        \"user_price\": 22.02,\n        \"net_per_unit\": 22.02,\n        \"partner_discounts\": [],\n        \"sales_discount\": 55,\n        \"attributes\": {\n          \"ARR\": \"22.02\",\n          \"Customer Discount\": \"49.07\",\n          \"Item Status\": \"Active\",\n          \"End Reseller Price\": \"-\",\n          \"Inventory Category\": \"DEFAULT\",\n          \"Product Line\": \"Professional Services\"\n        }\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "34bba03b-0ce6-4106-994a-44f2fa356d90",
+              "name": "Bad Request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quote",
+                    "generate-1"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"request_action\": \"publish\",\n  \"external_opportunity_id\": \"006J7000003wYhD\",\n  \"line_item_details\": \"all\",\n  \"playbook\": \"playbook_api\",\n  \"quote_name\": \"quote name\",\n  \"dealroom_publish_name\": \"Dealroom publish name\",\n  \"expiration_date\": 1793788799000,\n  \"document_type\": \"DealRoom\",\n  \"total_sales_discount\": 15,\n  \"timezone_offset\": 0,\n  \"partner_program\": [\n    {\n      \"partner_level_name\": \"Silver\",\n      \"program_name\": \"Program Name Silver 1\"\n    },\n    {\n      \"partner_level_name\": \"Gold\",\n      \"program_name\": \"Program Name Gold 1\"\n    },\n    {\n      \"partner_level_name\": \"Platinum\",\n      \"program_name\": \"Program Name Platinum 1\"\n    }\n  ],\n  \"quote_data\": [\n    {\n      \"group_id\": \"qg1\",\n      \"questions\": [\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"id2_vall;id2_val2;id2_val3\",\n          \"question_id_3\": \"id3_val\"\n        },\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"id2_valA;valB;val2\",\n          \"question_id_3\": \"id3_val\"\n        }\n      ]\n    },\n    {\n      \"group_id\": \"qg2\",\n      \"questions\": [\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"A;B;C\",\n          \"question_id_3\": \"some_val\"\n        },\n        {\n          \"question_id_1\": \"idl_val\",\n          \"question_id_2\": \"A,D,N\",\n          \"question_id_3\": \"another_val\"\n        }\n      ]\n    }\n  ],\n  \"line_items\": [\n    {\n      \"sku\": \"product SKU\",\n      \"item_name\": \"Sweatpants\",\n      \"list_price\": 368,\n      \"net_price_per_unit\": 368,\n      \"net_price\": 1472,\n      \"msrp\": 0,\n      \"msrp_discount\": 0,\n      \"sales_discount\": 0,\n      \"total_discount\": 0,\n      \"product_factors\": {\n        \"Duration\": 2,\n        \"Quantity\": 2\n      },\n      \"attributes\": {\n        \"numeric PA\": \"50\",\n        \"currency PA\": \"50\"\n      }\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.dealhub.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "de4d6cd5-9c07-4a06-94a2-4d2cb31144cf",
+    "name": "Headless API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This API provides headless capabilities for managing the quote lifecycle within DealHub. It allows for the programmatic simulation and generation of quotes, as well as performing actions such as submitting for approval, publishing, and signing.\n\nAll requests require a secret Bearer Token in the `Authorization` header.",
+      "type": "text/plain"
+    }
+  }
+}

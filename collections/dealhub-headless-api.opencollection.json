@@ -1,0 +1,157 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Headless API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Headless Quoting",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Simulate a Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/quote/simulate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Synchronously calculates quote pricing and details based on the provided configuration without creating a persistent quote object in DealHub. Ideal for real-time price calculations.\n\nUse this endpoint to calculate real-time pricing and quote details without creating a permanent record in DealHub. You have to inform the product and configuration data to receive the calculated line items and a financial summary. \n\nTo run a simulation, your request must include a `version_id` to specify which prici"
+        },
+        {
+          "info": {
+            "name": "Generate a Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/quote/generate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an official quote record in DealHub, links it to a CRM opportunity, and initiates any required approval workflows based on your active CPQ version.\n\nThis is an asynchronous endpoint. When you send a request, the API provides an immediate response to confirm that the quote generation process has started. The full processing, including data synchronization with your CRM, happens in the background."
+        },
+        {
+          "info": {
+            "name": "Submit a Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/quote/:dealhub_quote_id/submit",
+            "params": [
+              {
+                "name": "dealhub_quote_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the quote in DealHub."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Asynchronously submits an existing `Draft` quote for approval."
+        },
+        {
+          "info": {
+            "name": "Publish a Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/quote/:dealhub_quote_id/publish",
+            "params": [
+              {
+                "name": "dealhub_quote_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the quote in DealHub."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Asynchronously publishes an existing `Ready to be sent` quote to a DealRoom."
+        },
+        {
+          "info": {
+            "name": "Sign a Quote Externally",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/quote/:dealhub_quote_id/sign_externally",
+            "params": [
+              {
+                "name": "dealhub_quote_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the quote in DealHub."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Asynchronously marks an existing quote as `Won`. The quote must be in a `Ready to be sent` or `Published` status."
+        },
+        {
+          "info": {
+            "name": "Get DealHub Quote ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v1/quote/id/:dealhub_proposal_id",
+            "params": [
+              {
+                "name": "dealhub_proposal_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the proposal in DealHub."
+              }
+            ]
+          },
+          "docs": "Retrieves the `dealhub_quote_id` using the `dealhub_proposal_id` (the ID visible in the UI)."
+        },
+        {
+          "info": {
+            "name": "Copy of Generate a Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/quote/generate-1",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an official quote record in DealHub, links it to a CRM opportunity, and initiates any required approval workflows based on your active CPQ version.\n\nThis is an asynchronous endpoint. When you send a request, the API provides an immediate response to confirm that the quote generation process has started. The full processing, including data synchronization with your CRM, happens in the background."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

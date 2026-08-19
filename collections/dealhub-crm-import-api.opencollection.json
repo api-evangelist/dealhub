@@ -1,0 +1,121 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "CRM Import API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "CRM Import",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Start CRM Import",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/accounts/crm-import",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Starts (or joins) a CRM import for the authenticated tenant. Accepts the list of buyer-account CRM ids to migrate; duplicate ids are ignored. If an import is already running for the tenant, its `request_id` is returned instead of starting a new one."
+        },
+        {
+          "info": {
+            "name": "Get CRM Import Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v1/accounts/crm-import/status",
+            "params": [
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "query",
+                "description": "ID of the import request. If omitted, the tenant's most-recent import is returned."
+              }
+            ]
+          },
+          "docs": "Retrieves the summary of an import: aggregate counts plus a flat list of per-id failures with reasons. This is the service to poll. When `request_id` is omitted, the tenant's most recent import is used."
+        },
+        {
+          "info": {
+            "name": "Get CRM Import Detail",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v1/accounts/crm-import/detail",
+            "params": [
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "query",
+                "description": "ID of the import request. If omitted, the tenant's most-recent import is returned."
+              }
+            ]
+          },
+          "docs": "Retrieves the full picture of an import: the same summary as the status service plus every buyer account and each of its contacts, each with its own state and (if failed) reason. Use this to see exactly which contacts within an account did or did not migrate. When `request_id` is omitted, the tenant's most recent import is used."
+        },
+        {
+          "info": {
+            "name": "Lookup CRM Import Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v1/accounts/crm-import/lookup",
+            "params": [
+              {
+                "name": "crm_id",
+                "value": "",
+                "type": "query",
+                "description": "The CRM id to resolve (account or contact)."
+              },
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "query",
+                "description": "ID of the import request. If omitted, the tenant's most-recent import is used."
+              }
+            ]
+          },
+          "docs": "Resolves a single CRM id within an import: whether it is a buyer account or a contact (or not part of the import), its state, and the failure reason if any. For a contact match, the buyer-account CRM id it belongs to is also returned."
+        },
+        {
+          "info": {
+            "name": "Retry CRM Import",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/accounts/crm-import/retry",
+            "params": [
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "query",
+                "description": "ID of the import request to retry. If omitted, the tenant's most-recent import is retried."
+              }
+            ]
+          },
+          "docs": "Re-runs the failed ids of an import (plus any unfinished ids from an interruption) under the same `request_id`. Already-imported accounts are skipped, so retrying is safe. No-op when there is nothing to reprocess. Like Start CRM Import, retry is asynchronous: it re-enqueues the failed ids and returns the `request_id` immediately — poll Get CRM Import Status (same `request_id`) for the outcome as the re-run progresses."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

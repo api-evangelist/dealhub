@@ -1,0 +1,119 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "CRM API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "CRM Integration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Authenticate User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/user/authenticate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Authenticates a user from an external CRM and returns a short-lived (60 seconds) one-time access token. This is a server-to-server call that uses a long-lived secret token for authorization. If the user does not exist in DealHub, a new user with a `Sales` role is created."
+        },
+        {
+          "info": {
+            "name": "Create Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1.1/quote/create",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new quote in DealHub and returns a URL to redirect the user to. This is a client-side call that must be authenticated with the one-time access token obtained from the `/user/authenticate` endpoint. This version supports subscription renewals via the `repeatable_groups` parameter."
+        },
+        {
+          "info": {
+            "name": "Open Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v2/quote/open",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves a URL for an existing quote in DealHub. The user can then be redirected to this URL to view or edit the quote. This call can optionally update opportunity information for quotes in 'draft' status."
+        },
+        {
+          "info": {
+            "name": "View Quotes for an Opportunity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v2/quotes",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves a URL that redirects the user to the **My Proposals** page for a specific opportunity, showing all associated quotes."
+        },
+        {
+          "info": {
+            "name": "View My Opportunities",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/opportunities",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves a URL that redirects the user to their main \"My Opportunities\" dashboard in DealHub."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

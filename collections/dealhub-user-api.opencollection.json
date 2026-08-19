@@ -1,0 +1,111 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "User API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "User Management",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get User by Login",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v1/user/login/:login",
+            "params": [
+              {
+                "name": "login",
+                "value": "",
+                "type": "path",
+                "description": "The login name of the user."
+              }
+            ]
+          },
+          "docs": "Retrieves a single user's details based on their login name. Fields with null values will not be included in the response."
+        },
+        {
+          "info": {
+            "name": "Get User by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v1/user/id/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique DealHub ID of the user."
+              }
+            ]
+          },
+          "docs": "Retrieves a single user's details based on their DealHub user ID. Fields with null values will not be included in the response."
+        },
+        {
+          "info": {
+            "name": "Get a List of Users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v1/users",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter users by their active or inactive status."
+              }
+            ]
+          },
+          "docs": "Retrieves a list of users. If no parameters are provided, it will retrieve all users. Fields with null values will not be included in the response."
+        },
+        {
+          "info": {
+            "name": "Update Users (v1)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.dealhub.io/api/v1/users",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates one or more existing users in DealHub. This operation identifies users by their `login`, which is an immutable field."
+        },
+        {
+          "info": {
+            "name": "Create or Update Users (v2)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.dealhub.io/api/v2/users",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates new users or updates existing ones. The operation uses the `login` field to identify existing users."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

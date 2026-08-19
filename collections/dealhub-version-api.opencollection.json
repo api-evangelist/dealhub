@@ -1,0 +1,504 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Version API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Version Management",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Version by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v1/version/id/:version_id",
+            "params": [
+              {
+                "name": "version_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the version."
+              }
+            ]
+          },
+          "docs": "Retrieve a specific Version based on its unique DealHub ID."
+        },
+        {
+          "info": {
+            "name": "Get Version by Name",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v1/version/name/:version_name",
+            "params": [
+              {
+                "name": "version_name",
+                "value": "",
+                "type": "path",
+                "description": "The name of the version."
+              }
+            ]
+          },
+          "docs": "Retrieve a specific Version based on its name."
+        },
+        {
+          "info": {
+            "name": "Get a List of Versions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v1/versions",
+            "params": [
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Search for Version(s) based on status."
+              }
+            ]
+          },
+          "docs": "Retrieve a list of Versions, with an option to filter by status. If no parameters are provided, it returns all versions."
+        },
+        {
+          "info": {
+            "name": "Duplicate a Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/version/duplicate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Asynchronously creates a new Version entity based on an existing one. This operation returns a `request_id` for tracking."
+        },
+        {
+          "info": {
+            "name": "Activate a Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/version/activate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Asynchronously activates a `DRAFT` Version. This operation returns a `request_id` for tracking."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Playbook",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Playbook Data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/version/:versionName/playbook/:playbookId/export",
+            "params": [
+              {
+                "name": "versionName",
+                "value": "",
+                "type": "path",
+                "description": "Version name."
+              },
+              {
+                "name": "playbookId",
+                "value": "",
+                "type": "path",
+                "description": "Playbook name (not the Playbook display name)."
+              }
+            ]
+          },
+          "docs": "Retrieves the details of the requested Playbook in a specific version, exporting the Playbook configuration and data in JSON format.\n\nDate-type attributes and playbook questions are returned in the format `yyyy-mm-dd hh:mm:ss`.\n\nThe result might differ, depending on the requested features."
+        },
+        {
+          "info": {
+            "name": "Get Generate Quote Template",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/version/:versionId/playbook/:playbookId/generate-quote-template",
+            "params": [
+              {
+                "name": "versionId",
+                "value": "",
+                "type": "path",
+                "description": "Version name."
+              },
+              {
+                "name": "playbookId",
+                "value": "",
+                "type": "path",
+                "description": "Playbook name (not the Playbook display name)."
+              }
+            ]
+          },
+          "docs": "Returns a preformatted JSON template for API quote generation based on the Playbook structure. Use this template as the starting point for Generate Quote API requests.\n\nDate-type attributes and playbook questions are returned in the format `yyyy-mm-dd hh:mm:ss`.\n\nTemplate generation rules:\n- The template includes all required API fields.\n- The template includes default values if they exist. Otherwise, it uses the first available answer.\n- The template excludes calculated questions."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Product Catalog",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Products of a Version",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v1/version/:version_id/products",
+            "params": [
+              {
+                "name": "version_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Version."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The number of products to skip for pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of products to return. If the requested `limit` value exceeds the maximum allowed limit, the system will automatically cap the result set at the maximum limit."
+              },
+              {
+                "name": "product_option",
+                "value": "",
+                "type": "query",
+                "description": "Specify whether to fetch all products or only new/updated products."
+              },
+              {
+                "name": "pricing_option",
+                "value": "",
+                "type": "query",
+                "description": "For products with multiple fixed prices, specifies which price to return (Minimum, Maximum, or First defined)."
+              }
+            ]
+          },
+          "docs": "Retrieves a paginated list of products for a specific version, returning basic product attributes and price details.\n- `DRAFT` Status: Returns the full product list.\n- `ACTIVE`/`DEACTIVATED` Status: Can return either all products or only products that were new or modified compared to the previously active version."
+        },
+        {
+          "info": {
+            "name": "Get Products by SKU",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/version/product_by_sku",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Retrieves basic details for a specific list of products from the catalog based on their SKUs.\n\n> 📘\n> If some SKUs could not be found in a specific Version the system will return status 200, with error in the `info` structure."
+        },
+        {
+          "info": {
+            "name": "Extract Products to Excel",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v1/version/products_excel/:version_id",
+            "params": [
+              {
+                "name": "version_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Version."
+              }
+            ]
+          },
+          "docs": "Retrieves all product-related information for a specific version in an Excel file format."
+        },
+        {
+          "info": {
+            "name": "Get Product Catalog",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v1/version/:version_id/products_catalog",
+            "params": [
+              {
+                "name": "version_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Version."
+              },
+              {
+                "name": "sku",
+                "value": "",
+                "type": "query",
+                "description": "One or more product SKUs to filter the result. Can be used multiple times (e.g., `?sku=SKU001&sku=SKU002`).\n\nIf none of the provided SKUs match, the service will return an empty list.\n\nIn case you inform a list of SKUs, ‘limit’ and ‘offset’ parameters on request will be ignored if provided."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The number of products to skip for pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of products to return."
+              }
+            ]
+          },
+          "docs": "Retrieves paginated information about products and bundles in the catalog, including attributes, assignments, and pricing details."
+        },
+        {
+          "info": {
+            "name": "Create or Update Product Catalog",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/version/:version_id/products_catalog",
+            "params": [
+              {
+                "name": "version_id",
+                "value": "",
+                "type": "path",
+                "description": "The identifier of the 'DRAFT' version to upload the catalog to."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint asynchronously uploads a complete product catalog to a `DRAFT` version. Each product and bundle is created or updated based on the details in the request JSON.\n\nIf a SKU already exists in the catalog, it will be completely replaced with the new data from the request, including its pricing, assignments, and other details. If the replacement process fails for any reason, the system will revert to the old product definition.\n\nThis operation returns a `request_id` for you to track the "
+        },
+        {
+          "info": {
+            "name": "Update Product Catalog Items",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.dealhub.io/api/v1/version/:version_id/products_catalog",
+            "params": [
+              {
+                "name": "version_id",
+                "value": "",
+                "type": "path",
+                "description": "The identifier of the `DRAFT` version whose catalog should be updated."
+              },
+              {
+                "name": "mode",
+                "value": "",
+                "type": "query",
+                "description": "The update mode. `UPDATE` merges the provided data with existing data for each SKU; unspecified data is preserved. `REPLACE` replaces all entries within each included data category; entries not present in the request are removed from that category."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Asynchronously updates specific data elements for existing SKUs in a `DRAFT` version's product catalog. Unlike the POST endpoint, this endpoint **does not** create new products — it only modifies data elements for SKUs that already exist in the catalog.\n\nThis endpoint operates in one of two modes, defined by the `mode` query parameter:\n\n**UPDATE mode**: Only the data elements explicitly included in the request body are added or updated. Any existing data not referenced in the request remains unc"
+        },
+        {
+          "info": {
+            "name": "Delete All Products from Catalog",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.dealhub.io/api/v1/version/:version_id/products_catalog/all",
+            "params": [
+              {
+                "name": "version_id",
+                "value": "",
+                "type": "path",
+                "description": "The identifier of the 'DRAFT' version."
+              }
+            ]
+          },
+          "docs": "Deletes all products and the entire product hierarchy tree from a `DRAFT` version.\n* This operation can only be triggered for a catalog version with a **`DRAFT`** status.\n* Requests made for an `ACTIVE` or `DEACTIVATED` catalog version will fail with a `400 Bad Request` HTTP error."
+        },
+        {
+          "info": {
+            "name": "Delete Specific Products by SKU",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.dealhub.io/api/v1/version/:version_id/products_catalog/by_sku",
+            "params": [
+              {
+                "name": "version_id",
+                "value": "",
+                "type": "path",
+                "description": "The identifier of the `DRAFT` version."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deletes specific products from the product catalog of a `DRAFT` version. \n* This operation can only be triggered for a catalog version with a **`DRAFT`** status.\n* Requests made for an `ACTIVE` or `DEACTIVATED` catalog version will fail with a `400 Bad Request` HTTP error.\n\nA product cannot be deleted if it is:\n* A parent to another product in the hierarchy.\n* Marked as mandatory.\n* Set as an alternative in the hierarchy tree."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Product Hierarchy (Beta)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Product Hierarchy",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/beta/version/:version_id/product-hierarchy",
+            "params": [
+              {
+                "name": "version_id",
+                "value": "",
+                "type": "path",
+                "description": "The identifier of the version."
+              }
+            ]
+          },
+          "docs": "Retrieves the product hierarchy tree for a specific version."
+        },
+        {
+          "info": {
+            "name": "Create or Update Product Hierarchy",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/beta/version/:version_id/product-hierarchy",
+            "params": [
+              {
+                "name": "version_id",
+                "value": "",
+                "type": "path",
+                "description": "The identifier of the 'DRAFT' version."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Asynchronously creates or updates the product hierarchy for a 'DRAFT' version. This operation returns a `request_id` for tracking."
+        },
+        {
+          "info": {
+            "name": "Delete from Product Hierarchy",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.dealhub.io/api/beta/version/:version_id/product-hierarchy",
+            "params": [
+              {
+                "name": "version_id",
+                "value": "",
+                "type": "path",
+                "description": "The identifier of the 'DRAFT' version."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Asynchronously deletes specified items (products, bundles, or labels) from the product hierarchy of a 'DRAFT' version."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Asynchronous Operations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Asynchronous Request Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v1/request/:request_id/status",
+            "params": [
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the asynchronous request."
+              }
+            ]
+          },
+          "docs": "Polls and retrieves the current status of a specific asynchronous request (e.g., duplicate version, activate version)."
+        },
+        {
+          "info": {
+            "name": "Get Asynchronous Request Execution Summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v1/request/:request_id/summary",
+            "params": [
+              {
+                "name": "request_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the asynchronous request."
+              }
+            ]
+          },
+          "docs": "Retrieves a summary of a completed asynchronous process, including success, error, and warning counts. This is particularly useful for operations like product catalog uploads."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

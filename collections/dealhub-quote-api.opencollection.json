@@ -1,0 +1,151 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Quote API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Quote Management",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a Specific Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v2/quote/:quote_id",
+            "params": [
+              {
+                "name": "quote_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier for the quote in DealHub."
+              },
+              {
+                "name": "feature",
+                "value": "",
+                "type": "query",
+                "description": "Specify which parts of the quote data to retrieve. This parameter can be used multiple times.\nValid options are:\n* `info`\n* `summary`\n* `deal_room_info`\n* `line_items`\n* `answers`\n* `approvals`\n* `all`"
+              },
+              {
+                "name": "external_identifier_flag",
+                "value": "",
+                "type": "query",
+                "description": "If true, the `quote_id` in the path refers to the `external_quote_id` from the CRM."
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a single existing quote by its DealHub Quote ID.\n\nThis endpoint allows you to fetch specific data points for any quote in DealHub. The level of detail in the response is controlled by the **`feature`** query parameter.\n\n-   **Minimal Response**: If you don't specify any `feature` parameters, the API returns a basic response containing only the `dealhub_quote_id`, its current `status`, and the `quote_upgrade_required` flag.\n-   **Detailed Response**: To get more informati"
+        },
+        {
+          "info": {
+            "name": "Get a List of Quotes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v2/quotes",
+            "params": [
+              {
+                "name": "external_opportunity_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter quotes associated with a specific CRM opportunity ID."
+              },
+              {
+                "name": "feature",
+                "value": "",
+                "type": "query",
+                "description": "Specify which parts of the quote data to retrieve for each quote in the list. This parameter can be used multiple times.\nValid options are:\n* `info`\n* `summary`\n* `deal_room_info`\n* `line_items`\n* `answers`\n* `approvals`\n* `all`"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The number of quotes to skip for pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of quotes to return."
+              }
+            ]
+          },
+          "docs": "Retrieves a list of quotes, with options for filtering and pagination. \n\nUse the `external_opportunity_id` query parameter to retrieve only the quotes linked to a specific opportunity in your CRM.\n\nThe level of detail returned for each quote is controlled by the `feature` query parameter.\n\nUse the `offset` and `limit` parameters to page through large sets of quotes. The default `limit` is 50 quotes per request.\n\nIf no quotes match the specified criteria, the API will return a `200 OK` status wit"
+        },
+        {
+          "info": {
+            "name": "Create an Opportunity",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/opportunity",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new opportunity within DealHub, typically used for renewal automation."
+        },
+        {
+          "info": {
+            "name": "Get Quote Document",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v1/quote/:dealhub_quote_id/document",
+            "params": [
+              {
+                "name": "dealhub_quote_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique DealHub ID of the quote."
+              },
+              {
+                "name": "document_type",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the desired document format."
+              }
+            ]
+          },
+          "docs": "Retrieves the output document (e.g., PDF, Word) for a submitted quote. Use this endpoint to archive contracts or integrate quote documents into other systems.\n\nBy default, the endpoint returns the document in the format and template that the salesperson originally generated. You can use the optional `document_type` query parameter to request the document in a different format (e.g., `PDF`, `WORD`). However, this is only possible if the requested format has been enabled for the quote's playbook i"
+        },
+        {
+          "info": {
+            "name": "Get DealRoom Signers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.dealhub.io/api/v1/dealroom/:opportunity_id",
+            "params": [
+              {
+                "name": "opportunity_id",
+                "value": "",
+                "type": "path",
+                "description": "The ID of the CRM opportunity."
+              }
+            ]
+          },
+          "docs": "Retrieves information about who has signed a contract within a DealRoom for a specific opportunity."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

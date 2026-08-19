@@ -1,0 +1,778 @@
+{
+  "item": [
+    {
+      "id": "68c7e294-e2e4-4024-92c0-315df770b34a",
+      "name": "Partner Integration",
+      "description": {
+        "content": "Endpoints for integrating Partner Relationship Management (PRM) systems.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ec40b672-8aaa-45c5-9ddd-0f46d9246d85",
+          "name": "Authenticate Partner User",
+          "request": {
+            "name": "Authenticate Partner User",
+            "description": {
+              "content": "Authenticates a partner user from a PRM system and returns a short-lived (60 seconds) one-time access token. This is a server-to-server call that does not require a bearer token in the header, instead, the long-lived authentication key is sent in the request body.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "authenticate",
+                "user"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                  "type": "any",
+                  "value": "{{your-dealhub-instance}}",
+                  "key": "your-dealhub-instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"authentication\": \"<string>\",\n  \"user_information\": {\n    \"type\": \"<string>\",\n    \"user_id\": \"<string>\",\n    \"login\": \"<string>\",\n    \"email\": \"<email>\",\n    \"name\": \"<string>\",\n    \"position\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"mobile\": \"<string>\",\n    \"company\": \"<string>\",\n    \"street\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"country\": \"<string>\",\n    \"postal_code\": \"<string>\",\n    \"profile_img\": \"<uri>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "72c02c35-b66c-43fc-a96b-9c3fb433c601",
+              "name": "Authentication successful.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authenticate",
+                    "user"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authentication\": \"480zZQNXR8zoTicG.7MIkom0ETwBjYWzi\",\n  \"user_information\": {\n    \"type\": \"partner\",\n    \"user_id\": \"qwerty1234356\",\n    \"login\": \"david.s@domain.com\",\n    \"email\": \"david.s@domain.com\",\n    \"name\": \"David Solomon\",\n    \"position\": \"Sales\",\n    \"phone\": \"03-12345678\",\n    \"mobile\": \"058-12345678\",\n    \"fax\": \"03-12345679\",\n    \"company\": \"Acme Partnerl\",\n    \"street\": \"12nd Broadway\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"country\": \"USA\",\n    \"postal_code\": \"1234567\",\n    \"profile_img\": \"https://domain.com/img.png\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"access_token\": \"4D114DAD97361C84B154A828FF991\",\n  \"errors\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b27ed647-c2ef-423d-ad8e-c357adc0569b",
+              "name": "Forbidden. The authentication key is invalid or the request is from an untrusted IP.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authenticate",
+                    "user"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"authentication\": \"480zZQNXR8zoTicG.7MIkom0ETwBjYWzi\",\n  \"user_information\": {\n    \"type\": \"partner\",\n    \"user_id\": \"qwerty1234356\",\n    \"login\": \"david.s@domain.com\",\n    \"email\": \"david.s@domain.com\",\n    \"name\": \"David Solomon\",\n    \"position\": \"Sales\",\n    \"phone\": \"03-12345678\",\n    \"mobile\": \"058-12345678\",\n    \"fax\": \"03-12345679\",\n    \"company\": \"Acme Partnerl\",\n    \"street\": \"12nd Broadway\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"country\": \"USA\",\n    \"postal_code\": \"1234567\",\n    \"profile_img\": \"https://domain.com/img.png\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b10d3fbb-357f-4c5c-b6e1-c5aea3296ca7",
+          "name": "Get URL to Create a New Quote",
+          "request": {
+            "name": "Get URL to Create a New Quote",
+            "description": {
+              "content": "Retrieves a URL that redirects an authenticated partner user to the quote creation page within DealHub for a specific opportunity. This is a client-side call using the one-time access token.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "create",
+                "quote"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                  "type": "any",
+                  "value": "{{your-dealhub-instance}}",
+                  "key": "your-dealhub-instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"opportunity_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f038a881-ff2a-476a-9773-52f134bd492e",
+              "name": "Success. The response contains the URL for redirection.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "create",
+                    "quote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"opportunity_id\": \"x444sh231hr2jkk2\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"https://service-eul.dealhub.io/.../\",\n  \"errors\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2dd1d09b-81cc-41de-82e1-328b68e179b3",
+              "name": "Unauthenticated. The one-time access token is missing, invalid, or expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "create",
+                    "quote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"opportunity_id\": \"x444sh231hr2jkk2\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e6a471a4-20cc-4b6a-9f6c-8ba3f3ed0e53",
+          "name": "Get URL to Open an Existing Quote",
+          "request": {
+            "name": "Get URL to Open an Existing Quote",
+            "description": {
+              "content": "Retrieves a URL that redirects an authenticated partner user to an existing quote within DealHub. This is a client-side call using the one-time access token.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "open",
+                "quote"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                  "type": "any",
+                  "value": "{{your-dealhub-instance}}",
+                  "key": "your-dealhub-instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"opportunity_id\": \"<string>\",\n  \"quote_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "917d2d10-1e1a-4074-9d72-8b3f66a4e994",
+              "name": "Success. The response contains the URL for redirection.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "open",
+                    "quote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"opportunity_id\": \"lkdash231hr2jkk2\",\n  \"quote_id\": \"urhnvfkjsfdfdgrfdnbkg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"http://WrJKUu.bbyydXZH4Ea-W66S\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0c97a5e7-bee6-48ea-bbd3-b4a53cb29f40",
+              "name": "Unauthenticated. The one-time access token is missing, invalid, or expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "open",
+                    "quote"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"opportunity_id\": \"lkdash231hr2jkk2\",\n  \"quote_id\": \"urhnvfkjsfdfdgrfdnbkg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "924d4555-6329-4383-8e42-cc64f747aa97",
+          "name": "Get URL to View an Opportunity's Quotes",
+          "request": {
+            "name": "Get URL to View an Opportunity's Quotes",
+            "description": {
+              "content": "Retrieves a URL that redirects an authenticated partner user to the opportunity details page in DealHub, listing all associated quotes. This is a client-side call using the one-time access token.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "open",
+                "opportunity"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                  "type": "any",
+                  "value": "{{your-dealhub-instance}}",
+                  "key": "your-dealhub-instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"opportunity_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "76d68722-be42-45c2-a3b4-e847b374f107",
+              "name": "Success. The response contains the URL for redirection.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "open",
+                    "opportunity"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"opportunity_id\": \"lkdash231hr2jkk2\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"url\": \"http://WeHSovrbhhlKWUvvQMGvs.cafsEI8VQDEv5OzPiUcbvkKE.z8mTlcJ1DglO494EOhUJow6CTazcdwPZ.GimQa3fzeC0xXS3iIpIiTU7u0HRlJ\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "adeb8076-0952-410f-9a49-0c56b977b850",
+              "name": "Unauthenticated. The one-time access token is missing, invalid, or expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "open",
+                    "opportunity"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"opportunity_id\": \"lkdash231hr2jkk2\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "app",
+      "key": "your-dealhub-instance"
+    },
+    {
+      "type": "string",
+      "value": "https://api.dealhub.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "26db7620-09df-462f-b00d-daeed7d4fc89",
+    "name": "Partner API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This API allows users from Partner Relationship Management (PRM) systems and partner portals to securely access DealHub's CPQ functionality. The integration follows a two-request flow:\n1.  **Authentication (Server-to-Server):** The PRM system makes a server-side call to `/api/v1/authenticate/user` using a long-lived secret key to get a short-lived (60 seconds) one-time access token for a specific partner user.\n2.  **Open DealHub CPQ (Client-Side):** The PRM's client-side application uses the one-time access token to make a request to a DealHub endpoint (e.g., `/api/v1/create/quote`). DealHub returns a unique URL. The PRM should then redirect the user's browser to this URL, giving them a seamless and authenticated session in the DealHub portal.",
+      "type": "text/plain"
+    }
+  }
+}

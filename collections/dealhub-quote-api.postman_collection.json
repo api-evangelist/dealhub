@@ -1,0 +1,1244 @@
+{
+  "item": [
+    {
+      "id": "558f205c-89bb-4dc6-8fbf-ec6756b70344",
+      "name": "Quote Management",
+      "description": {
+        "content": "Endpoints for retrieving and managing quotes, opportunities, and related documents.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "892a19fb-f0de-4a2c-9331-82d6c07c827e",
+          "name": "Get a Specific Quote",
+          "request": {
+            "name": "Get a Specific Quote",
+            "description": {
+              "content": "Retrieves the details of a single existing quote by its DealHub Quote ID.\n\nThis endpoint allows you to fetch specific data points for any quote in DealHub. The level of detail in the response is controlled by the **`feature`** query parameter.\n\n-   **Minimal Response**: If you don't specify any `feature` parameters, the API returns a basic response containing only the `dealhub_quote_id`, its current `status`, and the `quote_upgrade_required` flag.\n-   **Detailed Response**: To get more information, you must include one or more `feature` query parameters in your request.\n\nIf a Draft quote was created using an older one, now-inactive version, the `quote_upgrade_required` flag will be `true`. When this occurs, the API will not return any requested `feature` data for that quote.\n\n> 📘 Date Formats\n>\n> All date values in the response are returned in `yyyy-mm-dd hh:mm:ss` format.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "quote",
+                ":quote_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "feature",
+                  "value": "<string>",
+                  "description": "Specify which parts of the quote data to retrieve. This parameter can be used multiple times.\nValid options are:\n* `info`\n* `summary`\n* `deal_room_info`\n* `line_items`\n* `answers`\n* `approvals`\n* `all`"
+                },
+                {
+                  "disabled": false,
+                  "key": "feature",
+                  "value": "<string>",
+                  "description": "Specify which parts of the quote data to retrieve. This parameter can be used multiple times.\nValid options are:\n* `info`\n* `summary`\n* `deal_room_info`\n* `line_items`\n* `answers`\n* `approvals`\n* `all`"
+                },
+                {
+                  "disabled": false,
+                  "key": "external_identifier_flag",
+                  "value": "false",
+                  "description": "If true, the `quote_id` in the path refers to the `external_quote_id` from the CRM."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "quote_id",
+                  "description": "(Required) The unique identifier for the quote in DealHub."
+                },
+                {
+                  "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                  "type": "any",
+                  "value": "{{your-dealhub-instance}}",
+                  "key": "your-dealhub-instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6f963bce-e479-4e0c-a410-dcc2706b7ebc",
+              "name": "Success. Returns the detailed quote object.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "quote",
+                    ":quote_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "feature",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "feature",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "external_identifier_flag",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quote_id",
+                      "description": "(Required) The unique identifier for the quote in DealHub."
+                    },
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"dealhub_quote_id\": \"12345zWIwGV12344\",\n  \"status\": \"ReadyToBeSent\",\n  \"quote_upgrade_required\\\"\": false,\n  \"info\": {\n    \"external_opportunity_id\": \"2077636\",\n    \"external_quote_id\": \"\",\n    \"external_customer_id\": \"101008\",\n    \"customer_id\": \"6951040\",\n    \"account_name\": \"Example Ltd\",\n    \"contact_name\\\"\": null,\n    \"contact_email\\\"\": \"\",\n    \"dealhub_opportunity_id\": \"12345zWIwGV12345\",\n    \"dealhub_quote_name\": \"3 year quote\",\n    \"dealhub_quote_number\": \"Q_101\",\n    \"duplicate_from_quote\": \"\",\n    \"primary_quote\\\"\": false,\n    \"created_by\": \"antony@mydomain.com\",\n    \"creation_date\": \"2022-04-11 07:08:59\",\n    \"submitted_by\": \"antony@mydomain.com\",\n    \"submission_date\": \"2022-04-11 07:19:16\",\n    \"expiration_date\": \"2022-05-11 09:04:02\",\n    \"geo_code\": \"EMEA\",\n    \"currency\": \"USD\",\n    \"playbook\": \"Playbook\",\n    \"version_id\": \"12345zWIWGV12346\"\n  },\n  \"summary\": {\n    \"currency\": \"USD\",\n    \"total_list_price\": 458154.42,\n    \"total_net_price\": 238042.66,\n    \"total_discount\": 48.04,\n    \"sales_discount\": 0\n  },\n  \"line_items\\\"\": [\n    {\n      \"id\": \"12345zWIwGV12347\",\n      \"sku\": \"999451\",\n      \"bundle_ref\": \"\",\n      \"name\": \"Gold Shield Pack\",\n      \"primary_tag\": \"PS\",\n      \"msrp\": 50000.04,\n      \"msrp_discount\": 55,\n      \"list_price\": 50.04,\n      \"user_price\": 22.02,\n      \"net_per_unit\": 22.02,\n      \"partner_discounts\": [],\n      \"sales_discount\": 55,\n      \"total_discount\": 55,\n      \"net_price\": 22500.02,\n      \"product_factors\": {\n        \"duration\": \"1.0\",\n        \"quantity\": \"1.0\"\n      },\n      \"attributes\": {\n        \"ARR\": \"22.02\",\n        \"Customer Discount\": \"49.07\",\n        \"Item Status\": \"Active\",\n        \"End Reseller Price\\\"\": \"-\",\n        \"Inventory Category\": \"DEFAULT\",\n        \"Product Line\": \"Professional Services\"\n      }\n    }\n  ],\n  \"answers\": [\n    {\n      \"system_id\": \"12345zWIwGV12349\",\n      \"system_name\": \"3yr\",\n      \"group_id\": \"SE_DISCOUNT\",\n      \"group_name\": \"SE Discount\",\n      \"question_id\": \"Distibrutor Discount\",\n      \"question\\\"\": \"<font face=\\\"Arial\\\" color=#36749D>Distribution Discount</font>\",\n      \"answer\": \"55\"\n    },\n    {\n      \"system_id\": \"12345zWIWGV12349\",\n      \"system_name\": \"3yr\",\n      \"group_id\": \"SE_DISCOUNT\",\n      \"group_name\": \"SE Discount\",\n      \"question_id\": \"Special discount\",\n      \"question\": \"<font face=\\\"Arial\\\" color=#36749D>Advanced Options</font>\",\n      \"answer\": \"\\\"No\\\"\"\n    },\n    {\n      \"system_id\": \"12345zWIWGV12349\",\n      \"system_name\": \"3yr\",\n      \"group_id\": \"Line\",\n      \"group_name\": \"D-Line\",\n      \"question_id\": \"Multimode\",\n      \"question\\\"\": \"Multimode\",\n      \"answer\": \"0\"\n    }\n  ],\n  \"approvals\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7cd69fa2-b262-4cb7-85bb-91442fde6931",
+              "name": "Bad Request. The quote is in draft status or the requested document type is not supported.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "quote",
+                    ":quote_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "feature",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "feature",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "external_identifier_flag",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quote_id",
+                      "description": "(Required) The unique identifier for the quote in DealHub."
+                    },
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "0dadd952-a6ee-44b1-93c0-98380478d3bd",
+              "name": "Forbidden. Invalid or missing authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "quote",
+                    ":quote_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "feature",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "feature",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "external_identifier_flag",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "quote_id",
+                      "description": "(Required) The unique identifier for the quote in DealHub."
+                    },
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e0e092ef-6332-46cd-9af5-8c14a98d2dbe",
+          "name": "Get a List of Quotes",
+          "request": {
+            "name": "Get a List of Quotes",
+            "description": {
+              "content": "Retrieves a list of quotes, with options for filtering and pagination. \n\nUse the `external_opportunity_id` query parameter to retrieve only the quotes linked to a specific opportunity in your CRM.\n\nThe level of detail returned for each quote is controlled by the `feature` query parameter.\n\nUse the `offset` and `limit` parameters to page through large sets of quotes. The default `limit` is 50 quotes per request.\n\nIf no quotes match the specified criteria, the API will return a `200 OK` status with an empty `quotes` array.\n\n> 📘 Date Formats\n>\n> All date values in the response are returned in `yyyy-mm-dd hh:mm:ss` format.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "quotes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "external_opportunity_id",
+                  "value": "<string>",
+                  "description": "Filter quotes associated with a specific CRM opportunity ID."
+                },
+                {
+                  "disabled": false,
+                  "key": "feature",
+                  "value": "<string>",
+                  "description": "Specify which parts of the quote data to retrieve for each quote in the list. This parameter can be used multiple times.\nValid options are:\n* `info`\n* `summary`\n* `deal_room_info`\n* `line_items`\n* `answers`\n* `approvals`\n* `all`"
+                },
+                {
+                  "disabled": false,
+                  "key": "feature",
+                  "value": "<string>",
+                  "description": "Specify which parts of the quote data to retrieve for each quote in the list. This parameter can be used multiple times.\nValid options are:\n* `info`\n* `summary`\n* `deal_room_info`\n* `line_items`\n* `answers`\n* `approvals`\n* `all`"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<integer>",
+                  "description": "The number of quotes to skip for pagination."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "The maximum number of quotes to return."
+                }
+              ],
+              "variable": [
+                {
+                  "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                  "type": "any",
+                  "value": "{{your-dealhub-instance}}",
+                  "key": "your-dealhub-instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c0759b13-1e4a-4855-9552-22d2d9fe94de",
+              "name": "Success. Returns a paginated list of quotes.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "quotes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "external_opportunity_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "feature",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "feature",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"info\": {\n    \"more_results_matching_the_request\": true,\n    \"offset\": \"1\",\n    \"limit\": \"25\"\n  },\n  \"quotes\": [\n    {\n      \"dealhub_quote_id\": \"12345zWIwGV12344\",\n      \"status\": \"ReadyToBeSent\",\n      \"quote_upgrade_required\": false\n    },\n    {\n      \"dealhub_quote_id\": \"12345zWIwGV12347\",\n      \"status\": \"Draft\",\n      \"quote_upgrade_required\\\"\": true\n    },\n    {\n      \"dealhub_quote_id\": \"12345zWIwGV12349\",\n      \"status\": \"Draft\",\n      \"quote_upgrade_required\\\"\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "810e017a-2253-48da-806f-f2514d4f18fc",
+              "name": "Forbidden. Invalid or missing authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "quotes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "external_opportunity_id",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "feature",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "feature",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9d42e82a-826e-4cd8-a01f-cefafc72ec8f",
+          "name": "Create an Opportunity",
+          "request": {
+            "name": "Create an Opportunity",
+            "description": {
+              "content": "Creates a new opportunity within DealHub, typically used for renewal automation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "opportunity"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                  "type": "any",
+                  "value": "{{your-dealhub-instance}}",
+                  "key": "your-dealhub-instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"external_opportunity_id\": \"<string>\",\n  \"external_opportunity_name\": \"<string>\",\n  \"opportunity_owner\": {\n    \"external_user_id\": \"<string>\",\n    \"email\": \"<email>\",\n    \"name\": \"<string>\",\n    \"login\": \"<string>\",\n    \"position\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"mobile\": \"<string>\",\n    \"fax\": \"<string>\",\n    \"company\": \"<string>\",\n    \"street\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"country\": \"<string>\",\n    \"postal_code\": \"<string>\",\n    \"user_manager_login\": \"<string>\"\n  },\n  \"currency\": \"<string>\",\n  \"external_customer_id\": \"<string>\",\n  \"customer_name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0afeae48-af42-4db3-a853-cd75451e7b0b",
+              "name": "Success. The opportunity was created.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "opportunity"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"external_opportunity_id\": \"vadim-test-01\",\n  \"external_opportunity_name\\\"\": \"vadim-test-01-opp\",\n  \"opportunity_owner\": {\n    \"login\": \"liotr\",\n    \"external_user_id\": \"11\",\n    \"email\": \"vadim@myDomain.io\",\n    \"name\": \"Vadim T\",\n    \"position\": \"Sales\",\n    \"phone\": \"03-12345678\",\n    \"mobile\": \"051-12345678\",\n    \"fax\": \"03-12345679\",\n    \"company\": \"Acme Partner1\",\n    \"street\": \"12nd Broadway\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"country\": \"USA\",\n    \"postal_code\": \"1234567\",\n    \"user_manager_login\": \"manager@domain.com\"\n  },\n  \"currency\": \"USD\",\n  \"external_customer_id\": \"br768\",\n  \"customer_name\": \"Vadim Test1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "04d52b96-2201-4b2a-96a4-6703b44b4d58",
+              "name": "Bad Request. The opportunity with the specified ID already exists or the payload is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "opportunity"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"external_opportunity_id\": \"vadim-test-01\",\n  \"external_opportunity_name\\\"\": \"vadim-test-01-opp\",\n  \"opportunity_owner\": {\n    \"login\": \"liotr\",\n    \"external_user_id\": \"11\",\n    \"email\": \"vadim@myDomain.io\",\n    \"name\": \"Vadim T\",\n    \"position\": \"Sales\",\n    \"phone\": \"03-12345678\",\n    \"mobile\": \"051-12345678\",\n    \"fax\": \"03-12345679\",\n    \"company\": \"Acme Partner1\",\n    \"street\": \"12nd Broadway\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"country\": \"USA\",\n    \"postal_code\": \"1234567\",\n    \"user_manager_login\": \"manager@domain.com\"\n  },\n  \"currency\": \"USD\",\n  \"external_customer_id\": \"br768\",\n  \"customer_name\": \"Vadim Test1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e3fdea1b-5c02-4fdf-95a2-fdb4e904980d",
+              "name": "Forbidden. Invalid or missing authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "opportunity"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"external_opportunity_id\": \"vadim-test-01\",\n  \"external_opportunity_name\\\"\": \"vadim-test-01-opp\",\n  \"opportunity_owner\": {\n    \"login\": \"liotr\",\n    \"external_user_id\": \"11\",\n    \"email\": \"vadim@myDomain.io\",\n    \"name\": \"Vadim T\",\n    \"position\": \"Sales\",\n    \"phone\": \"03-12345678\",\n    \"mobile\": \"051-12345678\",\n    \"fax\": \"03-12345679\",\n    \"company\": \"Acme Partner1\",\n    \"street\": \"12nd Broadway\",\n    \"city\": \"New York\",\n    \"state\": \"NY\",\n    \"country\": \"USA\",\n    \"postal_code\": \"1234567\",\n    \"user_manager_login\": \"manager@domain.com\"\n  },\n  \"currency\": \"USD\",\n  \"external_customer_id\": \"br768\",\n  \"customer_name\": \"Vadim Test1\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f46b077d-f4bd-41ed-93bf-415175195e30",
+          "name": "Get Quote Document",
+          "request": {
+            "name": "Get Quote Document",
+            "description": {
+              "content": "Retrieves the output document (e.g., PDF, Word) for a submitted quote. Use this endpoint to archive contracts or integrate quote documents into other systems.\n\nBy default, the endpoint returns the document in the format and template that the salesperson originally generated. You can use the optional `document_type` query parameter to request the document in a different format (e.g., `PDF`, `WORD`). However, this is only possible if the requested format has been enabled for the quote's playbook in the CPQ settings.\n\n> 📘 Excel Files\n>\n> A quote document can only be retrieved in `EXCEL` format if the quote was explicitly configured to allow an Excel file output.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "quote",
+                ":dealhub_quote_id",
+                "document"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "document_type",
+                  "value": "<string>",
+                  "description": "Specifies the desired document format."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dealhub_quote_id",
+                  "description": "(Required) The unique DealHub ID of the quote."
+                },
+                {
+                  "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                  "type": "any",
+                  "value": "{{your-dealhub-instance}}",
+                  "key": "your-dealhub-instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/octet-stream"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a0ff3793-535b-4e3c-b140-f1f0d2ce93aa",
+              "name": "Success. Returns the document file.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quote",
+                    ":dealhub_quote_id",
+                    "document"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "document_type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dealhub_quote_id",
+                      "description": "(Required) The unique DealHub ID of the quote."
+                    },
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/octet-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/octet-stream"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b1a9db9f-700b-4638-a713-cce06b7e85cf",
+              "name": "Bad Request. Document retrieval for a draft quote is not supported or the document type is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quote",
+                    ":dealhub_quote_id",
+                    "document"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "document_type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dealhub_quote_id",
+                      "description": "(Required) The unique DealHub ID of the quote."
+                    },
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e87fef88-94eb-4b6c-bc5b-d0c49e9e1bde",
+              "name": "Forbidden. Invalid or missing authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "quote",
+                    ":dealhub_quote_id",
+                    "document"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "document_type",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dealhub_quote_id",
+                      "description": "(Required) The unique DealHub ID of the quote."
+                    },
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ab40eeb6-7424-44fc-98bb-afefdc3f6294",
+          "name": "Get DealRoom Signers",
+          "request": {
+            "name": "Get DealRoom Signers",
+            "description": {
+              "content": "Retrieves information about who has signed a contract within a DealRoom for a specific opportunity.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "dealroom",
+                ":opportunity_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "opportunity_id",
+                  "description": "(Required) The ID of the CRM opportunity."
+                },
+                {
+                  "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                  "type": "any",
+                  "value": "{{your-dealhub-instance}}",
+                  "key": "your-dealhub-instance"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b5f38141-2c30-49fb-8df6-c7f2f382fa40",
+              "name": "Success. Returns the list of signers.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "dealroom",
+                    ":opportunity_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "opportunity_id",
+                      "description": "(Required) The ID of the CRM opportunity."
+                    },
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"dealroom_state\": \"Partially signed\",\n  \"buyer_signers\": [\n    {\n      \"company_name\": \"BBB Inc.\",\n      \"signee_name\": \"John Brown\",\n      \"signee_title\": \"CEO\",\n      \"signature_date\": \"2024-02-06 16:41:29\",\n      \"ordinal\": 1\n    }\n  ],\n  \"seller_signers\": []\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "011addeb-4164-4831-8c78-74252605514f",
+              "name": "Bad Request. No DealRoom instance found for the given opportunity ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "dealroom",
+                    ":opportunity_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "opportunity_id",
+                      "description": "(Required) The ID of the CRM opportunity."
+                    },
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4cd70059-60ba-467c-83a4-54fe7d5fdc8e",
+              "name": "Forbidden. Invalid or missing authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "dealroom",
+                    ":opportunity_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "opportunity_id",
+                      "description": "(Required) The ID of the CRM opportunity."
+                    },
+                    {
+                      "description": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+                      "type": "any",
+                      "value": "{{your-dealhub-instance}}",
+                      "key": "your-dealhub-instance"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Your specific DealHub instance name (e.g., 'app', 'service-eu1').",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "app",
+      "key": "your-dealhub-instance"
+    },
+    {
+      "type": "string",
+      "value": "https://api.dealhub.io",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "1344d4bf-37cd-40d6-9a41-029ba150cc79",
+    "name": "Quote API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This API provides a set of services for managing and retrieving quote information from the DealHub platform.\n\nAll requests require a secret Bearer Token in the `Authorization` header, which is generated by a CPQ administrator.",
+      "type": "text/plain"
+    }
+  }
+}

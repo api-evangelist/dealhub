@@ -1,0 +1,96 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Partner API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Partner Integration",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Authenticate Partner User",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/authenticate/user",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Authenticates a partner user from a PRM system and returns a short-lived (60 seconds) one-time access token. This is a server-to-server call that does not require a bearer token in the header, instead, the long-lived authentication key is sent in the request body."
+        },
+        {
+          "info": {
+            "name": "Get URL to Create a New Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/create/quote",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves a URL that redirects an authenticated partner user to the quote creation page within DealHub for a specific opportunity. This is a client-side call using the one-time access token."
+        },
+        {
+          "info": {
+            "name": "Get URL to Open an Existing Quote",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/open/quote",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves a URL that redirects an authenticated partner user to an existing quote within DealHub. This is a client-side call using the one-time access token."
+        },
+        {
+          "info": {
+            "name": "Get URL to View an Opportunity's Quotes",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.dealhub.io/api/v1/open/opportunity",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Retrieves a URL that redirects an authenticated partner user to the opportunity details page in DealHub, listing all associated quotes. This is a client-side call using the one-time access token."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

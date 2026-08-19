@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Callout API",
+    "version": "1.0.1"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Callouts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve Real-Time Pricing",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://your-external-system.com/api/pricing/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "> ❗️ Important\n>\n> This is not an endpoint provided by DealHub. This page present the endpoint definition you need to make available so DealHub can call it.\n\nThis endpoint enables DealHub to retrieve real-time product prices and attributes from your external system while a quote is being generated.\n\nThe specific URL for this endpoint is configured by the administrator in the DealHub UI.\n\n> 📘 Date Formats\n>\n> All date and time values are provided in ISO 8601 format and standardized to UTC (Coord"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,199 @@
+{
+  "item": [
+    {
+      "id": "c5808b74-2668-4832-b567-f74aa730349e",
+      "name": "External Query",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "837caf09-4555-40e8-bf43-f2aa7642c92f",
+          "name": "External Data Query",
+          "request": {
+            "name": "External Data Query",
+            "description": {
+              "content": "> ❗️ Important \n>\n> This is not an endpoint provided by DealHub. This page present the endpoint definition you need to make available so DealHub can call it. \n\nDealHub uses this endpoint to send requests that share data from the current quote’s playbook and product list. Your endpoint should process this data and return information that will be populated back into the quote’s playbook.\n\nThe specific URL for this endpoint is configured by the administrator in the DealHub UI.\n\n> 📘 Authentication\n>\n> When DealHub calls your endpoint, it will include an `Authorization` header based on the configuration set by an administrator in the DealHub UI. Your endpoint must be prepared to handle one of the following methods:\n> - **Token (Bearer):** DealHub sends a secret bearer token. Your endpoint should validate this token.\n> - **Basic:** DealHub sends a username and password for Basic Authentication.\n> - **None:** No `Authorization` header is sent. This is used when the endpoint is unsecured or uses a different security method, such as a token embedded in the URL.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"playbook_data\": {\n    \"key_0\": \"<string>\",\n    \"key_1\": \"<string>\"\n  },\n  \"product_data\": [\n    {\n      \"bundle_line_items\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/ProductDataItem detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/ProductDataItem detected>\"\n        }\n      ]\n    },\n    {\n      \"bundle_line_items\": [\n        {\n          \"value\": \"<Circular reference to #/components/schemas/ProductDataItem detected>\"\n        },\n        {\n          \"value\": \"<Circular reference to #/components/schemas/ProductDataItem detected>\"\n        }\n      ],\n      \"key_0\": false,\n      \"key_1\": false,\n      \"key_2\": 1474\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c9581b97-7b0e-4630-b162-cf28c15d33ff",
+              "name": "Successful response containing the data to be populated into the DealHub playbook.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"playbook_data\": {\n    \"general.currency\": \"USD\",\n    \"general.geo\": \"North America\",\n    \"group1.customer_type\\\"\": \"Enterprise\",\n    \"group2.number\": 4323.11,\n    \"group3.proposal_date\": \"2021-03-25T15:39:25Z\"\n  },\n  \"product_data\": [\n    {\n      \"ITEM NAME\": \"Whiteboard\",\n      \"SKU\": \"B-12345-W\",\n      \"attribute1\": \"1237\"\n    },\n    {\n      \"ITEM NAME\": \"Junior Kit\",\n      \"SKU\": \"B-56-TRIPLE\",\n      \"bundle_line_items\": [\n        {\n          \"ITEM NAME\": \"Pencil\",\n          \"SKU\": \"sku-1\",\n          \"attribute1\": \"9\"\n        },\n        {\n          \"ITEM NAME\": \"Eraser\",\n          \"SKU\\\"\": \"sku-2\",\n          \"attribute1\\\"\": \"2\"\n        },\n        {\n          \"ITEM NAME\": \"Sharpener\",\n          \"SKU\\\"\": \"sku-3\"\n        }\n      ]\n    },\n    {\n      \"ITEM NAME\": \"Sharpener\",\n      \"SKU\": \"sku-3\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"playbook_data\": [\n    {\n      \"id1\": \"id1_val\",\n      \"id2\": \"A;B;C\",\n      \"id3\": \"some_val\"\n    },\n    {\n      \"id1\": \"id1_val\",\n      \"id2\": \"A;B;C\",\n      \"id3\": \"some_val\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "29b82fb2-bb87-4986-a83d-6f07682beae7",
+              "name": "Bad Request. An error occurred while processing the request. The response should contain a clear error message.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"playbook_data\": {\n    \"general.currency\": \"USD\",\n    \"general.geo\": \"North America\",\n    \"group1.customer_type\\\"\": \"Enterprise\",\n    \"group2.number\": 4323.11,\n    \"group3.proposal_date\": \"2021-03-25T15:39:25Z\"\n  },\n  \"product_data\": [\n    {\n      \"ITEM NAME\": \"Whiteboard\",\n      \"SKU\": \"B-12345-W\",\n      \"attribute1\": \"1237\"\n    },\n    {\n      \"ITEM NAME\": \"Junior Kit\",\n      \"SKU\": \"B-56-TRIPLE\",\n      \"bundle_line_items\": [\n        {\n          \"ITEM NAME\": \"Pencil\",\n          \"SKU\": \"sku-1\",\n          \"attribute1\": \"9\"\n        },\n        {\n          \"ITEM NAME\": \"Eraser\",\n          \"SKU\\\"\": \"sku-2\",\n          \"attribute1\\\"\": \"2\"\n        },\n        {\n          \"ITEM NAME\": \"Sharpener\",\n          \"SKU\\\"\": \"sku-3\"\n        }\n      ]\n    },\n    {\n      \"ITEM NAME\": \"Sharpener\",\n      \"SKU\": \"sku-3\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://your-external-system.com/api/data-query",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "5deab78b-32ca-4a66-8b7b-31c62fbbbfbf",
+    "name": "External Query",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "This API defines the contract for an external system that DealHub calls to retrieve data in real-time during quote creation.\nA DealHub administrator configures an \"External Query\" object, specifying the endpoint URL, authentication, and the data to be sent. When a sales rep triggers this query from the DealHub Playbook, DealHub sends a POST request to the defined endpoint. The external system is expected to process the request and return data that will be populated back into the Playbook.",
+      "type": "text/plain"
+    }
+  }
+}
