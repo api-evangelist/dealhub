@@ -28,6 +28,19 @@ x-enrichment:
 tags:
 - Company
 - CPQ
+- Quote-to-Cash
+- Contract Lifecycle Management
+- Subscription Management
+- Billing
+- Revenue Operations
+- Sales
+- Pricing
+- Usage-Based Billing
+- Revenue Recognition
+- Sales Enablement
+tags_raw:
+- Company
+- CPQ
 - Quote to Cash
 - Contract Lifecycle Management
 - Subscription Management
@@ -124,6 +137,9 @@ apis:
   humanURL: https://developers.dealhub.io/docs/user-api-overview
   baseURL: https://api.dealhub.io
   tags:
+  - User
+  - Provisioning
+  tags_raw:
   - Users
   - Provisioning
   properties:
@@ -159,6 +175,9 @@ apis:
   humanURL: https://developers.dealhub.io/docs/retrieving-product-data
   baseURL: https://api.dealhub.io
   tags:
+  - Pricing
+  - Product
+  tags_raw:
   - Pricing
   - Products
   properties:
@@ -198,6 +217,13 @@ apis:
   humanURL: https://developers.dealhub.io/docs/orders-and-subscriptions
   baseURL: https://api.app.subskribe.com
   tags:
+  - Billing
+  - Subscription
+  - Usage-Based Billing
+  - Revenue Recognition
+  - Invoicing
+  - Payments
+  tags_raw:
   - Billing
   - Subscriptions
   - Usage Based Billing
