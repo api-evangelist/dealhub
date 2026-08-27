@@ -57,66 +57,11 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 apis:
-- aid: dealhub-quote-api
-  name: DealHub Quote API
-  description: Retrieve quotes and quote documents from DealHub, list quotes for a
-    CRM opportunity, create renewal opportunities and read DealRoom signer status.
-    The read side of the CPQ platform used to feed BI systems and downstream
-    integrations.
-  humanURL: https://developers.dealhub.io/docs/quote-overview
-  baseURL: https://api.dealhub.io
-  tags:
-  - Quotes
-  - CPQ
-  - DealRoom
-  properties:
-  - type: OpenAPI
-    url: openapi/dealhub-quote-api-openapi.yml
-  - type: APIReference
-    url: https://developers.dealhub.io/reference/getquotebyid
-  - type: Overlay
-    url: overlays/dealhub-quote-api-overlay.yaml
-- aid: dealhub-headless-api
-  name: DealHub Headless Quote API
-  description: Generate, simulate, submit, publish and externally sign quotes entirely
-    from a backend system with no user interaction in the DealHub UI, including the
-    Actions API and the quote-template generator for an API Playbook.
-  humanURL: https://developers.dealhub.io/docs/headless-api-overview
-  baseURL: https://api.dealhub.io
-  tags:
-  - Quotes
-  - Headless
-  - CPQ
-  properties:
-  - type: OpenAPI
-    url: openapi/dealhub-headless-api-openapi.yml
-  - type: APIReference
-    url: https://developers.dealhub.io/reference/simulatequote
-  - type: Overlay
-    url: overlays/dealhub-headless-api-overlay.yaml
-- aid: dealhub-crm-api
-  name: DealHub CRM API
-  description: Authenticate a user from an external CRM into DealHub with a short-lived
-    one-time access token, then create or open a quote and view quotes and
-    opportunities through returned redirect URLs.
-  humanURL: https://developers.dealhub.io/docs/overview-and-flow-of-events
-  baseURL: https://api.dealhub.io
-  tags:
-  - CRM
-  - Authentication
-  - Quotes
-  properties:
-  - type: OpenAPI
-    url: openapi/dealhub-crm-api-openapi.yml
-  - type: APIReference
-    url: https://developers.dealhub.io/reference/authenticateuser
-  - type: Overlay
-    url: overlays/dealhub-crm-api-overlay.yaml
 - aid: dealhub-crm-import-api
   name: DealHub CRM Import API
-  description: Start, track, inspect and retry asynchronous imports of buyer accounts
-    and contacts from a tenant's connected CRM into DealHub, with per-id lookup and
-    aggregate success/failure counts.
+  description: >-
+    Start, track, inspect and retry asynchronous imports of buyer accounts and contacts from a tenant's
+    connected CRM into DealHub, with per-id lookup and aggregate success/failure counts.
   humanURL: https://developers.dealhub.io/docs/crm-import-overview
   baseURL: https://api.dealhub.io
   tags:
@@ -130,152 +75,1892 @@ apis:
     url: https://developers.dealhub.io/reference/startcrmimport
   - type: Overlay
     url: overlays/dealhub-crm-import-api-overlay.yaml
-- aid: dealhub-user-api
-  name: DealHub User API
-  description: Retrieve DealHub users by login or by DealHub user id, list users, and
-    create or update users in bulk through the v1 and v2 user provisioning endpoints.
-  humanURL: https://developers.dealhub.io/docs/user-api-overview
+- aid: dealhub:dealhub-account-api
+  name: DealHub Account API
+  description: The Account API from DealHub — 6 operation(s) for account.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
-  - User
-  - Provisioning
-  tags_raw:
-  - Users
-  - Provisioning
+  - Account
   properties:
   - type: OpenAPI
-    url: openapi/dealhub-user-api-openapi.yml
+    url: openapi/dealhub-account-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
   - type: APIReference
     url: https://developers.dealhub.io/reference/getuserbylogin
-  - type: Overlay
-    url: overlays/dealhub-user-api-overlay.yaml
-- aid: dealhub-partner-api
-  name: DealHub Partner API
-  description: Two-step PRM integration that authenticates a partner user from a
-    partner relationship management system and returns redirect URLs to create a
-    quote, open an existing quote, or view an opportunity's quotes in DealHub CPQ.
-  humanURL: https://developers.dealhub.io/docs/partner-api-overview
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-accounting-api
+  name: DealHub Accounting API
+  description: The Accounting API from DealHub — 7 operation(s) for accounting.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
-  - Partners
-  - PRM
+  - Accounting
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-accounting-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-accounts-api
+  name: DealHub Accounts API
+  description: The Accounts API from DealHub — 10 operation(s) for accounts.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Accounts
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-accounts-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-ai-agent-api
+  name: DealHub AI Agent API
+  description: The AI Agent API from DealHub — 7 operation(s) for ai agent.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - AI Agent
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-ai-agent-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-ai-summary-api
+  name: DealHub AI Summary API
+  description: The AI Summary API from DealHub — 3 operation(s) for ai summary.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - AI Summary
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-ai-summary-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-approvals-api
+  name: DealHub Approvals API
+  description: The Approvals API from DealHub — 13 operation(s) for approvals.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Approvals
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-approvals-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-asynchronous-operations-api
+  name: DealHub Asynchronous Operations API
+  description: Endpoints for tracking the status of asynchronous requests.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Asynchronous Operations
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-asynchronous-operations-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-attachments-api
+  name: DealHub Attachments API
+  description: The Attachments API from DealHub — 4 operation(s) for attachments.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Attachments
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-attachments-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-authentication-api
+  name: DealHub Authentication API
+  description: The Authentication API from DealHub — 5 operation(s) for authentication.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
   - Authentication
   properties:
   - type: OpenAPI
-    url: openapi/dealhub-partner-api-openapi.yml
+    url: openapi/dealhub-authentication-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
   - type: APIReference
     url: https://developers.dealhub.io/reference/authenticatepartneruser
-  - type: Overlay
-    url: overlays/dealhub-partner-api-overlay.yaml
-- aid: dealhub-pricing-api
-  name: DealHub Pricing API
-  description: Return the list of parameters required to price each SKU and return a
-    calculated price per SKU, used to expose DealHub pricing logic to external
-    systems.
-  humanURL: https://developers.dealhub.io/docs/retrieving-product-data
-  baseURL: https://api.dealhub.io
-  tags:
-  - Pricing
-  - Product
-  tags_raw:
-  - Pricing
-  - Products
-  properties:
-  - type: OpenAPI
-    url: openapi/dealhub-pricing-api-openapi.yml
   - type: APIReference
     url: https://developers.dealhub.io/reference/getproductsparameters
-  - type: Overlay
-    url: overlays/dealhub-pricing-api-overlay.yaml
-- aid: dealhub-version-api
-  name: DealHub Version API
-  description: Manage DealHub configuration Versions and their product catalog —
-    retrieve, duplicate and activate versions, export playbook data, read and upload
-    the product catalog, patch catalog items, manage the product hierarchy, and poll
-    asynchronous request status.
-  humanURL: https://developers.dealhub.io/docs/version-api-overview
-  baseURL: https://api.dealhub.io
-  tags:
-  - Versions
-  - Product Catalog
-  - Configuration
-  properties:
-  - type: OpenAPI
-    url: openapi/dealhub-version-api-openapi.yml
   - type: APIReference
     url: https://developers.dealhub.io/reference/getversionbyid
-  - type: Overlay
-    url: overlays/dealhub-version-api-overlay.yaml
-- aid: dealhub-subskribe-api
-  name: DealHub Subskribe API
-  description: The subscription management, usage-based billing and revenue
-    recognition API DealHub acquired with Subskribe — accounts, orders,
-    subscriptions, plans and rate plans, charge types, usage records and
-    aggregation, invoices and credit memos, payments and payment methods, taxation,
-    accounting periods, ERP and revenue-recognition integration, ledger and journal
-    entries, entitlements, approvals, documents and tenant administration.
-  humanURL: https://developers.dealhub.io/docs/orders-and-subscriptions
-  baseURL: https://api.app.subskribe.com
-  tags:
-  - Billing
-  - Subscription
-  - Usage-Based Billing
-  - Revenue Recognition
-  - Invoicing
-  - Payments
-  tags_raw:
-  - Billing
-  - Subscriptions
-  - Usage Based Billing
-  - Revenue Recognition
-  - Invoicing
-  - Payments
-  properties:
-  - type: OpenAPI
-    url: openapi/dealhub-subskribe-api-openapi.yml
   - type: APIReference
     url: https://developers.dealhub.io/docs/create-a-subscription
-  - type: Overlay
-    url: overlays/dealhub-subskribe-api-overlay.yaml
-- aid: dealhub-external-query
-  name: DealHub External Query (inbound callback contract)
-  description: The endpoint contract a DealHub customer implements on their own
-    infrastructure so DealHub can send the current quote's playbook and product list
-    to an external system and populate the returned data back into the quote. The
-    server URL in the published spec is a documented placeholder — the real endpoint
-    URL is configured per tenant in DealHub Version Settings, so this entry has no
-    DealHub-hosted base URL.
-  humanURL: https://developers.dealhub.io/docs/external-query-overview
-  tags:
-  - Callbacks
-  - Integration
-  properties:
-  - type: OpenAPI
-    url: openapi/dealhub-external-query-openapi.yml
   - type: APIReference
     url: https://developers.dealhub.io/reference/fulfillexternalquery
-  - type: Overlay
-    url: overlays/dealhub-external-query-overlay.yaml
-- aid: dealhub-callout-api
-  name: DealHub Callout API (inbound callback contract)
-  description: The endpoint contract a DealHub customer implements so DealHub can
-    retrieve real-time product prices and attributes from an external system such as
-    an ERP while a quote is being generated. The server URL in the published spec is
-    a documented placeholder — the real endpoint URL is configured per tenant in
-    DealHub Version Settings, so this entry has no DealHub-hosted base URL.
-  humanURL: https://developers.dealhub.io/docs/callouts-api-overview
-  tags:
-  - Callbacks
-  - Pricing
-  - Integration
-  properties:
-  - type: OpenAPI
-    url: openapi/dealhub-callout-api-openapi.yml
   - type: APIReference
     url: https://developers.dealhub.io/reference/getpricing
-  - type: Overlay
-    url: overlays/dealhub-callout-api-overlay.yaml
+- aid: dealhub:dealhub-banktransactions-api
+  name: DealHub Bank Transactions API
+  description: The BankTransactions API from DealHub — 3 operation(s) for banktransactions.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - BankTransactions
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-banktransactions-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-billing-api
+  name: DealHub Billing API
+  description: The Billing API from DealHub — 38 operation(s) for billing.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Billing
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-billing-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-callouts-api
+  name: DealHub Callouts API
+  description: The Callouts API from DealHub — 1 operation(s) for callouts.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Callouts
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-callouts-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-credit-memo-api
+  name: DealHub Credit Memo API
+  description: The Credit Memo API from DealHub — 8 operation(s) for credit memo.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Credit Memo
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-credit-memo-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-crm-field-mapping-api
+  name: DealHub CRM field mapping API
+  description: The CRM field mapping API from DealHub — 6 operation(s) for crm field mapping.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - CRM field mapping
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-crm-field-mapping-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-crm-integration-api
+  name: DealHub CRM Integration API
+  description: Endpoints for integrating external CRM systems with DealHub.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - CRM Integration
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-crm-integration-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-custom-field-api
+  name: DealHub Custom Field API
+  description: The Custom Field API from DealHub — 7 operation(s) for custom field.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Custom Field
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-custom-field-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-customization-api
+  name: DealHub Customization API
+  description: The Customization API from DealHub — 2 operation(s) for customization.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Customization
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-customization-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-deal-pulse-api
+  name: DealHub Deal Pulse API
+  description: The Deal Pulse API from DealHub — 3 operation(s) for deal pulse.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Deal Pulse
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-deal-pulse-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-discounts-api
+  name: DealHub Discounts API
+  description: The Discounts API from DealHub — 3 operation(s) for discounts.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Discounts
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-discounts-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-documents-api
+  name: DealHub Documents API
+  description: The Documents API from DealHub — 5 operation(s) for documents.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Documents
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-documents-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-email-api
+  name: DealHub Email API
+  description: The Email API from DealHub — 1 operation(s) for email.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Email
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-email-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-entities-api
+  name: DealHub Entities API
+  description: The Entities API from DealHub — 3 operation(s) for entities.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Entities
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-entities-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-erp-api
+  name: DealHub ERP API
+  description: The ERP API from DealHub — 9 operation(s) for erp.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - ERP
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-erp-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-experimental-api
+  name: DealHub Experimental API
+  description: The Experimental API from DealHub — 17 operation(s) for experimental.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Experimental
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-experimental-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-external-query-api
+  name: DealHub External Query API
+  description: The External Query API from DealHub — 1 operation(s) for external query.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - External Query
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-external-query-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-foreign-exchange-api
+  name: DealHub Foreign Exchange API
+  description: The Foreign Exchange API from DealHub — 4 operation(s) for foreign exchange.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Foreign Exchange
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-foreign-exchange-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-get-products-information-api
+  name: DealHub Get Products Information API
+  description: >-
+    The Get Products Information API from DealHub — 2 operation(s) for get products information.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Get Products Information
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-get-products-information-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-headless-quoting-api
+  name: DealHub Headless Quoting API
+  description: Endpoints for programmatic quote simulation, generation, and lifecycle actions.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Headless Quoting
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-headless-quoting-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-health-api
+  name: DealHub Health API
+  description: The Health API from DealHub — 1 operation(s) for health.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Health
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-health-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-import-api
+  name: DealHub Import API
+  description: The Import API from DealHub — 10 operation(s) for import.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Import
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-import-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-integrations-api
+  name: DealHub Integrations API
+  description: The Integrations API from DealHub — 35 operation(s) for integrations.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Integrations
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-integrations-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-intelligent-sales-room-api
+  name: DealHub Intelligent Sales Room API
+  description: >-
+    The Intelligent Sales Room API from DealHub — 41 operation(s) for intelligent sales room.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Intelligent Sales Room
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-intelligent-sales-room-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-invoice-api
+  name: DealHub Invoice API
+  description: The Invoice API from DealHub — 1 operation(s) for invoice.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Invoice
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-invoice-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-jobs-api
+  name: DealHub Jobs API
+  description: The Jobs API from DealHub — 4 operation(s) for jobs.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Jobs
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-jobs-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-metricsreporting-api
+  name: DealHub Metrics Reporting API
+  description: The MetricsReporting API from DealHub — 3 operation(s) for metricsreporting.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - MetricsReporting
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-metricsreporting-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-notifications-api
+  name: DealHub Notifications API
+  description: The Notifications API from DealHub — 3 operation(s) for notifications.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Notifications
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-notifications-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-opportunity-api
+  name: DealHub Opportunity API
+  description: The Opportunity API from DealHub — 4 operation(s) for opportunity.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Opportunity
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-opportunity-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-order-api
+  name: DealHub Order API
+  description: The Order API from DealHub — 3 operation(s) for order.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Order
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-order-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-orders-api
+  name: DealHub Orders API
+  description: The Orders API from DealHub — 22 operation(s) for orders.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-orders-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-partner-integration-api
+  name: DealHub Partner Integration API
+  description: Endpoints for integrating Partner Relationship Management (PRM) systems.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Partner Integration
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-partner-integration-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-payments-api
+  name: DealHub Payments API
+  description: The Payments API from DealHub — 17 operation(s) for payments.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Payments
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-payments-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-platform-feature-api
+  name: DealHub Platform Feature API
+  description: The Platform Feature API from DealHub — 1 operation(s) for platform feature.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Platform Feature
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-platform-feature-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-playbook-api
+  name: DealHub Playbook API
+  description: >-
+    Endpoints for exporting Playbook configuration and data in JSON format, and for generating a Generate
+    Quote API request template based on the Playbook structure.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Playbook
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-playbook-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-prismatic-api
+  name: DealHub Prismatic API
+  description: The Prismatic API from DealHub — 6 operation(s) for prismatic.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Prismatic
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-prismatic-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-product-catalog-api
+  name: DealHub Product Catalog API
+  description: The Product Catalog API from DealHub — 29 operation(s) for product catalog.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Product Catalog
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-product-catalog-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-product-hierarchy-beta-api
+  name: DealHub Product Hierarchy (Beta) API
+  description: >-
+    The Product Hierarchy (Beta) API from DealHub — 1 operation(s) for product hierarchy (beta).
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Product Hierarchy (Beta)
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-product-hierarchy-beta-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-product-provisioning-api
+  name: DealHub Product Provisioning API
+  description: The Product Provisioning API from DealHub — 1 operation(s) for product provisioning.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Product Provisioning
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-product-provisioning-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-quote-management-api
+  name: DealHub Quote Management API
+  description: Endpoints for retrieving and managing quotes, opportunities, and related documents.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Quote Management
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-quote-management-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-ratecard-api
+  name: DealHub Rate Card API
+  description: The RateCard API from DealHub — 5 operation(s) for ratecard.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - RateCard
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-ratecard-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-refunds-api
+  name: DealHub Refunds API
+  description: The Refunds API from DealHub — 2 operation(s) for refunds.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Refunds
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-refunds-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-reports-api
+  name: DealHub Reports API
+  description: The Reports API from DealHub — 4 operation(s) for reports.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Reports
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-reports-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-revenue-enablement-api
+  name: DealHub Revenue Enablement API
+  description: The Revenue Enablement API from DealHub — 8 operation(s) for revenue enablement.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Revenue Enablement
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-revenue-enablement-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-revenue-recognition-api
+  name: DealHub Revenue Recognition API
+  description: The Revenue Recognition API from DealHub — 9 operation(s) for revenue recognition.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Revenue Recognition
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-revenue-recognition-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-search-api
+  name: DealHub Search API
+  description: The Search API from DealHub — 1 operation(s) for search.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Search
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-search-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-settings-api
+  name: DealHub Settings API
+  description: The Settings API from DealHub — 22 operation(s) for settings.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Settings
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-settings-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-subscriptions-api
+  name: DealHub Subscriptions API
+  description: The Subscriptions API from DealHub — 20 operation(s) for subscriptions.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Subscriptions
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-subscriptions-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-templatescript-api
+  name: DealHub Template Script API
+  description: The TemplateScript API from DealHub — 1 operation(s) for templatescript.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - TemplateScript
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-templatescript-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-tenant-api
+  name: DealHub Tenant API
+  description: The Tenant API from DealHub — 1 operation(s) for tenant.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Tenant
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-tenant-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-usage-api
+  name: DealHub Usage API
+  description: The Usage API from DealHub — 11 operation(s) for usage.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Usage
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-usage-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-user-management-api
+  name: DealHub User Management API
+  description: Endpoints for retrieving and managing user data.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - User Management
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-user-management-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-users-api
+  name: DealHub Users API
+  description: The Users API from DealHub — 10 operation(s) for users.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-users-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
+- aid: dealhub:dealhub-version-management-api
+  name: DealHub Version Management API
+  description: Endpoints for retrieving, creating, and managing versions.
+  humanURL: https://developers.dealhub.io/docs/quote-overview
+  baseURL: https://api.dealhub.io
+  tags:
+  - Version Management
+  properties:
+  - type: OpenAPI
+    url: openapi/dealhub-version-management-api-openapi.yml
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getquotebyid
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/simulatequote
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticateuser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getuserbylogin
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/authenticatepartneruser
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getproductsparameters
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getversionbyid
+  - type: APIReference
+    url: https://developers.dealhub.io/docs/create-a-subscription
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/fulfillexternalquery
+  - type: APIReference
+    url: https://developers.dealhub.io/reference/getpricing
 common:
+- type: Overlay
+  url: overlays/dealhub-quote-api-overlay.yaml
+- type: Overlay
+  url: overlays/dealhub-headless-api-overlay.yaml
+- type: Overlay
+  url: overlays/dealhub-crm-api-overlay.yaml
+- type: Overlay
+  url: overlays/dealhub-user-api-overlay.yaml
+- type: Overlay
+  url: overlays/dealhub-partner-api-overlay.yaml
+- type: Overlay
+  url: overlays/dealhub-pricing-api-overlay.yaml
+- type: Overlay
+  url: overlays/dealhub-version-api-overlay.yaml
+- type: Overlay
+  url: overlays/dealhub-subskribe-api-overlay.yaml
+- type: Overlay
+  url: overlays/dealhub-external-query-overlay.yaml
+- type: Overlay
+  url: overlays/dealhub-callout-api-overlay.yaml
 - type: TrustCenter
   url: security/dealhub-trust-center.yml
 - type: Website
