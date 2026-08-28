@@ -13,6 +13,18 @@ description: 'DealHub is an agentic quote-to-revenue platform that unifies CPQ (
   api.app.subskribe.com, plus two inbound callback contracts (External Query and
   Callouts) that customers implement so DealHub can pull real-time data and pricing
   from an external system during quote generation.'
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 image: https://cms.dealhub.io/wp-content/uploads/2026/02/HP-Thumbnail-1.png
 url: https://raw.githubusercontent.com/api-evangelist/dealhub/refs/heads/main/apis.yml
 x-type: company
