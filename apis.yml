@@ -1953,6 +1953,9 @@ apis:
   - type: APIReference
     url: https://developers.dealhub.io/reference/getpricing
 common:
+- type: CapabilityMap
+  url: capabilities/dealhub-capability-edges.yml
+  name: DealHub Business Capability Map
 - type: Overlay
   url: overlays/dealhub-quote-api-overlay.yaml
 - type: Overlay

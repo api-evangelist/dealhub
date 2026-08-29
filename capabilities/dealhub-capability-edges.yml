@@ -1,0 +1,246 @@
+slug: dealhub
+provider: DealHub
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 22
+edges:
+- tag: Revenue Recognition
+  spec_file: dealhub-revenue-recognition-api-openapi.yml
+  capability_id: BC-4250.50
+  capability_id_l1: BC-4250
+  capability_name: Subscription Revenue Recognition
+  confidence: 0.95
+  evidence: POST /revrec/rules  addRecognitionRule  Create a revenue recognition rule; GET /revrec/waterfall  getRevenueWaterfall  Download
+    waterfall report
+  reason: Recognition events, recognition rules, bulk revenue recognition and revenue waterfall are plainly
+    subscription revenue recognition (ASC 606-style schedules) for this quote-to-revenue platform.
+- tag: Opportunity
+  spec_file: dealhub-opportunity-api-openapi.yml
+  capability_id: BC-410.30
+  capability_id_l1: BC-410
+  capability_name: Opportunity & Pipeline Management
+  confidence: 0.9
+  evidence: POST /opportunity createOpportunity Creates a standalone opportunity; GET /opportunity/accountCrmId/{id}
+    Get opportunities by account CRM ID
+  reason: CRUD on sales opportunities including reopening closed state — opportunity/deal lifecycle management.
+- tag: Subscriptions
+  spec_file: dealhub-subscriptions-api-openapi.yml
+  capability_id: BC-4240
+  capability_id_l1: BC-4240
+  capability_name: Subscription Lifecycle Management
+  confidence: 0.9
+  evidence: GET /subscriptions/{id}/draftAmendment  Generate draft amendment order; GET /subscriptions/{id}/draftRenewal  Generate
+    draft renewal order; GET /subscriptions/{id}/modifiable  Subscription can be modified
+  reason: Operations manage the in-life subscription lifecycle — retrieval, update, amendment, renewal,
+    revert, cancel line items — spanning modification, renewal and cancellation sub-capabilities, so mapped
+    at the L1 subscription lifecycle level.
+- tag: Discounts
+  spec_file: dealhub-discounts-api-openapi.yml
+  capability_id: BC-440.30
+  capability_id_l1: BC-440
+  capability_name: Discount & Promotion Management
+  confidence: 0.85
+  evidence: POST /discounts addDiscount "Create a discount"; PUT /discounts/{id}/status/{status} "Update
+    discount status"; schema DiscountJson
+  reason: CRUD and activation of discount definitions used in quoting — discount policy/offer management.
+- tag: Headless Quoting
+  spec_file: dealhub-headless-quoting-api-openapi.yml
+  capability_id: BC-410.40
+  capability_id_l1: BC-410
+  capability_name: Quote & Configuration Management
+  confidence: 0.85
+  evidence: '"headless capabilities for managing the quote lifecycle"; POST /api/v1/quote/generate Generate
+    a Quote; POST /api/v1/quote/{id}/submit Submit a Quote'
+  reason: Explicit quote generation, simulation, approval submission, publishing and signing — configure-price-quote
+    lifecycle. Some overlap with Subscription Contracting, so not maximal confidence.
+- tag: MetricsReporting
+  spec_file: dealhub-metricsreporting-api-openapi.yml
+  capability_id: BC-4250.70
+  capability_id_l1: BC-4250
+  capability_name: Subscription Revenue Analytics
+  confidence: 0.85
+  evidence: POST /metricsReporting/externalArrMetrics addExternalArrMetrics submit request to generate
+    external arr metrics; "generate/regenerate arr metrics for a subscription"
+  reason: Generation and retrieval of ARR metrics per subscription — recurring-revenue health analytics.
+- tag: Payments
+  spec_file: dealhub-payments-api-openapi.yml
+  capability_id: BC-4250.40
+  capability_id_l1: BC-4250
+  capability_name: Payment Collection & Dunning
+  confidence: 0.85
+  evidence: POST /payments/processPaymentForInvoice/{invoiceNumber} "Processes one time payment for an
+    invoice if there is an automatic payment set up for the account"; POST /payments/retry/config "Creates
+    or updates a payment retry configuration"; PaymentRetryPolicy
+  reason: Operations manage payment methods/bank accounts, payment gateways, payment processing against
+    invoices and automated retry policy — payment-method management, authorisation and dunning for recurring
+    revenue.
+- tag: Quote Management
+  spec_file: dealhub-quote-management-api-openapi.yml
+  capability_id: BC-410.40
+  capability_id_l1: BC-410
+  capability_name: Quote & Configuration Management
+  confidence: 0.85
+  evidence: GET /api/v2/quotes "Get a List of Quotes"; GET /api/v1/quote/{dealhub_quote_id}/document "Get
+    Quote Document"; schemas Quote, LineItem, Approval, PlaybookAnswer
+  reason: Operations retrieve quotes, quote line items, approvals and quote documents from the CPQ, i.e.
+    configure-price-quote management within the sales cycle.
+- tag: Revenue Enablement
+  spec_file: dealhub-revenue-enablement-api-openapi.yml
+  capability_id: BC-4250.50
+  capability_id_l1: BC-4250
+  capability_name: Subscription Revenue Recognition
+  confidence: 0.85
+  evidence: PUT /revenueEnablement/enable  enableRevenueRecognition  Enable revenue recognition; 'Check
+    if all charges are tagged with revenue rules'; 'Check if all charges are tagged with GL accounts'
+  reason: Operations set up and verify readiness for subscription revenue recognition (revenue rules,
+    GL account tagging, order-line schedules, accounting periods), which is the configuration side of
+    subscription revenue recognition.
+- tag: Usage
+  spec_file: dealhub-usage-api-openapi.yml
+  capability_id: BC-4250.10
+  capability_id_l1: BC-4250
+  capability_name: Usage Metering
+  confidence: 0.85
+  evidence: POST /v2/usage  addUsage  Add usage record; PUT /v2/usage/aggregate  performOnDemandUsageAggregation  Aggregate
+    raw usage; GET /v2/usage/{subscriptionId}  Get aggregated usage
+  reason: Dominant surface ingests and aggregates raw usage events per subscription for usage-based billing,
+    i.e. usage metering; a couple of stray payment-matching endpoints do not change the tag's centre of
+    gravity.
+- tag: Accounting
+  spec_file: dealhub-accounting-api-openapi.yml
+  capability_id: BC-200.10
+  capability_id_l1: BC-200
+  capability_name: General Ledger Management
+  confidence: 0.8
+  evidence: GET /accounting/journalEntry getJournalEntries 'Return Journal Entries'; GET /accounting/ledgerAccounts
+    'Get ledger accounts'; POST /accountingPeriods 'Specify the current accounting period'
+  reason: Operations expose journal entries, ledger accounts and accounting-period control — core general
+    ledger accounting. A revenue-schedule running-balance endpoint hints at subscription revenue recognition,
+    but the dominant surface (journals, ledger accounts, periods) is GL management.
+- tag: Billing
+  spec_file: dealhub-billing-api-openapi.yml
+  capability_id: BC-4250.30
+  capability_id_l1: BC-4250
+  capability_name: Invoicing & Statement Management
+  confidence: 0.8
+  evidence: POST /automatedInvoiceRules 'Create an automated invoice rule'; schemas InvoiceJson, DunningSettingJson,
+    BulkInvoiceRunItem, CreditMemoUnapplicationJson, VoidInvoiceRequest
+  reason: Subscription invoicing surface — invoice generation rules, invoice runs, voiding, credit memos,
+    dunning settings and AR contact. L1 clearly subscription billing; L2 invoicing is the largest share
+    though dunning and tax also appear.
+- tag: Credit Memo
+  spec_file: dealhub-credit-memo-api-openapi.yml
+  capability_id: BC-4250.30
+  capability_id_l1: BC-4250
+  capability_name: Invoicing & Statement Management
+  confidence: 0.8
+  evidence: POST /creditmemos createStandaloneCreditMemo "Create a standalone credit memo"; PUT /creditmemos/convert/{invoiceNumber}
+    "Convert invoice to credit memo"; "Post a credit memo"
+  reason: Credit memo lifecycle (create, post, void, PDF) on a subscription billing platform is invoice/statement
+    adjustment within subscription billing, i.e. Invoicing & Statement Management.
+- tag: CRM Import
+  spec_file: dealhub-crm-import-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.75
+  evidence: '''bulk-migrate a tenant''s buyer accounts and their contacts out of the tenant''s connected
+    CRM (Salesforce, HubSpot, or Microsoft Dynamics) and into DealHub''; POST /api/v1/accounts/crm-import
+    ''Start CRM Import'''
+  reason: Bulk ingestion and de-duplication (matched by CRM id) of customer accounts and contacts is customer
+    master data maintenance. The async job-tracking endpoints are supporting plumbing around that business
+    purpose.
+- tag: CRM Integration
+  spec_file: dealhub-crm-integration-api-openapi.yml
+  capability_id: BC-410.40
+  capability_id_l1: BC-410
+  capability_name: Quote & Configuration Management
+  confidence: 0.75
+  evidence: POST /api/v1.1/quote/create 'Create Quote'; POST /api/v2/quotes 'View Quotes for an Opportunity';
+    POST /api/v1/opportunities 'View My Opportunities'
+  reason: Operations create and open quotes against CRM opportunities, i.e. the CPQ quoting motion surfaced
+    to sellers. Some opportunity-listing content edges toward pipeline management, but quote handling
+    dominates.
+- tag: Orders
+  spec_file: dealhub-orders-api-openapi.yml
+  capability_id: BC-4240.20
+  capability_id_l1: BC-4240
+  capability_name: Subscription Contracting
+  confidence: 0.72
+  evidence: POST /compositeOrders/{id}/pdf createCompositeOrderDocument "Generate a composite order PDF";
+    "Fetch composite order form PDF"; PUT /compositeOrders/{id}/execute "Mark composite order as executed"
+  reason: Subskribe orders are subscription order forms carrying billing schedules, discounts and pricing
+    overrides (CustomBillingScheduleInput, DiscountJson) executed against a CRM opportunity — i.e. capture
+    and generation of subscription contract artefacts rather than physical goods order fulfilment.
+- tag: Account
+  spec_file: dealhub-account-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.7
+  evidence: '"addCpqSourcedAccount", "updateCpqSourcedAccount", "getCpqSourcedAccountContacts", "addCpqSourcedAccountContact";
+    schemas NewAccountJson, AccountAddressJson, NewAccountContactJson'
+  reason: CRUD and bulk lookup over customer accounts, their addresses and contact records sourced from
+    CPQ/CRM — customer master record maintenance. Mapped to Customer Data Management; confidence moderated
+    because it could alternatively be read as sales Account Management, and summaries are absent for several
+    operations.
+- tag: Accounts
+  spec_file: dealhub-accounts-api-openapi.yml
+  capability_id: BC-420.10
+  capability_id_l1: BC-420
+  capability_name: Customer Data Management
+  confidence: 0.7
+  evidence: GET /accounts 'Get all accounts'; POST /accounts/{accountId}/contacts 'Add a contact for an
+    account'; PUT /accounts/{accountId}/crmId 'Update CRM ID'
+  reason: CRUD over customer accounts, their contacts, addresses and CRM cross-reference ids is customer
+    master/golden-record maintenance. Some payment-method and ERP-detail endpoints blur into billing,
+    hence moderate confidence.
+- tag: Get Products Information
+  spec_file: dealhub-get-products-information-api-openapi.yml
+  capability_id: BC-410.40
+  capability_id_l1: BC-410
+  capability_name: Quote & Configuration Management
+  confidence: 0.7
+  evidence: '"This API provides services to calculate prices for a given list of product SKUs"; POST /api/v1/products/pricing
+    getProductsPricing'
+  reason: Operations resolve required product factors/parameters and return calculated prices per SKU
+    — the price/configure step of CPQ. Mapped to Quote & Configuration Management; could alternatively
+    be read as pure Price List Management, hence moderate confidence.
+- tag: Playbook
+  spec_file: dealhub-playbook-api-openapi.yml
+  capability_id: BC-410.40
+  capability_id_l1: BC-410
+  capability_name: Quote & Configuration Management
+  confidence: 0.7
+  evidence: GET /api/version/{versionId}/playbook/{playbookId}/generate-quote-template "Get Generate Quote
+    Template"; schemas QuoteTemplateLineItem, QuoteTemplateQuoteData, PlaybookQuestion
+  reason: DealHub playbooks are the guided-selling question sets and quote templates that drive configure-price-quote
+    output; schemas are quote line items and quote data, so this is CPQ quote/configuration tooling.
+- tag: Tenant
+  spec_file: dealhub-tenant-api-openapi.yml
+  capability_id: BC-4230.10
+  capability_id_l1: BC-4230
+  capability_name: Tenant Provisioning & Lifecycle
+  confidence: 0.7
+  evidence: 'POST /rh/tenants  createRevHubTenant; schemas: TenantJson, TenantSettingJson'
+  reason: Single operation creates a tenant in the multi-tenant service, which is tenant provisioning;
+    evidence is thin (one operation, no summary) so confidence is moderate.
+- tag: Users
+  spec_file: dealhub-users-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: 'POST /userGroups  addUserGroup  Add user group; PUT /users/disable/{id}  disableUser  Disable
+    user; schemas: UserSsoUpdate'
+  reason: User and user-group provisioning, enable/disable and SSO update within the application are identity
+    and access management (joiner-mover-leaver style account administration).
