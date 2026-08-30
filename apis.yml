@@ -40,14 +40,14 @@ x-enrichment:
 tags:
 - Company
 - CPQ
-- Quote-to-Cash
+- Quote to Cash
 - Contract Lifecycle Management
 - Subscription Management
 - Billing
 - Revenue Operations
 - Sales
 - Pricing
-- Usage-Based Billing
+- Usage Based Billing
 - Revenue Recognition
 - Sales Enablement
 tags_raw:
@@ -153,6 +153,8 @@ apis:
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
+  - Account
+  tags_raw:
   - Accounts
   properties:
   - type: OpenAPI
@@ -363,6 +365,8 @@ apis:
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
+  - Bank Transactions
+  tags_raw:
   - BankTransactions
   properties:
   - type: OpenAPI
@@ -994,6 +998,8 @@ apis:
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
+  - Integration
+  tags_raw:
   - Integrations
   properties:
   - type: OpenAPI
@@ -1085,6 +1091,8 @@ apis:
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
+  - Job
+  tags_raw:
   - Jobs
   properties:
   - type: OpenAPI
@@ -1145,6 +1153,8 @@ apis:
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
+  - Notification
+  tags_raw:
   - Notifications
   properties:
   - type: OpenAPI
@@ -1235,6 +1245,8 @@ apis:
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
+  - Order
+  tags_raw:
   - Orders
   properties:
   - type: OpenAPI
@@ -1748,6 +1760,8 @@ apis:
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
+  - Subscription
+  tags_raw:
   - Subscriptions
   properties:
   - type: OpenAPI
@@ -1898,6 +1912,8 @@ apis:
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
