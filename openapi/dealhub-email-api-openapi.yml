@@ -1,0 +1,119 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Email API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Email
+paths:
+  /emailSettings:
+    get:
+      tags:
+      - Email
+      summary: Fetch the email settings
+      description: Returns a list of email settings
+      operationId: getEmailSettings
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EmailSetting'
+    post:
+      tags:
+      - Email
+      summary: Add a new email setting
+      description: ''
+      operationId: addEmailSetting
+      requestBody:
+        $ref: '#/components/requestBodies/EmailSetting'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailSetting'
+    put:
+      tags:
+      - Email
+      summary: Update an existing email setting
+      description: ''
+      operationId: updateEmailSetting
+      requestBody:
+        $ref: '#/components/requestBodies/EmailSetting'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailSetting'
+    delete:
+      tags:
+      - Email
+      summary: Delete an email setting
+      description: ''
+      operationId: deleteEmailSetting
+      requestBody:
+        $ref: '#/components/requestBodies/EmailSetting'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmailSetting'
+components:
+  schemas:
+    EmailSetting:
+      type: object
+      required:
+      - ccEmail
+      - ccEmailType
+      properties:
+        entityId:
+          type: string
+          readOnly: true
+        ccEmail:
+          type: string
+          readOnly: true
+          minLength: 0
+          maxLength: 255
+        ccEmailType:
+          type: string
+          readOnly: true
+          enum:
+          - INVOICE_POSTED
+          - CREDIT_MEMO_AVAILABLE
+          - HUBSPOT_ERROR
+          - DUNNING
+          - APPROVAL_FLOW
+          - ESIGN
+          - LOGIN_LINK
+          - NOTIFICATION
+        createdOn:
+          type: integer
+          format: int64
+          readOnly: true
+        updatedOn:
+          type: integer
+          format: int64
+          readOnly: true
+  requestBodies:
+    EmailSetting:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EmailSetting'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

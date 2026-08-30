@@ -1,0 +1,31 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Platform Feature API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Platform Feature
+paths:
+  /platformFeature/isAccountingFeatureEnabled:
+    get:
+      tags:
+      - Platform Feature
+      summary: Check if the tenant has accounting feature enabled
+      description: Returns whether the tenant has accounting feature enabled.
+      operationId: isAccountingFeatureEnabled
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: boolean
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

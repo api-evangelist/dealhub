@@ -1,0 +1,1455 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Experimental API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Experimental
+paths:
+  /ai/zeppa/gen:
+    post:
+      tags:
+      - Experimental
+      summary: Generate zeppa artifact based on the description provided
+      description: Generate zeppa code or documentation based on the input provided
+      operationId: generateZeppaArtifact
+      requestBody:
+        $ref: '#/components/requestBodies/generateZeppaArtifactBody'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/event-stream:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+  /ai/explain/proration/async/{orderId}/{orderLineItemId}:
+    get:
+      tags:
+      - Experimental
+      summary: Generate an explanation of the proration calculation
+      description: Generate an explanation of the proration calculation for the given order line item.
+      operationId: explainProrationAsync
+      parameters:
+      - name: orderId
+        in: path
+        description: id of the order
+        required: true
+        schema:
+          type: string
+      - name: orderLineItemId
+        in: path
+        description: id of the order line item
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/event-stream:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+  /ai/explain/proration/{orderId}/{orderLineItemId}:
+    get:
+      tags:
+      - Experimental
+      summary: Generate an explanation of the proration calculation
+      description: Generate an explanation of the proration calculation for the given order line item.
+      operationId: explainProration
+      parameters:
+      - name: orderId
+        in: path
+        description: id of the order
+        required: true
+        schema:
+          type: string
+      - name: orderLineItemId
+        in: path
+        description: id of the order line item
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+  /ai/agents/session/{sessionId}:
+    get:
+      tags:
+      - Experimental
+      summary: 'Get the agent session given the id, NOTE: at the moment there is no response body'
+      description: 'Get the agent session given the id, NOTE: at the moment there is no response body, if 200 is returned then session exists'
+      operationId: getAgentSession
+      parameters:
+      - name: sessionId
+        in: path
+        description: id of the session to be fetched
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /ai/summary/subscription/{subscriptionId}:
+    get:
+      tags:
+      - Experimental
+      summary: Generate a summary of the subscription in plain english in markdown format
+      description: Generate a complete summary of the subscription with the given id, a full detailed summary will be generated including metrics
+      operationId: generateSubscriptionSummary
+      parameters:
+      - name: subscriptionId
+        in: path
+        description: id of the subscription
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/event-stream:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+  /ai/summary/order/{orderId}:
+    get:
+      tags:
+      - Experimental
+      summary: Generate a summary of the order in plain english in markdown format
+      description: Generate a complete summary of the order with the given id, a full detailed summary will be generated including metrics
+      operationId: generateOrderSummary
+      parameters:
+      - name: orderId
+        in: path
+        description: id of the order
+        required: true
+        schema:
+          type: string
+      - name: type
+        in: query
+        description: Force regeneration of the PDF document even if there has been no changes. Defaults to false.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/event-stream:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+  /ai/agents/session:
+    post:
+      tags:
+      - Experimental
+      summary: Create new conversational AI agent session
+      description: Create a new conversation session with Subskribe AI agent, this resource will return a session id which will be used for future conversations
+      operationId: createAgentSession
+      responses:
+        default:
+          description: successful operation
+  /ai/agents/session/{sessionId}/chat:
+    put:
+      tags:
+      - Experimental
+      summary: Chat with a given session id and get back a response for a given message
+      description: The API responds user message, a session id is required to identify the session this message needs to be posted
+      operationId: chatResponse
+      parameters:
+      - name: sessionId
+        in: path
+        description: id of the session with which the conversation needs to happen
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/generateZeppaArtifactBody'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+  /ai/agents/session/{sessionId}/chatAsync:
+    get:
+      tags:
+      - Experimental
+      summary: Chat with a given session id and get back a response for a given message in a async manner in the form of server side events
+      description: The API responds to user message, a session id is required to identify the session this message needs to be posted
+      operationId: chatResponseAsync
+      parameters:
+      - name: sessionId
+        in: path
+        description: id of the session with which the conversation needs to happen
+        required: true
+        schema:
+          type: string
+      - name: userMessage
+        in: query
+        description: the user message to which the AI can respond
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/event-stream:
+              schema:
+                $ref: '#/components/schemas/OutboundEvent'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutboundEvent'
+  /ai/agents/session/{sessionId}/messages:
+    get:
+      tags:
+      - Experimental
+      summary: List the messages belong to this session
+      description: The message will be returned in the most recent order, with the latest being the first
+      operationId: chatMessages
+      parameters:
+      - name: sessionId
+        in: path
+        description: id of the session with which the conversation needs to happen
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: the number of message to fetch should be a number between 1 to 100 if present
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+  /guidedSelling/usecase/{id}/qscript:
+    get:
+      tags:
+      - Experimental
+      operationId: getUsecaseScript
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Experimental
+      operationId: putQScript
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/generateZeppaArtifactBody'
+      responses:
+        default:
+          description: successful operation
+  /guidedSelling/usecase:
+    get:
+      tags:
+      - Experimental
+      operationId: listUsecases
+      responses:
+        default:
+          description: successful operation
+    post:
+      tags:
+      - Experimental
+      operationId: addUsecase
+      requestBody:
+        $ref: '#/components/requestBodies/GuidedSellingUsecase'
+      responses:
+        default:
+          description: successful operation
+  /guidedSelling/usecase/{usecase}/nextQuestion:
+    put:
+      tags:
+      - Experimental
+      summary: Get Next Question for Guided Selling
+      description: Get the next question given a set of answers to questions so far
+      operationId: fetchNextQuestion
+      parameters:
+      - name: usecase
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/AnswerArray'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NextQuestion'
+  /guidedSelling/usecase/{usecase}/nextQuestions:
+    put:
+      tags:
+      - Experimental
+      summary: Get The next set of questions based on the answers provided so far
+      description: Get the ordered list of all relevant questions to answer based on the answers provided so far
+      operationId: fetchNextQuestions
+      parameters:
+      - name: usecase
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/AnswerArray'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NextQuestions'
+  /guidedSelling/usecase/{id}:
+    get:
+      tags:
+      - Experimental
+      operationId: getUsecase
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Experimental
+      operationId: updateUsecase
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/GuidedSellingUsecase'
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+      - Experimental
+      operationId: deleteUsecase
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /guidedSelling/usecase/{usecase}/buildOrder:
+    put:
+      tags:
+      - Experimental
+      summary: Build an order using the guided selling answers
+      description: For a given use case this API allows building the order, given account id. you can also save the order
+      operationId: buildOrderFromAnswers
+      parameters:
+      - name: usecase
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: accountId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: saveOrder
+        in: query
+        required: false
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/AnswerArray'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderJson'
+  /guidedSelling/ai/answers:
+    put:
+      tags:
+      - Experimental
+      summary: Use AI to get answers for guided selling questions
+      description: Get the answer to guided selling questions form the deal desk AI, when all questions are answered then return the Answers for the guided selling
+      operationId: getAnswersFromAi
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GuidedSellingInput'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessagesAndAnswer'
+components:
+  schemas:
+    TenantDiscountLineItemJson:
+      type: object
+      properties:
+        id:
+          type: string
+        percent:
+          type: number
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DEPRECATED
+        amount:
+          type: number
+    OrderJson:
+      type: object
+      required:
+      - orderType
+      - startDate
+      - status
+      properties:
+        id:
+          type: string
+          example: ORD-AXBY123
+          description: System-generated unique identifier for the order.
+        entityId:
+          type: string
+          example: ENT-98765AB
+          description: ID of the entity (e.g., business or subsidiary) associated with this order.
+        externalId:
+          type: string
+          example: EXT-456789
+          description: Unique external reference ID for the order that can be used for integration with other systems. This ID can't be reused on multiple orders.
+          minLength: 0
+          maxLength: 36
+        name:
+          type: string
+          example: CreativePro Monthly Subscription Order
+          description: Name or title of the order for easy identification.
+        accountId:
+          type: string
+          example: ACCT-ADE4567
+          description: Unique identifier of the account associated with this order.
+        orderType:
+          type: string
+          example: NEW
+          description: 'Type of order being placed. This value determines how the order will impact a subscription when it is executed.
+
+
+            Supported values:
+
+            * `NEW`: Create a new subscription.
+
+            * `CANCEL`: Cancel an existing subscription.
+
+            * `AMENDMENT`: Amend an existing subscription.
+
+            * `RENEWAL`: Renew an existing subscription.
+
+            * `RESTRUCTURE`: Restructure an existing subscription.'
+          enum:
+          - NEW
+          - AMENDMENT
+          - CANCEL
+          - RENEWAL
+          - RESTRUCTURE
+        currency:
+          type: string
+          example: USD
+          description: ISO 4217 currency code for the order. If you don't specify a value, the account's default currency is used.
+        paymentTerm:
+          type: string
+          example: NET30
+          description: Specifies when the payment for the invoice is due. Supported values are `NET0`, `NET30`, `NET45`, `NET60`, and `NET90`.
+          enum:
+          - NET0
+          - NET30
+          - NET45
+          - NET60
+          - NET90
+        subscriptionId:
+          type: string
+          example: SUB-BCDE123
+          description: The ID of the subscription that you want to amend, restructure, or cancel.
+        subscriptionTargetVersion:
+          type: integer
+          format: int32
+          example: 3
+          description: The subscription version targeted by this order. Each time a subscription is modified, the version is incremented. Orders target a specific version to maintain consistency. Orders may become outdated if the subscription is modified before the order is executed.
+          readOnly: true
+        shippingContactId:
+          type: string
+          example: CONT-XYZ7891
+          description: ID of the contact to use for shipping information.
+        billingContactId:
+          type: string
+          example: CONT-ABC1234
+          description: ID of the contact to use for billing information.
+        predefinedDiscounts:
+          type: array
+          description: Array of predefined discount objects to apply to the order.
+          items:
+            $ref: '#/components/schemas/TenantDiscountJson'
+        creditableAmounts:
+          type: array
+          description: Array of creditable amount which can be refunded when one time charges are cancelled/debooked during amendment or cancellation of a subscription
+          items:
+            $ref: '#/components/schemas/CreditableAmount'
+        lineItems:
+          type: array
+          description: Array of line item objects (i.e., charges) that you added order.
+          items:
+            $ref: '#/components/schemas/OrderLineItemJson'
+        lineItemsNetEffect:
+          type: array
+          description: 'Array of line item objects (i.e., charges) representing the changes that will be made to the subscription when the order is executed.
+
+
+            The number of objects in this array depends on the type of order being created:
+
+            * For `NEW` orders, this array includes all line items that will be added to the new subscription.
+
+            * For `CANCEL` orders, this array includes the line items that will be removed from the subscription on the cancellation date. Any line items that expire before the cancellation date are not included.
+
+            * For `AMENDMENT` orders, this array includes only those line items that contain the changes to make the requested amendments to the subscription.
+
+            * For `RENEWAL` orders, this array includes all line items from the subscription that is being renewed.
+
+            * For `RESTRUCTURE` orders, this array includes line items that will be added to the restructured subscription.'
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/OrderLineItemJson'
+        startDate:
+          type: integer
+          format: int64
+          example: 1672531200
+          description: Start date of the subscription in Unix timestamp format (seconds since epoch). This date is inclusive.
+        endDate:
+          type: integer
+          format: int64
+          example: 1704067200
+          description: "End date of the subscription in Unix timestamp format (seconds since epoch). If not provided for `TERMED` subscriptions, it will be calculated based on `termLength`. \n\n**NOTE:** This date is exclusive. For example, if the subscription's start date is 1735689600 (January 1, 2025 00:00:00) and the term length is 1 year, specify the end date as 1767225600 (January 1, 2026 00:00:00).\nSince the date is exclusive, the subscription is still active at December 31, 2025 23:59:59 but will have ended at January 1, 2026 00:00:00."
+        termLength:
+          $ref: '#/components/schemas/RecurrenceJson'
+        billingCycle:
+          $ref: '#/components/schemas/RecurrenceJson'
+        billingTerm:
+          type: string
+          example: UP_FRONT
+          description: 'Specifies when billing occurs relative to service delivery.
+
+
+            Supported values:
+
+            * `UP_FRONT`: Billing occurs before the product or service is delivered
+
+            * `IN_ARREARS`: The customer is billed after receiving the product or service.'
+          enum:
+          - UP_FRONT
+          - IN_ARREARS
+        billingAnchorDate:
+          type: integer
+          format: int64
+          example: 1672531200
+          description: Specific date to anchor billing cycles to, in Unix timestamp format (seconds since epoch). Useful for aligning billing with specific dates (e.g., first of the month).
+        totalAmount:
+          type: number
+          example: 1500
+          description: Total currency amount for the order, including all line items, taxes, and discounts.
+        totalListAmount:
+          type: number
+          example: 1800
+          description: Total list amount for the order before any discounts are applied.
+        totalListAmountBeforeOverride:
+          type: number
+          example: 2000
+          description: Total list amount for the order before any manual overrides are applied.
+        taxEstimate:
+          type: number
+          example: 120
+          description: Estimated tax amount for the order based on tax considerations.
+        status:
+          type: string
+          example: APPROVED
+          description: 'Current status of the order.
+
+            **NOTE:** Order details can be modified only when the status is `DRAFT`. When the order is in any other state, only a few attributes such as order name, shipping and billing contacts, PO number, and CRM opportunity details can be modified.
+
+
+            Supported values:
+
+            * `DRAFT`: Initial and default status of an order. An order in this status can be modified.
+
+            * `SUBMITTED`: Order has been submitted for review and approval. No further modifications are allowed without changing the order status back to `DRAFT`.
+
+            * `APPROVED`: Order has been approved and is ready for execution.
+
+            * `EXECUTED`: Order has been executed and the associated subscription has been created or modified.
+
+            * `EXPIRED`: Order has reached its expiration date without being executed. You can change an expired order''s status to `DRAFT` if the expiration date is removed or updated to a later date.'
+          enum:
+          - DRAFT
+          - SUBMITTED
+          - APPROVED
+          - EXECUTED
+          - EXPIRED
+        executedOn:
+          type: integer
+          format: int64
+          example: 1672617600
+          description: Date when the order was executed in Unix timestamp format. This field is populated only when the order status is `EXECUTED`.
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+          example: 1672704000
+          description: Date when the order was last updated in Unix timestamp format (seconds since epoch).
+        executedOnFormatted:
+          type: string
+          example: '2023-01-02T00:00:00Z'
+          description: Formatted date when the order was executed.
+        rampInterval:
+          type: array
+          example: '[1672531200, 1680307200, 1688083200]'
+          description: Array of timestamps (in Unix timestamp format) defining intervals for ramped pricing schedules. The timestamps must be in chronological order from earliest to latest, and there must be no duplicate entries. Used when implementing gradual quantity or price changes over time.
+          items:
+            type: integer
+            format: int64
+        orderFormTemplateIds:
+          type: array
+          example: '[a7b8c3d4-e5f6-4a1b-9c2d-3e4f5a6b7c8d5, f1e2d3c4-b5a6-4978-8364-1a2b3c4d5e6f]'
+          description: Array of IDs associated with predefined terms used to generate order forms. Specified as UUIDs.
+          items:
+            type: string
+        orderTerms:
+          type: array
+          description: Array of objects representing the terms associated with this order.
+          items:
+            $ref: '#/components/schemas/OrderTerms'
+        sfdcOpportunityId:
+          type: string
+          description: Salesforce opportunity ID associated with the order.
+        isPrimaryOrderForSfdcOpportunity:
+          type: boolean
+          description: Indicates if the order is the primary order for the Salesforce opportunity.
+        sfdcOpportunityName:
+          type: string
+          description: Salesforce opportunity name.
+        sfdcOpportunityType:
+          type: string
+          description: Type of Salesforce opportunity.
+        sfdcOpportunityStage:
+          type: string
+          description: Stage of the Salesforce opportunity.
+        sfdcOrderCanBeExecuted:
+          type: boolean
+          description: Indicates whether the order can be executed in Salesforce.
+        opportunityCrmType:
+          type: string
+          example: SALESFORCE
+          description: Type of CRM where the opportunity is managed.
+          enum:
+          - SALESFORCE
+          - HUBSPOT
+        renewalForSubscriptionId:
+          type: string
+          example: SUB-A1B3C4D
+          description: ID of the subscription being renewed. Returned only when `orderType` is `RENEWAL`.
+        renewalForSubscriptionVersion:
+          type: integer
+          format: int32
+          example: 2
+          description: Version number of the subscription being renewed. Returned only when `orderType` is `RENEWAL`.
+        ownerId:
+          type: string
+          example: USR-12345AB
+          description: ID of the user who owns this order.
+        documentMasterTemplateId:
+          type: string
+          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+          description: UUID of the document template to use to generate order documents.
+        purchaseOrderNumber:
+          type: string
+          example: '123456789'
+          description: The purchase order number associated with this order.
+        purchaseOrderRequiredForInvoicing:
+          type: boolean
+          example: true
+          description: Indicates whether a purchase order number is required to generate an invoice.
+        autoRenew:
+          type: boolean
+          example: false
+          description: Indicates whether the subscription should automatically renew at the end of its term.
+        approvalSegmentId:
+          type: string
+          example: APSG-ABC45
+          description: ID of the approval segment to use for routing this order through approval workflows.
+        attachmentId:
+          type: string
+          example: '12345678'
+          description: ID of an attachment associated with this order (e.g., signed contract).
+        compositeOrderId:
+          type: string
+          example: CORD-A0B0C1D
+          description: ID of the composite order. Returned only if this order is part of a composite order structure.
+        restructureForSubscriptionId:
+          type: string
+          example: SUB-Z98Y7X6
+          description: ID of the subscription being restructured. Returned only when `orderType` is `RESTRUCTURE`.
+        expiresOn:
+          type: integer
+          format: int64
+          example: 1675209600
+          description: Date when the order expires if the `status` is not `EXECUTED`. Specified in Unix timestamp format (seconds since epoch).
+        customFields:
+          type: array
+          description: Array of custom fields to include additional metadata with the order.
+          items:
+            $ref: '#/components/schemas/CustomFieldEntry'
+        startDateType:
+          type: string
+          example: EXECUTION_DATE
+          description: 'Determines how the start date is calculated.
+
+
+            Supported values:
+
+            * `FIXED`: Start date is the value of `startDate`, or the first `rampInterval` timestamp if specified.
+
+            * `EXECUTION_DATE`: Start date is the date when the order status changes to `EXECUTED`.'
+          enum:
+          - FIXED
+          - EXECUTION_DATE
+        customBillingEligibleOrderLineIds:
+          type: array
+          description: Array of line item IDs (i.e., charge IDs) in this order that are eligible for custom billing.
+          items:
+            type: string
+        customPredefinedTemplatesOnOrder:
+          type: array
+          description: List of predefined templates that are applied specifically to this order.
+          items:
+            $ref: '#/components/schemas/CustomPredefinedTemplateOnOrder'
+        subscriptionDurationModel:
+          type: string
+          description: 'Determines the subscription term.
+
+
+            Supported values:
+
+            * `TERMED`: Subscription has a fixed term length.
+
+            * `EVERGREEN`: Subscription continues indefinitely until cancelled.'
+          enum:
+          - TERMED
+          - EVERGREEN
+        opportunity:
+          $ref: '#/components/schemas/OpportunityJson'
+        zeppaOutput:
+          $ref: '#/components/schemas/OrderCreationCustomizationOutputJson'
+    CreditableAmount:
+      type: object
+      properties:
+        subscriptionChargeId:
+          type: string
+        creditableAmount:
+          type: number
+        maxCreditableAmount:
+          type: number
+    OrderLineRuleWarningsJson:
+      type: object
+      properties:
+        lineIdentifier:
+          type: string
+        warnings:
+          type: array
+          items:
+            type: string
+    NextQuestions:
+      type: object
+      required:
+      - state
+      properties:
+        questions:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Question'
+        answersToRemove:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        state:
+          type: string
+          readOnly: true
+          enum:
+          - IN_PROGRESS
+          - DONE
+    GuidedSellingInput:
+      type: object
+      required:
+      - initialBlurb
+      properties:
+        usecaseId:
+          type: string
+          readOnly: true
+        initialBlurb:
+          type: string
+          readOnly: true
+        messagesSoFar:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Message'
+    OutboundEvent:
+      type: object
+      properties:
+        name:
+          type: string
+        comment:
+          type: string
+        id:
+          type: string
+        mediaType:
+          $ref: '#/components/schemas/MediaType'
+        data:
+          type: object
+        reconnectDelay:
+          type: integer
+          format: int64
+        genericType:
+          $ref: '#/components/schemas/Type'
+        reconnectDelaySet:
+          type: boolean
+    Type:
+      type: object
+      properties:
+        typeName:
+          type: string
+    CustomFieldEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        name:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        value:
+          type: string
+          readOnly: true
+        selections:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        required:
+          type: boolean
+          readOnly: true
+        source:
+          type: string
+          readOnly: true
+          enum:
+          - USER
+          - SYSTEM
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+    NextQuestion:
+      type: object
+      required:
+      - state
+      properties:
+        nextQuestion:
+          $ref: '#/components/schemas/Question'
+        state:
+          type: string
+          readOnly: true
+          enum:
+          - IN_PROGRESS
+          - DONE
+    DiscountDetailJson:
+      type: object
+      properties:
+        name:
+          type: string
+        percent:
+          type: number
+        discountAmount:
+          type: number
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DEPRECATED
+        discountedPrice:
+          type: number
+        amount:
+          type: number
+    RuleTraceJson:
+      type: object
+      properties:
+        ruleName:
+          type: string
+        fired:
+          type: boolean
+        orderActionsPerformed:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleActionPerformedJson'
+        orderLineActionsPerformed:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLineActionsPerformedJson'
+        orderRuleWarnings:
+          type: array
+          items:
+            type: string
+        orderLineRuleWarnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLineRuleWarningsJson'
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
+    PricingOverrideJson:
+      type: object
+      properties:
+        priceTiers:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/PriceTierJson'
+        minQuantity:
+          type: integer
+          format: int64
+          readOnly: true
+        maxQuantity:
+          type: integer
+          format: int64
+          readOnly: true
+    PriceTierJson:
+      type: object
+      required:
+      - amount
+      - untilQuantity
+      properties:
+        untilQuantity:
+          type: string
+        amount:
+          type: number
+        overage:
+          type: number
+    OpportunityJson:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        entityId:
+          type: string
+        type:
+          type: string
+        stage:
+          type: string
+        crmId:
+          type: string
+        accountId:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        opportunityCrmType:
+          type: string
+          enum:
+          - SALESFORCE
+          - HUBSPOT
+        isClosed:
+          type: boolean
+        primaryOrderId:
+          type: string
+        opportunityId:
+          type: string
+        currency:
+          type: string
+        customFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldEntry'
+    QuestionSchema:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          readOnly: true
+          enum:
+          - ARRAY
+          - STRING
+          - INTEGER
+          - DATE
+        allowedValues:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        minValue:
+          type: integer
+          format: int32
+          readOnly: true
+        maxValue:
+          type: integer
+          format: int32
+          readOnly: true
+    MediaType:
+      type: object
+      properties:
+        type:
+          type: string
+        subtype:
+          type: string
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+        wildcardType:
+          type: boolean
+        wildcardSubtype:
+          type: boolean
+    MessagesAndAnswer:
+      type: object
+      properties:
+        accountId:
+          type: string
+          readOnly: true
+        entityId:
+          type: string
+          readOnly: true
+        messages:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Message'
+        answers:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Answer'
+    Answer:
+      type: object
+      required:
+      - questionId
+      properties:
+        questionId:
+          type: string
+          readOnly: true
+        answer:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        skipped:
+          type: boolean
+          readOnly: true
+    GuidedSellingUsecase:
+      type: object
+      required:
+      - name
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+          minLength: 0
+          maxLength: 100
+        description:
+          type: string
+          readOnly: true
+        questions:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/QuestionDefinition'
+    CustomPredefinedTemplateOnOrder:
+      type: object
+      properties:
+        id:
+          type: string
+        orderId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        content:
+          type: string
+    RuleActionPerformedJson:
+      type: object
+      properties:
+        action:
+          type: string
+        actionMessage:
+          type: string
+    Question:
+      type: object
+      required:
+      - id
+      - questionText
+      - required
+      - schema
+      properties:
+        id:
+          type: string
+          readOnly: true
+        questionText:
+          type: string
+          readOnly: true
+        required:
+          type: boolean
+          readOnly: true
+        multiSelectionAllowed:
+          type: boolean
+          readOnly: true
+        schema:
+          $ref: '#/components/schemas/QuestionSchema'
+    OrderLineItemJson:
+      type: object
+      required:
+      - chargeId
+      properties:
+        id:
+          type: string
+        itemGroupId:
+          type: string
+        isDryRunItem:
+          type: boolean
+        action:
+          type: string
+          enum:
+          - ADD
+          - UPDATE
+          - REMOVE
+          - RENEWAL
+          - NONE
+          - MISSING_RENEWAL
+          - RESTRUCTURE
+        planId:
+          type: string
+        subscriptionChargeId:
+          type: string
+        currencyConversionRateId:
+          type: string
+        subscriptionChargeGroupId:
+          type: string
+        chargeId:
+          type: string
+        quantity:
+          type: integer
+          format: int64
+        isRamp:
+          type: boolean
+        listUnitPrice:
+          type: number
+        sellUnitPrice:
+          type: number
+        discountAmount:
+          type: number
+        discounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/DiscountDetailJson'
+        predefinedDiscounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/TenantDiscountLineItemJson'
+        attributeReferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeReference'
+        amount:
+          type: number
+        listAmount:
+          type: number
+        annualizedAmount:
+          type: number
+        pricingOverride:
+          $ref: '#/components/schemas/PricingOverrideJson'
+        listPriceOverrideRatio:
+          type: number
+        listUnitPriceBeforeOverride:
+          type: number
+        listAmountBeforeOverride:
+          type: number
+        taxEstimate:
+          type: number
+        effectiveDate:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+        customFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldEntry'
+        arrOverride:
+          type: number
+        replacedPlanId:
+          type: string
+        dryRunItem:
+          type: boolean
+    OrderTerms:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        templateGroupId:
+          type: string
+        templateGroupVersion:
+          type: integer
+          format: int32
+        orderId:
+          type: string
+        levelType:
+          type: string
+          enum:
+          - ORDER
+          - PLAN
+        planIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        templateId:
+          type: string
+          readOnly: true
+        deleted:
+          type: boolean
+    QuestionDefinition:
+      type: object
+      required:
+      - id
+      - questionText
+      - required
+      - schema
+      properties:
+        id:
+          type: string
+          readOnly: true
+        questionText:
+          type: string
+          readOnly: true
+        required:
+          type: boolean
+          readOnly: true
+        multiSelectionAllowed:
+          type: boolean
+          readOnly: true
+        schema:
+          $ref: '#/components/schemas/QuestionSchema'
+        dependsAnd:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Answer'
+        dependsOr:
+          type: array
+          readOnly: true
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/Answer'
+    RecurrenceJson:
+      type: object
+      required:
+      - cycle
+      - step
+      properties:
+        cycle:
+          type: string
+          enum:
+          - DAY
+          - MONTH
+          - QUARTER
+          - SEMI_ANNUAL
+          - YEAR
+          - PAID_IN_FULL
+          - CUSTOM
+        step:
+          type: integer
+          format: int32
+          minimum: 1
+    OrderCreationCustomizationOutputJson:
+      type: object
+      properties:
+        customizationRunSkipped:
+          type: boolean
+        customizationDefinitionMissing:
+          type: boolean
+        ruleTraces:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleTraceJson'
+    Message:
+      type: object
+      required:
+      - createdAt
+      - message
+      - role
+      properties:
+        role:
+          type: string
+          readOnly: true
+        message:
+          type: string
+          readOnly: true
+        createdAt:
+          type: integer
+          format: int64
+          readOnly: true
+    OrderLineActionsPerformedJson:
+      type: object
+      properties:
+        lineIdentifier:
+          type: string
+        actionsPerformed:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleActionPerformedJson'
+    AttributeReference:
+      type: object
+      properties:
+        attributeDefinitionId:
+          type: string
+          readOnly: true
+        attributeValue:
+          type: string
+          readOnly: true
+    TenantDiscountJson:
+      type: object
+      properties:
+        id:
+          type: string
+        percent:
+          type: number
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DEPRECATED
+  requestBodies:
+    generateZeppaArtifactBody:
+      content:
+        text/plain:
+          schema:
+            type: string
+    GuidedSellingUsecase:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GuidedSellingUsecase'
+    AnswerArray:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Answer'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

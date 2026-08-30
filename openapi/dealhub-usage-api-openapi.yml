@@ -1,0 +1,447 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Usage API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Usage
+paths:
+  /bankTransactions/match:
+    post:
+      tags:
+      - Usage
+      summary: Match bank transactions
+      description: Match bank transactions
+      operationId: bankTransactionsMatch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatchBankTransactionsRequest'
+        description: Invoice ID and Bank Transaction IDs to match
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceBankTransactionMatchResponse'
+  /settlements/addAndApplyPaymentsInBulk/csv:
+    post:
+      tags:
+      - Usage
+      summary: Add and apply bulk payments to invoices CSV
+      description: Bulk upload payments to invoices in CSV file
+      operationId: addAndApplyBulkPaymentsCsv
+      requestBody:
+        $ref: '#/components/requestBodies/uploadApprovalMatrixCSV'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkPaymentUploadResult'
+  /v2/usage/aggregate:
+    put:
+      tags:
+      - Usage
+      summary: Aggregate raw usage
+      description: Trigger the process to aggregate any remaining raw usage records
+      operationId: performOnDemandUsageAggregation
+      responses:
+        default:
+          description: successful operation
+  /v2/usage/csv:
+    post:
+      tags:
+      - Usage
+      summary: Upload usage record CSV
+      description: Upload usage records in CSV file. Each row of the file represents a single usage record
+      operationId: uploadSubscriptionUsageCSV
+      requestBody:
+        $ref: '#/components/requestBodies/uploadApprovalMatrixCSV'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageBatchInsertResult'
+  /v2/usage:
+    post:
+      tags:
+      - Usage
+      summary: Add usage record
+      description: Load usage records into the system
+      operationId: addUsage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RawUsagesData'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsageBatchInsertResult'
+  /v2/usage/{subscriptionId}:
+    get:
+      tags:
+      - Usage
+      summary: Get aggregated usage
+      description: Retrieve the current aggregated usage data for a subscription between 2 instants
+      operationId: getUsageAggregatesForSubscription
+      parameters:
+      - name: subscriptionId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: from
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: to
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UsageAggregateOutput'
+  /v2/usage/stats/{subscriptionId}:
+    get:
+      tags:
+      - Usage
+      summary: Get prepaid drawdown usage stats for subscription
+      description: Retrieve the current prepaid drawdown statistics for a subscription
+      operationId: getUsageStatsForSubscription
+      parameters:
+      - name: subscriptionId
+        in: path
+        description: ID of subscription to retrieve usages stats for
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PrepaidStats'
+  /v2/usage/stats/{subscriptionId}/csv:
+    get:
+      tags:
+      - Usage
+      summary: Get prepaid drawdown usage stats CSV
+      description: Retrieve the current prepaid drawdown statistics for a subscription in CSV format
+      operationId: getUsageStatsForSubscriptionCsv
+      parameters:
+      - name: subscriptionId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /v2/usage/stats/{subscriptionId}/pdf:
+    get:
+      tags:
+      - Usage
+      summary: Get prepaid drawdown usage stats PDF
+      description: Retrieve the current prepaid drawdown statistics for a subscription in PDF format
+      operationId: getUsageStatsForSubscriptionPdf
+      parameters:
+      - name: subscriptionId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /v2/usage/stats/csv:
+    get:
+      tags:
+      - Usage
+      summary: Get all prepaid drawdown usage stats CSV
+      description: Retrieve the current prepaid drawdown statistics for all subscriptions for a time range in CSV format
+      operationId: getUsageStatsForAllSubscriptionsCsv
+      parameters:
+      - name: from
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: to
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: successful operation
+  /v2/usage/aggregate/usageArrivalTimeCheckpoint:
+    get:
+      tags:
+      - Usage
+      summary: Get usage arrival checkpoint
+      description: Retrieve the latest usage record upload to the system as epoch seconds
+      operationId: getUsageArrivalTimeCheckpoint
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    Entry:
+      type: object
+      properties:
+        rowNumber:
+          type: integer
+          format: int64
+        failed:
+          type: boolean
+        failureReason:
+          type: string
+    PrepaidStats:
+      type: object
+      properties:
+        accountId:
+          type: string
+        accountName:
+          type: string
+        accountCrmId:
+          type: string
+        subscriptionId:
+          type: string
+        entityDisplayId:
+          type: string
+        subscriptionStartDate:
+          type: integer
+          format: int64
+        subscriptionEndDate:
+          type: integer
+          format: int64
+        planName:
+          type: string
+        drawdownChargeName:
+          type: string
+        provisionedQuantity:
+          type: number
+        startingQuantity:
+          type: number
+        remainingQuantity:
+          type: number
+        consumedQuantity:
+          type: number
+        periodStart:
+          type: integer
+          format: int64
+        periodEnd:
+          type: integer
+          format: int64
+    BulkPaymentUploadData:
+      type: object
+      properties:
+        currencyCode:
+          type: string
+        amount:
+          type: number
+        failed:
+          type: boolean
+        bankFee:
+          type: number
+        invoiceNumber:
+          type: string
+        note:
+          type: string
+        paymentMethod:
+          type: string
+        paymentBankAccountId:
+          type: string
+        paymentDate:
+          type: integer
+          format: int64
+        paymentMethodId:
+          type: string
+          format: uuid
+        failureReason:
+          type: string
+        newInvoiceBalance:
+          type: number
+        originalInvoiceBalance:
+          type: number
+    MatchBankTransactionsRequest:
+      type: object
+      properties:
+        invoiceID:
+          type: string
+        bankTransactionIDs:
+          type: array
+          items:
+            type: string
+    InvoiceBankTransactionMatchResponse:
+      type: object
+      properties:
+        invoiceID:
+          type: string
+          readOnly: true
+        bankTransactionIDs:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        invoiceStatus:
+          type: string
+          readOnly: true
+          enum:
+          - DRAFT
+          - POSTED
+          - PAID
+          - CONVERTED
+          - VOIDED
+        invoiceBalance:
+          type: number
+          readOnly: true
+        paymentId:
+          type: string
+          readOnly: true
+    AttributeReference:
+      type: object
+      properties:
+        attributeDefinitionId:
+          type: string
+          readOnly: true
+        attributeValue:
+          type: string
+          readOnly: true
+    BulkPaymentUploadResult:
+      type: object
+      properties:
+        paymentsRequestCount:
+          type: integer
+          format: int32
+        failedPaymentsCount:
+          type: integer
+          format: int32
+        bulkPaymentUploadData:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkPaymentUploadData'
+    UsageAggregateOutput:
+      type: object
+      properties:
+        subscriptionId:
+          type: string
+        subscriptionChargeGroupId:
+          type: string
+        attributeReferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeReference'
+        startAt:
+          type: integer
+          format: int64
+        endAt:
+          type: integer
+          format: int64
+        observedDataPoints:
+          type: integer
+          format: int32
+        usageSum:
+          type: number
+        usageMax:
+          type: number
+        usageMin:
+          type: number
+    RawUsagesData:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RawUsage'
+      description: A list of RawUsage objects
+    RawUsage:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for a particular usage record
+        aliasId:
+          type: string
+          description: Alias ID for an usage based subscription item. This value is required if subscriptionId and subscriptionChargeId are not provided
+        subscriptionId:
+          type: string
+          description: SubscriptionId to attach usage record to. This value is required if aliasId is not provided
+        chargeId:
+          type: string
+          description: ChargeId of an usage based charge to attach usage record to. This value is required if aliasId is not provided
+        usageTime:
+          type: integer
+          format: int64
+          description: Usage time in unix timestamp (seconds)
+        usageQuantity:
+          type: integer
+          format: int64
+        attributeReferences:
+          type: array
+          description: List of attribute references to derive the price for the usage record
+          items:
+            $ref: '#/components/schemas/AttributeReference'
+      description: A raw usage record
+    UsageBatchInsertResult:
+      type: object
+      properties:
+        rawUsagesTotal:
+          type: integer
+          format: int32
+        totalFailed:
+          type: integer
+          format: int32
+        totalDuplicates:
+          type: integer
+          format: int32
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entry'
+  requestBodies:
+    uploadApprovalMatrixCSV:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

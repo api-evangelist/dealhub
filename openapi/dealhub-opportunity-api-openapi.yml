@@ -1,0 +1,231 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Opportunity API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Opportunity
+paths:
+  /opportunity:
+    post:
+      tags:
+      - Opportunity
+      summary: Creates a standalone opportunity
+      description: Returns the details of a specified opportunity
+      operationId: createOpportunity
+      requestBody:
+        $ref: '#/components/requestBodies/OpportunityRestJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpportunityJson'
+  /opportunity/{id}:
+    put:
+      tags:
+      - Opportunity
+      summary: Updates a standalone opportunity
+      description: Returns the details of the updated opportunity
+      operationId: updateOpportunity
+      parameters:
+      - name: id
+        in: path
+        description: id of the opportunity
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/OpportunityRestJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpportunityJson'
+  /opportunity/{id}/open:
+    post:
+      tags:
+      - Opportunity
+      summary: Opens an opportunity
+      description: Returns the details of the updated opportunity
+      operationId: resetOpportunityClosedState
+      parameters:
+      - name: id
+        in: path
+        description: crm id or native id of the opportunity
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpportunityJson'
+  /opportunity/accountCrmId/{id}:
+    get:
+      tags:
+      - Opportunity
+      summary: Get opportunities by account CRM ID
+      description: Returns the opportunities for an account with a specific CRM ID
+      operationId: getOpportunitiesByAccountCrmId
+      parameters:
+      - name: id
+        in: path
+        description: Account CRM ID
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+components:
+  schemas:
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
+    OpportunityRestJson:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        entityId:
+          type: string
+        type:
+          type: string
+        stage:
+          type: string
+        crmId:
+          type: string
+        accountId:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        opportunityCrmType:
+          type: string
+          enum:
+          - SALESFORCE
+          - HUBSPOT
+        isClosed:
+          type: boolean
+        primaryOrderId:
+          type: string
+    CustomFieldEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        name:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        value:
+          type: string
+          readOnly: true
+        selections:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        required:
+          type: boolean
+          readOnly: true
+        source:
+          type: string
+          readOnly: true
+          enum:
+          - USER
+          - SYSTEM
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+    OpportunityJson:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        entityId:
+          type: string
+        type:
+          type: string
+        stage:
+          type: string
+        crmId:
+          type: string
+        accountId:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        opportunityCrmType:
+          type: string
+          enum:
+          - SALESFORCE
+          - HUBSPOT
+        isClosed:
+          type: boolean
+        primaryOrderId:
+          type: string
+        opportunityId:
+          type: string
+        currency:
+          type: string
+        customFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldEntry'
+  requestBodies:
+    OpportunityRestJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OpportunityRestJson'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

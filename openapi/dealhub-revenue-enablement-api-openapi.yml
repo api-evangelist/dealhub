@@ -1,0 +1,150 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Revenue Enablement API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Revenue Enablement
+paths:
+  /revenueEnablement/enable:
+    put:
+      tags:
+      - Revenue Enablement
+      summary: Enable revenue recognition
+      description: This will enable revenue recognition
+      operationId: enableRevenueRecognition
+      responses:
+        default:
+          description: successful operation
+  /revenueEnablement/readiness/doesOpenAccountingPeriodExist:
+    get:
+      tags:
+      - Revenue Enablement
+      summary: Check if an open accounting period exists
+      description: This will check if an open accounting period exists
+      operationId: doesOpenAccountingPeriodExist
+      responses:
+        default:
+          description: successful operation
+  /revenueEnablement/readiness/areAllChargesTaggedWithRevenueRules:
+    get:
+      tags:
+      - Revenue Enablement
+      summary: Check if all charges are tagged with revenue rules
+      description: This will check if all charges are tagged with revenue rules
+      operationId: areAllChargesTaggedWithRevenueRules
+      responses:
+        default:
+          description: successful operation
+  /revenueEnablement/readiness/areAllChargesTaggedWithGLAccounts:
+    get:
+      tags:
+      - Revenue Enablement
+      summary: Check if all charges are tagged with GL accounts
+      description: This will check if all charges are tagged with GL accounts
+      operationId: areAllChargesTaggedWithGLAccounts
+      responses:
+        default:
+          description: successful operation
+  /revenueEnablement/readiness/doAllOrderLinesHaveSchedules:
+    get:
+      tags:
+      - Revenue Enablement
+      summary: Check if all order lines have schedules
+      description: This will check if all order lines have schedules
+      operationId: doAllOrderLinesHaveSchedules
+      responses:
+        default:
+          description: successful operation
+  /revenueEnablement/readiness/areAccountingEventsPresentForAllTransactionTypes:
+    get:
+      tags:
+      - Revenue Enablement
+      summary: Check if accounting events are present for all transaction types
+      description: This will check if accounting events are present for all transaction types
+      operationId: areAccountingEventsPresentForAllTransactionTypes
+      responses:
+        default:
+          description: successful operation
+  /revenueEnablement/progress:
+    get:
+      tags:
+      - Revenue Enablement
+      summary: Get revenue enablement progress
+      description: This will get revenue enablement progress
+      operationId: getRevenueEnablementProgress
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Revenue Enablement
+      summary: Update revenue enablement progress
+      description: This will update revenue enablement progress
+      operationId: upsertRevenueEnablementProgress
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevenueEnablementProgress'
+        description: json representation of the progress
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /revenueEnablement:
+    delete:
+      tags:
+      - Revenue Enablement
+      summary: Delete all accounting and revenue recognition data
+      description: This will delete all accounting and revenue recognition data except for the charge configuration and ledger accounts
+      operationId: deleteAllAccountingAndRevenueRecognitionData
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    RevenueEnablementProgress:
+      type: object
+      properties:
+        entityId:
+          type: string
+        cpqEnabled:
+          type: boolean
+        billingEnabled:
+          type: boolean
+        accountingPeriodDefined:
+          type: boolean
+        revenueAndAccountingEnabled:
+          type: boolean
+        revenueRulesAndGlCodeAssigned:
+          type: boolean
+        goLiveDate:
+          type: integer
+          format: int64
+        historicalInvoicesGenerated:
+          type: boolean
+        historicalInvoicesRunId:
+          type: string
+        historicalInvoicesReviewedAndClosed:
+          type: boolean
+        revenueScheduleReviewed:
+          type: boolean
+        revenueScheduleGenerationJobId:
+          type: string
+        glBalancesReviewed:
+          type: boolean
+        glBalancesReprocessEventsJobId:
+          type: string
+        glBalancesBulkRevenueRecognitionId:
+          type: string
+        isCompleted:
+          type: boolean
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

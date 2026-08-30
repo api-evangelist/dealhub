@@ -1,0 +1,491 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Accounting API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Accounting
+paths:
+  /accountingPeriods:
+    post:
+      tags:
+      - Accounting
+      summary: Specify the current accounting period
+      description: Specify the start date of and open an accounting period, making it current
+      operationId: specifyCurrentAccountingPeriod
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+              format: int64
+        description: Start date of new period in seconds since Epoch (GMT)
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountingPeriod'
+  /accountingPeriods/current:
+    get:
+      tags:
+      - Accounting
+      summary: Get the current accounting period
+      description: ''
+      operationId: getCurrentAccountingPeriod
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountingPeriod'
+  /accounting/journalEntry/summary:
+    get:
+      tags:
+      - Accounting
+      summary: Return Journal Entry summary
+      description: Returns Journal Entry summary for the optionally specified accounting period as text/csv. If no period is specified, Journal Entry summary for 12 recent periods are returned.
+      operationId: getJournalEntriesSummary
+      parameters:
+      - name: accountingPeriodId
+        in: query
+        description: Id of the period
+        required: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /accounting/journalEntry/runningBalances:
+    get:
+      tags:
+      - Accounting
+      summary: Get running balances of revenue schedule
+      description: Returns deferred revenue and contract asset balances for the given revenue schedule, as of the given date.If no date is provided, the balances are returned as of the current date.
+      operationId: getRunningBalances
+      parameters:
+      - name: scheduleId
+        in: query
+        description: Revenue schedule id
+        required: true
+        schema:
+          type: string
+      - name: asOf
+        in: query
+        description: Date in seconds since Epoch(GMT)
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: successful operation
+  /accounting/journalEntry/events:
+    get:
+      tags:
+      - Accounting
+      summary: Get accounting events for the specified dates
+      description: Returns all accounting related events between the from and to dates. Since there can be a large number of these, the results are paginated. To retrieve subsequent pages of events, pass in the pageToken returned from the prior call.
+      operationId: getAccountingEvents
+      parameters:
+      - name: from
+        in: query
+        description: start date in seconds since Epoch(GMT)
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: to
+        in: query
+        description: end date in seconds since Epoch(GMT)
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: number of items per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: pageToken
+        in: query
+        description: pass this to subsequent calls
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountingEventPaginatedResponse'
+  /accounting/journalEntry:
+    get:
+      tags:
+      - Accounting
+      summary: Return Journal Entries
+      description: Returns all Journal Entries for the optionally specified accounting period as text/csv. If no period is specified, Journal Entries for 12 recent periods are returned.
+      operationId: getJournalEntries
+      parameters:
+      - name: accountingPeriodId
+        in: query
+        description: Id of the period
+        required: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /accounting/ledgerAccounts:
+    get:
+      tags:
+      - Accounting
+      summary: Get ledger accounts
+      description: Get list of all ledger accounts (GL accounts), optionally filtered by type
+      operationId: getLedgerAccounts
+      parameters:
+      - name: type
+        in: query
+        description: Filter by ledger account type
+        required: false
+        schema:
+          type: string
+          enum:
+          - ACCOUNTS_RECEIVABLE
+          - TAX_LIABILITY
+          - CASH
+          - DEFERRED_REVENUE
+          - RECOGNIZED_REVENUE
+          - CONTRACT_ASSET
+          - REALIZED_GAIN_LOSS
+          - EXPENSE
+          - REFUND
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LedgerAccount'
+components:
+  schemas:
+    ByteBuffer:
+      type: object
+      properties:
+        short:
+          type: integer
+          format: int32
+        char:
+          type: string
+        int:
+          type: integer
+          format: int32
+        long:
+          type: integer
+          format: int64
+        float:
+          type: number
+          format: float
+        double:
+          type: number
+          format: double
+        direct:
+          type: boolean
+        readOnly:
+          type: boolean
+    AccountingEventPaginatedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountingEvent'
+        count:
+          type: integer
+          format: int32
+        pageToken:
+          type: string
+        totalCount:
+          type: integer
+          format: int32
+    AccountingPeriod:
+      type: object
+      properties:
+        startDate:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+        deferredRevenueBalance:
+          type: number
+        status:
+          type: string
+          enum:
+          - OPEN
+          - CLOSE_IN_PROGRESS
+          - CLOSED
+          - UPCOMING
+        syncStatus:
+          type: string
+          enum:
+          - NONE
+          - WAITING
+          - IN_PROGRESS
+          - SUCCEEDED
+          - FAILED
+        openedBy:
+          type: string
+        openedOn:
+          type: integer
+          format: int64
+        closedBy:
+          type: string
+        closedOn:
+          type: integer
+          format: int64
+        calculation:
+          $ref: '#/components/schemas/AccountingPeriodCalculation'
+        openedByUser:
+          $ref: '#/components/schemas/UserJson'
+        closedByUser:
+          $ref: '#/components/schemas/UserJson'
+        synthetic:
+          type: boolean
+        id:
+          type: string
+        entityId:
+          type: string
+    EntityRef:
+      type: object
+      required:
+      - entityId
+      - name
+      properties:
+        entityId:
+          type: string
+          readOnly: true
+        displayId:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+    ApprovalSegmentJson:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    AccountingEvent:
+      type: object
+      properties:
+        id:
+          type: string
+        entityId:
+          type: string
+        accountingDate:
+          type: integer
+          format: int64
+        accountId:
+          type: string
+        subscriptionId:
+          type: string
+        sourceTransactionType:
+          type: string
+          enum:
+          - INVOICE_POSTED
+          - PAYMENT_PROCESSED
+          - CREDIT_MEMO_POSTED
+          - REVENUE_RECOGNIZED
+          - PAYMENT_VOIDED
+          - INVOICE_VOIDED
+          - REALIZED_GAIN_LOSS_POSTED
+          - REFUND
+        sourceTransactionId:
+          type: string
+        sourceEventId:
+          type: string
+        sourceEventTimestamp:
+          type: integer
+          format: int64
+        sourceEventPayload:
+          $ref: '#/components/schemas/ByteBuffer'
+        sourceEventMetadata:
+          type: object
+          additionalProperties:
+            type: string
+        sourceEventSequenceNumber:
+          type: integer
+          format: int64
+    UserGroupJson:
+      type: object
+      properties:
+        id:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        description:
+          type: string
+        users:
+          type: array
+          items:
+            type: string
+        externalId:
+          type: string
+    AccountingPeriodCalculation:
+      type: object
+      properties:
+        deferredRevenueStartingBalance:
+          type: number
+        deferredRevenueEndingBalance:
+          type: number
+        additionalRevenue:
+          type: number
+        recognizedRevenue:
+          type: number
+        unrecognizedRevenue:
+          type: number
+        unrecognizedTransactionCount:
+          type: integer
+          format: int32
+    LedgerAccount:
+      type: object
+      properties:
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        accountCode:
+          type: string
+        description:
+          type: string
+          minLength: 0
+          maxLength: 65535
+        accountType:
+          type: string
+          enum:
+          - ACCOUNTS_RECEIVABLE
+          - TAX_LIABILITY
+          - CASH
+          - DEFERRED_REVENUE
+          - RECOGNIZED_REVENUE
+          - CONTRACT_ASSET
+          - REALIZED_GAIN_LOSS
+          - EXPENSE
+          - REFUND
+        isDefault:
+          type: boolean
+        inUse:
+          type: boolean
+        default:
+          type: boolean
+        id:
+          type: string
+    UserJson:
+      type: object
+      properties:
+        id:
+          type: string
+        displayName:
+          type: string
+        title:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        state:
+          type: string
+          enum:
+          - ACTIVE
+          - DISABLED
+          - EXPIRED
+        role:
+          type: string
+          enum:
+          - ADMIN
+          - FINANCE
+          - SALES
+          - SALES_MANAGER
+          - ACCOUNTANT
+          - BILLING_CLERK
+          - REVENUE_CLERK
+          - READ_ONLY
+          - EXECUTIVE
+          - CRM
+          - IMPORT
+          - BILLY_ADMIN
+          - BILLY_ENGINEER
+          - BILLY_SUPPORT
+          - BILLY_JOB
+        ssoOnly:
+          type: boolean
+        tenantName:
+          type: string
+        cognitoUserStatus:
+          type: string
+          enum:
+          - UNCONFIRMED
+          - CONFIRMED
+          - ARCHIVED
+          - COMPROMISED
+          - UNKNOWN
+          - RESET_REQUIRED
+          - FORCE_CHANGE_PASSWORD
+          - EXTERNAL_PROVIDER
+          - UNKNOWN_TO_SDK_VERSION
+        userGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserGroupJson'
+        approvalSegments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalSegmentJson'
+        hasAllEntitiesAccess:
+          type: boolean
+        availableEntities:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityRef'
+        entityIds:
+          type: array
+          items:
+            type: string
+        externalId:
+          type: string
+        eventObjectId:
+          type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

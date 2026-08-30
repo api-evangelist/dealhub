@@ -1,0 +1,138 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Metrics Reporting API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: MetricsReporting
+paths:
+  /metricsReporting/externalArrMetrics/{id}:
+    get:
+      tags:
+      - MetricsReporting
+      summary: gets external arr metrics request for the provided id
+      description: returns the external arr metrics request for the provided id
+      operationId: getExternalArrMetrics
+      parameters:
+      - name: id
+        in: path
+        description: id of the externalArrMetrics request
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /metricsReporting/externalArrMetrics:
+    get:
+      tags:
+      - MetricsReporting
+      summary: gets external arr metrics requests submitted
+      description: returns the paginated list of external arr metrics requests
+      operationId: getExternalArrMetrics_1
+      parameters:
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        default:
+          description: successful operation
+    post:
+      tags:
+      - MetricsReporting
+      summary: submit request to generate external arr metrics
+      description: returns the request with its captured id. Arr metrics will be generated as a backend job
+      operationId: addExternalArrMetrics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExternalArrScheduleJson'
+      responses:
+        default:
+          description: successful operation
+  /metricsReporting/populateArrMetrics/subscriptions/{subscriptionId}:
+    put:
+      tags:
+      - MetricsReporting
+      summary: submit request to generate/regenerate arr metrics for a subscription
+      description: returns 200 if the result is successfully submitted to a background task
+      operationId: populateArrMetricsForSubscription
+      parameters:
+      - name: subscriptionId
+        in: path
+        description: id of the subscription
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    ExternalArrScheduleJson:
+      type: object
+      required:
+      - amount
+      - endDate
+      - quantity
+      - startDate
+      properties:
+        id:
+          type: string
+        externalId:
+          type: string
+        startDate:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+        category:
+          type: string
+          enum:
+          - OPENING_BALANCE
+          - NEW
+          - ADD_ON
+          - RENEWAL_ADD_ON
+          - UPSELL
+          - MARKUP
+          - RENEWAL_UPSELL
+          - RENEWAL_MARKUP
+          - DOWNSELL
+          - MARKDOWN
+          - RENEWAL_DOWNSELL
+          - RENEWAL_MARKDOWN
+          - TERMINATION
+          - EXPIRATION
+          - PENDING_RENEWAL
+          - REACTIVATION
+          - DEBOOK
+        amount:
+          type: number
+        quantity:
+          type: integer
+          format: int64
+        previousScheduleId:
+          type: string
+        metadata:
+          type: string
+        submittedBy:
+          type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

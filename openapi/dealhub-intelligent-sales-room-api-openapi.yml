@@ -1,0 +1,1777 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Intelligent Sales Room API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Intelligent Sales Room
+paths:
+  /accounts/salesRoom/{shareLink}/contacts:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Get account contacts via sales room share link
+      description: Gets account contacts via sales room share link
+      operationId: getAccountContactViaShareLink
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+    post:
+      tags:
+      - Intelligent Sales Room
+      summary: Create account contact via share link
+      description: Creates account contact via share link
+      operationId: addAccountContactViaShareLink
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: skipAddressValidation
+        in: query
+        description: value = perform basic address validation
+        required: false
+        schema:
+          type: boolean
+      - name: strictValidation
+        in: query
+        description: value = require the address to match a canonical address, if it exists
+        required: false
+        schema:
+          type: boolean
+      - name: addToReseller
+        in: query
+        description: value = Whether or not to add the contact for the reseller
+        required: false
+        schema:
+          type: boolean
+      requestBody:
+        $ref: '#/components/requestBodies/AccountContactJson'
+      responses:
+        default:
+          description: successful operation
+  /accounts/salesRoom/{shareLink}/contacts/{contactId}:
+    put:
+      tags:
+      - Intelligent Sales Room
+      summary: Update account contact via share link
+      description: Updates account contact via share link
+      operationId: updateAccountContactViaShareLink
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: contactId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: skipAddressValidation
+        in: query
+        description: value = perform basic address validation
+        required: false
+        schema:
+          type: boolean
+      - name: strictValidation
+        in: query
+        description: value = require the address to match a canonical address, if it exists
+        required: false
+        schema:
+          type: boolean
+      - name: updateReseller
+        in: query
+        description: value = Whether or not to update the contact for the reseller
+        required: false
+        schema:
+          type: boolean
+      requestBody:
+        $ref: '#/components/requestBodies/AccountContactJson'
+      responses:
+        default:
+          description: successful operation
+  /compositeOrders/salesRoom/{shareLink}/pdf:
+    post:
+      tags:
+      - Intelligent Sales Room
+      summary: Generate a composite order PDF via Sales Room Share Link
+      description: Generate and retrieve a PDF representation of the composite order details for a specific sales room using share link.
+      operationId: createCompositeOrderDocumentForSalesRoom
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/{salesRoomId}/files/{fileId}:
+    delete:
+      tags:
+      - Intelligent Sales Room
+      summary: Delete a file
+      description: Deletes an uploaded file
+      operationId: deleteFile
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: fileId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/{salesRoomId}/files:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Get all files for a sales room
+      description: Returns all uploaded files
+      operationId: getFiles
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - MEDIA
+          - ATTACHMENT
+          - LOGO
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IntelligentSalesRoomFile'
+    post:
+      tags:
+      - Intelligent Sales Room
+      summary: Upload a file
+      description: Uploads a file to the sales room
+      operationId: uploadFile
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                originalFileName:
+                  type: string
+                fileSize:
+                  type: integer
+                  format: int64
+                contentType:
+                  type: string
+                category:
+                  type: string
+                  enum:
+                  - MEDIA
+                  - ATTACHMENT
+                  - LOGO
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntelligentSalesRoomFile'
+  /intelligent-sales-rooms:
+    post:
+      tags:
+      - Intelligent Sales Room
+      summary: Create a new intelligent sales room
+      description: Creates a new sales room for the specified order
+      operationId: createSalesRoom
+      parameters:
+      - name: orderId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntelligentSalesRoomOverviewResponse'
+  /intelligent-sales-rooms/by-order/{orderId}:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Get sales room by order ID
+      description: Returns the sales room for the specified order, creating one if it doesn't exist
+      operationId: getSalesRoomByOrderId
+      parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntelligentSalesRoomOverviewResponse'
+  /intelligent-sales-rooms/{salesRoomId}:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Get sales room by ID
+      description: Returns the sales room details
+      operationId: getSalesRoomById
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntelligentSalesRoomOverviewResponse'
+  /intelligent-sales-rooms/{salesRoomId}/widgets/{widgetId}:
+    put:
+      tags:
+      - Intelligent Sales Room
+      summary: Update a widget
+      description: Updates widget name and content
+      operationId: updateWidget
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: widgetId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntelligentSalesRoomUpdateWidgetRequest'
+        description: Widget update request with type-specific content format
+        required: true
+        x-examples:
+          application/json: "{\n  \"name\": \"Updated AI Introduction\",\n  \"content\": \"{\\\"type\\\": \\\"AI_GENERATED_TEXT\\\", \\\"aiContentId\\\": \\\"content-uuid-123\\\", \\\"displayContent\\\": \\\"This is the updated AI generated content...\\\"}\"\n}"
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntelligentSalesRoomWidget'
+    delete:
+      tags:
+      - Intelligent Sales Room
+      summary: Delete a widget
+      description: Deletes a user-generated widget
+      operationId: deleteWidget
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: widgetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/{salesRoomId}/widgets/reorder:
+    put:
+      tags:
+      - Intelligent Sales Room
+      summary: Reorder widgets
+      description: Updates the sort order of all widgets
+      operationId: reorderWidgets
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntelligentSalesRoomReorderWidgetsRequest'
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/{salesRoomId}/theme:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Get sales room theme
+      description: Returns the current theme settings
+      operationId: getTheme
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntelligentSalesRoomTheme'
+    put:
+      tags:
+      - Intelligent Sales Room
+      summary: Update theme manually
+      description: Updates theme with user-provided values
+      operationId: updateTheme
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntelligentSalesRoomUpdateThemeRequest'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntelligentSalesRoomTheme'
+  /intelligent-sales-rooms/{salesRoomId}/widgets/{widgetId}/ai-content:
+    post:
+      tags:
+      - Intelligent Sales Room
+      summary: Generate AI content for widget
+      description: Generates AI content based on order context
+      operationId: generateAIContent
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: widgetId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntelligentSalesRoomAIGeneratedContent'
+  /intelligent-sales-rooms/{salesRoomId}/ai-content/{contentId}:
+    put:
+      tags:
+      - Intelligent Sales Room
+      summary: Update AI generated content
+      description: Updates AI content with user edits
+      operationId: updateAIContent
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: contentId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntelligentSalesRoomUpdateAIContentRequest'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntelligentSalesRoomAIGeneratedContent'
+  /intelligent-sales-rooms/{salesRoomId}/activate:
+    post:
+      tags:
+      - Intelligent Sales Room
+      summary: Activate sales room
+      description: Moves sales room from READY_TO_SHARE to ACTIVE status
+      operationId: activateSalesRoom
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/{salesRoomId}/retract:
+    post:
+      tags:
+      - Intelligent Sales Room
+      summary: Retract sales room
+      description: Moves sales room from ACTIVE to READY_TO_SHARE status
+      operationId: retractSalesRoom
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/share/{shareLink}/accept:
+    post:
+      tags:
+      - Intelligent Sales Room
+      summary: Accept sales room proposal (using share link)
+      description: Moves sales room (using share link) to ACCEPTED status
+      operationId: acceptSalesRoom
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/{salesRoomId}/accept:
+    post:
+      tags:
+      - Intelligent Sales Room
+      summary: Accept sales room proposal
+      description: Moves sales room to ACCEPTED status
+      operationId: acceptSalesRoom_1
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/{salesRoomId}/engagement/summary:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Get engagement summary
+      description: Returns engagement metrics and summary
+      operationId: getEngagementSummary
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: toDate
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntelligentSalesRoomEngagementSummaryResponse'
+  /intelligent-sales-rooms/{salesRoomId}/engagement/activity:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Get activity logs
+      description: Returns activity logs with optional date filtering and pagination
+      operationId: getActivityLogs
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: fromDate
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: toDate
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: limit
+        in: query
+        description: Number of records to return
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 10
+      - name: pageToken
+        in: query
+        description: Page token for pagination
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IntelligentSalesRoomActivityLog'
+  /intelligent-sales-rooms/{salesRoomId}/share-access:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Get share link access records
+      description: Returns all users who have accessed via share link
+      operationId: getShareLinkAccesses
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IntelligentSalesRoomShareLinkAccess'
+  /intelligent-sales-rooms/{salesRoomId}/visitors/count:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Get unique visitor count
+      description: Returns the number of unique visitors
+      operationId: getUniqueVisitorCount
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/{salesRoomId}/customer-information:
+    put:
+      tags:
+      - Intelligent Sales Room
+      summary: Update customer information
+      description: Updates billing and/or shipping contact information
+      operationId: updateCustomerInformation
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/IntelligentSalesRoomUpdateCustomerInfoRequest'
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/{salesRoomId}/custom-fields:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Fetch custom fields for an Intelligent Sales Room
+      description: Retrieves the custom fields for the specified Intelligent Sales Room.
+      operationId: getCustomFields_1
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Intelligent Sales Room
+      summary: Update custom fields for an Intelligent Sales Room
+      description: Updates the custom fields for the specified Intelligent Sales Room.
+      operationId: updateCustomFields_1
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/updateCustomFields_1Body'
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/share/{shareLink}/events:
+    post:
+      tags:
+      - Intelligent Sales Room
+      summary: Track user event
+      description: Records user interaction events
+      operationId: trackEvent
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntelligentSalesRoomTrackEventRequest'
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/share/{shareLink}/custom-fields:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Fetch custom fields for an Intelligent Sales Room (via share link)
+      description: Retrieves the custom fields for the specified Intelligent Sales Room (via share link).
+      operationId: getCustomFieldsViaShareLink
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Intelligent Sales Room
+      summary: Update custom fields for an Intelligent Sales Room (via share link)
+      description: Updates the custom fields for the specified Intelligent Sales Room (via share link).
+      operationId: updateCustomFieldsViaShareLink
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/updateCustomFields_1Body'
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/{salesRoomId}/widgets:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Get all widgets for a sales room
+      description: Returns all widgets ordered by sort order
+      operationId: getWidgets
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IntelligentSalesRoomWidget'
+    post:
+      tags:
+      - Intelligent Sales Room
+      summary: Create a new widget
+      description: 'Creates a new user-generated widget with type-specific content structure.
+
+
+        Content format by widget type:
+
+        - RICH_TEXT: {"html": "HTML content"}
+
+        - AI_GENERATED_TEXT: {} (empty object - content is generated by calling the AI generation endpoint after widget creation)
+
+        - MEDIA_CONTENT: {"type": "YOUTUBE_VIDEO|LINK|FILE_UPLOAD|GOOGLE_WORKSPACE|PDF_UPLOAD", "url": "...", "fileId": "...", "title": "..."}
+
+        - USER_PDF: {"fileId": "uploaded-file-uuid"}
+
+
+        Media content types:
+
+        - YOUTUBE_VIDEO: YouTube video URLs
+
+        - LINK: Generic web links
+
+        - FILE_UPLOAD: References uploaded files via fileId
+
+        - GOOGLE_WORKSPACE: Google Docs/Sheets/Slides URLs
+
+        - PDF_UPLOAD: References uploaded PDF files via fileId
+
+
+        AI Generated content structure after generation:
+
+        - type: "AI_GENERATED_TEXT"
+
+        - aiContentId: UUID of the generated content record
+
+        - displayContent: The actual generated text content
+
+        '
+      operationId: createWidget
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntelligentSalesRoomCreateWidgetRequest'
+        description: Widget creation request with type-specific content format
+        required: true
+        x-examples:
+          application/json: "{\n  \"type\": \"AI_GENERATED_TEXT\",\n  \"name\": \"Smart Introduction\",\n  \"content\": \"{}\"\n}"
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntelligentSalesRoomWidget'
+  /intelligent-sales-rooms/{salesRoomId}/theme/extract:
+    post:
+      tags:
+      - Intelligent Sales Room
+      summary: Extract theme from website
+      description: Automatically extracts branding from website using AI
+      operationId: extractTheme
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntelligentSalesRoomExtractThemeRequest'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntelligentSalesRoomTheme'
+  /intelligent-sales-rooms/{salesRoomId}/files/{fileId}/download:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Get file download URL
+      description: Returns a presigned URL for file download
+      operationId: getFileDownloadUrl
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: fileId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expirationMinutes
+        in: query
+        description: URL expiration in minutes
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 60
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/share/{shareLink}/order/pdf:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Fetch order form PDF for an Intelligent Sales Room
+      description: Downloads the order form PDF for the specified Intelligent Sales Room.
+      operationId: getOrderDocument
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/share/{shareLink}/access:
+    post:
+      tags:
+      - Intelligent Sales Room
+      summary: Access sales room via share link
+      description: End-user access to sales room using share link
+      operationId: accessViaShareLink
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IntelligentSalesRoomShareLinkAccessRequest'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntelligentSalesRoomOverviewResponse'
+  /intelligent-sales-rooms/share/{shareLink}/widgets:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Get widgets via share link
+      description: End-user access to sales room widgets
+      operationId: getWidgetsViaShareLink
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IntelligentSalesRoomWidget'
+  /intelligent-sales-rooms/share/{shareLink}/theme:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Get theme via share link
+      description: End-user access to sales room theme
+      operationId: getThemeViaShareLink
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntelligentSalesRoomTheme'
+  /intelligent-sales-rooms/share/{shareLink}/files:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Get files via share link
+      description: End-user access to sales room files
+      operationId: getFilesViaShareLink
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: category
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - MEDIA
+          - ATTACHMENT
+          - LOGO
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IntelligentSalesRoomFile'
+  /intelligent-sales-rooms/share/{shareLink}/files/{fileId}/download:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Get file download URL via share link
+      description: End-user access to file download
+      operationId: getFileDownloadUrlViaShareLink
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: fileId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: expirationMinutes
+        in: query
+        description: URL expiration in minutes
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 60
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/share/{shareLink}:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Get sales room details via share link
+      description: End-user access to basic sales room information
+      operationId: getSalesRoomViaShareLink
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntelligentSalesRoomOverviewResponse'
+  /intelligent-sales-rooms/share/{shareLink}/ai-content:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Get AI content via share link
+      description: End-user access to AI generated content
+      operationId: getAIContentViaShareLink
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/IntelligentSalesRoomAIGeneratedContent'
+  /intelligent-sales-rooms/share/{shareLink}/customer-information:
+    put:
+      tags:
+      - Intelligent Sales Room
+      summary: Update customer information via share link
+      description: End-user update of customer information via share link
+      operationId: updateCustomerInformationViaShareLink
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/IntelligentSalesRoomUpdateCustomerInfoRequest'
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/share/{shareLink}/image/{fileName}:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Download image file via share link
+      description: Downloads image file for public access
+      operationId: downloadImageViaShareLink
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: fileName
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /intelligent-sales-rooms/share/{shareLink}/esign:
+    post:
+      tags:
+      - Intelligent Sales Room
+      summary: Send email for e-signature via share link
+      description: Sends email for eSign for Sales Room via share link
+      operationId: sendEmailForEsignViaShareLink
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmailContact'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IntelligentSalesRoomEngagementSession'
+  /intelligent-sales-rooms/share/{shareLink}/order-metadata:
+    get:
+      tags:
+      - Intelligent Sales Room
+      summary: Fetch order metadata for an Intelligent Sales Room
+      description: Retrieves the corder metadata for the specified Intelligent Sales Room.
+      operationId: getOrderMetadata
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /orders/salesRoom/{shareLink}/pdf:
+    post:
+      tags:
+      - Intelligent Sales Room
+      summary: Generate an order PDF via Sales Room Share Link
+      description: Generate and retrieve a PDF representation of the order details for a specific sales room using share link.
+      operationId: createOrderDocumentForSalesRoom
+      parameters:
+      - name: shareLink
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: force
+        in: query
+        description: Force regeneration of the PDF document even if there has been no changes. Defaults to false.
+        required: false
+        schema:
+          type: boolean
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    IntelligentSalesRoomUpdateWidgetRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 0
+          maxLength: 255
+        content:
+          type: string
+          minLength: 0
+          maxLength: 10000
+    IntelligentSalesRoomUpdateThemeRequest:
+      type: object
+      required:
+      - template
+      properties:
+        template:
+          type: string
+          enum:
+          - TEMPLATE_1
+          - TEMPLATE_2
+          - TEMPLATE_3
+        websiteUrl:
+          type: string
+        logoUrl:
+          type: string
+        primaryColor:
+          type: string
+        secondaryColor:
+          type: string
+    IntelligentSalesRoomAIGeneratedContent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        salesRoomId:
+          type: string
+        widgetId:
+          type: string
+        isEdited:
+          type: boolean
+        generatedOn:
+          type: integer
+          format: int64
+        lastEditedOn:
+          type: integer
+          format: int64
+        generatedContent:
+          type: string
+        orderFormContext:
+          type: string
+    EmailContact:
+      type: object
+      properties:
+        contactId:
+          type: string
+        type:
+          type: string
+          enum:
+          - ACCOUNT_CONTACT
+          - USER_GROUP
+          - USER
+        email:
+          type: string
+        name:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    IntelligentSalesRoomShareLinkAccessRequest:
+      type: object
+      properties:
+        userName:
+          type: string
+          minLength: 0
+          maxLength: 1024
+        userEmail:
+          type: string
+          minLength: 0
+          maxLength: 1024
+    IntelligentSalesRoomExtractThemeRequest:
+      type: object
+      properties:
+        websiteUrl:
+          type: string
+          minLength: 0
+          maxLength: 1024
+    IntelligentSalesRoomActivityLog:
+      type: object
+      properties:
+        eventType:
+          type: string
+          enum:
+          - PAGE_FOCUS
+          - PAGE_BLUR
+          - SCROLL
+          - CLICK
+          - KEYDOWN
+          - LOAD
+          - UNLOAD
+          - FILE_UPLOAD_VIEW
+          - FILE_DOWNLOAD
+          - LINK_CLICK
+          - YOUTUBE_PLAY
+          - YOUTUBE_PAUSE
+          - YOUTUBE_COMPLETE
+          - GOOGLE_WORKSPACE_VIEW
+          - CONTACT_EDIT
+          - CONTACT_ADD
+          - CUSTOM_FIELD_EDIT
+          - ORDER_PDF_DOWNLOAD
+          - ESIGNATURE_INITIATE
+          - ACCEPT_PROPOSAL
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+        salesRoomId:
+          type: string
+        userEmail:
+          type: string
+        eventTimestamp:
+          type: integer
+          format: int64
+    IntelligentSalesRoomReorderWidgetsRequest:
+      type: object
+      required:
+      - orderedWidgetIds
+      properties:
+        orderedWidgetIds:
+          type: array
+          items:
+            type: string
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
+    IntelligentSalesRoomUpdateCustomerInfoRequest:
+      type: object
+    IntelligentSalesRoomEngagementSummaryResponse:
+      type: object
+      properties:
+        lastActivity:
+          type: integer
+          format: int64
+        mostActiveUser:
+          type: string
+        totalVisitors:
+          type: integer
+          format: int32
+        totalSessions:
+          type: integer
+          format: int32
+        totalTimeSpentSeconds:
+          type: integer
+          format: int64
+        averageTimeSpent:
+          type: string
+        totalEvents:
+          type: integer
+          format: int32
+    AccountContactJson:
+      type: object
+      required:
+      - accountId
+      properties:
+        id:
+          type: string
+          description: This is a system-generated Account Contact ID
+        accountId:
+          type: string
+          description: Uniquely identifies the Account
+        firstName:
+          type: string
+          description: First Name of the Contact
+        lastName:
+          type: string
+          description: (optional) Last Name of the Contact
+        email:
+          type: string
+          description: Email of the Contact
+        phoneNumber:
+          type: string
+          description: (optional) Phone Number of the Contact
+        title:
+          type: string
+          description: (optional) Title of the Contact
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+        externalId:
+          type: string
+        erpId:
+          type: string
+        fullName:
+          type: string
+        eventObjectId:
+          type: string
+    IntelligentSalesRoomWidget:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+          - ORDER_FORM_PDF
+          - CUSTOMER_INFORMATION
+          - ADDITIONAL_INFORMATION
+          - E_SIGNATURE_BUTTON
+          - ACCEPT_PROPOSAL_BUTTON
+          - MEDIA_CONTENT
+          - RICH_TEXT
+          - AI_GENERATED_TEXT
+          - USER_PDF
+        content:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        salesRoomId:
+          type: string
+        isUserGenerated:
+          type: boolean
+        isDeletable:
+          type: boolean
+        sortOrder:
+          type: integer
+          format: int32
+    IntelligentSalesRoomUpdateAIContentRequest:
+      type: object
+      properties:
+        editedContent:
+          type: string
+          minLength: 0
+          maxLength: 10000
+    IntelligentSalesRoomThemeResponse:
+      type: object
+      properties:
+        updatedOn:
+          type: integer
+          format: int64
+        template:
+          type: string
+          enum:
+          - TEMPLATE_1
+          - TEMPLATE_2
+          - TEMPLATE_3
+        websiteUrl:
+          type: string
+        logoUrl:
+          type: string
+        primaryColor:
+          type: string
+        isLogoAutoExtracted:
+          type: boolean
+        isColorAutoExtracted:
+          type: boolean
+    IntelligentSalesRoomFile:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        fileName:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        mimeType:
+          type: string
+        fileSize:
+          type: integer
+          format: int64
+        salesRoomId:
+          type: string
+        fileType:
+          type: string
+          enum:
+          - PDF
+          - MP4
+          - PPTX
+          - PNG
+          - JPG
+          - GIF
+          - OTHER
+        fileCategory:
+          type: string
+        validFileSize:
+          type: boolean
+        userUploadedPdf:
+          type: boolean
+        originalFileName:
+          type: string
+    IntelligentSalesRoomTheme:
+      type: object
+      properties:
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        template:
+          type: string
+          enum:
+          - TEMPLATE_1
+          - TEMPLATE_2
+          - TEMPLATE_3
+        websiteUrl:
+          type: string
+        logoUrl:
+          type: string
+        primaryColor:
+          type: string
+        secondaryColor:
+          type: string
+        salesRoomId:
+          type: string
+        isLogoAutoExtracted:
+          type: boolean
+        isColorAutoExtracted:
+          type: boolean
+    IntelligentSalesRoomOverviewResponse:
+      type: object
+      properties:
+        orderId:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - READY_TO_SHARE
+          - ACTIVE
+          - ACCEPTED
+          - EXPIRED
+          - DELETED
+        tenantId:
+          type: string
+        accountId:
+          type: string
+        salesRoomId:
+          type: string
+          format: uuid
+        theme:
+          $ref: '#/components/schemas/IntelligentSalesRoomThemeResponse'
+        tenantName:
+          type: string
+        isFirstAccess:
+          type: boolean
+        shareLink:
+          type: string
+          format: uuid
+        accountName:
+          type: string
+        sharedOn:
+          type: integer
+          format: int64
+        acceptedOn:
+          type: integer
+          format: int64
+        expiresOn:
+          type: integer
+          format: int64
+        canEdit:
+          type: boolean
+        canShare:
+          type: boolean
+        canRetract:
+          type: boolean
+        tenantAddress:
+          $ref: '#/components/schemas/AccountAddressJson'
+        electronicSignatureStatus:
+          type: string
+          enum:
+          - PENDING
+          - SENT
+          - VIEWED
+          - PARTIALLY_SIGNED
+          - COMPLETED
+          - FAILED
+          - VOIDED
+          - DECLINED
+    IntelligentSalesRoomCreateWidgetRequest:
+      type: object
+      required:
+      - type
+      properties:
+        name:
+          type: string
+          minLength: 0
+          maxLength: 255
+        type:
+          type: string
+          enum:
+          - ORDER_FORM_PDF
+          - CUSTOMER_INFORMATION
+          - ADDITIONAL_INFORMATION
+          - E_SIGNATURE_BUTTON
+          - ACCEPT_PROPOSAL_BUTTON
+          - MEDIA_CONTENT
+          - RICH_TEXT
+          - AI_GENERATED_TEXT
+          - USER_PDF
+        content:
+          type: string
+          minLength: 0
+          maxLength: 10000
+    IntelligentSalesRoomShareLinkAccess:
+      type: object
+      properties:
+        userAgent:
+          type: string
+        userName:
+          type: string
+        salesRoomId:
+          type: string
+        userEmail:
+          type: string
+        firstAccess:
+          type: integer
+          format: int64
+        lastAccess:
+          type: integer
+          format: int64
+        isActive:
+          type: boolean
+        ipAddress:
+          type: string
+    IntelligentSalesRoomTrackEventRequest:
+      type: object
+      required:
+      - eventType
+      properties:
+        eventType:
+          type: string
+          enum:
+          - PAGE_FOCUS
+          - PAGE_BLUR
+          - SCROLL
+          - CLICK
+          - KEYDOWN
+          - LOAD
+          - UNLOAD
+          - FILE_UPLOAD_VIEW
+          - FILE_DOWNLOAD
+          - LINK_CLICK
+          - YOUTUBE_PLAY
+          - YOUTUBE_PAUSE
+          - YOUTUBE_COMPLETE
+          - GOOGLE_WORKSPACE_VIEW
+          - CONTACT_EDIT
+          - CONTACT_ADD
+          - CUSTOM_FIELD_EDIT
+          - ORDER_PDF_DOWNLOAD
+          - ESIGNATURE_INITIATE
+          - ACCEPT_PROPOSAL
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+        userEmail:
+          type: string
+          minLength: 0
+          maxLength: 1024
+    AccountAddressJson:
+      type: object
+      properties:
+        streetAddressLine1:
+          type: string
+          description: Address Line 1 of the Contact
+        streetAddressLine2:
+          type: string
+          description: Address Line 2 of the Contact
+        streetAddressLine3:
+          type: string
+          description: Address Line 3 of the Contact
+        city:
+          type: string
+          description: City of the Contact
+        state:
+          type: string
+          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
+        country:
+          type: string
+          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
+        zipcode:
+          type: string
+          description: Zip or Postal Code of the Contact
+    IntelligentSalesRoomEngagementSession:
+      type: object
+      properties:
+        durationSeconds:
+          type: integer
+          format: int64
+        sessionId:
+          type: string
+        userAgent:
+          type: string
+        userName:
+          type: string
+        salesRoomId:
+          type: string
+        userEmail:
+          type: string
+        sessionEnd:
+          type: integer
+          format: int64
+        lastActivityTime:
+          type: integer
+          format: int64
+        sessionStart:
+          type: integer
+          format: int64
+        isActive:
+          type: boolean
+        ipAddress:
+          type: string
+        tabsVisited:
+          type: array
+          items:
+            type: string
+        activityData:
+          type: object
+          additionalProperties:
+            type: object
+        sessionExpired:
+          type: boolean
+    CustomFieldValue:
+      type: object
+      properties:
+        type:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        name:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        value:
+          type: string
+          readOnly: true
+        selections:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        required:
+          type: boolean
+          readOnly: true
+        source:
+          type: string
+          readOnly: true
+          enum:
+          - USER
+          - SYSTEM
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+  requestBodies:
+    IntelligentSalesRoomUpdateCustomerInfoRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IntelligentSalesRoomUpdateCustomerInfoRequest'
+    AccountContactJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccountContactJson'
+    updateCustomFields_1Body:
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties:
+              $ref: '#/components/schemas/CustomFieldValue'
+      description: Custom field values
+      required: true
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

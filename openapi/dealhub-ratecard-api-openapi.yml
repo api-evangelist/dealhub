@@ -1,0 +1,121 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Rate Card API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: RateCard
+paths:
+  /ratecards/{id}/csv:
+    put:
+      tags:
+      - RateCard
+      summary: create a rate card using CSV price table multipart form data
+      description: create a rate card using the multipart form data, where a CSV can be passed in for the price table
+      operationId: updateRateCardCsv
+      parameters:
+      - name: id
+        in: path
+        description: rate card id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/updateRateCardCsv'
+      responses:
+        default:
+          description: successful operation
+  /ratecards:
+    get:
+      tags:
+      - RateCard
+      summary: Fetch the list of rate cards stored in the system
+      description: Fetch the list of rate cards stored in the system
+      operationId: getRateCards
+      responses:
+        default:
+          description: successful operation
+  /ratecards/csv:
+    post:
+      tags:
+      - RateCard
+      summary: create a rate card using CSV price table multipart form data
+      description: create a rate card using the multipart form data, where a CSV can be passed in for the price table
+      operationId: addRateCardCsv
+      requestBody:
+        $ref: '#/components/requestBodies/updateRateCardCsv'
+      responses:
+        default:
+          description: successful operation
+  /ratecards/attributes/csv:
+    get:
+      tags:
+      - RateCard
+      summary: Fetch the price attributes defined in the system in CSV format
+      description: Get all the price attributes in the system in CSV format one per row
+      operationId: getPriceAttributesCsv
+      responses:
+        default:
+          description: successful operation
+    post:
+      tags:
+      - RateCard
+      summary: Import price attributes into the system
+      description: Import the price attributes from an input CSV file, the output provides details on each row of the input
+      operationId: importPriceAttributes
+      requestBody:
+        $ref: '#/components/requestBodies/uploadApprovalMatrixCSV'
+      responses:
+        default:
+          description: successful operation
+  /ratecards/{id}/priceTable:
+    get:
+      tags:
+      - RateCard
+      summary: Fetch the price table for the rate card given the id
+      description: Get the price table for the rate card given the id
+      operationId: getRateCardPriceTable
+      parameters:
+      - name: id
+        in: path
+        description: rate card id
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+components:
+  requestBodies:
+    uploadApprovalMatrixCSV:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+    updateRateCardCsv:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              description:
+                type: string
+              currency:
+                type: string
+              file:
+                type: string
+                format: binary
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

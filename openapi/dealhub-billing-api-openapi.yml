@@ -1,0 +1,2119 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Billing API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Billing
+paths:
+  /accountReceivableContact:
+    get:
+      tags:
+      - Billing
+      summary: Get the contact for accounts receivable
+      description: Returns the details of the account receivable contact for your tenant
+      operationId: getAccountReceivableContact
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountReceivableContactJson'
+    put:
+      tags:
+      - Billing
+      summary: Set the contact for accounts receivable
+      description: Sets the details of the account receivable contact for your tenant
+      operationId: putAccountReceivableContact
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountReceivableContactJson'
+        description: contact details
+      responses:
+        default:
+          description: successful operation
+  /alias/subscriptionCharge/{aliasId}:
+    get:
+      tags:
+      - Billing
+      summary: Get the details of an alias
+      description: Returns the details of the specified alias id including the subscription id and the charge id it is mapped to.
+      operationId: getSubscriptionChargeAlias
+      parameters:
+      - name: aliasId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SubscriptionChargeAlias'
+    put:
+      tags:
+      - Billing
+      summary: Create an alias for a subscription id/charge id pair
+      description: This allows you to specify a string alias for a subscription id and a charge id. This can be useful when, for example, you want to upload usage statistics and would rather specify your own id (or another external id), rather than referring to Subskribe's internal ids.
+      operationId: addSubscriptionChargeAlias
+      parameters:
+      - name: aliasId
+        in: path
+        description: alias to map to create the mapping for
+        required: true
+        schema:
+          type: string
+      - name: subscriptionId
+        in: query
+        description: the subscription id
+        required: false
+        schema:
+          type: string
+      - name: chargeId
+        in: query
+        description: the charge id
+        required: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+      - Billing
+      summary: Delete the specified alias
+      description: Deletes the specified alias mapping
+      operationId: deleteSubscriptionChargeAlias
+      parameters:
+      - name: aliasId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /alias/subscriptionCharge:
+    get:
+      tags:
+      - Billing
+      summary: Get aliases for a subscription
+      description: Returns all aliases for the specified subscription id.
+      operationId: listAliasesForSubscription
+      parameters:
+      - name: subscriptionId
+        in: query
+        description: id of the subscription
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SubscriptionChargeAlias'
+  /automatedInvoiceRules/{id}:
+    get:
+      tags:
+      - Billing
+      summary: Get automated invoice rule details
+      description: Returns the details of the specified automated invoice rule
+      operationId: getAutomatedInvoiceRule
+      parameters:
+      - name: id
+        in: path
+        description: Id of the automated invoice rule
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Billing
+      summary: Update automated invoice rule details
+      description: Updates the details of the specified automated invoice rule
+      operationId: updateAutomatedInvoiceRule
+      parameters:
+      - name: id
+        in: path
+        description: id of the automated invoice rule
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/AutomatedInvoiceRuleRequestJson'
+      responses:
+        default:
+          description: successful operation
+  /automatedInvoiceRules/internal/{id}:
+    get:
+      tags:
+      - Billing
+      summary: Get automated invoice rule details via internal id
+      description: Returns the details of the specified automated invoice rule
+      operationId: getAutomatedInvoiceRuleByInternalId
+      parameters:
+      - name: id
+        in: path
+        description: Internal id of the automated invoice rule
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+      deprecated: true
+    put:
+      tags:
+      - Billing
+      operationId: updateAutomatedInvoiceRuleUsingInternalId
+      parameters:
+      - name: id
+        in: path
+        description: id of the automated invoice rule
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/AutomatedInvoiceRuleRequestJson'
+      responses:
+        default:
+          description: successful operation
+      deprecated: true
+  /automatedInvoiceRules:
+    get:
+      tags:
+      - Billing
+      summary: Get automated invoice rules for a tenant
+      description: Returns all the configured automated invoice rules for the tenant
+      operationId: getAutomatedInvoiceRules
+      responses:
+        default:
+          description: successful operation
+    post:
+      tags:
+      - Billing
+      summary: Create an automated invoice rule
+      description: Creates an automated invoice rule with the specified parameters
+      operationId: addAutomatedInvoiceRule
+      requestBody:
+        $ref: '#/components/requestBodies/AutomatedInvoiceRuleRequestJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AutomatedInvoiceRule'
+  /dunning/sendInvoiceReminder/{invoiceNumber}:
+    post:
+      tags:
+      - Billing
+      summary: Send an Invoice Reminder
+      description: Sends a reminder email for the specified invoice
+      operationId: sendInvoiceReminder
+      parameters:
+      - name: invoiceNumber
+        in: path
+        description: number of the invoice
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /dunning/sendTestEmail/{reminderType}:
+    post:
+      tags:
+      - Billing
+      summary: Send a test email
+      description: Sends a test email for dunning to the use associated with this API call. Note A user bound api key is required for this operation.
+      operationId: sendTestDunningEmail
+      parameters:
+      - name: reminderType
+        in: path
+        description: type of the reminder
+        required: true
+        schema:
+          type: string
+          enum:
+          - WEEK_BEFORE_DUE_DATE
+          - DUE_DATE
+          - WEEK_AFTER_DUE_DATE
+          - TWO_WEEKS_AFTER_DUE_DATE
+          - MONTH_AFTER_DUE_DATE
+          - TWO_MONTHS_AFTER_DUE_DATE
+      responses:
+        default:
+          description: successful operation
+  /dunningSetting:
+    get:
+      tags:
+      - Billing
+      summary: Get dunning settings
+      description: Returns the dunning settings for your tenant
+      operationId: getDunningSetting
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DunningSettingJson'
+    put:
+      tags:
+      - Billing
+      summary: Update dunning settings
+      description: Updates the dunning settings for your tenant
+      operationId: updateDunningSetting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DunningSettingJson'
+        description: json representing the dunning settings
+      responses:
+        default:
+          description: successful operation
+  /invoices/bulk/{bulkInvoiceRunId}:
+    get:
+      tags:
+      - Billing
+      summary: Get bulk invoice run details
+      description: Returns the details of the specified bulk invoice run
+      operationId: getBulkInvoiceRun
+      parameters:
+      - name: bulkInvoiceRunId
+        in: path
+        description: id of the run
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkInvoiceRun'
+  /invoices/bulk/{bulkInvoiceRunId}/runItems:
+    get:
+      tags:
+      - Billing
+      summary: Get items for bulk invoice run
+      description: Returns the items associated with the specified bulk invoice run
+      operationId: getBulkInvoiceRunItems
+      parameters:
+      - name: bulkInvoiceRunId
+        in: path
+        description: id of the run
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BulkInvoiceRunItem'
+  /invoices/{number}/balance:
+    get:
+      tags:
+      - Billing
+      summary: Get invoice balance
+      description: Returns the balance of the specified invoice number
+      operationId: getInvoiceBalance
+      parameters:
+      - name: number
+        in: path
+        description: number of the invoice
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceBalanceJson'
+  /invoices/{number}:
+    get:
+      tags:
+      - Billing
+      summary: Get invoice details
+      description: Returns the details of the specified invoice number
+      operationId: getInvoice
+      parameters:
+      - name: number
+        in: path
+        description: number of the invoice
+        required: true
+        schema:
+          type: string
+      - name: includeDeleted
+        in: query
+        description: include deleted invoice items
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceJson'
+    put:
+      tags:
+      - Billing
+      summary: Update invoice details
+      description: Updates the details of the specified invoice.
+      operationId: updateInvoice
+      parameters:
+      - name: number
+        in: path
+        description: number of the invoice
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateInvoiceRequest'
+        description: json representing invoice details
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceJson'
+    delete:
+      tags:
+      - Billing
+      summary: Delete invoice
+      description: Deletes the specified invoice
+      operationId: deleteInvoice
+      parameters:
+      - name: number
+        in: path
+        description: number of the invoice
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceJson'
+  /invoices/generate:
+    post:
+      tags:
+      - Billing
+      summary: Generate subscription invoices
+      description: Generates the invoices for the given subscription
+      operationId: generateInvoice
+      parameters:
+      - name: subscriptionId
+        in: query
+        description: id of the subscription
+        required: true
+        schema:
+          type: string
+      - name: targetDate
+        in: query
+        description: Time in seconds since Epoch (GMT) to generate invoice from
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: invoiceDate
+        in: query
+        description: Time in seconds since Epoch (GMT) to set invoice date to
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: invoiceChargeInclusionOption
+        in: query
+        description: types of charges to include
+        required: true
+        schema:
+          type: string
+          enum:
+          - INCLUDE_USAGE
+          - EXCLUDE_USAGE
+          - ONLY_USAGE
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InvoiceJson'
+  /invoices/preview:
+    get:
+      tags:
+      - Billing
+      summary: Preview invoices
+      description: Returns a preview of invoice for the specified order id OR subscription id
+      operationId: previewInvoiceByOrderPeriod
+      parameters:
+      - name: orderId
+        in: query
+        description: id of order
+        required: false
+        schema:
+          type: string
+      - name: subscriptionId
+        in: query
+        description: id of subscription
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InvoicePreviewJson'
+  /invoices/unbilledUsage:
+    get:
+      tags:
+      - Billing
+      summary: Get unbilled usage
+      description: Returns the unbilled usage invoice items for the specified subscription
+      operationId: previewInvoiceByOrderPeriod_1
+      parameters:
+      - name: subscriptionId
+        in: query
+        description: id of the subscription
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InvoiceItemJson'
+  /invoices:
+    get:
+      tags:
+      - Billing
+      summary: Get all invoices for a subscription
+      description: Returns all invoices for a subscription. The result is paginated. Use the cursor returned from a request in subsequent calls to retrieve all results.
+      operationId: getInvoices
+      parameters:
+      - name: subscriptionId
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: status filter for invoices
+        required: false
+        schema:
+          type: string
+          enum:
+          - DRAFT
+          - POSTED
+          - PAID
+          - CONVERTED
+          - VOIDED
+      - name: cursor
+        in: query
+        description: used to iterate through all results
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        description: number of items per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceJsonPaginationResponse'
+  /invoices/{number}/voided:
+    delete:
+      tags:
+      - Billing
+      summary: Delete voided invoice
+      description: Deletes the specified invoice
+      operationId: deleteVoidedInvoice
+      parameters:
+      - name: number
+        in: path
+        description: number of the invoice
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceJson'
+  /invoices/{number}/post:
+    post:
+      tags:
+      - Billing
+      summary: Mark invoice as posted
+      description: Marks the specified invoice as posted
+      operationId: postInvoice
+      parameters:
+      - name: number
+        in: path
+        description: number of the invoice
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceJson'
+  /invoices/{number}/void:
+    put:
+      tags:
+      - Billing
+      summary: Mark invoice as voided
+      description: Marks the specified invoice as voided
+      operationId: voidInvoice
+      parameters:
+      - name: number
+        in: path
+        description: number of the invoice
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoidInvoiceRequest'
+        description: json representing invoice details
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceJson'
+  /invoices/{invoiceNumber}/pdf:
+    get:
+      tags:
+      - Billing
+      summary: Download invoice PDF
+      description: Downloads the PDF for an invoice after it has been generated via a POST to /{invoiceNumber}/pdf. The data return will be the PDF document contents.
+      operationId: getInvoiceDocumentPdf
+      parameters:
+      - name: invoiceNumber
+        in: path
+        description: number of the invoice
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+    post:
+      tags:
+      - Billing
+      summary: Generate invoice PDF
+      description: Generates a PDF version of the specified invoice. Once generated, PDF can be later fetched via a call to /{invoiceNumber}/pdf.
+      operationId: createInvoiceDocument
+      parameters:
+      - name: invoiceNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: force
+        in: query
+        description: Force regeneration of the PDF document even if there has been no changes. Defaults to false.
+        required: false
+        schema:
+          type: boolean
+      responses:
+        default:
+          description: successful operation
+  /invoices/schedule/{id}:
+    delete:
+      tags:
+      - Billing
+      summary: Delete an existing billing schedule
+      description: Billing schedules must be deleted in reverse chronological order.
+      operationId: deleteBillingSchedule
+      parameters:
+      - name: id
+        in: path
+        description: billing schedule entry id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        default:
+          description: successful operation
+  /invoices/schedule:
+    get:
+      tags:
+      - Billing
+      summary: Get billing schedules for a subscription line item
+      description: Retrieve all billing schedules for a subscription line item
+      operationId: getBillingSchedules
+      parameters:
+      - name: subscriptionId
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: subscriptionChargeId
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BillingEventEntry'
+    post:
+      tags:
+      - Billing
+      summary: Add a new billing schedule for subscription line item
+      description: Creates a new billing schedule entry for an event based charge
+      operationId: addBillingSchedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillingEventInput'
+        description: new billing event
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+  /invoices/bulk/{bulkInvoiceRunId}/post:
+    put:
+      tags:
+      - Billing
+      summary: Posts invoices for a bulk run
+      description: Marks all invoices associated with the specified bulk run as posted
+      operationId: postInvoicesForBulkInvoiceRun
+      parameters:
+      - name: bulkInvoiceRunId
+        in: path
+        description: id of the run
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/postInvoicesForBulkInvoiceRunBody'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkInvoiceRun'
+  /invoices/bulk/email:
+    post:
+      tags:
+      - Billing
+      summary: Send emails for multiple invoices
+      description: Trigger tasks for sending emails for the given list of invoice IDs
+      operationId: sendBulkInvoiceEmail
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        description: List of invoice numbers to email
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /invoices/sequence/{invoiceConfigId}:
+    post:
+      tags:
+      - Billing
+      summary: Update invoice sequence
+      description: Updates the invoice sequence by invoice config id.
+      operationId: updateInvoiceSequence
+      parameters:
+      - name: invoiceConfigId
+        in: path
+        description: invoice config id
+        required: true
+        schema:
+          type: string
+      - name: next invoice number
+        in: query
+        description: long integer value
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantInvoiceConfig'
+  /invoices/previewAllInvoices:
+    get:
+      tags:
+      - Billing
+      summary: Preview all invoices
+      description: Returns a preview of invoice for the specified order id OR subscription id
+      operationId: previewAllInvoice
+      parameters:
+      - name: orderId
+        in: query
+        description: id of order
+        required: false
+        schema:
+          type: string
+      - name: subscriptionId
+        in: query
+        description: id of subscription
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InvoicePreviewJson'
+  /invoices/usage:
+    get:
+      tags:
+      - Billing
+      summary: Get usage
+      description: Returns the usage invoice items for the specified subscription and charge
+      operationId: getUsageForSubscriptionCharge
+      parameters:
+      - name: subscriptionId
+        in: query
+        description: id of the subscription
+        required: true
+        schema:
+          type: string
+      - name: chargeId
+        in: query
+        description: id of the charge
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InvoiceItemJson'
+  /invoices/{number}/canDelete:
+    get:
+      tags:
+      - Billing
+      summary: Check if invoice can be deleted
+      description: Response contains flag to indicate if the invoice can be deleted and reason if it cannot be deleted
+      operationId: getCanDeleteInvoice
+      parameters:
+      - name: number
+        in: path
+        description: number of the invoice
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceDeletableResponse'
+  /invoices/{invoiceNumber}/documentJson:
+    get:
+      tags:
+      - Billing
+      summary: Get the invoice document JSON that is used to render invoice PDF
+      description: Invoice document JSON that contains all details required to render full Invoice document
+      operationId: getRawInvoiceDocumentJson
+      parameters:
+      - name: invoiceNumber
+        in: path
+        description: number of the invoice
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /invoices/{invoiceNumber}/email:
+    post:
+      tags:
+      - Billing
+      summary: Send invoice email to contacts
+      description: Send the invoice to recipients via email with invoice PDF as attachment.
+      operationId: emailInvoice
+      parameters:
+      - name: invoiceNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /invoices/bulk:
+    post:
+      tags:
+      - Billing
+      summary: Create a bulk invoice run
+      description: Creates a bulk invoice run as specified by the input parameters. On success the id of the run is returned.
+      operationId: createBulkInvoiceRun
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkInvoiceRunInput'
+        description: json representing the run parameters
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+  /settlements/applicablePaymentBankAccounts:
+    get:
+      tags:
+      - Billing
+      summary: Get applicable payment bank accounts for invoice payment
+      description: Returns a list of applicable payment bank accounts that can be used for payment for a given invoice number
+      operationId: getApplicablePaymentBankAccountsForInvoicePayment
+      parameters:
+      - name: invoiceNumber
+        in: query
+        description: Invoice number
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentBankAccountJson'
+  /settlements/{id}:
+    get:
+      tags:
+      - Billing
+      summary: Get settlement application details
+      description: Gets the details of specified settlement application.
+      operationId: getSettlementApplication
+      parameters:
+      - name: id
+        in: path
+        description: id of the settlement application
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettlementApplication'
+  /settlements:
+    get:
+      tags:
+      - Billing
+      summary: Get settlement applications
+      description: Returns the settlement applications for the specified invoice number or payment object.
+      operationId: getSettlementApplications
+      parameters:
+      - name: invoiceNumber
+        in: query
+        description: number of the invoice
+        required: false
+        schema:
+          type: string
+      - name: paymentId
+        in: query
+        description: Id of payment
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SettlementApplication'
+  /settlements/addAndApplyPayment:
+    post:
+      tags:
+      - Billing
+      summary: Apply a payment on a specific invoice
+      description: Apply a payment per the specified parameters.
+      operationId: addAndApplyPayment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApplyPaymentRequest'
+        description: add and apply payment parameters in json
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /settlements/applyCreditMemo:
+    post:
+      tags:
+      - Billing
+      summary: Apply a credit memo
+      description: Applies a credit memo per the specified parameters
+      operationId: applyCreditMemo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditMemoApplicationJson'
+        description: application details in json
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /settlements/unapplyCreditMemo:
+    post:
+      tags:
+      - Billing
+      summary: Unapply a credit memo
+      description: Unapplies a credit memo per the specified parameters
+      operationId: unapplyCreditMemo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreditMemoUnapplicationJson'
+        description: application details in json
+        required: true
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    AutomatedInvoiceRuleRequestJson:
+      type: object
+      required:
+      - cronExpression
+      - firstExecutionDate
+      - name
+      properties:
+        id:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        description:
+          type: string
+        cronExpression:
+          type: string
+        firstExecutionDate:
+          type: integer
+          format: int64
+        lastExecutionDate:
+          type: integer
+          format: int64
+        targetDuration:
+          type: integer
+          format: int32
+        invoiceDuration:
+          type: integer
+          format: int32
+        includeUsageCharge:
+          type: boolean
+        includeNonUsageCharge:
+          type: boolean
+        autoPostInvoice:
+          type: boolean
+        autoEmailInvoice:
+          type: boolean
+        enabled:
+          type: boolean
+    PaymentBankAccountJson:
+      type: object
+      required:
+      - currencyCode
+      - entityIds
+      - status
+      properties:
+        id:
+          type: string
+          readOnly: true
+        entityIds:
+          type: array
+          items:
+            type: string
+        externalId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        currencyCode:
+          type: string
+        cashLedgerAccountId:
+          type: string
+        expenseLedgerAccountId:
+          type: string
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - ACTIVE
+          - DEPRECATED
+        hasExistingPayments:
+          type: boolean
+        createdOn:
+          type: integer
+          format: int64
+          readOnly: true
+        updatedOn:
+          type: integer
+          format: int64
+          readOnly: true
+    InvoiceJson:
+      type: object
+      properties:
+        entityId:
+          type: string
+        invoiceNumber:
+          type: string
+        postedDate:
+          type: integer
+          format: int64
+        invoiceDate:
+          type: integer
+          format: int64
+        voidedDate:
+          type: integer
+          format: int64
+        dueDate:
+          type: integer
+          format: int64
+        currency:
+          type: string
+        paymentTerm:
+          type: string
+        totalDiscount:
+          type: number
+        subTotal:
+          type: number
+        taxTotal:
+          type: number
+        taxTransactionCode:
+          type: string
+        total:
+          type: number
+        subscriptionId:
+          type: string
+        accountId:
+          type: string
+        resellerAccountId:
+          type: string
+        invoiceItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceItemJson'
+        billingContact:
+          $ref: '#/components/schemas/AccountContactJson'
+        shippingContact:
+          $ref: '#/components/schemas/AccountContactJson'
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - POSTED
+          - PAID
+          - CONVERTED
+          - VOIDED
+        purchaseOrderNumber:
+          type: string
+        purchaseOrderRequired:
+          type: boolean
+        note:
+          type: string
+        emailNotifiersList:
+          $ref: '#/components/schemas/EmailNotifiersList'
+        erpId:
+          type: string
+        generationMethod:
+          type: string
+          enum:
+          - USER_INITIATED
+          - API_INITIATED
+          - BULK_INVOICE_RUN
+          - AUTOMATED_INVOICE_JOB
+          - RULE_DRIVEN_INVOICE_JOB
+          - UNKNOWN
+        generatedBy:
+          type: string
+        exchangeRateId:
+          type: string
+        exchangeRate:
+          type: number
+        exchangeRateDate:
+          type: integer
+          format: int64
+        functionalTotalDiscount:
+          type: number
+        functionalSubTotal:
+          type: number
+        functionalTaxTotal:
+          type: number
+        functionalTotal:
+          type: number
+        customFields:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValue'
+    DunningSettingJson:
+      type: object
+      required:
+      - isEnabled
+      properties:
+        isEnabled:
+          type: boolean
+        dunningTypeMap:
+          type: object
+          additionalProperties:
+            type: boolean
+    InvoiceDeletableResponse:
+      type: object
+      properties:
+        deletable:
+          type: boolean
+          readOnly: true
+        message:
+          type: string
+          readOnly: true
+    BulkInvoiceRunItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        runId:
+          type: string
+        accountId:
+          type: string
+        accountName:
+          type: string
+        subscriptionId:
+          type: string
+        draftInvoiceNumber:
+          type: string
+        postedInvoiceNumber:
+          type: string
+        invoiceCreatedOn:
+          type: integer
+          format: int64
+        invoiceCurrencyCode:
+          type: string
+        invoiceAmount:
+          type: number
+        failureReason:
+          type: string
+        excludedForPosting:
+          type: boolean
+        excludedForEmailing:
+          type: boolean
+        emailSent:
+          type: boolean
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        draftInvoiceNotGenerated:
+          type: boolean
+        invoiceNotPosted:
+          type: boolean
+        draftInvoiceGenerated:
+          type: boolean
+        invoicePosted:
+          type: boolean
+        includedForPosting:
+          type: boolean
+        includedForEmailing:
+          type: boolean
+    TenantInvoiceConfig:
+      type: object
+      properties:
+        invoiceConfigId:
+          type: string
+        invoiceNumberPrefix:
+          $ref: '#/components/schemas/InvoiceNumberPrefix'
+        invoiceNumberScheme:
+          type: string
+          enum:
+          - SEQUENCE
+          - PSEUDO_RANDOM
+        invoiceNextNumber:
+          type: integer
+          format: int64
+        invoiceNumberLength:
+          type: integer
+          format: int32
+    SettlementApplication:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        entityId:
+          type: string
+        customerAccountId:
+          type: string
+        invoiceNumber:
+          type: string
+        paymentId:
+          type: string
+        creditMemoNumber:
+          type: string
+        applicationType:
+          type: string
+          enum:
+          - PAYMENT
+          - VOID_PAYMENT
+          - CREDIT
+          - UNAPPLY_CREDIT
+        amount:
+          type: number
+        note:
+          type: string
+        appliedOn:
+          type: integer
+          format: int64
+        exchangeRateId:
+          type: string
+        exchangeRate:
+          type: number
+        exchangeRateDate:
+          type: integer
+          format: int64
+        functionalAmount:
+          type: number
+        createdOn:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - ATTEMPTING_PAYMENT_COLLECTION
+          - APPLIED_PAYMENT
+          - FAILED
+        negatedSettlementId:
+          type: string
+          format: uuid
+    SubscriptionChargeAlias:
+      type: object
+      properties:
+        aliasId:
+          type: string
+          minLength: 5
+          maxLength: 100
+        subscriptionId:
+          type: string
+          minLength: 0
+          maxLength: 36
+        chargeId:
+          type: string
+          minLength: 0
+          maxLength: 36
+        createdOn:
+          type: integer
+          format: int64
+    AutomatedInvoiceRule:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+          format: uuid
+        enabled:
+          type: boolean
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        cronExpression:
+          type: string
+        automatedInvoiceRuleId:
+          type: string
+        cronExpressionMeaning:
+          type: string
+        lastExecutionDate:
+          type: integer
+          format: int64
+        nextExecutionDate:
+          type: integer
+          format: int64
+        targetDuration:
+          type: integer
+          format: int32
+        invoiceDuration:
+          type: integer
+          format: int32
+        includeUsageCharge:
+          type: boolean
+        includeNonUsageCharge:
+          type: boolean
+        autoPostInvoice:
+          type: boolean
+        autoEmailInvoice:
+          type: boolean
+        firstExecutionDate:
+          type: integer
+          format: int64
+        description:
+          type: string
+    InvoiceJsonPaginationResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/InvoiceJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
+    InvoiceItemPreviewJson:
+      type: object
+      properties:
+        orderLineItemId:
+          type: string
+        amount:
+          type: number
+        listAmount:
+          type: number
+        discountAmount:
+          type: number
+        listUnitPrice:
+          type: number
+        sellUnitPrice:
+          type: number
+    CreditMemoUnapplicationJson:
+      type: object
+      required:
+      - creditMemoNumber
+      - settlementToUnapplyId
+      properties:
+        invoiceNumber:
+          type: string
+        invoiceBalanceAmount:
+          type: string
+        creditMemoNumber:
+          type: string
+        creditMemoBalanceAmount:
+          type: string
+        settlementToUnapplyId:
+          type: string
+          format: uuid
+        note:
+          type: string
+    VoidInvoiceRequest:
+      type: object
+      required:
+      - invoiceBalance
+      - voidDate
+      properties:
+        voidDate:
+          type: integer
+          format: int64
+        invoiceBalance:
+          type: number
+    AccountContactJson:
+      type: object
+      required:
+      - accountId
+      properties:
+        id:
+          type: string
+          description: This is a system-generated Account Contact ID
+        accountId:
+          type: string
+          description: Uniquely identifies the Account
+        firstName:
+          type: string
+          description: First Name of the Contact
+        lastName:
+          type: string
+          description: (optional) Last Name of the Contact
+        email:
+          type: string
+          description: Email of the Contact
+        phoneNumber:
+          type: string
+          description: (optional) Phone Number of the Contact
+        title:
+          type: string
+          description: (optional) Title of the Contact
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+        externalId:
+          type: string
+        erpId:
+          type: string
+        fullName:
+          type: string
+        eventObjectId:
+          type: string
+    AccountReceivableContactJson:
+      type: object
+      required:
+      - address
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+    EmailNotifiersList:
+      type: object
+      properties:
+        toIds:
+          type: array
+          items:
+            type: string
+        ccIds:
+          type: array
+          items:
+            type: string
+        bccIds:
+          type: array
+          items:
+            type: string
+    TaxRateJson:
+      type: object
+      required:
+      - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        taxPercentage:
+          type: number
+        taxCode:
+          type: string
+        taxInclusive:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DISABLED
+          - EXPIRED
+        inUse:
+          type: boolean
+    BillingEventInput:
+      type: object
+      required:
+      - amount
+      properties:
+        subscriptionId:
+          type: string
+          readOnly: true
+        subscriptionChargeId:
+          type: string
+          readOnly: true
+        triggerOn:
+          type: integer
+          format: int64
+          readOnly: true
+        amount:
+          type: number
+          readOnly: true
+    AccountJson:
+      type: object
+      required:
+      - name
+      properties:
+        id:
+          type: string
+          description: This is a system-generated Account ID
+        name:
+          type: string
+          description: Account name
+        legalName:
+          type: string
+          description: (optional) Account legal name
+        description:
+          type: string
+          description: (optional) Account Description
+        phoneNumber:
+          type: string
+          description: (optional) Phone number of the Account
+        timezone:
+          type: string
+          readOnly: true
+        crmId:
+          type: string
+          description: (optional) CRM ID of the Account
+        crmType:
+          type: string
+          description: (optional) CRM type
+        erpId:
+          type: string
+          description: (optional) ERP ID of this account
+        externalId:
+          type: string
+          description: (optional) External ID of this account
+        currency:
+          type: string
+          description: 'The currency code (ISO 4217 format). If currency is not entered, USD will be applied by default. Possible currencies in Subskribe: AED AUD CAD CHF CZK DKK EUR GBP HKD INR MXN NOK NZD SAR SEK SGD TWD USD'
+        taxExemptionUseCode:
+          type: string
+          description: (optional) Indicates Tax Exemption Information. When the account does not qualify for Tax Exemption, add null in the request. When using Anrok Tax Integration, keep this value  null , as Anrok requires to upload Tax Exemption Certificate.
+          enum:
+          - A
+          - B
+          - C
+          - D
+          - E
+          - F
+          - G
+          - H
+          - I
+          - J
+          - K
+          - L
+          - M
+          - N
+          - P
+          - Q
+          - R
+        isReseller:
+          type: boolean
+          description: (optional) Input true, if this is a Reseller Account. Default is false
+        hasAutomaticPayment:
+          type: boolean
+          description: (optional) Input true, if this Account will have an automatic payment. Default is false
+        excludeFromBatchOperations:
+          type: boolean
+          description: (optional) Input true, if this account needs to be excluded from Batch Operations like Bulk  Invoice Run, Invoice Generation. Default is false. This is an optional field.
+        excludeFromDunning:
+          type: boolean
+          description: (optional) Input true, if this account needs to be excluded from Dunning emails. Default is false. This is an optional field.
+        supportedPaymentTypes:
+          type: array
+          description: (optional) Supported payment types for this Account. This field can include various payment types such as ACH, Card, Check, Wire, and Invoice. This is an optional field.
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - ACH
+            - CARD
+            - CHECK
+            - WIRE
+            - INVOICE
+            - DEPOSIT
+            - EXTERNAL
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+        updatedOn:
+          type: integer
+          format: int64
+          description: (optional) will be auto-populated as today's date
+        customFields:
+          type: object
+          description: (optional) Use this option to create custom fields for the Account object if you need to collect Account-specific information, such as region, age, or gender.
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValue'
+        entityIds:
+          type: array
+          description: (optional) Enter the entity ID where this Account belongs to
+          uniqueItems: true
+          items:
+            type: string
+    InvoiceBalanceJson:
+      type: object
+      properties:
+        accountId:
+          type: string
+        invoiceNumber:
+          type: string
+        balance:
+          type: number
+        updatedOn:
+          type: integer
+          format: int64
+    InvoicePreviewJson:
+      type: object
+      properties:
+        orderId:
+          type: string
+        lineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceItemPreviewJson'
+        invoiceItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceItemJson'
+        total:
+          type: number
+        totalDiscount:
+          type: number
+        createdOn:
+          type: integer
+          format: int64
+    BillingEventEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        triggerOn:
+          type: integer
+          format: int64
+          readOnly: true
+        amount:
+          type: number
+          readOnly: true
+        createdOn:
+          type: integer
+          format: int64
+          readOnly: true
+    BulkInvoiceRunInput:
+      type: object
+      properties:
+        entityId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        targetDate:
+          type: integer
+          format: int64
+        invoiceDate:
+          type: integer
+          format: int64
+        chargeInclusionOption:
+          type: string
+          enum:
+          - INCLUDE_USAGE
+          - EXCLUDE_USAGE
+          - ONLY_USAGE
+        isHistorical:
+          type: boolean
+    InvoiceItemJson:
+      type: object
+      properties:
+        id:
+          type: string
+        planId:
+          type: string
+        chargeId:
+          type: string
+        orderId:
+          type: string
+        orderLineItemId:
+          type: string
+        subscriptionChargeId:
+          type: string
+        subscriptionChargeGroupId:
+          type: string
+        listAmount:
+          type: number
+        discountAmount:
+          type: number
+        amount:
+          type: number
+        taxAmount:
+          type: number
+        taxRate:
+          $ref: '#/components/schemas/TaxRateJson'
+        listUnitPrice:
+          type: number
+        sellUnitPrice:
+          type: number
+        quantity:
+          type: integer
+          format: int64
+        drawdownQuantityUsed:
+          type: integer
+          format: int64
+        drawdownQuantityRemaining:
+          type: integer
+          format: int64
+        periodStartDate:
+          type: integer
+          format: int64
+        periodEndDate:
+          type: integer
+          format: int64
+        isBilled:
+          type: boolean
+        functionalListAmount:
+          type: number
+        functionalDiscountAmount:
+          type: number
+        functionalAmount:
+          type: number
+        functionalTaxAmount:
+          type: number
+        triggerOn:
+          type: integer
+          format: int64
+    ApplyPaymentRequest:
+      type: object
+      properties:
+        invoiceNumber:
+          type: string
+        invoiceAmount:
+          type: string
+        paymentMethodId:
+          type: string
+          format: uuid
+        paymentBankAccountId:
+          type: string
+        paymentType:
+          type: string
+          enum:
+          - ACH
+          - CARD
+          - CHECK
+          - WIRE
+          - INVOICE
+          - DEPOSIT
+          - EXTERNAL
+        amount:
+          type: number
+        bankFee:
+          type: number
+        note:
+          type: string
+        paymentDate:
+          type: integer
+          format: int64
+    BulkInvoiceRunSelector:
+      type: object
+      properties:
+        exclusions:
+          $ref: '#/components/schemas/BulkInvoiceRunExclusions'
+    UpdateInvoiceRequest:
+      type: object
+      required:
+      - invoiceDate
+      properties:
+        invoiceDate:
+          type: integer
+          format: int64
+        dueDate:
+          type: integer
+          format: int64
+        note:
+          type: string
+          minLength: 0
+          maxLength: 1000
+        purchaseOrderNumber:
+          type: string
+          minLength: 0
+          maxLength: 255
+        billingContactId:
+          type: string
+        emailNotifiersList:
+          $ref: '#/components/schemas/EmailNotifiersList'
+    AccountAddressJson:
+      type: object
+      properties:
+        streetAddressLine1:
+          type: string
+          description: Address Line 1 of the Contact
+        streetAddressLine2:
+          type: string
+          description: Address Line 2 of the Contact
+        streetAddressLine3:
+          type: string
+          description: Address Line 3 of the Contact
+        city:
+          type: string
+          description: City of the Contact
+        state:
+          type: string
+          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
+        country:
+          type: string
+          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
+        zipcode:
+          type: string
+          description: Zip or Postal Code of the Contact
+    CreditMemoApplicationJson:
+      type: object
+      required:
+      - amount
+      - creditMemoNumber
+      properties:
+        id:
+          type: string
+          format: uuid
+        invoiceNumber:
+          type: string
+        invoiceAmount:
+          type: string
+        creditMemoNumber:
+          type: string
+        amount:
+          type: number
+        note:
+          type: string
+    InvoiceNumberPrefix:
+      type: object
+      properties:
+        prefix:
+          type: string
+    BulkInvoiceRunExclusions:
+      type: object
+      properties:
+        accounts:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/AccountJson'
+        accountIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    BulkInvoiceRun:
+      type: object
+      properties:
+        entityId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        targetDate:
+          type: integer
+          format: int64
+        invoiceDate:
+          type: integer
+          format: int64
+        chargeInclusionOption:
+          type: string
+          enum:
+          - INCLUDE_USAGE
+          - EXCLUDE_USAGE
+          - ONLY_USAGE
+        isHistorical:
+          type: boolean
+        id:
+          type: string
+        bulkInvoiceRunId:
+          type: string
+        automatedInvoiceRuleId:
+          type: string
+        status:
+          type: string
+          enum:
+          - QUEUED
+          - CREATED
+          - PROCESSING
+          - FAILED
+          - COMPLETED
+          - RUNNING
+        phase:
+          type: string
+          enum:
+          - INVOICE_GENERATION_NOT_STARTED
+          - NO_INVOICES_FOUND
+          - INVOICES_GENERATING
+          - INVOICES_GENERATED
+          - INVOICES_POSTING
+          - INVOICES_POSTED
+          - INVOICES_EMAILING
+          - INVOICES_EMAILED
+        invoiceSelector:
+          $ref: '#/components/schemas/BulkInvoiceRunSelector'
+        failureReason:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    CustomFieldValue:
+      type: object
+      properties:
+        type:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        name:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        value:
+          type: string
+          readOnly: true
+        selections:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        required:
+          type: boolean
+          readOnly: true
+        source:
+          type: string
+          readOnly: true
+          enum:
+          - USER
+          - SYSTEM
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+  requestBodies:
+    AutomatedInvoiceRuleRequestJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AutomatedInvoiceRuleRequestJson'
+      description: automated invoice rule
+      required: true
+    postInvoicesForBulkInvoiceRunBody:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

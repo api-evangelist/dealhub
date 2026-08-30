@@ -1,0 +1,356 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Account API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Account
+paths:
+  /rh/accounts/{accountId}:
+    get:
+      tags:
+      - Account
+      operationId: getCpqSourcedAccount
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique account identifier
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Account
+      operationId: updateCpqSourcedAccount
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique account identifier
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/NewAccountJson'
+      responses:
+        default:
+          description: successful operation
+  /rh/accounts:
+    post:
+      tags:
+      - Account
+      operationId: addCpqSourcedAccount
+      requestBody:
+        $ref: '#/components/requestBodies/NewAccountJson'
+      responses:
+        default:
+          description: successful operation
+  /rh/accounts/bulk:
+    post:
+      tags:
+      - Account
+      operationId: getCpqSourcedAccounts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountQueryRequest'
+      responses:
+        default:
+          description: successful operation
+  /rh/accounts/cfac-id:
+    get:
+      tags:
+      - Account
+      operationId: getCpqSourcedAccountsByUvcaCfacId
+      parameters:
+      - name: uvcaCfacId
+        in: query
+        description: uvca_cfac_id
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: successful operation
+  /rh/accounts/{accountId}/contacts:
+    get:
+      tags:
+      - Account
+      operationId: getCpqSourcedAccountContacts
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique account identifier
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+    post:
+      tags:
+      - Account
+      operationId: addCpqSourcedAccountContact
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique account identifier
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/NewAccountContactJson'
+      responses:
+        default:
+          description: successful operation
+  /rh/accounts/{accountId}/contacts/{contactId}:
+    get:
+      tags:
+      - Account
+      operationId: getCpqSourcedAccountContact
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique account identifier
+        required: true
+        schema:
+          type: string
+      - name: contactId
+        in: path
+        description: The unique contact identifier
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Account
+      operationId: updateCpqSourcedAccountContact
+      parameters:
+      - name: accountId
+        in: path
+        description: The unique account identifier
+        required: true
+        schema:
+          type: string
+      - name: contactId
+        in: path
+        description: The unique contact identifier
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/NewAccountContactJson'
+      responses:
+        default:
+          description: successful operation
+components:
+  requestBodies:
+    NewAccountJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NewAccountJson'
+    NewAccountContactJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NewAccountContactJson'
+  schemas:
+    NewAccountContactJson:
+      type: object
+      required:
+      - accountId
+      - email
+      properties:
+        contactId:
+          type: string
+          description: Contact ID - Used for CPQ-RevenuHub integration
+          minLength: 0
+          maxLength: 36
+        accountId:
+          type: string
+          description: Uniquely identifies the Account
+          minLength: 0
+          maxLength: 36
+        firstName:
+          type: string
+          description: (optional) First Name of the Contact
+        lastName:
+          type: string
+          description: (optional) Last Name of the Contact
+        email:
+          type: string
+          description: Email of the Contact
+        phoneNumber:
+          type: string
+          description: (optional) Phone Number of the Contact
+        title:
+          type: string
+          description: (optional) Title of the Contact
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+        externalId:
+          type: string
+          description: (optional) External system identifier
+        erpId:
+          type: string
+          description: (optional) ERP system identifier
+        crmId:
+          type: string
+          description: (optional) CRM system identifier
+        fullName:
+          type: string
+        eventObjectId:
+          type: string
+    AccountAddressJson:
+      type: object
+      properties:
+        streetAddressLine1:
+          type: string
+          description: Address Line 1 of the Contact
+        streetAddressLine2:
+          type: string
+          description: Address Line 2 of the Contact
+        streetAddressLine3:
+          type: string
+          description: Address Line 3 of the Contact
+        city:
+          type: string
+          description: City of the Contact
+        state:
+          type: string
+          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
+        country:
+          type: string
+          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
+        zipcode:
+          type: string
+          description: Zip or Postal Code of the Contact
+    NewAccountJson:
+      type: object
+      required:
+      - accountId
+      - name
+      - uvcaCfacId
+      properties:
+        accountId:
+          type: string
+          description: Account ID - Required for CPQ-RevenuHub integration (max 36 characters)
+          minLength: 0
+          maxLength: 36
+        name:
+          type: string
+          description: Account name
+        description:
+          type: string
+          description: (optional) Account description
+        crmId:
+          type: string
+          description: (optional) CRM ID
+        accountDisplayId:
+          type: string
+          description: (optional) Human-readable account display ID generated by DealHub (e.g. ACC-100847). Immutable once set.
+          minLength: 0
+          maxLength: 40
+        currency:
+          type: string
+          description: 'Currency code (ISO 4217 format). Optional - defaults to USD if not provided. Example: USD, EUR, GBP'
+        shippingAddress:
+          $ref: '#/components/schemas/AccountAddressJson'
+        billingAddress:
+          $ref: '#/components/schemas/AccountAddressJson'
+        uvcaCfacId:
+          type: integer
+          format: int64
+          description: uvca_cfac_id - Required for CPQ-RevenuHub integration
+        entityIds:
+          type: array
+          description: (optional) Entity IDs where this account belongs
+          uniqueItems: true
+          items:
+            type: string
+        taxExemptionUseCode:
+          type: string
+          description: (optional) Tax exemption use code
+          enum:
+          - A
+          - B
+          - C
+          - D
+          - E
+          - F
+          - G
+          - H
+          - I
+          - J
+          - K
+          - L
+          - M
+          - N
+          - P
+          - Q
+          - R
+        hasAutomaticPayment:
+          type: boolean
+          description: (optional) Input true, if this Account will have an automatic payment. Default is false
+        excludeFromBatchOperations:
+          type: boolean
+          description: (optional) Input true, if this account needs to be excluded from Batch Operations. Default is false
+        excludeFromDunning:
+          type: boolean
+          description: (optional) Input true, if this account needs to be excluded from Dunning emails. Default is false
+        supportedPaymentTypes:
+          type: array
+          description: '(optional) Supported payment types for this Account. Example: ACH, Card, Check, Wire, Invoice'
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - ACH
+            - CARD
+            - CHECK
+            - WIRE
+            - INVOICE
+            - DEPOSIT
+            - EXTERNAL
+        taxId:
+          type: string
+          description: (optional) Tax identifier for the account (max 100 characters)
+          minLength: 0
+          maxLength: 100
+        attributes:
+          type: object
+          description: (optional) Additional attributes as key-value pairs for CPQ integration
+          additionalProperties:
+            type: object
+        updatedOn:
+          type: integer
+          format: int64
+          description: (optional) Last updated timestamp (epoch seconds)
+    AccountQueryRequest:
+      type: object
+      required:
+      - accountIds
+      properties:
+        accountIds:
+          type: array
+          description: List of account identifiers (max 100)
+          items:
+            type: string
+          maxItems: 100
+          minItems: 0
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

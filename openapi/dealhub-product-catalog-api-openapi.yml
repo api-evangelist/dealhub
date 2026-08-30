@@ -1,0 +1,3399 @@
+openapi: 3.2.0
+info:
+  title: Dealhub Product Catalog API
+  version: 1.0.0
+  description: 'Operations tagged Product Catalog across 2 of this provider''s published API definitions: dealhub-subskribe-api-openapi.yml, dealhub-version-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.app.subskribe.com
+- url: https://api.dealhub.io
+  description: The base URL for your DealHub instance.
+  variables:
+    your-dealhub-instance:
+      default: app
+      description: Your specific DealHub instance name (e.g., 'app', 'service-eu1').
+tags:
+- name: Product Catalog
+paths:
+  /charges/{chargeId}:
+    get:
+      tags:
+      - Product Catalog
+      summary: Get charge details
+      description: Gets the details of the specified charge.
+      operationId: getCharge
+      parameters:
+      - name: chargeId
+        in: path
+        description: id of the charge
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeJson'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /charges/revrec/csv/download:
+    get:
+      tags:
+      - Product Catalog
+      summary: Download revenue recognition fields
+      description: Downloads your charge revenue recognition fields as a csv
+      operationId: getRevRecFieldsAsCsv
+      responses:
+        default:
+          description: successful operation
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /charges/revrec/csv:
+    post:
+      tags:
+      - Product Catalog
+      summary: Backfill revenue recognition fields
+      description: Backfill API to update revenue recognition fields on charges
+      operationId: backfillRevRecFields
+      parameters:
+      - name: isDryRun
+        in: query
+        required: false
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/uploadApprovalMatrixCSV'
+      responses:
+        default:
+          description: successful operation
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /plans/{planId}/charges/{chargeId}/ledgerAccounts:
+    get:
+      tags:
+      - Product Catalog
+      summary: Get ledger accounts
+      description: Gets the ledger accounts mapped to the specified charge
+      operationId: getChargeLedgerAccounts
+      parameters:
+      - name: planId
+        in: path
+        description: id of the plan
+        required: true
+        schema:
+          type: string
+      - name: chargeId
+        in: path
+        description: id of the charge
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LedgerAccount'
+      security:
+      - ApiKeyAuth: []
+    put:
+      tags:
+      - Product Catalog
+      summary: Map ledger accounts
+      description: Map ledger accounts to the specified charge for the specified plan.
+      operationId: mapLedgerAccountsToCharge
+      parameters:
+      - name: planId
+        in: path
+        description: id of the plan
+        required: true
+        schema:
+          type: string
+      - name: chargeId
+        in: path
+        description: id of the charge
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        description: list of the ledger account ids
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LedgerAccount'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /plans/{planId}/replacedPlans:
+    get:
+      tags:
+      - Product Catalog
+      summary: Get replaced plans
+      description: ''
+      operationId: getReplacedPlans
+      parameters:
+      - name: planId
+        in: path
+        description: id of the plan
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanJson'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /plans:
+    get:
+      tags:
+      - Product Catalog
+      summary: Get plans
+      description: Returns all plans for a product. The result is paginated. To retrieve all results pass the cursor returned from a call to the next call until all results are returned.
+      operationId: getPlans
+      parameters:
+      - name: productId
+        in: query
+        description: id of the product
+        required: false
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: filter by plan status
+        required: false
+        schema:
+          type: string
+          enum:
+          - DRAFT
+          - ACTIVE
+          - GRANDFATHERED
+          - ARCHIVED
+          - DEPRECATED
+      - name: cursor
+        in: query
+        description: cursor from the last call
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        description: number of results per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanJsonPaginationResponse'
+      security:
+      - ApiKeyAuth: []
+    post:
+      tags:
+      - Product Catalog
+      summary: Create a plan
+      description: Creates a plan. On success the id of the new plan is returned.
+      operationId: addPlan
+      requestBody:
+        $ref: '#/components/requestBodies/PlanJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanJson'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /plans/{planId}:
+    get:
+      tags:
+      - Product Catalog
+      summary: Get plan details
+      description: Returns the details of the specified plan.
+      operationId: getPlan
+      parameters:
+      - name: planId
+        in: path
+        description: id of the plan
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanJson'
+      security:
+      - ApiKeyAuth: []
+    put:
+      tags:
+      - Product Catalog
+      summary: Update plan
+      description: Updates the details of the specified plan. Note you can't update the details of a plan once it's in use.
+      operationId: updatePlan
+      parameters:
+      - name: planId
+        in: path
+        description: id of the plan
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/PlanJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanJson'
+      security:
+      - ApiKeyAuth: []
+    delete:
+      tags:
+      - Product Catalog
+      summary: Delete a plan
+      description: Deletes a plan. Note you can't delete a plan that's in use.
+      operationId: deletePlan
+      parameters:
+      - name: planId
+        in: path
+        description: id of the plan
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanJson'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /plans/{planId}/terms:
+    put:
+      tags:
+      - Product Catalog
+      summary: Update plan terms
+      description: Updates predefined terms associated with the specified plan.
+      operationId: updatePlanTerms
+      parameters:
+      - name: planId
+        in: path
+        description: id of the plan
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        description: json of the plan details
+        required: true
+      responses:
+        default:
+          description: successful operation
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /plans/{planId}/metadata:
+    put:
+      tags:
+      - Product Catalog
+      summary: Update plan metadata
+      description: Update plan metadata. For now, this can be used only to change the entities assigned to a plan
+      operationId: updatePlanMetadata
+      parameters:
+      - name: planId
+        in: path
+        description: plan id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PlanMetadataJson'
+        description: plan metadata to be updated
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanJson'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /plans/{planId}/revertToDraft:
+    put:
+      tags:
+      - Product Catalog
+      summary: Revert a plan to draft
+      description: Marks a plan as draft
+      operationId: deactivatePlan
+      parameters:
+      - name: planId
+        in: path
+        description: id of the plan
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanJson'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /plans/{planId}/charges:
+    post:
+      tags:
+      - Product Catalog
+      summary: Add charge to plan
+      description: Adds a charge to the specified plan.  Success response contains ID of the new charge.
+      operationId: addCharge
+      parameters:
+      - name: planId
+        in: path
+        description: ID of the plan to which you want to add the charge. To get a list of IDs, call the [Get plans](/reference/getplans) operation.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargeJson'
+        description: JSON representing the charge details
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeJson'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /plans/{planId}/charges/{chargeId}/partial:
+    put:
+      tags:
+      - Product Catalog
+      summary: Update non-financial charge details
+      description: Updates certain details of the specified charge which won't impact its financial treatment
+      operationId: patchCharge
+      parameters:
+      - name: planId
+        in: path
+        description: id of the plan
+        required: true
+        schema:
+          type: string
+      - name: chargeId
+        in: path
+        description: id of the charge
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargePartialJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeJson'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /plans/{planId}/activate:
+    put:
+      tags:
+      - Product Catalog
+      summary: Activate a plan
+      description: Marks a plan as active
+      operationId: activatePlan
+      parameters:
+      - name: planId
+        in: path
+        description: id of the plan
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanJson'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /plans/{planId}/deprecate:
+    put:
+      tags:
+      - Product Catalog
+      summary: Deprecate a plan
+      description: Marks a plan as deprecated. Once deprecated a plan may not be attached to new orders.
+      operationId: deprecatePlan
+      parameters:
+      - name: planId
+        in: path
+        description: id of the plan
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanJson'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /plans/{planId}/reactivate:
+    put:
+      tags:
+      - Product Catalog
+      summary: Reactivate a plan
+      description: Reactivates a deprecated plan.
+      operationId: reactivatePlan
+      parameters:
+      - name: planId
+        in: path
+        description: id of the plan
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanJson'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /plans/{planId}/duplicate:
+    post:
+      tags:
+      - Product Catalog
+      summary: Duplicate a plan
+      description: Duplicates the specified plan. On success the new plan id is returned.
+      operationId: duplicatePlan
+      parameters:
+      - name: planId
+        in: path
+        description: id of the plan to duplicate
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlanJson'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /plans/{planId}/charges/{chargeId}:
+    put:
+      tags:
+      - Product Catalog
+      summary: Update charge details
+      description: Updates the details of the specified charge on the specified plan.
+      operationId: updateCharge
+      parameters:
+      - name: planId
+        in: path
+        description: id of the plan associated with the charge
+        required: true
+        schema:
+          type: string
+      - name: chargeId
+        in: path
+        description: id of the charge
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChargeJson'
+      responses:
+        default:
+          description: successful operation
+      security:
+      - ApiKeyAuth: []
+    delete:
+      tags:
+      - Product Catalog
+      summary: Delete a charge
+      description: Removes a charge from a plan.
+      operationId: deleteCharge
+      parameters:
+      - name: planId
+        in: path
+        description: id of the plan
+        required: true
+        schema:
+          type: string
+      - name: chargeId
+        in: path
+        description: id of the charge
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChargeJson'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /plans/filter/customField:
+    get:
+      tags:
+      - Product Catalog
+      summary: Get Plans that have a specific value for a custom field
+      description: Gets Plans that have a specific value for a custom field
+      operationId: getPlansFilterByCustomFields
+      parameters:
+      - name: customFieldName
+        in: query
+        description: Name of the custom field to filter by
+        required: false
+        schema:
+          type: string
+      - name: customFieldValue
+        in: query
+        description: Value of the custom field to filter by
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanJson'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /product/categories/{id}:
+    get:
+      tags:
+      - Product Catalog
+      summary: Get product category details
+      description: Gets the details of the specified product category
+      operationId: getProductCategory
+      parameters:
+      - name: id
+        in: path
+        description: id of the category
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategory'
+      security:
+      - ApiKeyAuth: []
+    put:
+      tags:
+      - Product Catalog
+      summary: Update product category details
+      description: Updates the details of a product category
+      operationId: updateProductCategory
+      parameters:
+      - name: id
+        in: path
+        description: id of the category
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/ProductCategory'
+      responses:
+        default:
+          description: successful operation
+      security:
+      - ApiKeyAuth: []
+    delete:
+      tags:
+      - Product Catalog
+      summary: Delete a product category
+      description: Deletes the specified product category. Note that a product category can't be delete once it's in use.
+      operationId: deleteProductCategory
+      parameters:
+      - name: id
+        in: path
+        description: id of the category
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategory'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /product/categories:
+    get:
+      tags:
+      - Product Catalog
+      summary: Get product Categories
+      description: Gets all product categories for your tenant. The results are paginated. To fetch all results pass the cursor returned from a call to the subsequent calls until all results are returned. Initially the cursor should not be specified.
+      operationId: getProductCategories
+      parameters:
+      - name: cursor
+        in: query
+        description: cursor from prior call
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        description: number of results per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategoryPaginationResponse'
+      security:
+      - ApiKeyAuth: []
+    post:
+      tags:
+      - Product Catalog
+      summary: Create a product category
+      description: Creates a product category. On success the id of the category is returned.
+      operationId: addProductCategory
+      requestBody:
+        $ref: '#/components/requestBodies/ProductCategory'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCategory'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /products/{id}:
+    get:
+      tags:
+      - Product Catalog
+      summary: Get product details
+      description: Gets the details of the specified product.
+      operationId: getProduct
+      parameters:
+      - name: id
+        in: path
+        description: ID of the product
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductJson'
+      security:
+      - ApiKeyAuth: []
+    put:
+      tags:
+      - Product Catalog
+      summary: Update product details
+      description: Updates the details of the specified product
+      operationId: updateProduct
+      parameters:
+      - name: id
+        in: path
+        description: id of the product
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/ProductInputJson'
+      responses:
+        default:
+          description: successful operation
+      security:
+      - ApiKeyAuth: []
+    delete:
+      tags:
+      - Product Catalog
+      summary: Delete a product
+      description: Delete the specified product.
+      operationId: deleteProduct
+      parameters:
+      - name: id
+        in: path
+        description: id of the product
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductJson'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /products/export:
+    get:
+      tags:
+      - Product Catalog
+      summary: Export product catalog
+      description: Export the product catalog in CSV format.
+      operationId: exportProductCatalog
+      responses:
+        default:
+          description: successful operation
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /products:
+    get:
+      tags:
+      - Product Catalog
+      summary: Get products
+      description: Returns all products for your tenant. The results on paginated. To fetch them all pass the cursor returned from a call to the subsequent call until all results are fetched. Initially the cursor should not be specified.
+      operationId: getProducts
+      parameters:
+      - name: cursor
+        in: query
+        description: cursor received from prior call
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        description: number of results per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductJsonPaginationResponse'
+      security:
+      - ApiKeyAuth: []
+    post:
+      tags:
+      - Product Catalog
+      summary: Create a product
+      description: Creates a product for your tenant. The success response contains the ID of the product.
+      operationId: addProduct
+      requestBody:
+        $ref: '#/components/requestBodies/ProductInputJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductJson'
+      security:
+      - ApiKeyAuth: []
+    servers:
+    - url: https://api.app.subskribe.com
+  /api/v1/version/{version_id}/products:
+    get:
+      tags:
+      - Product Catalog
+      summary: Get Products of a Version
+      description: 'Retrieves a paginated list of products for a specific version, returning basic product attributes and price details.
+
+        - `DRAFT` Status: Returns the full product list.
+
+        - `ACTIVE`/`DEACTIVATED` Status: Can return either all products or only products that were new or modified compared to the previously active version.'
+      operationId: getVersionProducts
+      parameters:
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 16
+        description: The unique identifier of the Version.
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          minimum: 0
+          maximum: 10000
+        description: The number of products to skip for pagination.
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+        description: The maximum number of products to return. If the requested `limit` value exceeds the maximum allowed limit, the system will automatically cap the result set at the maximum limit.
+      - name: product_option
+        in: query
+        schema:
+          type: string
+          enum:
+          - ALL
+          - MODIFIED
+          default: ALL
+        description: Specify whether to fetch all products or only new/updated products.
+      - name: pricing_option
+        in: query
+        schema:
+          type: string
+          enum:
+          - MIN
+          - MAX
+          - FIRST
+          default: MIN
+        description: For products with multiple fixed prices, specifies which price to return (Minimum, Maximum, or First defined).
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionProductsResponse'
+              examples:
+                getVersionProductsExample:
+                  summary: Successful response
+                  value:
+                    info:
+                      version_id: '76472'
+                      version_status: ACTIVE
+                      compared_with_version_id: '76326'
+                      more_results_matching_the_request: true
+                      offset: '1'
+                      limit: '25'
+                    products:
+                    - sku: '56545'
+                      name: Product A
+                      type: PRODUCT
+                      description: Description of product A
+                      price:
+                        EUR: '10'
+                        USD: '12.5'
+                      attributes:
+                      - attr_x: value X
+                      - attr_y: value Y
+                    - sku: '56546'
+                      name: Product B
+                      type: PRODUCT
+                      description: Description of product B
+                      price:
+                        EUR: '18'
+                        USD: '21.5'
+                      attributes:
+                      - attr_x: value XX
+                      - attr_y: value YY
+                    - sku: 56545_b
+                      name: Bundle X
+                      type: BUNDLE
+                      description: Description of bundle X
+                      price:
+                        EUR: '10'
+                      attributes:
+                      - attr_x: value XYZ
+                      - attr_y: value YZ
+                      bundle_items:
+                      - '56545'
+                      - '56546'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.dealhub.io
+      description: The base URL for your DealHub instance.
+      variables:
+        your-dealhub-instance:
+          default: app
+          description: Your specific DealHub instance name (e.g., 'app', 'service-eu1').
+  /api/v1/version/product_by_sku:
+    post:
+      tags:
+      - Product Catalog
+      summary: Get Products by SKU
+      description: 'Retrieves basic details for a specific list of products from the catalog based on their SKUs.
+
+
+        > 📘
+
+        > If some SKUs could not be found in a specific Version the system will return status 200, with error in the `info` structure.'
+      operationId: getProductsBySku
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductsBySkuRequest'
+            examples:
+              getProductsBySkuExample:
+                summary: Request specific products by SKU
+                value:
+                  version_id: 23687268JS5
+                  pricing_option: MAX
+                  sku:
+                  - Sku-123-dvvv
+                  - Sku-123-dvv2
+                  - Sku-123-dvv3
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VersionProductsResponse'
+              examples:
+                getVersionProductsExample:
+                  summary: Successful response
+                  value:
+                    info:
+                      version_id: '76472'
+                      version_status: ACTIVE
+                      compared_with_version_id: '76326'
+                      more_results_matching_the_request: true
+                      offset: '1'
+                      limit: '25'
+                    products:
+                    - sku: '56545'
+                      name: Product A
+                      type: PRODUCT
+                      description: Description of product A
+                      price:
+                        EUR: '10'
+                        USD: '12.5'
+                      attributes:
+                      - attr_x: value X
+                      - attr_y: value Y
+                    - sku: '56546'
+                      name: Product B
+                      type: PRODUCT
+                      description: Description of product B
+                      price:
+                        EUR: '18'
+                        USD: '21.5'
+                      attributes:
+                      - attr_x: value XX
+                      - attr_y: value YY
+                    - sku: 56545_b
+                      name: Bundle X
+                      type: BUNDLE
+                      description: Description of bundle X
+                      price:
+                        EUR: '10'
+                      attributes:
+                      - attr_x: value XYZ
+                      - attr_y: value YZ
+                      bundle_items:
+                      - '56545'
+                      - '56546'
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.dealhub.io
+      description: The base URL for your DealHub instance.
+      variables:
+        your-dealhub-instance:
+          default: app
+          description: Your specific DealHub instance name (e.g., 'app', 'service-eu1').
+  /api/v1/version/products_excel/{version_id}:
+    get:
+      tags:
+      - Product Catalog
+      summary: Extract Products to Excel
+      description: Retrieves all product-related information for a specific version in an Excel file format.
+      operationId: extractProductsExcel
+      parameters:
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 16
+        description: The unique identifier of the Version.
+      responses:
+        '200':
+          description: Success. Returns the Excel file as a byte array.
+          content:
+            application/vnd.ms-excel:
+              schema:
+                type: string
+                format: binary
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.dealhub.io
+      description: The base URL for your DealHub instance.
+      variables:
+        your-dealhub-instance:
+          default: app
+          description: Your specific DealHub instance name (e.g., 'app', 'service-eu1').
+  /api/v1/version/{version_id}/products_catalog:
+    get:
+      tags:
+      - Product Catalog
+      summary: Get Product Catalog
+      description: Retrieves paginated information about products and bundles in the catalog, including attributes, assignments, and pricing details.
+      operationId: getProductCatalog
+      parameters:
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 16
+        description: The unique identifier of the Version.
+      - name: sku
+        in: query
+        style: form
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+          maxItems: 100
+        description: 'One or more product SKUs to filter the result. Can be used multiple times (e.g., `?sku=SKU001&sku=SKU002`).
+
+
+          If none of the provided SKUs match, the service will return an empty list.
+
+
+          In case you inform a list of SKUs, ‘limit’ and ‘offset’ parameters on request will be ignored if provided.'
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          default: 0
+        description: The number of products to skip for pagination.
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          default: 100
+        description: The maximum number of products to return.
+      responses:
+        '200':
+          description: Success.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductCatalogGetResponse'
+              examples:
+                getProductCatalogExample:
+                  summary: Successful response
+                  value:
+                    products:
+                    - sku: ABC-12345-S-BL
+                      name: GRM Service
+                      description: 'GRM Service
+
+                        '
+                      tags: []
+                      primary_tag: null
+                      merge_products: false
+                      product_attributes:
+                        Department:
+                          type: NUMBER
+                          value: '1022'
+                        Model:
+                          type: TEXT
+                          value: 01-200-GRM-M
+                        Manufacture Date:
+                          type: DATE
+                          value: May 31, 2024
+                      product_assignments:
+                      - assignment: RULE_BASED
+                        playbook: Master_playbook_24
+                        assignment_rules:
+                        - ordinal: 0
+                          name: Seasonal assignment
+                          rule: '[General.partner_program] = "Direct Sales"'
+                          note: null
+                          product_factors:
+                          - name: Duration
+                            value: '12'
+                            applicable: true
+                          - name: Quantity
+                            value: '1'
+                            applicable: true
+                          - name: Sits
+                            value: '1'
+                            applicable: false
+                          proposal_attributes:
+                          - name: custom_proposal_attribute
+                            value: Direct
+                            applicable: true
+                      product_pricing:
+                        advanced: true
+                        pricing_rules:
+                        - playbook: Master_playbook_24
+                          ordinal: 0
+                          currency: null
+                          rule: ''
+                          price: '0'
+                          level: 0
+                          note: null
+                          price_format: BASIC
+                          rounding_policy: null
+                          dynamic_price: false
+                          name: null
+                          price_type: SOLID
+                          apply_to: GENERATED_ITEMS
+                          apply_to_templates: ''
+                          apply_to_rules: ''
+                          max_discount: '100'
+                          default_discount: '0'
+                          based_of_tags: ''
+                          based_of_price: null
+                          limit_type: AS_IS
+                          limit_min_value: null
+                          limit_max_value: null
+                          disable_rounding: false
+                          include_positive: false
+                          volume_discount: {}
+                        - playbook: Master_playbook_24
+                          ordinal: 1
+                          currency: null
+                          rule: 'true'
+                          price: '888'
+                          level: 0
+                          note: null
+                          price_format: ADVANCED
+                          rounding_policy: null
+                          dynamic_price: false
+                          name: null
+                          price_type: SOLID
+                          apply_to: GENERATED_ITEMS
+                          apply_to_templates: ''
+                          apply_to_rules: ''
+                          max_discount: '100'
+                          default_discount: '0'
+                          based_of_tags: ''
+                          based_of_price: null
+                          limit_type: AS_IS
+                          limit_min_value: null
+                          limit_max_value: null
+                          disable_rounding: false
+                          include_positive: false
+                          volume_discount: {}
+                      product_conditional_names: []
+                    bundles:
+                    - sku: Products summary
+                      name: Products summary
+                      description: Products summary
+                      tags:
+                      - Products summary
+                      primary_tag: Products summary
+                      product_attributes:
+                        Department:
+                          type: NUMBER
+                          value: '1111'
+                        Model:
+                          type: TEXT
+                          value: '1117'
+                        Manufacture Date:
+                          type: DATE
+                          value: '1111'
+                      product_assignments:
+                      - assignment: RULE_BASED
+                        playbook: Master_playbook_24
+                        assignment_rules:
+                        - ordinal: 0
+                          name: bundle3
+                          rule: '[FixedSummary_bundles.Add_products_summary_bundle] = "Yes"'
+                          note: null
+                          product_factors:
+                          - name: Duration
+                            value: '1'
+                            applicable: false
+                          - name: Quantity
+                            value: '1'
+                            applicable: true
+                          - name: Sits
+                            value: '1'
+                            applicable: false
+                          proposal_attributes:
+                          - name: custom_proposal_attribute
+                            value: ''
+                            applicable: true
+                      product_pricing:
+                        advanced: false
+                        pricing_rules:
+                        - playbook: Master_playbook_24
+                          ordinal: 0
+                          currency: null
+                          rule: ''
+                          price: '50'
+                          level: 0
+                          note: null
+                          price_format: BASIC
+                          rounding_policy: null
+                          dynamic_price: false
+                          name: null
+                          price_type: FROM_ALL_QUOTE
+                          apply_to: GENERATED_ITEMS
+                          apply_to_templates: ''
+                          apply_to_rules: ''
+                          max_discount: '100'
+                          default_discount: '0'
+                          based_of_tags: ''
+                          based_of_price: null
+                          limit_type: AS_IS
+                          limit_min_value: null
+                          limit_max_value: null
+                          disable_rounding: false
+                          include_positive: false
+                          volume_discount: {}
+                      product_conditional_names: []
+                      bundle_type: PRODUCT_SUMMARY
+                      price_in_bundle_is_zero: false
+                      sync_to_crm: true
+                      sync_bundle_price: false
+                      bundle_items:
+                      - sku: Product2
+                        ordinal: 1
+                        how_to_add: AUTOMATIC
+                        enable_modify_factors: false
+                        product_factors:
+                        - name: Duration
+                          value: '1'
+                          applicable: true
+                        - name: Quantity
+                          value: '2'
+                          applicable: true
+                        - name: Sits
+                          value: '1'
+                          applicable: true
+                      - sku: Product3
+                        ordinal: 2
+                        how_to_add: MANUAL
+                        enable_modify_factors: true
+                        product_factors:
+                        - name: Duration
+                          value: '1'
+                          applicable: true
+                        - name: Quantity
+                          value: '3'
+                          applicable: true
+                        - name: Sits
+                          value: '0'
+                          applicable: true
+                      - sku: Product1
+                        ordinal: 0
+                        how_to_add: AUTOMATIC
+                        enable_modify_factors: true
+                        product_factors:
+                        - name: Duration
+                          value: '1'
+                          applicable: true
+                        - name: Quantity
+                          value: '1'
+                          applicable: true
+                        - name: Sits
+                          value: '0'
+                          applicable: true
+                      - sku: Product4
+                        ordinal: 3
+                        how_to_add: COMBINED
+                        enable_modify_factors: false
+                        product_factors:
+                        - name: Duration
+                          value: '1'
+                          applicable: true
+                        - name: Quantity
+                          value: '4'
+                          applicable: true
+                        - name: Sits
+                          value: '1'
+                          applicable: true
+                    info:
+                      version_id: 7b34133847401b12
+                      version_status: DRAFT
+                      more_results_matching_the_request: false
+                      limit: 100
+                      offset: 0
+      security:
+      - bearerAuth: []
+    patch:
+      tags:
+      - Product Catalog
+      summary: Update Product Catalog Items
+      description: 'Asynchronously updates specific data elements for existing SKUs in a `DRAFT` version''s product catalog. Unlike the POST endpoint, this endpoint **does not** create new products — it only modifies data elements for SKUs that already exist in the catalog.
+
+
+        This endpoint operates in one of two modes, defined by the `mode` query parameter:
+
+
+        **UPDATE mode**: Only the data elements explicitly included in the request body are added or updated. Any existing data not referenced in the request remains unchanged.
+
+
+        **REPLACE mode**: Each data category included in the request (e.g., `product_attributes`, `pricing_rules`) completely replaces the corresponding data for that SKU. Entries within an included category that are not present in the request are removed. Categories not referenced at all in the request are left untouched.
+
+
+        This operation returns a `request_id` for you to track the progress. Requests targeting an `ACTIVE` or `DEACTIVATED` version will fail.'
+      operationId: updateProductCatalogItems
+      parameters:
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 16
+        description: The identifier of the `DRAFT` version whose catalog should be updated.
+      - name: mode
+        in: query
+        required: true
+        schema:
+          type: string
+          enum:
+          - UPDATE
+          - REPLACE
+        description: The update mode. `UPDATE` merges the provided data with existing data for each SKU; unspecified data is preserved. `REPLACE` replaces all entries within each included data category; entries not present in the request are removed from that category.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCatalogPatchRequest'
+            examples:
+              patchProductCatalogExample:
+                summary: Request example
+                value:
+                  products:
+                  - sku: ABC-12345-S-BL
+                    product_attributes:
+                      Department:
+                        value: '1022'
+                      Model:
+                        value: 01-200-GRM-M
+                      Manufacture Date:
+                        value: May 31, 2024
+                    product_pricing:
+                      advanced: true
+                      pricing_rules:
+                      - playbook: Master_playbook_24
+                        currency: null
+                        rule: ''
+                        price: '0'
+                        level: 0
+                        note: null
+                        price_format: BASIC
+                        rounding_policy: null
+                        dynamic_price: false
+                        name: Rule name
+                        price_type: SOLID
+                        apply_to: GENERATED_ITEMS
+                        apply_to_templates: ''
+                        apply_to_rules: ''
+                        max_discount: 100
+                        default_discount: 0
+                        based_of_tags: ''
+                        based_of_price: null
+                        limit_type: AS_IS
+                        limit_min_value: null
+                        limit_max_value: null
+                        disable_rounding: false
+                        include_positive: false
+                        volume_discount: {}
+                      - playbook: Master_playbook_24
+                        currency: null
+                        rule: 'true'
+                        price: '888'
+                        level: 0
+                        note: null
+                        price_format: ADVANCED
+                        rounding_policy: null
+                        dynamic_price: false
+                        name: null
+                        price_type: SOLID
+                        apply_to: GENERATED_ITEMS
+                        apply_to_templates: ''
+                        apply_to_rules: ''
+                        max_discount: 100
+                        default_discount: 0
+                        based_of_tags: ''
+                        based_of_price: null
+                        limit_type: AS_IS
+                        limit_min_value: null
+                        limit_max_value: null
+                        disable_rounding: false
+                        include_positive: false
+                        volume_discount: {}
+                  bundles:
+                  - sku: Products summary
+                    product_attributes:
+                      Department:
+                        value: ''
+                      Model:
+                        value: ''
+                      Manufacture Date:
+                        value: ''
+                    product_assignments:
+                    - assignment: RULE_BASED
+                      playbook: Master_playbook_24
+                      assignment_rules:
+                      - ordinal: 0
+                        name: bundle3
+                        rule: '[FixedSummary_bundles.Add_products] = "Yes"'
+                        note: null
+                        product_factors:
+                        - name: Duration
+                          value: '1'
+                          applicable: false
+                        - name: Quantity
+                          value: '1'
+                          applicable: true
+                        - name: Sits
+                          value: '1'
+                          applicable: false
+                        proposal_attributes:
+                        - name: custom_proposal_attribute
+                          value: ''
+                          applicable: true
+                    product_pricing:
+                      advanced: false
+                      pricing_rules:
+                      - playbook: Master_playbook_24
+                        currency: null
+                        rule: ''
+                        price: '50'
+                        level: 0
+                        price_format: BASIC
+                        rounding_policy: null
+                        dynamic_price: false
+                        name: null
+                        price_type: FROM_ALL_QUOTE
+                        apply_to: GENERATED_ITEMS
+                        apply_to_templates: ''
+                        apply_to_rules: ''
+                        max_discount: 100
+                        default_discount: 0
+                        based_of_tags: ''
+                        based_of_price: null
+                        limit_type: AS_IS
+                        limit_min_value: null
+                        limit_max_value: null
+                        disable_rounding: false
+                        include_positive: false
+                        volume_discount: {}
+                    bundle_items:
+                    - sku: Product1
+                      ordinal: 0
+                      how_to_add: AUTOMATIC
+                      enable_modify_factors: true
+                      product_factors:
+                      - name: Duration
+                        value: '1'
+                        applicable: true
+                      - name: Quantity
+                        value: '1'
+                        applicable: true
+                      - name: Sits
+                        value: '0'
+                        applicable: true
+                    - sku: Product2
+                      ordinal: 1
+                      how_to_add: AUTOMATIC
+                      enable_modify_factors: false
+                      product_factors:
+                      - name: Duration
+                        value: '1'
+                        applicable: true
+                      - name: Quantity
+                        value: '2'
+                        applicable: true
+                      - name: Sits
+                        value: '1'
+                        applicable: true
+      responses:
+        '200':
+          description: The request was accepted and will be processed asynchronously.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncResponse'
+              examples:
+                patchProductCatalogResponseExample:
+                  summary: Successful response
+                  value:
+                    request_id: 4D114DAD97
+        '400':
+          description: Bad Request. The request payload is invalid, a mandatory field is missing, or the specified version is not in `DRAFT` status.
+        '403':
+          description: Unauthenticated. The `Authorization` token is missing or invalid.
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Product Catalog
+      summary: Create or Update Product Catalog
+      description: 'This endpoint asynchronously uploads a complete product catalog to a `DRAFT` version. Each product and bundle is created or updated based on the details in the request JSON.
+
+
+        If a SKU already exists in the catalog, it will be completely replaced with the new data from the request, including its pricing, assignments, and other details. If the replacement process fails for any reason, the system will revert to the old product definition.
+
+
+        This operation returns a `request_id` for you to track the progress. Note that requests targeting an `ACTIVE` or `DEACTIVATED` catalog version will fail.'
+      operationId: uploadProductCatalog
+      parameters:
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 16
+        description: The identifier of the 'DRAFT' version to upload the catalog to.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductCatalogPostRequest'
+            examples:
+              productCatalogExample:
+                summary: Request example
+                value:
+                  products:
+                  - sku: ABC-12345-S-BL
+                    name: GRM Service
+                    description: 'GRM Service
+
+                      '
+                    tags: []
+                    primary_tag: null
+                    merge_products: false
+                    product_attributes:
+                      Department:
+                        value: '1022'
+                      Model:
+                        value: 01-200-GRM-M
+                      Manufacture Date:
+                        value: May 31, 2024
+                    product_assignments:
+                    - assignment: RULE_BASED
+                      playbook: Master_playbook_24
+                      assignment_rules:
+                      - ordinal: 0
+                        name: Seasonal assignment
+                        rule: '[General.partner_program] = "Direct Sales"'
+                        note: null
+                        product_factors:
+                        - name: Duration
+                          value: '12'
+                          applicable: true
+                        - name: Quantity
+                          value: '1'
+                          applicable: true
+                        - name: Sits
+                          value: '1'
+                          applicable: false
+                        proposal_attributes:
+                        - name: custom_proposal_attribute
+                          value: Direct
+                          applicable: true
+                    product_pricing:
+                      advanced: true
+                      pricing_rules:
+                      - playbook: Master_playbook_24
+                        ordinal: 0
+                        currency: null
+                        rule: ''
+                        price: '0'
+                        level: 0
+                        note: null
+                        price_format: BASIC
+                        rounding_policy: null
+                        dynamic_price: false
+                        name: null
+                        price_type: SOLID
+                        apply_to: GENERATED_ITEMS
+                        apply_to_templates: ''
+                        apply_to_rules: ''
+                        max_discount: '100'
+                        default_discount: '0'
+                        based_of_tags: ''
+                        based_of_price: null
+                        limit_type: AS_IS
+                        limit_min_value: null
+                        limit_max_value: null
+                        disable_rounding: false
+                        include_positive: false
+                        volume_discount: {}
+                      - playbook: Master_playbook_24
+                        ordinal: 1
+                        currency: null
+                        rule: 'true'
+                        price: '888'
+                        level: 0
+                        note: null
+                        price_format: ADVANCED
+                        rounding_policy: null
+                        dynamic_price: false
+                        name: null
+                        price_type: SOLID
+                        apply_to: GENERATED_ITEMS
+                        apply_to_templates: ''
+                        apply_to_rules: ''
+                        max_discount: '100'
+                        default_discount: '0'
+                        based_of_tags: ''
+                        based_of_price: null
+                        limit_type: AS_IS
+                        limit_min_value: null
+                        limit_max_value: null
+                        disable_rounding: false
+                        include_positive: false
+                        volume_discount: {}
+                    product_conditional_names: []
+                  bundles:
+                  - sku: Products summary
+                    name: Products summary
+                    description: Products summary
+                    tags:
+                    - Products summary
+                    primary_tag: Products summary
+                    product_attributes:
+                      Department:
+                        value: ''
+                      Model:
+                        value: ''
+                      Manufacture Date:
+                        value: ''
+                    product_assignments:
+                    - assignment: RULE_BASED
+                      playbook: Master_playbook_24
+                      assignment_rules:
+                      - ordinal: 0
+                        name: bundle3
+                        rule: '[FixedSummary_bundles.Add_products_summary_bundle] = "Yes"'
+                        note: null
+                        product_factors:
+                        - name: Duration
+                          value: '1'
+                          applicable: false
+                        - name: Quantity
+                          value: '1'
+                          applicable: true
+                        - name: Sits
+                          value: '1'
+                          applicable: false
+                        proposal_attributes:
+                        - name: custom_proposal_attribute
+                          value: ''
+                          applicable: true
+                    product_pricing:
+                      advanced: false
+                      pricing_rules:
+                      - playbook: Master_playbook_24
+                        ordinal: 0
+                        currency: null
+                        rule: ''
+                        price: '50'
+                        level: 0
+                        note: null
+                        price_format: BASIC
+                        rounding_policy: null
+                        dynamic_price: false
+                        name: null
+                        price_type: FROM_ALL_QUOTE
+                        apply_to: GENERATED_ITEMS
+                        apply_to_templates: ''
+                        apply_to_rules: ''
+                        max_discount: '100'
+                        default_discount: '0'
+                        based_of_tags: ''
+                        based_of_price: null
+                        limit_type: AS_IS
+                        limit_min_value: null
+                        limit_max_value: null
+                        disable_rounding: false
+                        include_positive: false
+                        volume_discount: {}
+                    product_conditional_names: []
+                    bundle_type: PRODUCT_SUMMARY
+                    price_in_bundle_is_zero: false
+                    sync_to_crm: true
+                    sync_bundle_price: false
+                    bundle_items:
+                    - sku: Product2
+                      ordinal: 1
+                      how_to_add: AUTOMATIC
+                      enable_modify_factors: false
+                      product_factors:
+                      - name: Duration
+                        value: '1'
+                        applicable: true
+                      - name: Quantity
+                        value: '2'
+                        applicable: true
+                      - name: Sits
+                        value: '1'
+                        applicable: true
+                    - sku: Product3
+                      ordinal: 2
+                      how_to_add: MANUAL
+                      enable_modify_factors: true
+                      product_factors:
+                      - name: Duration
+                        value: '1'
+                        applicable: true
+                      - name: Quantity
+                        value: '3'
+                        applicable: true
+                      - name: Sits
+                        value: '0'
+                        applicable: true
+                    - sku: Product1
+                      ordinal: 0
+                      how_to_add: AUTOMATIC
+                      enable_modify_factors: true
+                      product_factors:
+                      - name: Duration
+                        value: '1'
+                        applicable: true
+                      - name: Quantity
+                        value: '1'
+                        applicable: true
+                      - name: Sits
+                        value: '0'
+                        applicable: true
+                    - sku: Product4
+                      ordinal: 3
+                      how_to_add: COMBINED
+                      enable_modify_factors: false
+                      product_factors:
+                      - name: Duration
+                        value: '1'
+                        applicable: true
+                      - name: Quantity
+                        value: '4'
+                        applicable: true
+                      - name: Sits
+                        value: '1'
+                        applicable: true
+      responses:
+        '200':
+          description: Success. The upload process has started.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncResponse'
+              examples:
+                uploadProductCatalogExample:
+                  summary: Successful response
+                  value:
+                    request_id: 4D114DAD97
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.dealhub.io
+      description: The base URL for your DealHub instance.
+      variables:
+        your-dealhub-instance:
+          default: app
+          description: Your specific DealHub instance name (e.g., 'app', 'service-eu1').
+  /api/v1/version/{version_id}/products_catalog/all:
+    delete:
+      tags:
+      - Product Catalog
+      summary: Delete All Products from Catalog
+      description: 'Deletes all products and the entire product hierarchy tree from a `DRAFT` version.
+
+        * This operation can only be triggered for a catalog version with a **`DRAFT`** status.
+
+        * Requests made for an `ACTIVE` or `DEACTIVATED` catalog version will fail with a `400 Bad Request` HTTP error.'
+      operationId: deleteAllProducts
+      parameters:
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 16
+        description: The identifier of the 'DRAFT' version.
+      responses:
+        '200':
+          description: Success. All products were deleted.
+        '400':
+          description: Bad Request. The operation cannot be performed on a catalog Version with a status of `ACTIVE` or `DEACTIVATED`.
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.dealhub.io
+      description: The base URL for your DealHub instance.
+      variables:
+        your-dealhub-instance:
+          default: app
+          description: Your specific DealHub instance name (e.g., 'app', 'service-eu1').
+  /api/v1/version/{version_id}/products_catalog/by_sku:
+    delete:
+      tags:
+      - Product Catalog
+      summary: Delete Specific Products by SKU
+      description: "Deletes specific products from the product catalog of a `DRAFT` version. \n* This operation can only be triggered for a catalog version with a **`DRAFT`** status.\n* Requests made for an `ACTIVE` or `DEACTIVATED` catalog version will fail with a `400 Bad Request` HTTP error.\n\nA product cannot be deleted if it is:\n* A parent to another product in the hierarchy.\n* Marked as mandatory.\n* Set as an alternative in the hierarchy tree."
+      operationId: deleteProductsBySku
+      parameters:
+      - name: version_id
+        in: path
+        required: true
+        schema:
+          type: string
+          maxLength: 16
+        description: The identifier of the `DRAFT` version.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                skus:
+                  type: array
+                  items:
+                    type: string
+            examples:
+              deleteBySkuExample:
+                summary: Delete two specific SKUs
+                value:
+                  skus:
+                  - SKU-1
+                  - SKU-45
+      responses:
+        '200':
+          description: Success. Specified products were deleted.
+        '400':
+          description: Bad Request.
+      security:
+      - bearerAuth: []
+    servers:
+    - url: https://api.dealhub.io
+      description: The base URL for your DealHub instance.
+      variables:
+        your-dealhub-instance:
+          default: app
+          description: Your specific DealHub instance name (e.g., 'app', 'service-eu1').
+components:
+  schemas:
+    PlanJsonPaginationResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/PlanJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
+    PlanJson:
+      type: object
+      required:
+      - charges
+      - name
+      - productId
+      - status
+      properties:
+        id:
+          type: string
+          description: System-generated unique identifier for the plan
+          readOnly: true
+        entityIds:
+          type: array
+          description: Array of entity IDs associated with this plan
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+          description: Unique name of the plan
+        displayName:
+          type: string
+          description: Display name of the plan shown to customers
+        description:
+          type: string
+          description: Detailed description of the plan
+        status:
+          type: string
+          description: 'Status of the plan: `DRAFT`, `ACTIVE`, `GRANDFATHERED`, `ARCHIVED`, or `DEPRECATED`. Set the status to `DRAFT` when creating a new plan.'
+          enum:
+          - DRAFT
+          - ACTIVE
+          - GRANDFATHERED
+          - ARCHIVED
+          - DEPRECATED
+        productId:
+          type: string
+          description: ID of the product this plan is associated with
+        charges:
+          type: array
+          description: Array of charges associated with this plan
+          items:
+            $ref: '#/components/schemas/ChargeJson'
+        currency:
+          type: string
+          description: Currency code for this plan (defaults to system default if not specified)
+        externalId:
+          type: string
+          description: External identifier for the plan, used for integration with other systems
+        templateIds:
+          type: array
+          description: List of template IDs associated with this plan
+          items:
+            type: string
+        replacementPlanIds:
+          type: array
+          description: IDs of plans that can replace this plan during upgrades/downgrades
+          items:
+            type: string
+        customFields:
+          type: object
+          description: Map of custom fields associated with this plan
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValue'
+        updatedOn:
+          type: integer
+          format: int64
+          description: Timestamp of when the plan was last updated (in seconds since epoch)
+        eventObjectId:
+          type: string
+      description: A plan is a collection of charges that dictates how a product is priced.
+    PlanMetadataJson:
+      type: object
+      properties:
+        entityIds:
+          type: array
+          description: Entity ids to be updated
+          readOnly: true
+          uniqueItems: true
+          items:
+            type: string
+    ProductInputJson:
+      type: object
+      required:
+      - name
+      - sku
+      properties:
+        id:
+          type: string
+          description: System-generated unique identifier for the product
+          readOnly: true
+        entityIds:
+          type: array
+          description: Set of entity IDs associated with this product
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+          description: Unique name of the product
+        displayName:
+          type: string
+          description: Name of the product as shown to customers
+        description:
+          type: string
+          description: Detailed description of the product
+        sku:
+          type: string
+          description: Stock Keeping Unit (SKU) for the product
+        productCategoryId:
+          type: string
+          description: ID of the category this product belongs to
+        externalId:
+          type: string
+          description: External identifier for the product, used for integration with other systems
+    ProductJson:
+      type: object
+      required:
+      - name
+      - sku
+      properties:
+        id:
+          type: string
+          description: System-generated unique identifier for the product
+        entityIds:
+          type: array
+          description: Set of entity IDs associated with this product
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+          description: Unique name of the product
+        displayName:
+          type: string
+          description: Display name of the product shown to customers
+        inUse:
+          type: boolean
+          description: Indicates if the product is currently in use by any plans
+        description:
+          type: string
+          description: Detailed description of the product
+        sku:
+          type: string
+          description: Stock Keeping Unit (SKU) for the product
+        productCategoryId:
+          type: string
+          description: ID of the category this product belongs to
+        productCategory:
+          $ref: '#/components/schemas/ProductCategory'
+        updatedOn:
+          type: integer
+          format: int64
+          description: Timestamp of when the product was last updated (in seconds since epoch)
+        externalId:
+          type: string
+          description: External identifier for the product, used for integration with other systems
+        eventObjectId:
+          type: string
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
+    PriceTierJson:
+      type: object
+      required:
+      - amount
+      - untilQuantity
+      properties:
+        untilQuantity:
+          type: string
+        amount:
+          type: number
+        overage:
+          type: number
+    LedgerAccountMapping:
+      type: object
+      properties:
+        taxLiabilityAccountId:
+          type: string
+          readOnly: true
+        deferredRevenueAccountId:
+          type: string
+          readOnly: true
+        recognizedRevenueAccountId:
+          type: string
+          readOnly: true
+        contractAssetAccountId:
+          type: string
+          readOnly: true
+        ledgerAccountIds:
+          type: array
+          items:
+            type: string
+    ChargeJson:
+      type: object
+      required:
+      - chargeModel
+      - name
+      - type
+      properties:
+        id:
+          type: string
+          description: System-generated unique identifier for the charge
+          readOnly: true
+        name:
+          type: string
+          description: Name of the charge
+        displayName:
+          type: string
+          description: Display name of the charge shown to customers
+        description:
+          type: string
+          description: Detailed description of the charge
+        taxRateId:
+          type: string
+          format: uuid
+          description: 'ID of the tax rate applied to this charge. To get a list of available tax rate IDs, call the [Get tax rates](/reference/gettaxrates) operation. DEPRECATED: Use taxRateStrategyId instead. (deprecated: use taxRateStrategyId)'
+        taxRateStrategyId:
+          type: string
+          description: ID of the tax rate strategy applied to this charge. This determines how taxes are calculated when multiple tax rates apply.
+        unitOfMeasureId:
+          type: string
+          format: uuid
+          description: ID of the unit of measure for this charge (e.g., GB, users, licenses). To get a list of available unit of measure IDs, call the [Get units of measure](/reference/getunitsofmeasure) operation.
+        isRenewable:
+          type: boolean
+          description: Indicates if the charge is renewable
+        isCreditable:
+          type: boolean
+          description: Indicates if the charge can be credited
+        isListPriceEditable:
+          type: boolean
+          description: Indicates if the list price can be edited
+        minQuantity:
+          type: integer
+          format: int64
+          description: Minimum quantity that must be ordered. Applicable only if the chargeModel is PER_UNIT or RATE_CARD_LOOKUP.
+        defaultQuantity:
+          type: integer
+          format: int64
+          description: Default quantity for this charge. Applicable only if the chargeModel is PER_UNIT or RATE_CARD_LOOKUP.
+        maxQuantity:
+          type: integer
+          format: int64
+          description: Maximum quantity that can be ordered. Applicable only if the chargeModel is PER_UNIT or RATE_CARD_LOOKUP.
+        externalId:
+          type: string
+          description: External identifier for the charge, used for integration with other systems
+        minAmount:
+          type: number
+          description: '**NOTE: This parameter is currently in beta**
+
+            Minimum monetary amount for this charge. Applies only when `type` is `PERCENTAGE_OF`.'
+        maxAmount:
+          type: number
+          description: '**NOTE: This parameter is currently in beta**
+
+            Maximum monetary amount for this charge. Applies only when `type` is `PERCENTAGE_OF`.'
+        recognitionRuleId:
+          type: string
+          description: ID of the revenue recognition rule associated with this charge
+        erpId:
+          type: string
+          description: ERP system identifier for this charge
+        itemCode:
+          type: string
+          description: Item code used for this charge in external systems
+        targetPlanIds:
+          type: array
+          description: List of plan IDs that this PERCENTAGE_OF charge applies to
+          items:
+            type: string
+        planId:
+          type: string
+          description: ID of the plan this charge belongs to
+        amount:
+          type: number
+          description: The monetary amount for this charge
+        type:
+          type: string
+          description: 'Type of charge: `ONE_TIME`, `RECURRING`, `USAGE`, `PREPAID`, or `PERCENTAGE_OF`.
+
+            See also [Supported charge type and charge model combinations](/docs/charge-types-and-models#/supported-charge-type-and-charge-model-combinations).
+
+
+            * `ONE_TIME`: Charge a one-time fee for a product or service that''s usually purchased only once, for example, an initial setup fee.
+
+            * `RECURRING`: Charge a fee on a recurring basis. The `recurrence` object specifies the cadence.
+
+            * `USAGE`: Charge customers based on their usage of the product or service.
+
+            * `PREPAID`: Charge customers a certain price in advance of them using a product or service. Suitable for scenarios where the customer purchases the product or service for a fixed duration or usage limit.
+
+            * `PERCENTAGE_OF`: Charge a percentage of a customer''s revenue gained from using your product or service. The price is calculated as a percentage of the total cost of one or more target plans. The `targetPlanIds` field specifies the plans that are targeted.'
+          enum:
+          - ONE_TIME
+          - RECURRING
+          - USAGE
+          - PREPAID
+          - PERCENTAGE_OF
+        chargeModel:
+          type: string
+          description: 'Pricing model for the charge: `PER_UNIT`, `VOLUME`, `TIERED`, `FLAT_FEE`, `BLOCK`, or `RATE_CARD_LOOKUP`.
+
+            See also [Supported charge type and charge model combinations](/docs/charge-types-and-models#/supported-charge-type-and-charge-model-combinations).
+
+
+            * `PER_UNIT`: Charge a specific amount per unit of the product.
+
+            * `VOLUME`: Offer a volume discount where per-unit cost decreases as the customer buys a larger number of product units.
+
+            * `TIERED`: Define tiers with different per-unit prices based on number of units bought. Per-unit prices are applied successively starting with the first tier.
+
+            * `FLAT_FEE`: Charge a fixed, flat amount on a set schedule regardless of plan usage. For example, charge a $10 flat fee per month.
+
+            * `BLOCK`: Define product usage in tiered blocks and charge a specific amount per block based on the usage tier. For example, for an email marketing platform, charge $100 for a usage block of 1-500 emails, and $150 for a usage block of 500+ emails. A customer who wants to send 800 emails will purchase the 500+ block for $150.
+
+            * `RATE_CARD_LOOKUP`: Use an existing rate card to price a product based on a combination of price attributes.'
+          enum:
+          - PER_UNIT
+          - VOLUME
+          - TIERED
+          - FLAT_FEE
+          - BLOCK
+          - RATE_CARD_LOOKUP
+        recurrence:
+          $ref: '#/components/schemas/RecurrenceJson'
+        priceTiers:
+          type: array
+          description: List of price tiers for tiered pricing models. Required only if the value of `chargeModel` is `TIERED`, `BLOCK` or `VOLUME`.
+          items:
+            $ref: '#/components/schemas/PriceTierJson'
+        isDrawdown:
+          type: boolean
+          description: Indicates if this is a drawdown charge
+        minimumCommitBaseChargeId:
+          type: string
+          description: ID of the base charge for minimum commit calculation
+        overageBaseChargeId:
+          type: string
+          description: '**NOTE: This parameter is currently in beta**
+
+            ID of the base charge for overage calculation'
+        isCustom:
+          type: boolean
+          description: Indicates if this is a custom charge
+        percent:
+          type: number
+          description: Percentage value for PERCENTAGE_OF charge types
+        percentDerivedFrom:
+          type: string
+          description: For PERCENTAGE_OF charges, specifies if percentage is calculated from LIST_AMOUNT or SELL_AMOUNT
+          enum:
+          - LIST_AMOUNT
+          - SELL_AMOUNT
+        ledgerAccountMapping:
+          $ref: '#/components/schemas/LedgerAccountMapping'
+        durationInMonths:
+          type: integer
+          format: int64
+          description: Duration of the charge in months (for time-limited charges)
+        isEventBased:
+          type: boolean
+          description: Indicates if this charge is event-based rather than time-based
+        isDiscount:
+          type: boolean
+          description: Indicates if this charge represents a discount
+        rateCardId:
+          type: string
+          description: ID of the rate card for RATE_CARD_LOOKUP charge models
+        billingTerm:
+          type: string
+          description: 'Billing term: UP_FRONT or IN_ARREARS'
+          enum:
+          - UP_FRONT
+          - IN_ARREARS
+        billingCycle:
+          type: string
+          description: 'Billing cycle: DEFAULT, CHARGE_RECURRENCE, PAID_IN_FULL, MONTH, QUARTER, SEMI_ANNUAL, YEAR'
+          enum:
+          - DEFAULT
+          - CHARGE_RECURRENCE
+          - PAID_IN_FULL
+          - MONTH
+          - QUARTER
+          - SEMI_ANNUAL
+          - YEAR
+        shouldTrackArr:
+          type: boolean
+          description: Indicates if this charge should be included in Annual Recurring Revenue (ARR) calculations
+        customFields:
+          type: object
+          description: Map of custom fields associated with this charge
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValue'
+        custom:
+          type: boolean
+        eventObjectId:
+          type: string
+        drawdown:
+          type: boolean
+        eventBased:
+          type: boolean
+        creditable:
+          type: boolean
+      description: JSON object representing the charge details.
+    LedgerAccount:
+      type: object
+      properties:
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        accountCode:
+          type: string
+        description:
+          type: string
+          minLength: 0
+          maxLength: 65535
+        accountType:
+          type: string
+          enum:
+          - ACCOUNTS_RECEIVABLE
+          - TAX_LIABILITY
+          - CASH
+          - DEFERRED_REVENUE
+          - RECOGNIZED_REVENUE
+          - CONTRACT_ASSET
+          - REALIZED_GAIN_LOSS
+          - EXPENSE
+          - REFUND
+        isDefault:
+          type: boolean
+        inUse:
+          type: boolean
+        default:
+          type: boolean
+        id:
+          type: string
+    ProductCategoryPaginationResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/ProductCategory'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
+    RecurrenceJson:
+      type: object
+      required:
+      - cycle
+      - step
+      properties:
+        cycle:
+          type: string
+          enum:
+          - DAY
+          - MONTH
+          - QUARTER
+          - SEMI_ANNUAL
+          - YEAR
+          - PAID_IN_FULL
+          - CUSTOM
+        step:
+          type: integer
+          format: int32
+          minimum: 1
+    ProductCategory:
+      type: object
+      properties:
+        productCategoryId:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+          minLength: 0
+          maxLength: 100
+        description:
+          type: string
+        inUse:
+          type: boolean
+        updatedOn:
+          type: integer
+          format: int64
+        pkId:
+          type: string
+          format: uuid
+    ProductJsonPaginationResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/ProductJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
+    ChargePartialJson:
+      type: object
+      required:
+      - name
+      properties:
+        id:
+          type: string
+          description: System-generated unique identifier for the charge
+          readOnly: true
+        name:
+          type: string
+          description: Name of the charge
+        displayName:
+          type: string
+          description: Display name of the charge shown to customers
+        description:
+          type: string
+          description: Detailed description of the charge
+        taxRateId:
+          type: string
+          format: uuid
+          description: 'ID of the tax rate applied to this charge. To get a list of available tax rate IDs, call the [Get tax rates](/reference/gettaxrates) operation. DEPRECATED: Use taxRateStrategyId instead. (deprecated: use taxRateStrategyId)'
+        taxRateStrategyId:
+          type: string
+          description: ID of the tax rate strategy applied to this charge. This determines how taxes are calculated when multiple tax rates apply.
+        unitOfMeasureId:
+          type: string
+          format: uuid
+          description: ID of the unit of measure for this charge (e.g., GB, users, licenses). To get a list of available unit of measure IDs, call the [Get units of measure](/reference/getunitsofmeasure) operation.
+        isRenewable:
+          type: boolean
+          description: Indicates if the charge is renewable
+        isCreditable:
+          type: boolean
+          description: Indicates if the charge can be credited
+        isListPriceEditable:
+          type: boolean
+          description: Indicates if the list price can be edited
+        minQuantity:
+          type: integer
+          format: int64
+          description: Minimum quantity that must be ordered. Applicable only if the chargeModel is PER_UNIT or RATE_CARD_LOOKUP.
+        defaultQuantity:
+          type: integer
+          format: int64
+          description: Default quantity for this charge. Applicable only if the chargeModel is PER_UNIT or RATE_CARD_LOOKUP.
+        maxQuantity:
+          type: integer
+          format: int64
+          description: Maximum quantity that can be ordered. Applicable only if the chargeModel is PER_UNIT or RATE_CARD_LOOKUP.
+        externalId:
+          type: string
+          description: External identifier for the charge, used for integration with other systems
+        minAmount:
+          type: number
+          description: '**NOTE: This parameter is currently in beta**
+
+            Minimum monetary amount for this charge. Applies only when `type` is `PERCENTAGE_OF`.'
+        maxAmount:
+          type: number
+          description: '**NOTE: This parameter is currently in beta**
+
+            Maximum monetary amount for this charge. Applies only when `type` is `PERCENTAGE_OF`.'
+        recognitionRuleId:
+          type: string
+          description: ID of the revenue recognition rule associated with this charge
+        erpId:
+          type: string
+          description: ERP system identifier for this charge
+        itemCode:
+          type: string
+          description: Item code used for this charge in external systems
+        targetPlanIds:
+          type: array
+          description: List of plan IDs that this PERCENTAGE_OF charge applies to
+          items:
+            type: string
+        creditable:
+          type: boolean
+      description: JSON object representing the charge details.
+    CustomFieldValue:
+      type: object
+      properties:
+        type:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        name:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        value:
+          type: string
+          readOnly: true
+        selections:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        required:
+          type: boolean
+          readOnly: true
+        source:
+          type: string
+          readOnly: true
+          enum:
+          - USER
+          - SYSTEM
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+    ProductsBySkuRequest:
+      type: object
+      required:
+      - sku
+      properties:
+        version_id:
+          type: string
+          maxLength: 16
+          description: ID of the version. If omitted, the active version is used.
+        pricing_option:
+          type: string
+          enum:
+          - MIN
+          - MAX
+          - FIRST
+          description: Specifies which price to return for SKUs with multiple fixed prices.
+        sku:
+          type: array
+          items:
+            type: string
+            maxLength: 200
+          description: List of SKUs to retrieve.
+    ProductFactor:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: The name of the factor. Must match an existing factor name configured in the CPQ version.
+        value:
+          type: string
+          default: '1'
+          description: The factor value. This field may have a value even when the factor is not applicable.
+        applicable:
+          type: boolean
+          default: false
+          description: Indicates if the factor is applicable in the context of the assignment rule.
+    ProductCatalogPostRequest:
+      type: object
+      properties:
+        products:
+          type: array
+          description: 'List of products that should be created in the products catalog. Each element in the list contains the following information:'
+          items:
+            $ref: '#/components/schemas/ProductCatalogItem'
+        bundles:
+          type: array
+          description: 'List of bundles that should be created in the products catalog. Each element in the list contains the following information:'
+          items:
+            $ref: '#/components/schemas/BundleCatalogItem'
+    ProductCatalogPatchBundle:
+      type: object
+      description: Represents an existing bundle whose data elements should be updated. Only `sku` is required. Include only the data categories (`product_attributes`, `product_assignments`, `product_pricing`, `bundle_items`) that should be updated; omitted categories are left untouched.
+      required:
+      - sku
+      properties:
+        sku:
+          type: string
+          maxLength: 200
+          description: The unique identifier of an existing bundle in the catalog.
+        product_attributes:
+          type: object
+          description: 'Bundle attributes to update. Each entry is a key-value pair formatted as `"<attribute_name>": { "value": "<attribute_value>" }`. Attribute names must not exceed 50 characters; attribute values must not exceed 2000 characters. Use `;` as a delimiter for `TEXT_LIST` attribute types.'
+          additionalProperties:
+            $ref: '#/components/schemas/ProductAttribute'
+        product_assignments:
+          type: array
+          description: Assignment rules to update for this bundle. If `assignment` is `RULE_BASED` or `ALWAYS`, at least one rule must be provided.
+          items:
+            $ref: '#/components/schemas/BundleAssignment'
+        product_pricing:
+          description: Pricing definitions to update for this bundle. Can be an empty list if `assignment` is `NEVER`.
+          $ref: '#/components/schemas/ProductPricing'
+        bundle_items:
+          type: array
+          description: Products to update within this bundle. Each referenced SKU must already exist in the catalog.
+          items:
+            $ref: '#/components/schemas/BundleItem'
+    ProductCatalogPatchProduct:
+      type: object
+      description: Represents an existing product whose data elements should be updated. Only `sku` is required. Include only the data categories (`product_attributes`, `product_assignments`, `product_pricing`) that should be updated; omitted categories are left untouched.
+      required:
+      - sku
+      properties:
+        sku:
+          type: string
+          maxLength: 200
+          description: The unique identifier of an existing product in the catalog.
+        product_attributes:
+          type: object
+          description: 'Product attributes to update. Each entry is a key-value pair formatted as `"<attribute_name>": { "value": "<attribute_value>" }`. Attribute names must not exceed 50 characters; attribute values must not exceed 2000 characters. Use `;` as a delimiter for `TEXT_LIST` attribute types. Attributes must be pre-declared in the CPQ version.'
+          additionalProperties:
+            $ref: '#/components/schemas/ProductAttribute'
+        product_assignments:
+          type: array
+          description: Assignment rules to update for this product. The structure of each element is the same as in the POST endpoint. If `assignment` is `RULE_BASED` or `ALWAYS`, at least one rule must be provided.
+          items:
+            $ref: '#/components/schemas/ProductAssignment'
+        product_pricing:
+          description: Pricing definitions to update for this product. Can be an empty list if `assignment` is `NEVER`.
+          $ref: '#/components/schemas/ProductPricingProduct'
+    ProductBasic:
+      type: object
+      properties:
+        sku:
+          type: string
+          description: Product catalog unique identifier.
+        name:
+          type: string
+          description: Product name.
+        type:
+          type: string
+          enum:
+          - PRODUCT
+          - BUNDLE
+          description: Type of the product.
+        description:
+          type: string
+          description: Product description.
+        price:
+          type: object
+          description: List of price & currency pairs.
+          additionalProperties:
+            type: string
+        attributes:
+          type: array
+          description: List of all product attributes defined for the version.
+          items:
+            type: object
+            additionalProperties:
+              type: string
+        bundle_items:
+          type: array
+          description: List of Product SKUs in the bundle (if type is BUNDLE).
+          items:
+            type: string
+    ProductCatalogPatchRequest:
+      type: object
+      description: Request body for the PATCH product catalog endpoint. Include only the products and/or bundles whose data elements should be updated.
+      properties:
+        products:
+          type: array
+          description: List of existing products whose data elements should be updated. Each element must reference an existing SKU in the catalog.
+          items:
+            $ref: '#/components/schemas/ProductCatalogPatchProduct'
+        bundles:
+          type: array
+          description: List of existing bundles whose data elements should be updated. Each element must reference an existing bundle SKU in the catalog.
+          items:
+            $ref: '#/components/schemas/ProductCatalogPatchBundle'
+    ProductPricing:
+      type: object
+      required:
+      - pricing_rules
+      properties:
+        advanced:
+          type: boolean
+          default: false
+          description: Set to `true` for advanced pricing policy, `false` for basic.
+        pricing_rules:
+          type: array
+          description: 'List of the bundle pricing rules. The order of the elements determines the sequence in which they are evaluated. If `advanced` is `false`, the list must contain exactly one rule with `price_format: BASIC` — if not provided, a default rule with price `0` is created; if more than one `BASIC` rule is provided, only the first is used. If `advanced` is `true`, the list must contain at least one rule with `price_format: ADVANCED`; otherwise the bundle will not be created.'
+          items:
+            $ref: '#/components/schemas/PricingRuleProduct'
+    ConditionalName:
+      type: object
+      required:
+      - playbook
+      properties:
+        playbook:
+          type: string
+          description: The name of the playbook.
+        ordinal:
+          type: integer
+          description: 'The order in which the system evaluates the conditional name rules. For example, the rule with `ordinal: 0` is evaluated first.'
+        rule:
+          type: string
+          maxLength: 2048
+          description: The business condition that the system should evaluate.
+        name:
+          type: string
+          maxLength: 400
+          description: The name to be assigned to the specific product instance when the business condition (rule) evaluates to `true`.
+        description:
+          type: string
+          maxLength: 8192
+          description: The description to be assigned to the specific product instance when the business condition (rule) evaluates to `true`.
+    BundleItem:
+      type: object
+      required:
+      - sku
+      properties:
+        sku:
+          type: string
+          description: The unique identifier of the product in the catalog.
+        ordinal:
+          type: integer
+          default: 0
+          description: The order of the product in the bundle.
+        how_to_add:
+          type: string
+          enum:
+          - AUTOMATIC
+          - MANUAL
+          - COMBINED
+          description: Specifies how the product should be managed within the bundle during proposal configuration. For `FIXED_PRICE` bundles, only `AUTOMATIC` is valid. For `PRODUCT_SUMMARY` bundles, valid values are `AUTOMATIC`, `MANUAL`, and `COMBINED`.
+        enable_modify_factors:
+          type: boolean
+          description: Specifies if the seller is allowed to modify bundled product factors (e.g. quantity, duration). Relevant for `PRODUCT_SUMMARY` bundles only.
+        product_factors:
+          type: array
+          description: The list of product factors configured for this product in the context of the current bundle.
+          items:
+            $ref: '#/components/schemas/ProductFactor'
+        inherit_proposal_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/InheritedAttribute'
+          description: List of attributes that should inherit their value from the parent bundle.
+    AsyncResponse:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: The ID of the asynchronous request for tracking.
+    ProductCatalogItem:
+      type: object
+      required:
+      - sku
+      - name
+      - product_assignments
+      properties:
+        sku:
+          type: string
+          maxLength: 200
+          description: The unique identifier of the product in the catalog.
+        name:
+          type: string
+          maxLength: 400
+          description: The product name.
+        description:
+          type: string
+          maxLength: 21844
+          description: The product description.
+        tags:
+          type: array
+          description: List of tags associated with the specific product.
+          items:
+            type: string
+            maxLength: 200
+        primary_tag:
+          type: string
+          maxLength: 200
+          description: Primary tag of the specific product.
+        merge_products:
+          type: boolean
+          default: false
+          description: Identifies if multiple instances of this product should be merged into a single line during proposal configuration.
+        product_attributes:
+          type: object
+          description: List of product attributes with their respective values. Note that product attributes must be declared in the CPQ version. Use ‘;’ as a delimiter for product attribute type TEXT_LIST.
+          additionalProperties:
+            $ref: '#/components/schemas/ProductAttribute'
+        product_assignments:
+          type: array
+          description: List of product assignment rules defined for the product. The structure of each element in the list is defined in the product_assignments Structure section.
+          items:
+            $ref: '#/components/schemas/ProductAssignment'
+        product_pricing:
+          description: 'List of pricing definitions for the specific SKU. Note: if no pricing is configured for a specific SKU, the system will not instantiate an instance of that product (i.e., a line item) during the proposal configuration process, even if the assignment rule matches the business conditions. Can be an empty list if `assignment` is `NEVER`.'
+          $ref: '#/components/schemas/ProductPricingProduct'
+        product_conditional_names:
+          type: array
+          description: List of ‘conditional name’ rules for the specific SKU. The structure of each element in the list is defined in the product_conditional_names Structure section.
+          items:
+            $ref: '#/components/schemas/ConditionalName'
+    BundleAssignment:
+      type: object
+      required:
+      - playbook
+      properties:
+        assignment:
+          type: string
+          enum:
+          - RULE_BASED
+          - ALWAYS
+          - NEVER
+          default: NEVER
+          description: Directive for the bundle assignment. At least one rule must be provided in `assignment_rules` when this value is `RULE_BASED` or `ALWAYS`; otherwise the SKU creation will fail.
+        playbook:
+          type: string
+          description: The name of the existing playbook to which the assignment rules are meant to be applied.
+        assignment_rules:
+          type: array
+          description: List of assignment rules. The order of the elements in this list determines the sequence in which the rules are evaluated by the CPQ system. Must be an empty list if `assignment` is `NEVER`.
+          items:
+            $ref: '#/components/schemas/AssignmentRule'
+        assignment_templates:
+          type: array
+          readOnly: true
+          items:
+            type: string
+    InheritedAttribute:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the proposal attribute.
+        inherit:
+          type: boolean
+          description: Set to true to inherit the value from the bundle attribute.
+    ProposalAttribute:
+      type: object
+      required:
+      - name
+      - value
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          description: The name of the proposal attribute.
+        value:
+          type: string
+          maxLength: 2000
+          description: Attribute value. If `null` is provided, the system will define this attribute as not applicable in the context of the assignment rule.
+        applicable:
+          type: boolean
+          default: false
+          description: Indicates if the attribute is applicable in the context of the assignment rule.
+    AssignmentRule:
+      type: object
+      required:
+      - name
+      - rule
+      - product_factors
+      properties:
+        ordinal:
+          type: integer
+          description: The order in which the rule is evaluated.
+        name:
+          type: string
+          maxLength: 200
+          description: The name of the assignment rule. Must be unique in the context of this SKU. If an empty value is provided, the system will use the `ordinal` value as the rule name.
+        rule:
+          type: string
+          maxLength: 2048
+          default: 'false'
+          description: The business condition that should trigger the rule. Send `null` if `assignment` is `NEVER`.
+        note:
+          type: string
+          maxLength: 4096
+          description: A free text note.
+        product_factors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductFactor'
+          maxItems: 4
+          description: 'The list of available product factors configured in the context of the current assignment rule. At least one factor must have `applicable: true` with an explicit `value` defined; otherwise the rule creation will fail.'
+        proposal_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProposalAttribute'
+          description: 'The list of available proposal attributes configured in the context of the current assignment rule. If not specified, all proposal attributes will be treated as `applicable: true` and will receive an empty value.'
+    Info:
+      type: object
+      properties:
+        version_id:
+          type: string
+          description: The ID of the version for which products were retrieved.
+        version_status:
+          type: string
+          description: The status of the version.
+        compared_with_version_id:
+          type: string
+          description: The ID of the version that was replaced by this one upon activation.
+        more_results_matching_the_request:
+          type: boolean
+          description: Flag indicating if more results are available for pagination.
+        offset:
+          type: string
+          description: The offset used in the request.
+        limit:
+          type: string
+          description: The limit used in the request.
+        error:
+          type: string
+          description: Error message if not all requested data could be retrieved.
+    PricingRuleProduct:
+      description: 'List of the product pricing rules. The order of the elements in this list determines the sequence in which the pricing rules are evaluated by the CPQ system. </br> If <code>advanced</code>: false`, the <code>pricing_rules</code> list should have only **1 rule definition** with <code>price_format</code>: BASIC`. </br> If such configuration won’t be provided in the request, the system will create a default rule with price <code>0</code>. </br> In case there are more than 1 rule in the <code>pricing_rules</code> list with <code>price_format</code>: BASIC`, the system will use the 1st definition and the rest will be ignored. </br> If <code>advanced</code>: true`, the <code>pricing_rules</code> list must have at least **1 rule definition** with <code>price_format</code>: ADVANCED`. Otherwise, the product won’t be created. '
+      type: object
+      required:
+      - playbook
+      - price_format
+      - price_type
+      - default_discount
+      - name
+      properties:
+        playbook:
+          type: string
+          description: The name of the playbook where this rule should be evaluated.
+        name:
+          type: string
+          maxLength: 256
+          description: The name of the pricing rule.
+        rule:
+          type: string
+          maxLength: 4096
+          description: 'The business condition for <code>ADVANCED</code> price format. Mandatory if <code>price_format: ADVANCED</code>.'
+        price:
+          type: string
+          maxLength: 4096
+          description: The price amount or formula. Mandatory if <code>price_type</code> is <code>SOLID</code> or <code>ITEM</code>.
+        price_format:
+          type: string
+          enum:
+          - BASIC
+          - ADVANCED
+          description: 'During quotation, the system evaluates <code> pricing_rules</code> according to the product’s pricing configuration, specifically the <code>advanced</code> flag defined in <code>products_pricing</code>. </br>If <code>advanced: false</code>, the CPQ engine will **only evaluate rules with** <code>price_format: BASIC</code>. Any rules in the <code>pricing_rules</code> list defined with <code>price_format: ADVANCED</code> will be ignored, even if multiple such rules are provided.</br> In other words, when advanced pricing is disabled at the product level, all <code>ADVANCED</code> pricing rules are excluded from the quotation flow.'
+        price_type:
+          description: 'This field defines the price calculation type.</br></br>Available values:</br></br>• <code>SOLID</code></br>Fixed price value.</br></br>• <code>ITEM</code></br>Price is based on another SKU in the catalog.</br>Format of the <code>price</code> field:</br><code>&lt;BASE_SKU&gt;;%;&lt;PERCENTAGE_OF_BASE_PRICE&gt;</code></br>Example:</br><code>"price": "SKU1;%;90"</code></br>Result: 90% of SKU1 price.</br></br>• <code>GROUP</code></br>Price is based on products in the proposal that have specific catalog tag(s).</br>Format of the <code>price</code> field:</br><code>&lt;LIST_OF_TAGS&gt;;&lt;PERCENTAGE_OF_BASE_PRICE&gt;;&lt;WHICH_PRICE_TO_USE&gt;;&lt;HOW_TO_USE_PRICE&gt;;</code></br>Example:</br><code>"price": "SUPPORT,SW;50;BOTH;AS_IS;"</code></br>Result: 50% of products tagged SUPPORT or SW.</br></br>• <code>FROM_ALL_QUOTE</code></br>Price is based on all other products in the proposal.</br>Format of the <code>price</code> field:</br><code>&lt;PERCENTAGE_OF_OTHER_PRODUCTS_PRICE&gt;</code></br>Example:</br><code>"price": "10"</code></br>Result: 10% of the total price of all other products.</br></br>• <code>NEGATIVE</code></br>Used for negative price products (e.g., discounts). The <code>price</code> value must be negative.</br></br>• <code>GROUP_NEGATIVE</code></br>Negative price based on products in the proposal with specific catalog tag(s). By default, only negative products with the specified tags are considered. To include positive products, set <code>"include_positive": true</code>.</br>Format of the <code>price</code> field:</br><code>&lt;LIST_OF_TAGS&gt;;&lt;PERCENTAGE_OF_BASE_PRICE&gt;;&lt;WHICH_PRICE_TO_USE&gt;;&lt;HOW_TO_USE_PRICE&gt;;</code></br>Example:</br><code>"price": "SUN,FF5;30;NET;AS_IS;"</code></br>Result: 30% of negative products tagged SUN or FF5.</br></br>• <code>ERP</code></br>Price is retrieved from a third-party ERP system during proposal configuration.'
+          type: string
+          enum:
+          - SOLID
+          - FROM_ALL_QUOTE
+          - ITEM
+          - GROUP
+          - NEGATIVE
+          - GROUP_NEGATIVE
+          - ERP
+        currency:
+          type: string
+          description: This field defines how the <code>price</code> value in the pricing rule should be interpreted, especially for tenant accounts configured with multiple currencies.</br></br>Available values:</br></br>• <code>EXCHANGE_RATE</code> (default)</br>Use when the <code>price</code> represents the MSRP in the default account currency. The amount will be converted to the proposal currency configured in CPQ.</br></br>• <code>NO_EXCHANGE_RATE</code></br>Use when the system should treat the <code>price</code> as an absolute value, without performing any currency conversion.</br></br>• <code>&lt;ISO-4217 code&gt;</code></br>Use when a specific currency is explicitly defined for the <code>price</code> and no currency exchange should be performed (e.g., USD, EUR, BRL).</br></br>If <code>null</code> or an empty string is provided, the system treats it as <code>EXCHANGE_RATE</code>. If the price is defined in the default account currency, this field may be <code>null</code>.
+        dynamic_price:
+          type: boolean
+          default: false
+          description: Specifies if a seller is allowed to overwrite the list price during proposal configuration. Not applicable when `price_type` is `ERP` or `ITEM`.
+        rounding_policy:
+          type: string
+          description: 'This field defines the ID of the rounding policy explicitly associated with the pricing rule. It is relevant only when a non-default rounding policy must be applied.</br></br>Default: <code>null</code>.</br></br>If a value is provided (not <code>null</code>), the following conditions must be met:</br>1. The account flag <code>enable_rounding_policy</code> must be set to <code>true</code>.</br>2. The <code>price_item_type</code> must be <code>ADVANCED</code>.</br>3. The <code>price_item_currency</code> must not be <code>NO_EXCHANGE_RATE</code>.</br>4. The value must reference an existing rounding policy ID in the system.</br></br>If any of these conditions are not satisfied, the rounding policy will not be applied.'
+        max_discount:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: Maximum allowed discount percentage.
+        default_discount:
+          type: integer
+          minimum: 0
+          maximum: 100
+          description: Default discount percentage.
+        apply_to:
+          type: string
+          enum:
+          - ASSIGNMENT_RULES
+          - GENERATED_ITEMS
+          default: GENERATED_ITEMS
+          description: Specifies if the rule applies to all assignments or specific ones.
+        apply_to_templates:
+          type: string
+          description: Comma-separated list of assignment template names for which this pricing rule should be evaluated. Relevant when `apply_to` is `ASSIGNMENT_RULES`.
+        apply_to_rules:
+          type: string
+          description: Comma-separated list of assignment rule names for which this pricing rule should be evaluated. Relevant when `apply_to` is `ASSIGNMENT_RULES`.
+        level:
+          type: integer
+          enum:
+          - 0
+          - 1
+          - 2
+          default: 0
+          description: The level to be included in the price calculation.
+        note:
+          type: string
+          maxLength: 4096
+          description: A free text note for the rule.
+        based_of_tags:
+          type: string
+          description: 'This field specifies the catalog tags used as the baseline for price calculation. The system will sum the prices of products in the proposal that contain the specified tags and use that total as the base amount to calculate the price of the current product.</br></br>Value format: comma-separated list of tags.</br></br>This field must be provided when <code>price_type</code> is <code>GROUP</code> or <code>GROUP_NEGATIVE</code>.'
+        based_of_price:
+          type: string
+          enum:
+          - UNIT
+          - NET
+          - LIST
+          - BOTH
+          - USER
+          - MSRP
+          description: 'Specifies which price of the referenced product(s) (matched by <code>based_on_tags</code>) should be used as the base amount for tag-based price calculations.</br></br>When <code>price_type</code> is <code>GROUP</code>, valid values are: <code>UNIT</code>, <code>NET</code>, <code>LIST</code>, <code>BOTH</code>, <code>USER</code>, <code>MSRP</code>.</br></br>When <code>price_type</code> is <code>GROUP_NEGATIVE</code>, valid values are: <code>NET</code>, <code>LIST</code>.'
+        limit_type:
+          type: string
+          enum:
+          - MIN
+          - MAX
+          - AS_IS
+          - RANGE
+          description: The limit type for tag-based prices. Required if <code>price_type</code> is <code>GROUP</code> or <code>GROUP_NEGATIVE</code>.
+        limit_min_value:
+          type: number
+          description: The minimum limit value for tag-based prices. Required if <code>limit_type</code> is <code>MIN</code> or <code>RANGE</code>.
+        limit_max_value:
+          type: number
+          description: The maximum limit value for tag-based prices. Required if <code>limit_type</code> is <code>MAX</code> or <code>RANGE</code>.
+        disable_rounding:
+          type: boolean
+          description: Specifies if rounding for the price should be disabled.
+        include_positive:
+          type: boolean
+          description: Applicable only when <code>price_type</code> is <code>GROUP_NEGATIVE</code>. Determines whether products with positive prices should also be included in the base amount calculation for the current rule. By default, only products with negative prices (matched by the specified tags) are included. When set to <code>true</code>, both positive- and negative-priced products are considered in the calculation.
+        volume_discount:
+          $ref: '#/components/schemas/VolumeDiscount'
+    VolumeDiscount:
+      type: object
+      description: 'Defines the volume discount tables associated with the pricing rule. The value must be a key-value map where each entry represents a pair in the format <code>&lt;factor_name&gt;: &lt;volume_discount_table_name&gt;</code>. The <code>factor_name</code> corresponds to the pricing factor (e.g., Quantity, Duration), and the value specifies the volume discount table applied to that factor.</br></br>Example:</br><code>"volume_discount": { "Quantity": "VolD1", "Duration": "VolD2" }</code>'
+      example:
+        Quantity: VolD1
+        Duration: VolD2
+      additionalProperties:
+        type: string
+    AssignmentRuleProduct:
+      type: object
+      required:
+      - name
+      - rule
+      - product_factors
+      properties:
+        ordinal:
+          type: integer
+          description: The order in which the rule is evaluated.
+        name:
+          type: string
+          maxLength: 200
+          description: The name of the assignment rule. Must be unique in the context of this SKU. If an empty value is provided, the system will use the `ordinal` value as the rule name.
+        rule:
+          type: string
+          maxLength: 2048
+          default: 'false'
+          description: The business condition that should trigger the rule. Send `null` if `assignment` is `NEVER`.
+        note:
+          type: string
+          maxLength: 4096
+          description: A free text note.
+        product_factors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductFactor'
+          maxItems: 4
+          description: 'The list of available product factors configured in the context of the current assignment rule. At least one factor must have `applicable: true` with an explicit `value` defined; otherwise the rule creation will fail.'
+        proposal_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProposalAttribute'
+          description: 'The list of available proposal attributes configured in the context of the current assignment rule. If not specified, all proposal attributes will be treated as `applicable: true` and will receive an empty value.'
+    ProductAssignment:
+      type: object
+      required:
+      - playbook
+      properties:
+        assignment:
+          type: string
+          enum:
+          - RULE_BASED
+          - ALWAYS
+          - NEVER
+          default: NEVER
+          description: Directive for the product assignment. At least one rule must be provided in `assignment_rules` when this value is `RULE_BASED` or `ALWAYS`; otherwise the SKU creation will fail.
+        playbook:
+          type: string
+          description: The name of the existing playbook to which the assignment rules are meant to be applied.
+        assignment_rules:
+          type: array
+          description: List of assignment rules. The order of the elements in this list determines the sequence in which the rules are evaluated by the CPQ system. Must be an empty list if `assignment` is `NEVER`.
+          items:
+            $ref: '#/components/schemas/AssignmentRuleProduct'
+        assignment_templates:
+          type: array
+          readOnly: true
+          items:
+            type: string
+    VersionProductsResponse:
+      type: object
+      properties:
+        info:
+          $ref: '#/components/schemas/Info'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductBasic'
+    ProductCatalogGetResponse:
+      type: object
+      properties:
+        info:
+          description: Basic information about returned payload
+          $ref: '#/components/schemas/Info'
+        products:
+          type: array
+          description: 'List of products matching specified criteria. Each element in the list contains the following information:'
+          items:
+            $ref: '#/components/schemas/ProductCatalogItem'
+        bundles:
+          type: array
+          description: 'List of bundles matching specified criteria. Each element in the list contains the following information:'
+          items:
+            $ref: '#/components/schemas/BundleCatalogItem'
+    ProductPricingProduct:
+      type: object
+      required:
+      - pricing_rules
+      properties:
+        advanced:
+          type: boolean
+          default: false
+          description: Set to `true` for advanced pricing policy, `false` for basic. <br/> When you set `advanced` to `true`, the `pricing_rules.name is required.
+        pricing_rules:
+          type: array
+          description: 'List of the product pricing rules. The order of the elements determines the sequence in which they are evaluated. If `advanced` is `false`, the list must contain exactly one rule with `price_format: BASIC` — if not provided, a default rule with price `0` is created; if more than one `BASIC` rule is provided, only the first is used. If `advanced` is `true`, the list must contain at least one rule with `price_format: ADVANCED`; otherwise the product will not be created.'
+          items:
+            $ref: '#/components/schemas/PricingRuleProduct'
+    BundleCatalogItem:
+      type: object
+      required:
+      - sku
+      - name
+      - product_assignments
+      - bundle_items
+      properties:
+        sku:
+          type: string
+          maxLength: 200
+          description: The unique identifier of the bundle in the catalog.
+        name:
+          type: string
+          maxLength: 400
+          description: The bundle name.
+        description:
+          type: string
+          maxLength: 21844
+          description: The bundle description.
+        tags:
+          type: array
+          description: List of tags associated with the specific bundle. Use ';' as a delimiter between tags.
+          items:
+            type: string
+            maxLength: 200
+        primary_tag:
+          type: string
+          maxLength: 200
+          description: Primary tag of the specific bundle.
+        product_attributes:
+          type: object
+          description: 'List of bundle attributes and their values. Each entry is a key-value pair formatted as `"<attribute_name>": { "value": "<attribute_value>" }`. Use '';'' as a delimiter for attribute type TEXT_LIST. Attribute names must not exceed 50 characters and attribute values must not exceed 2000 characters.'
+          additionalProperties:
+            $ref: '#/components/schemas/ProductAttribute'
+        product_assignments:
+          type: array
+          description: List of bundle assignment rules defined for the bundle. The structure of each element in the list is defined in the product_assignments Structure section.
+          items:
+            $ref: '#/components/schemas/BundleAssignment'
+        product_pricing:
+          description: List of pricing definitions for the specific SKU. The structure of each element in the list is defined in the product_pricing Structure section.
+          $ref: '#/components/schemas/ProductPricing'
+        product_conditional_names:
+          type: array
+          description: List of the product conditional names. The structure of each element in the list is defined in the product_conditional_names Structure section.
+          items:
+            $ref: '#/components/schemas/ConditionalName'
+        bundle_type:
+          type: string
+          description: The type of the bundle.
+          enum:
+          - FIXED_PRICE
+          - PRODUCT_SUMMARY
+          default: PRODUCT_SUMMARY
+        price_in_bundle_is_zero:
+          type: boolean
+          description: This field determines whether the price of bundled products (aka items within the bundle) should be displayed in the proposal as $0.
+          default: false
+        sync_to_crm:
+          type: boolean
+          description: This field specifies if the bundle should be synchronized to CRM.
+          default: false
+        sync_bundle_price:
+          type: boolean
+          description: Determines how the bundle price should be synchronized to CRM. Set to `true` to synchronize the price at the bundle level. Set to `false` to synchronize the price at the bundled items level — in this case, the bundle price will be synced as 0.
+          default: false
+        bundle_items:
+          type: array
+          description: List of the products included into the bundle. The structure of each element in the list is defined in the bundle_items Structure section.
+          items:
+            $ref: '#/components/schemas/BundleItem'
+    ProductAttribute:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - DATE
+          - TEXT
+          - TEXT_LIST
+          - NUMBER
+          - BOOLEAN
+          - COGS
+        value:
+          type: string
+  requestBodies:
+    ProductCategory:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductCategory'
+      description: product category details json
+      required: true
+    PlanJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PlanJson'
+      description: json of the plan details
+      required: true
+    ProductInputJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductInputJson'
+      description: product details json
+      required: true
+    uploadApprovalMatrixCSV:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: A secret token generated by a CPQ administrator.
+x-refined-from:
+- dealhub-subskribe-api-openapi.yml
+- dealhub-version-api-openapi.yml
+x-readme:
+  explorer-enabled: true
+  proxy-enabled: true

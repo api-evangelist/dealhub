@@ -1,0 +1,714 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Payments API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Payments
+paths:
+  /payments/bank-account/{id}:
+    get:
+      tags:
+      - Payments
+      summary: Get a payment bank account by id
+      description: ''
+      operationId: getBankAccount
+      parameters:
+      - name: id
+        in: path
+        description: Payment bank account id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentBankAccountJson'
+    delete:
+      tags:
+      - Payments
+      summary: Get a payment bank account by id
+      description: ''
+      operationId: deleteBankAccount
+      parameters:
+      - name: id
+        in: path
+        description: Payment bank account id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentBankAccountJson'
+  /payments/{paymentId}/retry/manual:
+    post:
+      tags:
+      - Payments
+      summary: Manually retries a payment
+      description: Manually retries a payment based on the provided payment ID and last attempt ID
+      operationId: manualPaymentRetry
+      parameters:
+      - name: paymentId
+        in: path
+        description: Payment id
+        required: true
+        schema:
+          type: string
+      - name: lastPaymentAttemptId
+        in: query
+        description: Last payment attempt id
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRetryResult'
+  /payments/payment-gateways:
+    get:
+      tags:
+      - Payments
+      summary: Gets the list of payment integrations
+      description: Gets the list of all active and completed payment integrations for the tenant
+      operationId: getPaymentIntegrations
+      responses:
+        default:
+          description: successful operation
+  /payments/bank-account/accounts/ledger:
+    get:
+      tags:
+      - Payments
+      summary: Gets cash and expense ledger accounts for bank account creation
+      description: The bank account would be mapped to a cash and an expense ledger account from this list
+      operationId: getLedgerAccountsForPaymentBankAccount
+      parameters:
+      - name: id
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LedgerAccount'
+  /payments/processPaymentForInvoice/{invoiceNumber}:
+    post:
+      tags:
+      - Payments
+      summary: Processes one time payment for an invoice if there is an automatic payment set up for the account
+      description: The automatic payment is processed via Stripe for this invoice
+      operationId: processPaymentForInvoice
+      parameters:
+      - name: invoiceNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /payments/retry/config:
+    get:
+      tags:
+      - Payments
+      summary: Gets a payment retry configuration
+      description: Gets the latest payment retry configuration for the tenant, or by the grouping id if specified
+      operationId: getPaymentRetryConfig
+      parameters:
+      - name: groupingId
+        in: query
+        description: groupingId of the payment retry configuration
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRetryConfigOutput'
+    post:
+      tags:
+      - Payments
+      summary: Creates or updates a payment retry configuration
+      description: Creates or updates a payment retry configuration for the tenant
+      operationId: upsertPaymentRetryConfig
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentRetryConfigInput'
+        description: Payment retry configuration to be created or updated
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRetryConfigOutput'
+  /payments/retry/config/{id}:
+    delete:
+      tags:
+      - Payments
+      summary: Deletes a payment retry configuration
+      description: Deletes a payment retry configuration for the tenant
+      operationId: deletePaymentRetryConfig
+      parameters:
+      - name: id
+        in: path
+        description: ID of the payment retry configuration to be deleted
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRetryConfigOutput'
+  /payments/{id}:
+    get:
+      tags:
+      - Payments
+      summary: Get payment details
+      description: Gets the details of the specified payment
+      operationId: getPayment
+      parameters:
+      - name: id
+        in: path
+        description: id of the payment
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentJson'
+    delete:
+      tags:
+      - Payments
+      summary: Delete payment by payment id
+      description: Deletes the specified payment if the payment has been voided. This operation also deletes any applications of this payment
+      operationId: deletePayment
+      parameters:
+      - name: id
+        in: path
+        description: Payment bank account id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentJson'
+  /payments/account/{id}:
+    get:
+      tags:
+      - Payments
+      summary: Get payments
+      description: Returns the payments for the specified account
+      operationId: getAccountPayment
+      parameters:
+      - name: id
+        in: path
+        description: id of the account
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PaymentJson'
+  /payments/configuration:
+    get:
+      tags:
+      - Payments
+      summary: Get payment configuration
+      description: Returns the payment configuration for your tenant
+      operationId: getPaymentConfiguration
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentConfiguration'
+    post:
+      tags:
+      - Payments
+      summary: Update payment configuration
+      description: Updates the payment configuration for your tenant.
+      operationId: updatePaymentConfiguration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+                enum:
+                - ACH
+                - CARD
+                - CHECK
+                - WIRE
+                - INVOICE
+                - DEPOSIT
+                - EXTERNAL
+        description: Payment types to set. Options can be one or more of the allowable values
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentConfiguration'
+  /payments/account-payment/{id}:
+    get:
+      tags:
+      - Payments
+      summary: Get account payment management link
+      description: Returns a payment management link for an account
+      operationId: getAccountPaymentManagementLink
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+  /payments/bank-account:
+    post:
+      tags:
+      - Payments
+      summary: Adds a new payment bank account
+      description: The bank account would be mapped to a cash and an expense ledger account
+      operationId: upsertBankAccount
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentBankAccountJson'
+        description: Payment bank account to be added
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentBankAccountJson'
+  /payments:
+    get:
+      tags:
+      - Payments
+      summary: Get all payments
+      description: Returns all payments for you tenant. The results are paginated. To fetch all take the cursor returned from a call and pass it to a subsequent call.
+      operationId: getPayments
+      parameters:
+      - name: cursor
+        in: query
+        description: cursor returned from previous call
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        description: number of results per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentJsonPaginationResponse'
+  /payments/{id}/canDelete:
+    get:
+      tags:
+      - Payments
+      summary: Check if the payment object can be deleted
+      description: Payment can be deleted if it has been voided and does not have journal entries associated
+      operationId: canDeletePayment
+      parameters:
+      - name: id
+        in: path
+        description: id of the payment
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentDeletableResponse'
+  /payments/{id}/balance:
+    get:
+      tags:
+      - Payments
+      summary: Get payment balance
+      description: Gets the balance of a payment
+      operationId: getPaymentBalance
+      parameters:
+      - name: id
+        in: path
+        description: id of the payment
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentBalanceJson'
+  /payments/{id}/void:
+    put:
+      tags:
+      - Payments
+      summary: Voids a payment
+      description: Voids the specified payment per the specified parameters
+      operationId: voidPayment
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoidPaymentJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentJson'
+  /stripe-import/payment-method/csv:
+    post:
+      tags:
+      - Payments
+      summary: Import Stripe payment method via CSV
+      description: Associate an existing Stripe payment method with an account
+      operationId: importStripePaymentMethodCSV
+      requestBody:
+        $ref: '#/components/requestBodies/uploadApprovalMatrixCSV'
+      responses:
+        default:
+          description: successful operation
+components:
+  requestBodies:
+    uploadApprovalMatrixCSV:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+  schemas:
+    PaymentBankAccountJson:
+      type: object
+      required:
+      - currencyCode
+      - entityIds
+      - status
+      properties:
+        id:
+          type: string
+          readOnly: true
+        entityIds:
+          type: array
+          items:
+            type: string
+        externalId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        currencyCode:
+          type: string
+        cashLedgerAccountId:
+          type: string
+        expenseLedgerAccountId:
+          type: string
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - ACTIVE
+          - DEPRECATED
+        hasExistingPayments:
+          type: boolean
+        createdOn:
+          type: integer
+          format: int64
+          readOnly: true
+        updatedOn:
+          type: integer
+          format: int64
+          readOnly: true
+    PaymentRetryPolicy:
+      type: object
+      required:
+      - type
+      discriminator:
+        propertyName: type
+      properties:
+        version:
+          type: integer
+          format: int32
+        totalAttempts:
+          type: integer
+          format: int32
+        type:
+          type: string
+          enum:
+          - INTERVAL_BASED
+    PaymentRetryConfigOutput:
+      type: object
+      required:
+      - groupingId
+      - policy
+      properties:
+        groupingId:
+          type: string
+          readOnly: true
+        policy:
+          $ref: '#/components/schemas/PaymentRetryPolicy'
+    PaymentRetryResult:
+      type: object
+      properties:
+        retryAction:
+          type: string
+          enum:
+          - RETRIED
+          - SKIPPED
+          - RETRIED_AFTER_MANUAL_ATTEMPT
+        detail:
+          type: string
+        manualPaymentAttemptId:
+          type: string
+    VoidPaymentJson:
+      type: object
+      required:
+      - invoiceBalance
+      - invoiceNumber
+      - voidDate
+      properties:
+        paymentId:
+          type: string
+        voidDate:
+          type: integer
+          format: int64
+        invoiceBalance:
+          type: number
+        invoiceNumber:
+          type: string
+        note:
+          type: string
+    PaymentDeletableResponse:
+      type: object
+      properties:
+        deletable:
+          type: boolean
+          readOnly: true
+        message:
+          type: string
+          readOnly: true
+    LedgerAccount:
+      type: object
+      properties:
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        accountCode:
+          type: string
+        description:
+          type: string
+          minLength: 0
+          maxLength: 65535
+        accountType:
+          type: string
+          enum:
+          - ACCOUNTS_RECEIVABLE
+          - TAX_LIABILITY
+          - CASH
+          - DEFERRED_REVENUE
+          - RECOGNIZED_REVENUE
+          - CONTRACT_ASSET
+          - REALIZED_GAIN_LOSS
+          - EXPENSE
+          - REFUND
+        isDefault:
+          type: boolean
+        inUse:
+          type: boolean
+        default:
+          type: boolean
+        id:
+          type: string
+    PaymentBalanceJson:
+      type: object
+      properties:
+        accountId:
+          type: string
+        paymentId:
+          type: string
+        balance:
+          type: number
+        updatedOn:
+          type: integer
+          format: int64
+    PaymentConfiguration:
+      type: object
+      properties:
+        supportedPaymentTypes:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - ACH
+            - CARD
+            - CHECK
+            - WIRE
+            - INVOICE
+            - DEPOSIT
+            - EXTERNAL
+    PaymentJsonPaginationResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/PaymentJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
+    PaymentRetryConfigInput:
+      type: object
+      required:
+      - policy
+      properties:
+        groupingId:
+          type: string
+          readOnly: true
+        policy:
+          $ref: '#/components/schemas/PaymentRetryPolicy'
+    PaymentJson:
+      type: object
+      required:
+      - accountId
+      - paymentMethodId
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        paymentId:
+          type: string
+        accountId:
+          type: string
+        paymentMethodId:
+          type: string
+          format: uuid
+        currencyCode:
+          type: string
+        state:
+          type: string
+          enum:
+          - CREATED
+          - CONFIRMED
+          - CAPTURED
+          - PROCESSING
+          - CARD_DECLINED
+          - ACH_TRANSFER_FAILED
+          - RECONCILED
+          - INITIATED
+          - FAILED
+          - SUCCEED
+          - VOIDED
+        status:
+          type: string
+          readOnly: true
+        amount:
+          type: number
+        paymentDate:
+          type: integer
+          format: int64
+        exchangeRateId:
+          type: string
+        exchangeRate:
+          type: number
+        exchangeRateDate:
+          type: integer
+          format: int64
+        functionalAmount:
+          type: number
+        functionalAmountCaptured:
+          type: number
+        functionalBankFee:
+          type: number
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

@@ -1,0 +1,443 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Custom Field API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Custom Field
+paths:
+  /customFieldDefinition:
+    post:
+      tags:
+      - Custom Field
+      summary: Create a custom field definition
+      description: Creates a new custom field definition for your tenant. On success the id of the custom field definition is returned.
+      operationId: createCustomFieldDefinition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomFieldDefinitionCreateInput'
+        description: custom field definition values
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+  /customFieldDefinition/{parentObjectType}:
+    get:
+      tags:
+      - Custom Field
+      summary: Get custom field definitions
+      description: Returns all custom field definitions for a specific parent object type
+      operationId: getCustomFieldDefinitions
+      parameters:
+      - name: parentObjectType
+        in: path
+        description: object type custom fields are attached to
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CustomFieldDefinitionJson'
+  /customFieldDefinition/{id}:
+    put:
+      tags:
+      - Custom Field
+      summary: Update an existing custom field definition
+      description: Updates an existing custom field definition for your tenant. On success the update custom field definition is returned.
+      operationId: updateCustomFieldDefinition
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomFieldDefinitionUpdateInput'
+        description: custom field definition values
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldDefinitionJson'
+    delete:
+      tags:
+      - Custom Field
+      summary: Delete a custom field definition
+      description: Deletes an existing custom field definition for your tenant. On success the deleted custom field definition object is returned.
+      operationId: deleteCustomFieldDefinition
+      parameters:
+      - name: id
+        in: path
+        description: object type custom fields are attached to
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomFieldDefinitionJson'
+  /customField/{parentObjectType}/{parentObjectId}/{customFieldName}:
+    put:
+      tags:
+      - Custom Field
+      summary: Update an existing set of custom fields
+      description: Updates an existing set of custom fields for a given parent object type and id. On success the update custom fields are returned.
+      operationId: updateCustomField
+      parameters:
+      - name: parentObjectType
+        in: path
+        description: 'Object type custom fields are attached to. Available Object Types: ACCOUNT, ORDER, ORDER_ITEM, PLAN, CHARGE, INVOICE, SUBSCRIPTION_ITEM,OPPORTUNITY'
+        required: true
+        schema:
+          type: string
+      - name: parentObjectId
+        in: path
+        description: Id of the parent object
+        required: true
+        schema:
+          type: string
+      - name: customFieldName
+        in: path
+        description: Name of the custom field to be updated
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/CustomFieldUpdateInput'
+      responses:
+        default:
+          description: successful operation
+  /customField/{parentObjectType}/{parentObjectId}:
+    get:
+      tags:
+      - Custom Field
+      summary: Get custom fields by type and parent object id
+      description: Returns all custom fields for a specific parent object type and id
+      operationId: getCustomFields
+      parameters:
+      - name: parentObjectType
+        in: path
+        description: object type custom fields are attached to
+        required: true
+        schema:
+          type: string
+      - name: parentObjectId
+        in: path
+        description: Id of the parent object
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Custom Field
+      summary: Update an existing set of custom fields
+      description: Updates an existing set of custom fields for a given parent object type and id. On success the update custom fields are returned.
+      operationId: updateCustomFields
+      parameters:
+      - name: parentObjectType
+        in: path
+        description: 'object type custom fields are attached to. Available Object Types: ACCOUNT, ORDER, ORDER_ITEM, PLAN, CHARGE, INVOICE, SUBSCRIPTION_ITEM,OPPORTUNITY'
+        required: true
+        schema:
+          type: string
+      - name: parentObjectId
+        in: path
+        description: Id of the parent object
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/updateCustomFieldsBody'
+      responses:
+        default:
+          description: successful operation
+  /customField/{parentObjectType}/{parentObjectId}/force:
+    put:
+      tags:
+      - Custom Field
+      summary: Update an existing set of custom fields
+      description: Updates an existing set of custom fields for a given parent object type and id. On success the update custom fields are returned.
+      operationId: forceUpdateCustomFields
+      parameters:
+      - name: parentObjectType
+        in: path
+        description: 'Object type custom fields are attached to. Available Object Types: ACCOUNT, ORDER, ORDER_ITEM, PLAN, CHARGE, INVOICE, SUBSCRIPTION_ITEM,OPPORTUNITY'
+        required: true
+        schema:
+          type: string
+      - name: parentObjectId
+        in: path
+        description: Id of the parent object
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/updateCustomFieldsBody'
+      responses:
+        default:
+          description: successful operation
+  /customField/{parentObjectType}/{parentObjectId}/{customFieldName}/force:
+    put:
+      tags:
+      - Custom Field
+      summary: Update an existing set of custom fields
+      description: Updates an existing set of custom fields for a given parent object type and id. On success the update custom fields are returned.
+      operationId: forceUpdateCustomField
+      parameters:
+      - name: parentObjectType
+        in: path
+        description: 'Object type custom fields are attached to. Available Object Types: ACCOUNT, ORDER, ORDER_ITEM, PLAN, CHARGE, INVOICE, SUBSCRIPTION_ITEM,OPPORTUNITY'
+        required: true
+        schema:
+          type: string
+      - name: parentObjectId
+        in: path
+        description: Id of the parent object
+        required: true
+        schema:
+          type: string
+      - name: customFieldName
+        in: path
+        description: Name of the custom field to be updated
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/CustomFieldUpdateInput'
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    CustomFieldUpdateInput:
+      type: object
+      properties:
+        value:
+          type: string
+          readOnly: true
+        selections:
+          type: array
+          readOnly: true
+          items:
+            type: string
+    CustomFieldDefinitionUpdateInput:
+      type: object
+      properties:
+        fieldName:
+          type: string
+          readOnly: true
+        fieldLabel:
+          type: string
+          readOnly: true
+        fieldType:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
+    CustomFieldDefinitionJson:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        parentObjectType:
+          type: string
+          readOnly: true
+          enum:
+          - ACCOUNT
+          - ORDER
+          - ORDER_ITEM
+          - PLAN
+          - CHARGE
+          - INVOICE
+          - SALES_ROOM
+          - SUBSCRIPTION
+          - SUBSCRIPTION_ITEM
+          - OPPORTUNITY
+        fieldType:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        fieldName:
+          type: string
+          readOnly: true
+        fieldLabel:
+          type: string
+          readOnly: true
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        required:
+          type: boolean
+          readOnly: true
+        createdOn:
+          type: integer
+          format: int64
+          readOnly: true
+        updatedOn:
+          type: integer
+          format: int64
+          readOnly: true
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+    CustomFieldDefinitionCreateInput:
+      type: object
+      required:
+      - fieldType
+      - parentObjectType
+      properties:
+        parentObjectType:
+          type: string
+          readOnly: true
+          enum:
+          - ACCOUNT
+          - ORDER
+          - ORDER_ITEM
+          - PLAN
+          - CHARGE
+          - INVOICE
+          - SALES_ROOM
+          - SUBSCRIPTION
+          - SUBSCRIPTION_ITEM
+          - OPPORTUNITY
+        fieldType:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        fieldName:
+          type: string
+          readOnly: true
+        fieldLabel:
+          type: string
+          readOnly: true
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        required:
+          type: boolean
+          readOnly: true
+        source:
+          type: string
+          readOnly: true
+          enum:
+          - USER
+          - SYSTEM
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+    CustomFieldValue:
+      type: object
+      properties:
+        type:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        name:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        value:
+          type: string
+          readOnly: true
+        selections:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        required:
+          type: boolean
+          readOnly: true
+        source:
+          type: string
+          readOnly: true
+          enum:
+          - USER
+          - SYSTEM
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+  requestBodies:
+    CustomFieldUpdateInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CustomFieldUpdateInput'
+      description: custom field value
+      required: true
+    updateCustomFieldsBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties:
+              $ref: '#/components/schemas/CustomFieldValue'
+      description: custom field values
+      required: true
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

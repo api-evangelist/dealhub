@@ -1,0 +1,149 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Foreign Exchange API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Foreign Exchange
+paths:
+  /fx/transactional/refresh:
+    post:
+      tags:
+      - Foreign Exchange
+      summary: Refresh transactional exchange rates
+      description: Refresh transactional exchange rates for all supported currencies to functional currencies for the given effective date
+      operationId: refreshExchangeRates
+      parameters:
+      - name: effectiveDate
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: successful operation
+  /fx/transactional/latest:
+    get:
+      tags:
+      - Foreign Exchange
+      summary: Get latest transactional exchange rates
+      description: Get latest transactional exchange rates for all currency pairs of supported currencies to functional currencies
+      operationId: getLatestExchangeRates
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TransactionalExchangeRate'
+  /fx/transactional/asof:
+    get:
+      tags:
+      - Foreign Exchange
+      summary: Get as of transactional exchange rate for a currency pair
+      description: Get transactional exchange rate for a currency pair as of a specific date
+      operationId: getExchangeRateAsOf
+      parameters:
+      - name: fromCurrency
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: toCurrency
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: asOf
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TransactionalExchangeRate'
+  /fx/transactional/refreshPair:
+    post:
+      tags:
+      - Foreign Exchange
+      summary: Refresh transactional exchange rate by currency pair
+      description: Fetch and store transactional exchange rate for given currency pair and effective date from exchange rate provider
+      operationId: refreshExchangeRatePair
+      parameters:
+      - name: fromCurrency
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: toCurrency
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: effectiveDate
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    TransactionalExchangeRate:
+      type: object
+      required:
+      - effectiveDate
+      - exchangeRate
+      - exchangeSource
+      - fromCurrency
+      - isOverridden
+      - toCurrency
+      properties:
+        id:
+          type: string
+          readOnly: true
+        fromCurrency:
+          type: string
+          readOnly: true
+        toCurrency:
+          type: string
+          readOnly: true
+        effectiveDate:
+          type: integer
+          format: int64
+          readOnly: true
+        exchangeRate:
+          type: number
+          readOnly: true
+        exchangeSource:
+          type: string
+          readOnly: true
+          enum:
+          - QUODD
+          - SAME_CURRENCY
+          - USER
+          - TEST_RANDOM
+        updatedBy:
+          type: string
+          readOnly: true
+        isOverridden:
+          type: boolean
+          readOnly: true
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

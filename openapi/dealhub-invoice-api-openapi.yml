@@ -1,0 +1,58 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Invoice API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Invoice
+paths:
+  /rh/invoices:
+    get:
+      tags:
+      - Invoice
+      operationId: getCpqSourcedAccountInvoices
+      parameters:
+      - name: accountId
+        in: query
+        description: Required. Filter invoices to this account.
+        required: true
+        schema:
+          type: string
+      - name: status
+        in: query
+        description: Optional invoice status filter (DRAFT, POSTED, VOIDED).
+        required: false
+        schema:
+          type: string
+          enum:
+          - DRAFT
+          - POSTED
+          - PAID
+          - CONVERTED
+          - VOIDED
+      - name: pageToken
+        in: query
+        description: Pass the pageToken returned from a prior call to fetch the next page.
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: Page size (default 20).
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 20
+      responses:
+        default:
+          description: successful operation
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

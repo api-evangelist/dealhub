@@ -1,0 +1,199 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Reports API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Reports
+paths:
+  /reports/run:
+    post:
+      tags:
+      - Reports
+      summary: Run a report
+      description: Runs the specified report and returns the result as a csv.
+      operationId: run
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PredefinedReportJson'
+        description: definition of the report in json
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /reports/generate:
+    post:
+      tags:
+      - Reports
+      summary: Generate a report
+      description: Generates a report with the specified parameters. This report can later be downloaded via /reports/{reportRunId}/result
+      operationId: generate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PredefinedReportJson'
+        description: json definition of the report
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportJobResponse'
+  /reports/{reportRunId}/result:
+    get:
+      tags:
+      - Reports
+      summary: Run a generated report
+      description: Runs a report generated with /generate. On success a csv of the report is returned.
+      operationId: getReportOutput
+      parameters:
+      - name: reportRunId
+        in: path
+        description: id of the report
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /reports:
+    get:
+      tags:
+      - Reports
+      summary: Get report definitions
+      description: Returns the definitions of the reports defined for your tenant.
+      operationId: getPredefinedReportDefs
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PredefinedReportDefsJson'
+components:
+  schemas:
+    PredefinedReportParamObject:
+      type: object
+      required:
+      - datatype
+      - type
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+          enum:
+          - value
+          - range
+          - selection
+        datatype:
+          type: string
+          enum:
+          - date
+          - string
+          - integer
+        allowedValues:
+          type: array
+          items:
+            type: string
+        defaultValue:
+          type: object
+        optional:
+          type: boolean
+    PredefinedReportDefJson:
+      type: object
+      properties:
+        reportId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredefinedReportParamObject'
+        chart:
+          $ref: '#/components/schemas/PredefinedReportDefChartJson'
+    PredefinedReportJson:
+      type: object
+      properties:
+        reportId:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        duration:
+          $ref: '#/components/schemas/ReportDuration'
+        reportDate:
+          type: integer
+          format: int64
+    PredefinedReportDefsJson:
+      type: object
+      properties:
+        reportDefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredefinedReportDefJson'
+    PredefinedReportDefChartJson:
+      type: object
+      properties:
+        chartType:
+          type: string
+        mainAxisKey:
+          type: string
+        crossAxisKey:
+          type: string
+        mainAxisLabel:
+          type: string
+        crossAxisLabel:
+          type: string
+        mainAxisScale:
+          type: string
+        crossAxisScale:
+          type: string
+        title:
+          type: string
+        sortBy:
+          type: string
+        showLegend:
+          type: boolean
+    ReportJobResponse:
+      type: object
+      properties:
+        reportId:
+          type: string
+        reportRunId:
+          type: string
+        status:
+          type: string
+          enum:
+          - OK
+          - FAILED
+        uri:
+          type: string
+    ReportDuration:
+      type: object
+      properties:
+        start:
+          type: integer
+          format: int64
+        end:
+          type: integer
+          format: int64
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

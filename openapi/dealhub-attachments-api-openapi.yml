@@ -1,0 +1,204 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Attachments API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Attachments
+paths:
+  /attachments/account/maxNumberOfFiles:
+    get:
+      tags:
+      - Attachments
+      summary: Get the maximum number of attachments allowed for an account
+      description: Gets the maximum number of files allowed to be attached to any account
+      operationId: getMaximumNumberOfAttachmentsPerAccount
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: integer
+                format: int32
+  /attachments/{attachmentId}:
+    get:
+      tags:
+      - Attachments
+      summary: Get attachment contents
+      description: Gets the contents of the specified attachment
+      operationId: getAttachment
+      parameters:
+      - name: attachmentId
+        in: path
+        description: id of the attachment
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+      - Attachments
+      summary: Delete an attachment
+      description: Unattaches and deletes the specified document
+      operationId: deleteAttachmentFromAccount
+      parameters:
+      - name: attachmentId
+        in: path
+        description: id of the attachment
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        default:
+          description: successful operation
+  /attachments/account/{accountId}:
+    get:
+      tags:
+      - Attachments
+      summary: Get attachments for an account
+      description: Lists all the documents attached to an account
+      operationId: listAccountAttachments
+      parameters:
+      - name: accountId
+        in: path
+        description: id of the attachment
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Attachment'
+    post:
+      tags:
+      - Attachments
+      summary: Add an attachment
+      description: Attaches a document to the specified account. The post body should contain the body of the document that is to be attached. On success the Id of the attachment is returned.
+      operationId: addAttachmentToAccount
+      parameters:
+      - name: fileName
+        in: query
+        description: name to associate with the attachment
+        required: false
+        schema:
+          type: string
+      - name: description
+        in: query
+        description: description of the document
+        required: false
+        schema:
+          type: string
+      - name: accountId
+        in: path
+        description: id of the account to attach the document to
+        required: true
+        schema:
+          type: string
+      - name: tag
+        in: query
+        description: tag to apply to the attachment
+        required: false
+        schema:
+          type: string
+          enum:
+          - MASTER_SUBSCRIPTION_AGREEMENT
+          - STATEMENT_OF_WORK
+          - ORDER_FORM
+          - OTHER
+      requestBody:
+        $ref: '#/components/requestBodies/uploadApprovalMatrixCSV'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+  /attachments:
+    put:
+      tags:
+      - Attachments
+      summary: Update the details of an attachment
+      description: Updates the details of the specified document
+      operationId: modifyAttachment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attachment'
+        description: json representing the attachment
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+components:
+  requestBodies:
+    uploadApprovalMatrixCSV:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+  schemas:
+    Attachment:
+      type: object
+      required:
+      - createdOn
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - UPLOADING
+          - UPLOADED
+        accountId:
+          type: string
+        tag:
+          type: string
+          enum:
+          - MASTER_SUBSCRIPTION_AGREEMENT
+          - STATEMENT_OF_WORK
+          - ORDER_FORM
+          - OTHER
+        inUse:
+          type: boolean
+        isDeleted:
+          type: boolean
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

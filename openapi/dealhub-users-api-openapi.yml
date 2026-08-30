@@ -1,0 +1,512 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Users API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Users
+paths:
+  /userGroups:
+    get:
+      tags:
+      - Users
+      summary: Get user groups
+      description: Get all available user groups
+      operationId: getUserGroups
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UserGroupJson'
+    post:
+      tags:
+      - Users
+      summary: Add user group
+      description: Create a new user group based on the parameters in the input
+      operationId: addUserGroup
+      requestBody:
+        $ref: '#/components/requestBodies/UserGroupRequestJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserGroupJson'
+    put:
+      tags:
+      - Users
+      summary: Update user group
+      description: Updates the specified user group according to the input
+      operationId: updateUserGroup
+      requestBody:
+        $ref: '#/components/requestBodies/UserGroupRequestJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserGroupJson'
+  /userGroups/{userGroupId}:
+    get:
+      tags:
+      - Users
+      summary: Get user group
+      description: Retrieve a user group by Id
+      operationId: getUserGroup
+      parameters:
+      - name: userGroupId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserGroupJson'
+    delete:
+      tags:
+      - Users
+      summary: Delete user group
+      description: Delete the user group by Id
+      operationId: deleteUserGroup
+      parameters:
+      - name: userGroupId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserGroupJson'
+  /users/upload:
+    post:
+      tags:
+      - Users
+      summary: Bulk user upload
+      description: Loads a list of users to be added to in CSV format.
+      operationId: uploadCSV
+      requestBody:
+        content:
+          text/csv:
+            schema:
+              $ref: '#/components/schemas/InputStream'
+      responses:
+        default:
+          description: successful operation
+  /users/resend-email/{email}:
+    post:
+      tags:
+      - Users
+      summary: Resend welcome email
+      description: Resend welcome email conditioning temporary credentials. This is required if the user does not register within 24 hours of user activation
+      operationId: resendEmailForExistingUser
+      parameters:
+      - name: email
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+  /users:
+    get:
+      tags:
+      - Users
+      summary: Get users list
+      description: Returns a paginated list of users
+      operationId: getUsers
+      parameters:
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPaginationResponseJson'
+    post:
+      tags:
+      - Users
+      summary: Add a new user
+      description: Add a new user to the system. Users in the system must have unique emails. If successful, the path to the new user object is returned and a welcome email containing a temporary password will be sent to the email associated with the user. The login credentials expires in 24 hours. If the user does not login to the system within that time, a new invitation is required.
+      operationId: addUser
+      requestBody:
+        $ref: '#/components/requestBodies/UserInput'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+  /users/terms-and-conditions:
+    post:
+      tags:
+      - Users
+      summary: Accept terms and conditions
+      description: Before a user gains access to the application, they must accept Subskribe's terms and conditions. This operation requires user bound access tokens.
+      operationId: acceptTermsForCurrentUser
+      responses:
+        default:
+          description: successful operation
+  /users/disable/{id}:
+    put:
+      tags:
+      - Users
+      summary: Disable user
+      description: Disables a user by Id. If successful, returns the user just disabled
+      operationId: disableUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserJson'
+  /users/enable/{id}:
+    put:
+      tags:
+      - Users
+      summary: Enable user
+      description: Enables a user by Id. If successful, returns the user just enabled
+      operationId: enableUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserJson'
+  /users/{id}:
+    get:
+      tags:
+      - Users
+      summary: Get user by Id
+      description: Returns a specific user by Id
+      operationId: getUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserJson'
+    put:
+      tags:
+      - Users
+      summary: Update user
+      description: Updates the user information. Email cannot be updated.
+      operationId: updateUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/UserInput'
+      responses:
+        default:
+          description: successful operation
+  /users/{id}/sso:
+    put:
+      tags:
+      - Users
+      summary: Update user SSO configuration
+      description: Toggle user SSO configuration by user Id.
+      operationId: updateUserSSOConfig
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSsoUpdate'
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    UserPaginationResponseJson:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/UserJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
+    InputStream:
+      type: object
+    UserSsoUpdate:
+      type: object
+      properties:
+        ssoOnly:
+          type: boolean
+    EntityRef:
+      type: object
+      required:
+      - entityId
+      - name
+      properties:
+        entityId:
+          type: string
+          readOnly: true
+        displayId:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+    ApprovalSegmentJson:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    UserGroupJson:
+      type: object
+      properties:
+        id:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        description:
+          type: string
+        users:
+          type: array
+          items:
+            type: string
+        externalId:
+          type: string
+    UserInput:
+      type: object
+      properties:
+        id:
+          type: string
+        displayName:
+          type: string
+        title:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        state:
+          type: string
+          enum:
+          - ACTIVE
+          - DISABLED
+          - EXPIRED
+        role:
+          type: string
+          enum:
+          - ADMIN
+          - FINANCE
+          - SALES
+          - SALES_MANAGER
+          - ACCOUNTANT
+          - BILLING_CLERK
+          - REVENUE_CLERK
+          - READ_ONLY
+          - EXECUTIVE
+          - CRM
+          - IMPORT
+          - BILLY_ADMIN
+          - BILLY_ENGINEER
+          - BILLY_SUPPORT
+          - BILLY_JOB
+        ssoOnly:
+          type: boolean
+        entityIds:
+          type: array
+          items:
+            type: string
+        externalId:
+          type: string
+    UserGroupRequestJson:
+      type: object
+      properties:
+        id:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        description:
+          type: string
+        users:
+          type: array
+          items:
+            type: string
+        externalId:
+          type: string
+    UserJson:
+      type: object
+      properties:
+        id:
+          type: string
+        displayName:
+          type: string
+        title:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        state:
+          type: string
+          enum:
+          - ACTIVE
+          - DISABLED
+          - EXPIRED
+        role:
+          type: string
+          enum:
+          - ADMIN
+          - FINANCE
+          - SALES
+          - SALES_MANAGER
+          - ACCOUNTANT
+          - BILLING_CLERK
+          - REVENUE_CLERK
+          - READ_ONLY
+          - EXECUTIVE
+          - CRM
+          - IMPORT
+          - BILLY_ADMIN
+          - BILLY_ENGINEER
+          - BILLY_SUPPORT
+          - BILLY_JOB
+        ssoOnly:
+          type: boolean
+        tenantName:
+          type: string
+        cognitoUserStatus:
+          type: string
+          enum:
+          - UNCONFIRMED
+          - CONFIRMED
+          - ARCHIVED
+          - COMPROMISED
+          - UNKNOWN
+          - RESET_REQUIRED
+          - FORCE_CHANGE_PASSWORD
+          - EXTERNAL_PROVIDER
+          - UNKNOWN_TO_SDK_VERSION
+        userGroups:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserGroupJson'
+        approvalSegments:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalSegmentJson'
+        hasAllEntitiesAccess:
+          type: boolean
+        availableEntities:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntityRef'
+        entityIds:
+          type: array
+          items:
+            type: string
+        externalId:
+          type: string
+        eventObjectId:
+          type: string
+  requestBodies:
+    UserInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserInput'
+    UserGroupRequestJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserGroupRequestJson'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

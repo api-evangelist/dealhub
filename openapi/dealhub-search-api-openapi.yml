@@ -1,0 +1,53 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Search API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Search
+paths:
+  /rh/search:
+    get:
+      tags:
+      - Search
+      summary: Run a search query
+      description: Runs the specified search query
+      operationId: search
+      parameters:
+      - name: query
+        in: query
+        description: query to run
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+    post:
+      tags:
+      - Search
+      summary: Run a search query (POST)
+      description: Same as GET /rh/search but accepts the query in the request body. Use when the query JSON is too large to fit in a URL (e.g. terms clauses with hundreds of ids).
+      operationId: searchPost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JsonNode'
+        description: Query to run
+        required: true
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    JsonNode:
+      type: object
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

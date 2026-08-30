@@ -1,0 +1,760 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Accounts API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Accounts
+paths:
+  /accounts:
+    get:
+      tags:
+      - Accounts
+      summary: Get all accounts
+      description: Returns a paginated list of accounts
+      operationId: getAccounts
+      parameters:
+      - name: cursor
+        in: query
+        description: A string token is used to fetch next set of results. If not provided, the first page of results will be returned. Use the 'next_cursor' value from the previous response to fetch the next page.
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        description: An integer specifying the maximum number of results to return per page. Defaults to 10 if not provided.
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: type
+        in: query
+        description: 'The type of accounts to retrieve. Allowed values are:  ALL: Includes all account types. RESELLER: Includes only reseller accounts. NON_RESELLER: Includes only non-reseller accounts.'
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAccountsResponse'
+    post:
+      tags:
+      - Accounts
+      summary: Add a new account
+      description: Create an account with the specified parameters. On success, the id of the newly created account is returned
+      operationId: addAccount
+      requestBody:
+        $ref: '#/components/requestBodies/AccountJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountJson'
+  /accounts/{id}:
+    get:
+      tags:
+      - Accounts
+      summary: Get an account by id
+      description: Retrieves detailed information about a specific account using its unique identifier. It could be Account_ID, CRM_ID or External_ID. This endpoint provides comprehensive data for a particular account, enabling users to access full account details.
+      operationId: getAccount
+      parameters:
+      - name: id
+        in: path
+        description: Uniquely identifies the Account
+        required: true
+        schema:
+          type: string
+      - name: idType
+        in: query
+        description: 'Specifies the type of ID being used. Allowed values are account_id: The default account ID. crm_id: The CRM (Customer Relationship Management) ID external_id: An external system''s ID for the account. Default is account_id'
+        required: false
+        schema:
+          type: string
+          enum:
+          - ACCOUNT_ID
+          - CRM_ID
+          - EXTERNAL_ID
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountJson'
+    put:
+      tags:
+      - Accounts
+      summary: Update an account
+      description: Updates an existing account with the specified parameters
+      operationId: updateAccount
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/AccountJson'
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+      - Accounts
+      summary: Delete an account
+      description: Deletes the account associated with the passed ID
+      operationId: deleteAccount
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /accounts/{accountId}/contacts:
+    get:
+      tags:
+      - Accounts
+      summary: Get contacts for an account
+      description: Returns a list of contacts associated with the specified account id
+      operationId: getAccountContacts
+      parameters:
+      - name: accountId
+        in: path
+        description: Uniquely identifies the account for which contacts are being retrieved.
+        required: true
+        schema:
+          type: string
+      - name: expand
+        in: query
+        description: When set to true, expands the response to include additional details about each contact, such as address, external id, erp id, fullName. Default is false.
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AccountContactJson'
+    post:
+      tags:
+      - Accounts
+      summary: Add a contact for an account
+      description: Creates and adds a new contact for the specified account and returns the new contact ID.
+      operationId: addAccountContact
+      parameters:
+      - name: accountId
+        in: path
+        description: value = Uniquely identifies the account
+        required: true
+        schema:
+          type: string
+      - name: skipAddressValidation
+        in: query
+        description: value = perform basic address validation
+        required: false
+        schema:
+          type: boolean
+      - name: strictValidation
+        in: query
+        description: value = require the address to match a canonical address, if it exists
+        required: false
+        schema:
+          type: boolean
+      requestBody:
+        $ref: '#/components/requestBodies/AccountContactJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountContactJson'
+  /accounts/{accountId}/crmId:
+    put:
+      tags:
+      - Accounts
+      summary: Update CRM ID
+      description: API to update CRM ID for an account
+      operationId: updateAccountCrmId
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+        description: Unique CRM account / company identifier to associate to a Subskribe account.
+      responses:
+        default:
+          description: successful operation
+  /accounts/{id}/metrics:
+    get:
+      tags:
+      - Accounts
+      summary: Returns metrics for the specified account
+      description: Fetches metrics such as ARR, TCV, etc for the specified account as of the specified target date
+      operationId: getAccountMetrics
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: targetDate
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: forceRecalculate
+        in: query
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsJson'
+  /accounts/{accountId}/paymentMethods/{id}:
+    get:
+      tags:
+      - Accounts
+      summary: Get the details of a payment method
+      description: Returns the details of the payment method for the specified account id and payment method id
+      operationId: getPaymentMethod
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountPaymentMethodJson'
+  /accounts/{accountId}/erp:
+    put:
+      tags:
+      - Accounts
+      summary: Update account ERP details
+      description: Update ERP details for an account specified by the account id
+      operationId: addErpDetails
+      parameters:
+      - name: accountId
+        in: path
+        description: value = Uniquely identifies the account
+        required: true
+        schema:
+          type: string
+      - name: override
+        in: query
+        required: false
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErpInputJson'
+      responses:
+        default:
+          description: successful operation
+  /accounts/{accountId}/contacts/{contactId}:
+    get:
+      tags:
+      - Accounts
+      summary: Gets contact details
+      description: Returns the details of the specified contact
+      operationId: getAccountContact
+      parameters:
+      - name: accountId
+        in: path
+        description: Uniquely identifies the account for which contacts are being retrieved.
+        required: true
+        schema:
+          type: string
+      - name: contactId
+        in: path
+        description: Uniquely identifies the contact.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountContactJson'
+    put:
+      tags:
+      - Accounts
+      summary: Update a contact
+      description: Updates the contact specified by the account id and contact id with the passed information
+      operationId: updateAccountContact
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: contactId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: skipAddressValidation
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: strictValidation
+        in: query
+        required: false
+        schema:
+          type: boolean
+      requestBody:
+        $ref: '#/components/requestBodies/AccountContactJson'
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+      - Accounts
+      summary: Delete a contact
+      description: Deletes the contact specified by the account id and contact id
+      operationId: deleteAccountContact
+      parameters:
+      - name: contactId
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /accounts/crm/import:
+    post:
+      tags:
+      - Accounts
+      summary: Import an account from a CRM
+      description: Ensures an account exists which matches the passed details.If an account exists that has a matching CRM Id, it will be updated, if not, it will be created
+      operationId: importCrmAccount
+      requestBody:
+        $ref: '#/components/requestBodies/AccountJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmAccountImportResponse'
+  /accounts/{accountId}/paymentConfig:
+    get:
+      tags:
+      - Accounts
+      summary: Get account payment configuration
+      description: Retrieves the payment configuration for the specified account
+      operationId: getAccountPaymentConfig
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountPaymentConfigurationJson'
+    post:
+      tags:
+      - Accounts
+      summary: Upsert account payment configuration
+      description: Creates or updates the payment configuration for the specified account
+      operationId: upsertAccountPaymentConfig
+      parameters:
+      - name: accountId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountPaymentConfigurationJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountPaymentConfigurationJson'
+components:
+  requestBodies:
+    AccountJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccountJson'
+    AccountContactJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccountContactJson'
+  schemas:
+    AccountPaymentConfigurationJson:
+      type: object
+      required:
+      - accountId
+      - excludeFromPaymentRetries
+      properties:
+        id:
+          type: string
+        accountId:
+          type: string
+        excludeFromPaymentRetries:
+          type: boolean
+    MetricsJson:
+      type: object
+      properties:
+        tcv:
+          type: number
+        recurringTotal:
+          type: number
+        nonRecurringTotal:
+          type: number
+        arr:
+          type: number
+        entryArr:
+          type: number
+        exitArr:
+          type: number
+        averageArr:
+          type: number
+        arrTrend:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSeriesAmountJson'
+        deltaTcv:
+          type: number
+        deltaArr:
+          type: number
+    PaginatedAccountsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountJson'
+        numElements:
+          type: integer
+          format: int32
+        nextCursor:
+          type: string
+          format: uuid
+    AccountJson:
+      type: object
+      required:
+      - name
+      properties:
+        id:
+          type: string
+          description: This is a system-generated Account ID
+        name:
+          type: string
+          description: Account name
+        legalName:
+          type: string
+          description: (optional) Account legal name
+        description:
+          type: string
+          description: (optional) Account Description
+        phoneNumber:
+          type: string
+          description: (optional) Phone number of the Account
+        timezone:
+          type: string
+          readOnly: true
+        crmId:
+          type: string
+          description: (optional) CRM ID of the Account
+        crmType:
+          type: string
+          description: (optional) CRM type
+        erpId:
+          type: string
+          description: (optional) ERP ID of this account
+        externalId:
+          type: string
+          description: (optional) External ID of this account
+        currency:
+          type: string
+          description: 'The currency code (ISO 4217 format). If currency is not entered, USD will be applied by default. Possible currencies in Subskribe: AED AUD CAD CHF CZK DKK EUR GBP HKD INR MXN NOK NZD SAR SEK SGD TWD USD'
+        taxExemptionUseCode:
+          type: string
+          description: (optional) Indicates Tax Exemption Information. When the account does not qualify for Tax Exemption, add null in the request. When using Anrok Tax Integration, keep this value  null , as Anrok requires to upload Tax Exemption Certificate.
+          enum:
+          - A
+          - B
+          - C
+          - D
+          - E
+          - F
+          - G
+          - H
+          - I
+          - J
+          - K
+          - L
+          - M
+          - N
+          - P
+          - Q
+          - R
+        isReseller:
+          type: boolean
+          description: (optional) Input true, if this is a Reseller Account. Default is false
+        hasAutomaticPayment:
+          type: boolean
+          description: (optional) Input true, if this Account will have an automatic payment. Default is false
+        excludeFromBatchOperations:
+          type: boolean
+          description: (optional) Input true, if this account needs to be excluded from Batch Operations like Bulk  Invoice Run, Invoice Generation. Default is false. This is an optional field.
+        excludeFromDunning:
+          type: boolean
+          description: (optional) Input true, if this account needs to be excluded from Dunning emails. Default is false. This is an optional field.
+        supportedPaymentTypes:
+          type: array
+          description: (optional) Supported payment types for this Account. This field can include various payment types such as ACH, Card, Check, Wire, and Invoice. This is an optional field.
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - ACH
+            - CARD
+            - CHECK
+            - WIRE
+            - INVOICE
+            - DEPOSIT
+            - EXTERNAL
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+        updatedOn:
+          type: integer
+          format: int64
+          description: (optional) will be auto-populated as today's date
+        customFields:
+          type: object
+          description: (optional) Use this option to create custom fields for the Account object if you need to collect Account-specific information, such as region, age, or gender.
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValue'
+        entityIds:
+          type: array
+          description: (optional) Enter the entity ID where this Account belongs to
+          uniqueItems: true
+          items:
+            type: string
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
+    CrmAccountImportResponse:
+      type: object
+      properties:
+        accountUrl:
+          type: string
+        accountId:
+          type: string
+    AccountContactJson:
+      type: object
+      required:
+      - accountId
+      properties:
+        id:
+          type: string
+          description: This is a system-generated Account Contact ID
+        accountId:
+          type: string
+          description: Uniquely identifies the Account
+        firstName:
+          type: string
+          description: First Name of the Contact
+        lastName:
+          type: string
+          description: (optional) Last Name of the Contact
+        email:
+          type: string
+          description: Email of the Contact
+        phoneNumber:
+          type: string
+          description: (optional) Phone Number of the Contact
+        title:
+          type: string
+          description: (optional) Title of the Contact
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+        externalId:
+          type: string
+        erpId:
+          type: string
+        fullName:
+          type: string
+        eventObjectId:
+          type: string
+    AccountAddressJson:
+      type: object
+      properties:
+        streetAddressLine1:
+          type: string
+          description: Address Line 1 of the Contact
+        streetAddressLine2:
+          type: string
+          description: Address Line 2 of the Contact
+        streetAddressLine3:
+          type: string
+          description: Address Line 3 of the Contact
+        city:
+          type: string
+          description: City of the Contact
+        state:
+          type: string
+          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
+        country:
+          type: string
+          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
+        zipcode:
+          type: string
+          description: Zip or Postal Code of the Contact
+    TimeSeriesAmountJson:
+      type: object
+      properties:
+        instant:
+          type: integer
+          format: int64
+        amount:
+          type: number
+    ErpInputJson:
+      type: object
+      properties:
+        erpId:
+          type: string
+          minLength: 0
+          maxLength: 100
+    CustomFieldValue:
+      type: object
+      properties:
+        type:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        name:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        value:
+          type: string
+          readOnly: true
+        selections:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        required:
+          type: boolean
+          readOnly: true
+        source:
+          type: string
+          readOnly: true
+          enum:
+          - USER
+          - SYSTEM
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+    AccountPaymentMethodJson:
+      type: object
+      required:
+      - paymentType
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        accountId:
+          type: string
+        name:
+          type: string
+        externalPaymentAccountId:
+          type: string
+        paymentType:
+          type: string
+          enum:
+          - ACH
+          - CARD
+          - CHECK
+          - WIRE
+          - INVOICE
+          - DEPOSIT
+          - EXTERNAL
+        paymentMethodId:
+          type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

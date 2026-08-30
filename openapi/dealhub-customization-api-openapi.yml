@@ -1,0 +1,99 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Customization API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Customization
+paths:
+  /customization/selectionCustomization:
+    get:
+      tags:
+      - Customization
+      summary: Get the current selection customization defined
+      description: returns a .zeppa source file for the current selection customization if present, 404 if customization is not defined
+      operationId: getSelectionCustomization
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Customization
+      summary: Add or Update selection customization script
+      description: "Add or Update the selection customization zeppa script in the platform. \n - once the update happens new selection customization script will take effect \n - the updated version of the script is returned with the API call \nNOTE: the account id required for this is only for test before submission \nNOTE: it *does not mean* that this customization is run only for this account.\n"
+      operationId: addSelectionCustomization
+      parameters:
+      - name: testAccountId
+        in: query
+        description: before the script is actually stored the script is run against this test account id, it *DOES NOT MEAN* this customization is only for this account
+        required: true
+        schema:
+          type: string
+      - name: expectedVersion
+        in: query
+        description: "this is the expected version of the script that is currently stored \n- if the expected version does not match what is stored the call will fail \n- if the script is being added for the first time then the expected version is 0 \n- look at the GET call for how the current version number is returned"
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        $ref: '#/components/requestBodies/generateZeppaArtifactBody'
+      responses:
+        default:
+          description: successful operation
+  /customization/orderCreationCustomization:
+    get:
+      tags:
+      - Customization
+      summary: Get the current order creation customization defined
+      description: returns a .zeppa source file for the current order creation customization if present, 404 if customization is not defined
+      operationId: getOrderCreationCustomization
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Customization
+      summary: Add or Update order creation customization script
+      description: "Add or Update the order creation customization zeppa script in the platform.\n - once the update happens new this script will take effect for all order creations\n - the updated version of the script is returned with the API call\nNOTE: the order id required for this is only for test before submission\nNOTE: it *does not mean* that this customization is run only for this order.\n"
+      operationId: addOrderCreationCustomization
+      parameters:
+      - name: testOrderId
+        in: query
+        description: before the script is actually stored its run against this test order id. it *DOES NOT MEAN* this customization is only for this order
+        required: true
+        schema:
+          type: string
+      - name: expectedVersion
+        in: query
+        description: 'this is the expected version of the script that is currently stored
+
+          - if the expected version does not match what is stored the call will fail
+
+          - if the script is being added for the first time then the expected version is 0
+
+          - look at the GET call for how the current version number is returned'
+        required: true
+        schema:
+          type: integer
+          format: int32
+      requestBody:
+        $ref: '#/components/requestBodies/generateZeppaArtifactBody'
+      responses:
+        default:
+          description: successful operation
+components:
+  requestBodies:
+    generateZeppaArtifactBody:
+      content:
+        text/plain:
+          schema:
+            type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

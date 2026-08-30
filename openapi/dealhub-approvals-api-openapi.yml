@@ -1,0 +1,884 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Approvals API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Approvals
+paths:
+  /approvalFlows:
+    get:
+      tags:
+      - Approvals
+      summary: Get approval flows
+      description: Gets all approval flows
+      operationId: getApprovalFlows
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApprovalFlowJson'
+    post:
+      tags:
+      - Approvals
+      summary: Add an approval flow
+      description: Adds an approval flow to the order execution hierarchy and returns its ID
+      operationId: addApprovalFlow
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalFlowJson'
+        description: Json representation of the approval flow
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+  /approvalFlows/{approvalFlowId}:
+    get:
+      tags:
+      - Approvals
+      summary: Get Details of an approval flow
+      description: Returns the details of the specified approval flow
+      operationId: getApprovalFlowById
+      parameters:
+      - name: approvalFlowId
+        in: path
+        description: id of the approval flow
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalFlowJson'
+    put:
+      tags:
+      - Approvals
+      summary: Update an approval flow
+      description: Updates the details of the specified approval flow
+      operationId: updateApprovalFlow
+      parameters:
+      - name: approvalFlowId
+        in: path
+        description: id of the approval flow
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalFlowJson'
+        description: json representing the approval flow details
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+      - Approvals
+      summary: Delete an approval flow
+      description: Deletes an approval flow
+      operationId: deleteApprovalFlow
+      parameters:
+      - name: approvalFlowId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalFlowJson'
+  /approvalMatrix/csv:
+    get:
+      tags:
+      - Approvals
+      summary: Get approval matrix details
+      description: Returns details regarding the approval matrices that have been uploaded
+      operationId: getAllImportDetails
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApprovalMatrixImportDataJson'
+    post:
+      tags:
+      - Approvals
+      summary: Upload an Approval Matrix
+      description: "Upload a csv containing the order approval matrix to be used on order execution. The csv should have the following format: \nSegment, ApprovalRoleName1, ApprovalRoleName2 ...\nSegmentName1, UserEmailOrGroupName1, UserEmailOrGroupName2 ...\nRoles, userEmails, userGroups are expected to be added before putting them in this csv. Any new segment names defined here will add a new segment. If a segment isn't added, it shall be deleted."
+      operationId: uploadApprovalMatrixCSV
+      requestBody:
+        $ref: '#/components/requestBodies/uploadApprovalMatrixCSV'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalMatrixImportDataJson'
+  /approvalMatrix/csv/download:
+    get:
+      tags:
+      - Approvals
+      summary: Download approval matrix
+      description: Downloads your order approval matrix as a csv
+      operationId: getApprovalMatrixAsCsv
+      responses:
+        default:
+          description: successful operation
+  /approvalMatrix/csv/{importId}:
+    get:
+      tags:
+      - Approvals
+      summary: Get import details
+      description: Gets the details of an import specified by the passed ID
+      operationId: getImportDetailsById
+      parameters:
+      - name: importId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalMatrixImportDataJson'
+  /approvalMatrix/csv/{importId}/download:
+    get:
+      tags:
+      - Approvals
+      summary: Download the csv for an import
+      description: Downloads the CSV for an import activity specified by the passed ID
+      operationId: getImportResult
+      parameters:
+      - name: importId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /approvalMatrix/csv/{importId}/preview:
+    get:
+      tags:
+      - Approvals
+      summary: Preview import changes
+      description: Preview the changes that a specified approval matrix import will have once applied
+      operationId: getImportPreview
+      parameters:
+      - name: importId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalMatrixImportPreview'
+  /approvalMatrix/csv/{importId}/submit:
+    post:
+      tags:
+      - Approvals
+      summary: Finalize an import
+      description: Submit and finalize the import for the specified import operation.
+      operationId: submitApprovalMatrixCSV
+      parameters:
+      - name: importId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /approvalRoles:
+    get:
+      tags:
+      - Approvals
+      summary: Get approval roles
+      description: Gets all approval roles
+      operationId: getApprovalRoles
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApprovalRoleJson'
+    post:
+      tags:
+      - Approvals
+      summary: Add an approval role
+      description: Adds an approval role to the order execution hierarchy and returns its ID
+      operationId: addApprovalRole
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalRoleJson'
+        description: Json representation of the role
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+  /approvalRoles/{approvalRoleId}:
+    get:
+      tags:
+      - Approvals
+      summary: Get Details of an approval role
+      description: Returns the details of the specified approval role
+      operationId: getApprovalRoleById
+      parameters:
+      - name: approvalRoleId
+        in: path
+        description: id of the approval role
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalRoleJson'
+    put:
+      tags:
+      - Approvals
+      summary: Update an approval role
+      description: Updates the details of the specified approval role
+      operationId: updateApprovalRole
+      parameters:
+      - name: approvalRoleId
+        in: path
+        description: id of the role
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalRoleJson'
+        description: json representing the role details
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+      - Approvals
+      summary: Delete an approval role
+      description: Deletes an approval role
+      operationId: deleteApprovalRole
+      parameters:
+      - name: approvalRoleId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalRoleJson'
+  /approvalSegments:
+    get:
+      tags:
+      - Approvals
+      summary: Get approval segments
+      description: Get all approval segments
+      operationId: getApprovalSegments
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ApprovalSegmentJson'
+    post:
+      tags:
+      - Approvals
+      summary: Add an approval segment
+      description: Define and add an approval segment which can be later specified in an approval matrix. The ID of the segment is returned.
+      operationId: addApprovalSegment
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalSegmentJson'
+        description: json representing the segment
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+  /approvalSegments/{approvalSegmentId}:
+    get:
+      tags:
+      - Approvals
+      summary: Get approval segment details
+      description: Gets the details of the specified approval segment
+      operationId: getApprovalSegmentById
+      parameters:
+      - name: approvalSegmentId
+        in: path
+        description: id of the segment
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalSegmentJson'
+    put:
+      tags:
+      - Approvals
+      summary: Update an approval segment
+      description: Update the details of the specified approval segment
+      operationId: updateApprovalSegment
+      parameters:
+      - name: approvalSegmentId
+        in: path
+        description: id of the segment
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApprovalSegmentJson'
+        description: json representing the segment details
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+      - Approvals
+      summary: Delete a segment
+      description: Deletes the segment specified by the id
+      operationId: deleteApprovalSegment
+      parameters:
+      - name: approvalSegmentId
+        in: path
+        description: id of the segment
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApprovalSegmentJson'
+  /orders/{orderId}/approvalHistory:
+    get:
+      tags:
+      - Approvals
+      summary: Get complete approval history for an order
+      description: "Returns comprehensive approval workflow history including all submission attempts and approver activity. \n\n**Important:** This endpoint returns ONLY approval domain data with user IDs and comment IDs as references. To get full details:\n- User details: Call GET /users with user IDs from this response\n- Order details: Call GET /orders/{orderId}\n- Comment messages: Call GET /orders/{orderId}/comments\n\nThe response includes:\n- All submission attempts (if order was rejected and resubmitted)\n- All workflows triggered for each submission\n- Detailed approval states with approver user IDs (not names)\n- Summary statistics across all attempts"
+      operationId: getOrderApprovalHistory
+      parameters:
+      - name: orderId
+        in: path
+        description: ID of the order to retrieve approval history for
+        required: true
+        example: ORD-9FB8TW8
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successfully retrieved approval history
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderApprovalHistoryResponse'
+        '404':
+          description: Order not found
+        '500':
+          description: Internal server error
+components:
+  requestBodies:
+    uploadApprovalMatrixCSV:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+  schemas:
+    ApproverJson:
+      type: object
+      required:
+      - level
+      - status
+      properties:
+        level:
+          type: integer
+          format: int32
+          example: 1
+          description: Approval level/sequence
+          readOnly: true
+        approver:
+          type: string
+          example: sumit.subskribe@company.com
+          description: Approver user ID or email
+          readOnly: true
+        status:
+          type: string
+          example: APPROVED
+          description: Approval status
+          readOnly: true
+          enum:
+          - INACTIVE
+          - AWAITING_APPROVAL
+          - ADMIN_BYPASS
+          - NOT_APPLICABLE
+          - REJECTED
+          - APPROVED
+          - CANCELLED
+          - NEEDS_APPROVAL
+          - FULLY_APPROVED
+          - PENDING
+          - AUTO_APPROVED
+          - ERROR_ORDER_OWNER_IS_MISSING_TO_FIND_APPROVAL_SEGMENT
+          - ERROR_ORDER_OWNER_NOT_PART_OF_ANY_APPROVAL_SEGMENT
+          - ERROR_ORDER_OWNER_PART_OF_MULTIPLE_APPROVAL_SEGMENTS
+          - ERROR_ORDER_OWNER_NOT_PART_OF_APPROVAL_SEGMENT_SELECTED_ON_ORDER
+        assignedAt:
+          type: integer
+          format: int64
+          example: 1762509000
+          description: Timestamp (in epoch seconds) when task was assigned
+          readOnly: true
+        respondedAt:
+          type: integer
+          format: int64
+          example: 1762509000
+          description: Timestamp (in epoch seconds) when approver responded, null if pending
+          readOnly: true
+        duration:
+          type: integer
+          format: int64
+          example: 2700
+          description: Duration from assignment to response in seconds, null if not responded
+          readOnly: true
+        originalApprovalAt:
+          type: integer
+          format: int64
+          example: 1762509000
+          description: Original approval timestamp (in epoch seconds) for smart approvals
+          readOnly: true
+        approverNote:
+          type: string
+          description: Comment/note from approver
+          readOnly: true
+      description: Individual approver with timeline data (approval domain only)
+    WorkflowJson:
+      type: object
+      required:
+      - status
+      - triggeredAt
+      - workflowId
+      - workflowName
+      properties:
+        workflowId:
+          type: string
+          example: APRV-D4P10
+          description: Approval flow ID
+          readOnly: true
+        workflowName:
+          type: string
+          example: Discount > 10% and <= 25%
+          description: Human-readable workflow name
+          readOnly: true
+        smartApprovalEnabled:
+          type: boolean
+          example: true
+          description: Whether smart approval is enabled
+          readOnly: true
+        status:
+          type: string
+          example: APPROVED
+          description: Current workflow status
+          readOnly: true
+        triggeredAt:
+          type: integer
+          format: int64
+          example: 1762509000
+          description: Timestamp (in epoch seconds)  when workflow was triggered
+          readOnly: true
+        completedAt:
+          type: integer
+          format: int64
+          example: 1762509000
+          description: Timestamp (in epoch seconds)  when workflow completed, null if in progress
+          readOnly: true
+        totalDuration:
+          type: integer
+          format: int64
+          example: 5400
+          description: Total workflow duration in seconds, null if not completed
+          readOnly: true
+        approvers:
+          type: array
+          description: List of approvers for this workflow
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/ApproverJson'
+      description: Approval workflow with approver details (approval domain only)
+    ApprovalMatrixImportDataJson:
+      type: object
+      properties:
+        id:
+          type: string
+        fileName:
+          type: string
+        uploadedBy:
+          type: string
+        status:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    ApprovalRoleSegmentChange:
+      type: object
+      properties:
+        roleName:
+          type: string
+        segmentName:
+          type: string
+        previousUserOrGroupName:
+          type: string
+        newUserOrGroupName:
+          type: string
+    ApprovalFlowJson:
+      type: object
+      properties:
+        id:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        isSmartApproval:
+          type: boolean
+        states:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalStateJson'
+        transitionRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalTransitionRuleJson'
+    ApprovalMatrixImportPreview:
+      type: object
+      properties:
+        id:
+          type: string
+        uploadedBy:
+          type: string
+        segmentsToAdd:
+          type: array
+          items:
+            type: string
+        segmentsToDelete:
+          type: array
+          items:
+            type: string
+        approvalRoleSegmentChanges:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalRoleSegmentChange'
+    ApprovalSummaryJson:
+      type: object
+      required:
+      - totalAttempts
+      properties:
+        totalAttempts:
+          type: integer
+          format: int32
+          example: 2
+          description: Total number of submission attempts
+          readOnly: true
+        firstSubmittedAt:
+          type: integer
+          format: int64
+          example: 1762509000
+          description: Timestamp (in epoch seconds) of first submission
+          readOnly: true
+        lastUpdatedAt:
+          type: integer
+          format: int64
+          example: 1762514400
+          description: Timestamp (in epoch seconds) of final update
+          readOnly: true
+        totalTimeSeconds:
+          type: integer
+          format: int64
+          example: 23400
+          description: Total time from first submission to last update in seconds
+          readOnly: true
+        totalWorkflows:
+          type: integer
+          format: int32
+          example: 2
+          description: Total number of unique workflows triggered across all attempts
+          readOnly: true
+      description: Summary statistics across all approval attempts
+    OrderApprovalHistoryResponse:
+      type: object
+      required:
+      - currentAttempt
+      - orderId
+      - orderStatus
+      properties:
+        orderId:
+          type: string
+          example: ORD-9FB8TW8
+          description: Order ID reference
+          readOnly: true
+        orderStatus:
+          type: string
+          example: APPROVED
+          description: Status of the order
+          readOnly: true
+          enum:
+          - DRAFT
+          - SUBMITTED
+          - APPROVED
+          - EXECUTED
+          - EXPIRED
+        currentAttempt:
+          type: integer
+          format: int32
+          example: 2
+          description: Current approval attempt number
+          readOnly: true
+        currentSubmission:
+          $ref: '#/components/schemas/ApprovalSubmissionJson'
+        approvalHistory:
+          type: array
+          description: Historical approval submissions (previous attempts, if any)
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/ApprovalSubmissionJson'
+        summary:
+          $ref: '#/components/schemas/ApprovalSummaryJson'
+      description: Complete approval history for an order (approval domain only)
+    ApprovalSegmentJson:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    ApprovalStateActionJson:
+      type: object
+      properties:
+        emailGroupId:
+          type: string
+    ApprovalRoleJson:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    ApprovalStateJson:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        approvalGroupId:
+          type: string
+        approverId:
+          type: string
+        approverType:
+          type: string
+          enum:
+          - USER
+          - USER_GROUP
+          - ROLE
+        action:
+          $ref: '#/components/schemas/ApprovalStateActionJson'
+        escalationPolicyId:
+          type: string
+    ApprovalSubmissionJson:
+      type: object
+      required:
+      - attemptNumber
+      - status
+      - submittedAt
+      properties:
+        attemptNumber:
+          type: integer
+          format: int32
+          example: 1
+          description: Submission attempt number/version
+          readOnly: true
+        submittedAt:
+          type: integer
+          format: int64
+          example: 1762509000
+          description: Timestamp (in epoch seconds) when submitted
+          readOnly: true
+        submittedBy:
+          type: string
+          example: kaitlyn.underwood@company.com
+          description: Email of user who submitted
+          readOnly: true
+        submitterNote:
+          type: string
+          example: End of quarter deal
+          description: Submission note text
+          readOnly: true
+        status:
+          type: string
+          example: FULLY_APPROVED
+          description: Status of this submission
+          readOnly: true
+          enum:
+          - INACTIVE
+          - AWAITING_APPROVAL
+          - ADMIN_BYPASS
+          - NOT_APPLICABLE
+          - REJECTED
+          - APPROVED
+          - CANCELLED
+          - NEEDS_APPROVAL
+          - FULLY_APPROVED
+          - PENDING
+          - AUTO_APPROVED
+          - ERROR_ORDER_OWNER_IS_MISSING_TO_FIND_APPROVAL_SEGMENT
+          - ERROR_ORDER_OWNER_NOT_PART_OF_ANY_APPROVAL_SEGMENT
+          - ERROR_ORDER_OWNER_PART_OF_MULTIPLE_APPROVAL_SEGMENTS
+          - ERROR_ORDER_OWNER_NOT_PART_OF_APPROVAL_SEGMENT_SELECTED_ON_ORDER
+        fullyApprovedAt:
+          type: integer
+          format: int64
+          example: 1762509000
+          description: Timestamp (in epoch seconds) when fully approved, null if not approved
+          readOnly: true
+        rejectedAt:
+          type: integer
+          format: int64
+          example: 1762509000
+          description: Timestamp (in epoch seconds) when rejected, null if not rejected
+          readOnly: true
+        totalApprovalTime:
+          type: integer
+          format: int64
+          example: 5400
+          description: Total approval time in seconds (null if not completed)
+          readOnly: true
+        workflows:
+          type: array
+          description: List of workflows triggered for this submission
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/WorkflowJson'
+      description: Single approval submission attempt (approval domain only)
+    ApprovalRuleConditions:
+      type: object
+      properties:
+        orderCondition:
+          type: string
+        orderLineCondition:
+          type: string
+    ApprovalTransitionRuleJson:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        fromState:
+          type: string
+        toState:
+          type: string
+        condition:
+          type: string
+        ruleConditions:
+          $ref: '#/components/schemas/ApprovalRuleConditions'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

@@ -1,0 +1,181 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Deal Pulse API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Deal Pulse
+paths:
+  /deal-pulse:
+    get:
+      tags:
+      - Deal Pulse
+      summary: Get all deal pulses for tenant
+      description: Returns all deal pulses for the current tenant, sorted by pulse score (highest first) and last updated
+      operationId: getAllDealPulses
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DealPulseListResponse'
+  /deal-pulse/sales-rooms/{salesRoomId}:
+    get:
+      tags:
+      - Deal Pulse
+      summary: Get deal pulse for a specific sales room
+      description: Returns the calculated deal pulse score, category, AI recommendations, and engagement details for a sales room
+      operationId: getDealPulse
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DealPulseOverview'
+  /deal-pulse/sales-rooms/{salesRoomId}/events:
+    post:
+      tags:
+      - Deal Pulse
+      summary: Track deal pulse event
+      description: Records a deal pulse event and triggers pulse score recalculation
+      operationId: trackDealPulseEvent
+      parameters:
+      - name: salesRoomId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackDealPulseEventRequest'
+        description: Deal pulse event tracking request
+        required: true
+        x-examples:
+          application/json: "{\n  \"userEmail\": \"mike.jones@company.com\",\n  \"eventType\": \"YOUTUBE_COMPLETE\",\n  \"metadata\": {\"videoTitle\": \"Product Demo\", \"duration\": 180}\n}"
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    TrackDealPulseEventRequest:
+      type: object
+      required:
+      - eventType
+      properties:
+        eventType:
+          type: string
+          enum:
+          - CONTACT_ADD
+          - CONTACT_EDIT
+          - FILE_DOWNLOAD
+          - LOAD
+          - PAGE_FOCUS
+          - YOUTUBE_COMPLETE
+          - ORDER_PDF_DOWNLOAD
+          - YOUTUBE_PLAY
+          - LINK_CLICK
+          - SCROLL
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+        userEmail:
+          type: string
+    DealPulseOverview:
+      type: object
+      required:
+      - accountName
+      - arr
+      - orderCreationDate
+      - orderId
+      - pulseCategory
+      - pulseScore
+      - salesRoomId
+      - uniqueVisitors
+      properties:
+        salesRoomId:
+          type: string
+          format: uuid
+          readOnly: true
+        orderId:
+          type: string
+          readOnly: true
+        accountName:
+          type: string
+          readOnly: true
+        arr:
+          type: number
+          readOnly: true
+        orderCreationDate:
+          type: string
+          format: date
+          readOnly: true
+        pulseScore:
+          type: integer
+          format: int32
+          readOnly: true
+        pulseCategory:
+          type: string
+          readOnly: true
+          enum:
+          - HOT
+          - WARM
+          - MODERATE
+          - COOL
+          - COLD
+        uniqueVisitors:
+          type: integer
+          format: int32
+          readOnly: true
+        aiRecommendation:
+          type: string
+          readOnly: true
+        aiAnalysis:
+          type: string
+          readOnly: true
+        recentActivities:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        pulseActivities:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        lastActivity:
+          type: integer
+          format: int64
+          readOnly: true
+    DealPulseListResponse:
+      type: object
+      required:
+      - totalCount
+      properties:
+        dealPulses:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/DealPulseOverview'
+        totalCount:
+          type: integer
+          format: int32
+          readOnly: true
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

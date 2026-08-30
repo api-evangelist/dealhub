@@ -1,0 +1,412 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Revenue Recognition API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Revenue Recognition
+paths:
+  /revrec/events:
+    get:
+      tags:
+      - Revenue Recognition
+      summary: Get revenue recognition events
+      description: Gets revenue recognition events for the specified subscription and charge.
+      operationId: getRecognitionEventsBySubscriptionIdChargeId
+      parameters:
+      - name: accountingPeriodId
+        in: query
+        description: id of the accounting period to limit events to
+        required: false
+        schema:
+          type: string
+      - name: subscriptionId
+        in: query
+        description: id of the subscription
+        required: true
+        schema:
+          type: string
+      - name: chargeId
+        in: query
+        description: id of the charge
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecognitionEventCompletion'
+    post:
+      tags:
+      - Revenue Recognition
+      summary: Create a revenue recognition event
+      description: Creates a revenue recognition event, only if it is different from the previous event for same subscription and charge.
+      operationId: createRecognitionEvent
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecognitionEventCompletion'
+        description: recognition event details
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /revrec/rules:
+    get:
+      tags:
+      - Revenue Recognition
+      summary: Get revenue recognition rules
+      description: Get revenue recognition rules.
+      operationId: getRecognitionRuleById
+      responses:
+        default:
+          description: successful operation
+    post:
+      tags:
+      - Revenue Recognition
+      summary: Create a revenue recognition rule
+      description: Creates a revenue recognition rule.
+      operationId: addRecognitionRule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecognitionRule'
+        description: recognition rule details
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /revrec/rules/{id}:
+    get:
+      tags:
+      - Revenue Recognition
+      summary: Get revenue recognition rule
+      description: Get a revenue recognition rule using id.
+      operationId: getRecognitionRuleById_1
+      parameters:
+      - name: id
+        in: path
+        description: id of the recognition rule
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /revrec/rules/{ruleId}:
+    delete:
+      tags:
+      - Revenue Recognition
+      summary: Delete a recognition rule
+      description: Deletes a recognition rule. Note you can't delete a recognition rule that's in use.
+      operationId: deleteRule
+      parameters:
+      - name: ruleId
+        in: path
+        description: id of the recognition rule
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecognitionRule'
+  /revrec/bulk:
+    post:
+      tags:
+      - Revenue Recognition
+      summary: Create a bulk revenue recognition
+      description: Creates a bulk revenue recognition as specified by the input parameters. On success the id of the bulk revenue recognition is returned.
+      operationId: createBulkRevenueRecognition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkRevenueRecognitionInput'
+        description: json representing the bulk revenue recognition parameters
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+  /revrec/bulk/{bulkRevenueRecognitionId}:
+    get:
+      tags:
+      - Revenue Recognition
+      summary: Get bulk revenue recognition details
+      description: Returns the details of the specified bulk revenue recognition
+      operationId: getBulkRevenueRecognition
+      parameters:
+      - name: bulkRevenueRecognitionId
+        in: path
+        description: id of the bulk revenue recognition
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BulkRevenueRecognition'
+  /revrec/bulk/{bulkRevenueRecognitionId}/revrecItems:
+    get:
+      tags:
+      - Revenue Recognition
+      summary: Get items for bulk revenue recognition
+      description: Returns the items associated with the specified bulk revenue recognition
+      operationId: getBulkRevenueRecognitionItems
+      parameters:
+      - name: bulkRevenueRecognitionId
+        in: path
+        description: id of the bulk revenue recognition
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BulkRevenueRecognitionItem'
+  /revrec/waterfall:
+    get:
+      tags:
+      - Revenue Recognition
+      summary: Download waterfall report
+      description: Downloads a revenue waterfall report in csv format.
+      operationId: getRevenueWaterfall
+      parameters:
+      - name: startDate
+        in: query
+        description: report start date as unix timestamp
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: endDate
+        in: query
+        description: report end date as unix timestamp
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: successful operation
+  /revrec/events/upload:
+    post:
+      tags:
+      - Revenue Recognition
+      summary: Upload revenue events
+      description: 'Uploads revenue events from a csv file. The format of the file is
+
+        Subscription.Id,Charge.Id,Alias.Id,RevrecEvent.PercentComplete
+
+        Percent complete should be a decimal.'
+      operationId: uploadCompletionEvents
+      requestBody:
+        $ref: '#/components/requestBodies/uploadApprovalMatrixCSV'
+      responses:
+        default:
+          description: successful operation
+components:
+  requestBodies:
+    uploadApprovalMatrixCSV:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+  schemas:
+    BulkRevenueRecognitionItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        bulkRevenueRecognitionId:
+          type: string
+        accountingPeriodId:
+          type: string
+        isRecognized:
+          type: boolean
+        journalEntriesGenerated:
+          type: boolean
+        isClosed:
+          type: boolean
+        failureReason:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    BulkRevenueRecognitionInput:
+      type: object
+      properties:
+        entityId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        targetDate:
+          type: integer
+          format: int64
+    RecognitionEventCompletion:
+      type: object
+      required:
+      - unitOfCompletion
+      properties:
+        tenantId:
+          type: string
+        entityId:
+          type: string
+        subscriptionId:
+          type: string
+        chargeId:
+          type: string
+        aliasId:
+          type: string
+        accountingPeriodId:
+          type: string
+        unitOfCompletion:
+          type: number
+        status:
+          type: string
+          enum:
+          - ACCEPTED
+          - PROCESSED
+        arrivedOn:
+          type: integer
+          format: int64
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        deleted:
+          type: boolean
+    RecognitionRule:
+      type: object
+      properties:
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        source:
+          type: string
+          enum:
+          - ORDER
+          - INVOICE
+        recognitionType:
+          type: string
+          enum:
+          - OVER_TIME
+          - POINT_IN_TIME
+          - EVENT
+        distributionMethod:
+          type: string
+          enum:
+          - DAYS
+          - MONTHS_EVEN
+          - MONTHS_PARTIAL_PRORATED
+        recognitionDateAlignment:
+          type: string
+          enum:
+          - INVOICE_START_DATE
+          - INVOICE_END_DATE
+        isCatchupRequired:
+          type: boolean
+        recognitionEventType:
+          type: string
+          enum:
+          - PERCENTAGE_OF_COMPLETION
+          - AMOUNT
+        deferredRevenueAccountId:
+          type: string
+        recognizedRevenueAccountId:
+          type: string
+        inUse:
+          type: boolean
+        catchupRequired:
+          type: boolean
+        id:
+          type: string
+    BulkRevenueRecognition:
+      type: object
+      properties:
+        entityId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        targetDate:
+          type: integer
+          format: int64
+        id:
+          type: string
+        bulkRevenueRecognitionId:
+          type: string
+        status:
+          type: string
+          enum:
+          - QUEUED
+          - CREATED
+          - PROCESSING
+          - FAILED
+          - COMPLETED
+        phase:
+          type: string
+          enum:
+          - REVENUE_RECOGNITION_NOT_STARTED
+          - NO_ACCOUNTING_PERIODS_FOUND
+          - REVENUE_RECOGNIZING
+          - REVENUE_RECOGNIZED
+          - ACCOUNTING_PERIOD_CLOSING
+          - JOURNAL_ENTRIES_CREATING
+          - JOURNAL_ENTRIES_CREATED
+          - ACCOUNTING_PERIOD_CLOSED
+        failureReason:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

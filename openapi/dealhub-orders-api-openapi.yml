@@ -1,0 +1,2166 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Orders API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Orders
+paths:
+  /compositeOrders/{id}/status/{status}:
+    put:
+      tags:
+      - Orders
+      summary: Update composite order status
+      description: Update the status of a specific composite order by its ID.
+      operationId: updateCompositeOrderStatus
+      parameters:
+      - name: id
+        in: path
+        description: Uniquely identifies the composite order.
+        required: true
+        schema:
+          type: string
+      - name: status
+        in: path
+        description: 'New status to be set for the composite order: Draft, Submitted or Executed'
+        required: true
+        schema:
+          type: string
+          enum:
+          - DRAFT
+          - SUBMITTED
+          - EXECUTED
+      - name: statusUpdatedOn
+        in: query
+        description: The timestamp when composite order status was updated.
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: adminApprovalFlowByPass
+        in: query
+        description: Admin approval to bypass the approval flow
+        required: false
+        schema:
+          type: boolean
+      responses:
+        default:
+          description: successful operation
+  /compositeOrders/{id}:
+    get:
+      tags:
+      - Orders
+      summary: Fetch composite order
+      description: Fetches the composite order with the specified id.
+      operationId: getCompositeOrder
+      parameters:
+      - name: id
+        in: path
+        description: id of the composite order
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompositeOrderJson'
+    delete:
+      tags:
+      - Orders
+      summary: Delete composite order
+      description: Deletes the composite order with the specified id.
+      operationId: deleteCompositeOrder
+      parameters:
+      - name: id
+        in: path
+        description: id of the composite order
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /compositeOrders/{id}/execute:
+    put:
+      tags:
+      - Orders
+      summary: Mark composite order as executed.
+      description: Marks the composite order as executed. This also executes the individual orders contained. Optionally, the execution time can be specified using the executedOn query parameter.
+      operationId: executeOrder
+      parameters:
+      - name: id
+        in: path
+        description: Uniquely identifies the composite order.
+        required: true
+        schema:
+          type: string
+      - name: executedOn
+        in: query
+        description: The date and time when the composite order was executed.
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: adminApprovalFlowBypass
+        in: query
+        description: Bypass approval checks by admin
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompositeOrderJson'
+  /compositeOrders/{id}/pdf:
+    get:
+      tags:
+      - Orders
+      summary: Fetch composite order form PDF
+      description: Downloads the order form PDF for the specified order. This PDF must have been generated via a POST to /{id}/pdf. The response is the PDF document.
+      operationId: getCompositeOrderDocument
+      parameters:
+      - name: id
+        in: path
+        description: id of the order
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+    post:
+      tags:
+      - Orders
+      summary: Generate a composite order PDF
+      description: Generates a composite order form PDF. When completed this document can be downloaded via a get to /{id}/pdf.
+      operationId: createCompositeOrderDocument
+      parameters:
+      - name: id
+        in: path
+        description: id of the composite order
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /opportunity:
+    get:
+      tags:
+      - Orders
+      summary: Return all opportunities
+      description: Returns all opportunities associated with the specified account. The results are paginated. To fetch all results, pass the cursor returned from a call to subsequent calls.
+      operationId: getOpportunities
+      parameters:
+      - name: cursor
+        in: query
+        description: pass the cursor returned from a call to to subsequent calls until all values are fetched
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        description: number of results per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: accountId
+        in: query
+        description: id of account
+        required: true
+        schema:
+          type: string
+      - name: crmId
+        in: query
+        description: CRM ID of the opportunity
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpportunityPaginationResponse'
+  /opportunity/crm/{id}:
+    get:
+      tags:
+      - Orders
+      summary: Return details of an opportunity
+      description: Returns the details of a specified opportunity
+      operationId: getOpportunityByCrmOpportunityId
+      parameters:
+      - name: id
+        in: path
+        description: crm id of the opportunity
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpportunityJson'
+    delete:
+      tags:
+      - Orders
+      summary: Delete an opportunity with given CRM ID
+      description: Delete an opportunity with given CRM ID if there are no associated orders
+      operationId: deleteOpportunityByCrmId
+      parameters:
+      - name: id
+        in: path
+        description: crm id of the opportunity
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /opportunity/{id}:
+    get:
+      tags:
+      - Orders
+      summary: Return details of an opportunity
+      description: Returns the details of a specified opportunity
+      operationId: getOpportunityByOpportunityId
+      parameters:
+      - name: id
+        in: path
+        description: id of the opportunity
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OpportunityJson'
+  /opportunity/crm/{id}/orders:
+    get:
+      tags:
+      - Orders
+      summary: Return a list of orders associated with a CRM opportunity id
+      description: Returns the details of orders
+      operationId: getOrdersByCrmOpportunityId
+      parameters:
+      - name: id
+        in: path
+        description: crm id of the opportunity
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+  /orders/{id}:
+    get:
+      tags:
+      - Orders
+      summary: Get order details
+      description: Retrieve details of a specific order by its ID.
+      operationId: getOrder
+      parameters:
+      - name: id
+        in: path
+        description: Uniquely identifies the Order.
+        required: true
+        schema:
+          type: string
+      - name: suppressIdFormValidation
+        in: query
+        description: if set to true then the if form will not be validated
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderJson'
+    delete:
+      tags:
+      - Orders
+      summary: Delete an order
+      description: Delete a specific order by its ID.
+      operationId: deleteOrder
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of the order to be deleted.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderJson'
+  /orders:
+    get:
+      tags:
+      - Orders
+      summary: Get all Orders
+      description: Gets all orders for your tenant. The results are paginated. To fetch all results, take the cursor returned from a call and pass it to subsequent calls.
+      operationId: getOrders
+      parameters:
+      - name: cursor
+        in: query
+        description: A string token is used to fetch next set of results. If not provided, the first page of results will be returned. Use the 'next_cursor' value from the previous response to fetch the next page.
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        description: An integer specifying the maximum number of results to return per page. Defaults to 10 if not provided. Limit is capped to 50 orders
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderJsonPaginationResponse'
+    post:
+      tags:
+      - Orders
+      summary: Create an order
+      description: creates an order with the specified parameters. On success the order id is returned.
+      operationId: addOrder
+      parameters:
+      - name: isDryRun
+        in: query
+        description: indicates whether this order should be persisted.
+        required: false
+        schema:
+          type: boolean
+      - name: populateMissingLines
+        in: query
+        description: indicates whether an amendment should populate missing lines not provided here.
+        required: false
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequestJson'
+        description: JSON object containing information required to create an order.
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderJson'
+    put:
+      tags:
+      - Orders
+      summary: Update order details
+      description: Updates the details of the specified order.
+      operationId: updateOrder
+      parameters:
+      - name: isDryRun
+        in: query
+        description: true if the order should not be persisted.
+        required: false
+        schema:
+          type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderRequestJson'
+        description: json representing the order details.
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /orders/{id}/status/{status}:
+    put:
+      tags:
+      - Orders
+      summary: Update order status
+      description: Update the status of a specific order by its ID.
+      operationId: updateOrderStatus
+      parameters:
+      - name: id
+        in: path
+        description: Uniquely identifies the Order.
+        required: true
+        schema:
+          type: string
+      - name: status
+        in: path
+        description: 'New status to be set for the order (e.g: Draft, Submitted, Executed, Cancelled)'
+        required: true
+        schema:
+          type: string
+          enum:
+          - DRAFT
+          - SUBMITTED
+          - EXECUTED
+          - CANCELLED
+      - name: statusUpdatedOn
+        in: query
+        description: The timestamp when order status was updated.
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: adminApprovalFlowByPass
+        in: query
+        description: Admin approval to bypass the approval flow
+        required: false
+        schema:
+          type: boolean
+      responses:
+        default:
+          description: successful operation
+  /orders/{id}/metrics:
+    get:
+      tags:
+      - Orders
+      summary: Get order metrics
+      description: Retrieve the metrics for a specific order by its ID. Metrics can be filtered by a target date.
+      operationId: getOrderMetrics
+      parameters:
+      - name: id
+        in: path
+        description: Uniquely identifies the Order.
+        required: true
+        schema:
+          type: string
+      - name: targetDate
+        in: query
+        description: The target date for filtering metrics.
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsJson'
+  /orders/{orderId}/rebase:
+    put:
+      tags:
+      - Orders
+      summary: Rebase amendment against latest subscription version
+      description: Rebase a specific order by its ID. Rebasing an order involves recalculating its metrics or values based on updated data or criteria.
+      operationId: rebaseAmendment
+      parameters:
+      - name: orderId
+        in: path
+        description: Uniquely identifies the Order.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderJson'
+  /orders/{orderId}/attributes:
+    put:
+      tags:
+      - Orders
+      summary: Update order attributes for non-draft orders
+      description: Update order attributes for non-draft orders
+      operationId: updateOrderAttributes
+      parameters:
+      - name: orderId
+        in: path
+        description: Uniquely identifies the Order.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderAttributesUpdateRequest'
+        description: Order Attributes
+      responses:
+        default:
+          description: successful operation
+  /orders/{id}/pdf:
+    get:
+      tags:
+      - Orders
+      summary: Fetch order form PDF
+      description: Retrieves the PDF version of the order form for a specific order identified by its ID.
+      operationId: getOrderDocument_1
+      parameters:
+      - name: id
+        in: path
+        description: Uniquely identifies the Order.
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+    post:
+      tags:
+      - Orders
+      summary: Generate an order PDF
+      description: Generate and retrieve a PDF representation of the order details for a specific order by its ID.
+      operationId: createOrderDocument
+      parameters:
+      - name: id
+        in: path
+        description: Uniquely identifies the Order.
+        required: true
+        schema:
+          type: string
+      - name: force
+        in: query
+        description: Force regeneration of the PDF document even if there has been no changes. Defaults to false.
+        required: false
+        schema:
+          type: boolean
+      responses:
+        default:
+          description: successful operation
+  /orders/{orderId}/pdf/{id}:
+    get:
+      tags:
+      - Orders
+      summary: Fetch specific order form PDF on order
+      description: Retrieves specific PDF of the order form for a specific order identified by its orderId.
+      operationId: getSpecificOrderDocument
+      parameters:
+      - name: orderId
+        in: path
+        description: Uniquely identifies the orderId
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: Uniquely identifies the pdf id.
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /orders/{id}/doc:
+    get:
+      tags:
+      - Orders
+      summary: Download word doc version of order form
+      description: Download a Microsoft Word document of the order form for a specific order by its ID.
+      operationId: getOrderDocumentDoc
+      parameters:
+      - name: id
+        in: path
+        description: Uniquely identifies the Order.
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /orders/{id}/docx:
+    get:
+      tags:
+      - Orders
+      summary: Download word docx version of order form
+      description: Download a Microsoft Word document of the order form for a specific order by its ID.
+      operationId: getOrderDocumentDocx
+      parameters:
+      - name: id
+        in: path
+        description: Uniquely identifies the Order.
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /orders/{id}/execute:
+    put:
+      tags:
+      - Orders
+      summary: Mark order as executed.
+      description: Marks the order as executed. Optionally, the execution time can be specified using the executedOn query parameter.
+      operationId: executeOrder_1
+      parameters:
+      - name: id
+        in: path
+        description: Uniquely identifies the Order.
+        required: true
+        schema:
+          type: string
+      - name: executedOn
+        in: query
+        description: The date and time when the order was executed.
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: adminApprovalFlowBypass
+        in: query
+        description: Bypass approval flows by admin
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderJson'
+  /orders/{id}/execute/force:
+    put:
+      tags:
+      - Orders
+      summary: Mark order as executed
+      description: Forcefully executes an order. This endpoint bypasses approval checks and immediately executes the order.
+      operationId: forceExecuteOrder
+      parameters:
+      - name: id
+        in: path
+        description: Uniquely identifies the Order.
+        required: true
+        schema:
+          type: string
+      - name: executedOn
+        in: query
+        description: The date and time when the order was executed.
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: skipApprovalCheck
+        in: query
+        description: Indicates whether to skip the approval check. Default is false.
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderJson'
+  /orders/{id}/lineItems/metrics:
+    get:
+      tags:
+      - Orders
+      summary: Get order line metrics
+      description: Retrieves metrics for all line items associated with the specified order.
+      operationId: getOrderLineMetrics
+      parameters:
+      - name: id
+        in: path
+        description: Uniquely identifies the Order.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  $ref: '#/components/schemas/MetricsJson'
+  /orders/{orderId}/billing/custom:
+    get:
+      tags:
+      - Orders
+      summary: Get custom billing schedule for the order
+      description: Get the custom billing schedule for the order
+      operationId: getCustomBillingSchedule
+      parameters:
+      - name: orderId
+        in: path
+        description: Uniquely identifies the Order.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomBillingScheduleOutput'
+components:
+  schemas:
+    TenantDiscountLineItemJson:
+      type: object
+      properties:
+        id:
+          type: string
+        percent:
+          type: number
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DEPRECATED
+        amount:
+          type: number
+    OrderJson:
+      type: object
+      required:
+      - orderType
+      - startDate
+      - status
+      properties:
+        id:
+          type: string
+          example: ORD-AXBY123
+          description: System-generated unique identifier for the order.
+        entityId:
+          type: string
+          example: ENT-98765AB
+          description: ID of the entity (e.g., business or subsidiary) associated with this order.
+        externalId:
+          type: string
+          example: EXT-456789
+          description: Unique external reference ID for the order that can be used for integration with other systems. This ID can't be reused on multiple orders.
+          minLength: 0
+          maxLength: 36
+        name:
+          type: string
+          example: CreativePro Monthly Subscription Order
+          description: Name or title of the order for easy identification.
+        accountId:
+          type: string
+          example: ACCT-ADE4567
+          description: Unique identifier of the account associated with this order.
+        orderType:
+          type: string
+          example: NEW
+          description: 'Type of order being placed. This value determines how the order will impact a subscription when it is executed.
+
+
+            Supported values:
+
+            * `NEW`: Create a new subscription.
+
+            * `CANCEL`: Cancel an existing subscription.
+
+            * `AMENDMENT`: Amend an existing subscription.
+
+            * `RENEWAL`: Renew an existing subscription.
+
+            * `RESTRUCTURE`: Restructure an existing subscription.'
+          enum:
+          - NEW
+          - AMENDMENT
+          - CANCEL
+          - RENEWAL
+          - RESTRUCTURE
+        currency:
+          type: string
+          example: USD
+          description: ISO 4217 currency code for the order. If you don't specify a value, the account's default currency is used.
+        paymentTerm:
+          type: string
+          example: NET30
+          description: Specifies when the payment for the invoice is due. Supported values are `NET0`, `NET30`, `NET45`, `NET60`, and `NET90`.
+          enum:
+          - NET0
+          - NET30
+          - NET45
+          - NET60
+          - NET90
+        subscriptionId:
+          type: string
+          example: SUB-BCDE123
+          description: The ID of the subscription that you want to amend, restructure, or cancel.
+        subscriptionTargetVersion:
+          type: integer
+          format: int32
+          example: 3
+          description: The subscription version targeted by this order. Each time a subscription is modified, the version is incremented. Orders target a specific version to maintain consistency. Orders may become outdated if the subscription is modified before the order is executed.
+          readOnly: true
+        shippingContactId:
+          type: string
+          example: CONT-XYZ7891
+          description: ID of the contact to use for shipping information.
+        billingContactId:
+          type: string
+          example: CONT-ABC1234
+          description: ID of the contact to use for billing information.
+        predefinedDiscounts:
+          type: array
+          description: Array of predefined discount objects to apply to the order.
+          items:
+            $ref: '#/components/schemas/TenantDiscountJson'
+        creditableAmounts:
+          type: array
+          description: Array of creditable amount which can be refunded when one time charges are cancelled/debooked during amendment or cancellation of a subscription
+          items:
+            $ref: '#/components/schemas/CreditableAmount'
+        lineItems:
+          type: array
+          description: Array of line item objects (i.e., charges) that you added order.
+          items:
+            $ref: '#/components/schemas/OrderLineItemJson'
+        lineItemsNetEffect:
+          type: array
+          description: 'Array of line item objects (i.e., charges) representing the changes that will be made to the subscription when the order is executed.
+
+
+            The number of objects in this array depends on the type of order being created:
+
+            * For `NEW` orders, this array includes all line items that will be added to the new subscription.
+
+            * For `CANCEL` orders, this array includes the line items that will be removed from the subscription on the cancellation date. Any line items that expire before the cancellation date are not included.
+
+            * For `AMENDMENT` orders, this array includes only those line items that contain the changes to make the requested amendments to the subscription.
+
+            * For `RENEWAL` orders, this array includes all line items from the subscription that is being renewed.
+
+            * For `RESTRUCTURE` orders, this array includes line items that will be added to the restructured subscription.'
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/OrderLineItemJson'
+        startDate:
+          type: integer
+          format: int64
+          example: 1672531200
+          description: Start date of the subscription in Unix timestamp format (seconds since epoch). This date is inclusive.
+        endDate:
+          type: integer
+          format: int64
+          example: 1704067200
+          description: "End date of the subscription in Unix timestamp format (seconds since epoch). If not provided for `TERMED` subscriptions, it will be calculated based on `termLength`. \n\n**NOTE:** This date is exclusive. For example, if the subscription's start date is 1735689600 (January 1, 2025 00:00:00) and the term length is 1 year, specify the end date as 1767225600 (January 1, 2026 00:00:00).\nSince the date is exclusive, the subscription is still active at December 31, 2025 23:59:59 but will have ended at January 1, 2026 00:00:00."
+        termLength:
+          $ref: '#/components/schemas/RecurrenceJson'
+        billingCycle:
+          $ref: '#/components/schemas/RecurrenceJson'
+        billingTerm:
+          type: string
+          example: UP_FRONT
+          description: 'Specifies when billing occurs relative to service delivery.
+
+
+            Supported values:
+
+            * `UP_FRONT`: Billing occurs before the product or service is delivered
+
+            * `IN_ARREARS`: The customer is billed after receiving the product or service.'
+          enum:
+          - UP_FRONT
+          - IN_ARREARS
+        billingAnchorDate:
+          type: integer
+          format: int64
+          example: 1672531200
+          description: Specific date to anchor billing cycles to, in Unix timestamp format (seconds since epoch). Useful for aligning billing with specific dates (e.g., first of the month).
+        totalAmount:
+          type: number
+          example: 1500
+          description: Total currency amount for the order, including all line items, taxes, and discounts.
+        totalListAmount:
+          type: number
+          example: 1800
+          description: Total list amount for the order before any discounts are applied.
+        totalListAmountBeforeOverride:
+          type: number
+          example: 2000
+          description: Total list amount for the order before any manual overrides are applied.
+        taxEstimate:
+          type: number
+          example: 120
+          description: Estimated tax amount for the order based on tax considerations.
+        status:
+          type: string
+          example: APPROVED
+          description: 'Current status of the order.
+
+            **NOTE:** Order details can be modified only when the status is `DRAFT`. When the order is in any other state, only a few attributes such as order name, shipping and billing contacts, PO number, and CRM opportunity details can be modified.
+
+
+            Supported values:
+
+            * `DRAFT`: Initial and default status of an order. An order in this status can be modified.
+
+            * `SUBMITTED`: Order has been submitted for review and approval. No further modifications are allowed without changing the order status back to `DRAFT`.
+
+            * `APPROVED`: Order has been approved and is ready for execution.
+
+            * `EXECUTED`: Order has been executed and the associated subscription has been created or modified.
+
+            * `EXPIRED`: Order has reached its expiration date without being executed. You can change an expired order''s status to `DRAFT` if the expiration date is removed or updated to a later date.'
+          enum:
+          - DRAFT
+          - SUBMITTED
+          - APPROVED
+          - EXECUTED
+          - EXPIRED
+        executedOn:
+          type: integer
+          format: int64
+          example: 1672617600
+          description: Date when the order was executed in Unix timestamp format. This field is populated only when the order status is `EXECUTED`.
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+          example: 1672704000
+          description: Date when the order was last updated in Unix timestamp format (seconds since epoch).
+        executedOnFormatted:
+          type: string
+          example: '2023-01-02T00:00:00Z'
+          description: Formatted date when the order was executed.
+        rampInterval:
+          type: array
+          example: '[1672531200, 1680307200, 1688083200]'
+          description: Array of timestamps (in Unix timestamp format) defining intervals for ramped pricing schedules. The timestamps must be in chronological order from earliest to latest, and there must be no duplicate entries. Used when implementing gradual quantity or price changes over time.
+          items:
+            type: integer
+            format: int64
+        orderFormTemplateIds:
+          type: array
+          example: '[a7b8c3d4-e5f6-4a1b-9c2d-3e4f5a6b7c8d5, f1e2d3c4-b5a6-4978-8364-1a2b3c4d5e6f]'
+          description: Array of IDs associated with predefined terms used to generate order forms. Specified as UUIDs.
+          items:
+            type: string
+        orderTerms:
+          type: array
+          description: Array of objects representing the terms associated with this order.
+          items:
+            $ref: '#/components/schemas/OrderTerms'
+        sfdcOpportunityId:
+          type: string
+          description: Salesforce opportunity ID associated with the order.
+        isPrimaryOrderForSfdcOpportunity:
+          type: boolean
+          description: Indicates if the order is the primary order for the Salesforce opportunity.
+        sfdcOpportunityName:
+          type: string
+          description: Salesforce opportunity name.
+        sfdcOpportunityType:
+          type: string
+          description: Type of Salesforce opportunity.
+        sfdcOpportunityStage:
+          type: string
+          description: Stage of the Salesforce opportunity.
+        sfdcOrderCanBeExecuted:
+          type: boolean
+          description: Indicates whether the order can be executed in Salesforce.
+        opportunityCrmType:
+          type: string
+          example: SALESFORCE
+          description: Type of CRM where the opportunity is managed.
+          enum:
+          - SALESFORCE
+          - HUBSPOT
+        renewalForSubscriptionId:
+          type: string
+          example: SUB-A1B3C4D
+          description: ID of the subscription being renewed. Returned only when `orderType` is `RENEWAL`.
+        renewalForSubscriptionVersion:
+          type: integer
+          format: int32
+          example: 2
+          description: Version number of the subscription being renewed. Returned only when `orderType` is `RENEWAL`.
+        ownerId:
+          type: string
+          example: USR-12345AB
+          description: ID of the user who owns this order.
+        documentMasterTemplateId:
+          type: string
+          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+          description: UUID of the document template to use to generate order documents.
+        purchaseOrderNumber:
+          type: string
+          example: '123456789'
+          description: The purchase order number associated with this order.
+        purchaseOrderRequiredForInvoicing:
+          type: boolean
+          example: true
+          description: Indicates whether a purchase order number is required to generate an invoice.
+        autoRenew:
+          type: boolean
+          example: false
+          description: Indicates whether the subscription should automatically renew at the end of its term.
+        approvalSegmentId:
+          type: string
+          example: APSG-ABC45
+          description: ID of the approval segment to use for routing this order through approval workflows.
+        attachmentId:
+          type: string
+          example: '12345678'
+          description: ID of an attachment associated with this order (e.g., signed contract).
+        compositeOrderId:
+          type: string
+          example: CORD-A0B0C1D
+          description: ID of the composite order. Returned only if this order is part of a composite order structure.
+        restructureForSubscriptionId:
+          type: string
+          example: SUB-Z98Y7X6
+          description: ID of the subscription being restructured. Returned only when `orderType` is `RESTRUCTURE`.
+        expiresOn:
+          type: integer
+          format: int64
+          example: 1675209600
+          description: Date when the order expires if the `status` is not `EXECUTED`. Specified in Unix timestamp format (seconds since epoch).
+        customFields:
+          type: array
+          description: Array of custom fields to include additional metadata with the order.
+          items:
+            $ref: '#/components/schemas/CustomFieldEntry'
+        startDateType:
+          type: string
+          example: EXECUTION_DATE
+          description: 'Determines how the start date is calculated.
+
+
+            Supported values:
+
+            * `FIXED`: Start date is the value of `startDate`, or the first `rampInterval` timestamp if specified.
+
+            * `EXECUTION_DATE`: Start date is the date when the order status changes to `EXECUTED`.'
+          enum:
+          - FIXED
+          - EXECUTION_DATE
+        customBillingEligibleOrderLineIds:
+          type: array
+          description: Array of line item IDs (i.e., charge IDs) in this order that are eligible for custom billing.
+          items:
+            type: string
+        customPredefinedTemplatesOnOrder:
+          type: array
+          description: List of predefined templates that are applied specifically to this order.
+          items:
+            $ref: '#/components/schemas/CustomPredefinedTemplateOnOrder'
+        subscriptionDurationModel:
+          type: string
+          description: 'Determines the subscription term.
+
+
+            Supported values:
+
+            * `TERMED`: Subscription has a fixed term length.
+
+            * `EVERGREEN`: Subscription continues indefinitely until cancelled.'
+          enum:
+          - TERMED
+          - EVERGREEN
+        opportunity:
+          $ref: '#/components/schemas/OpportunityJson'
+        zeppaOutput:
+          $ref: '#/components/schemas/OrderCreationCustomizationOutputJson'
+    MetricsJson:
+      type: object
+      properties:
+        tcv:
+          type: number
+        recurringTotal:
+          type: number
+        nonRecurringTotal:
+          type: number
+        arr:
+          type: number
+        entryArr:
+          type: number
+        exitArr:
+          type: number
+        averageArr:
+          type: number
+        arrTrend:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSeriesAmountJson'
+        deltaTcv:
+          type: number
+        deltaArr:
+          type: number
+    CreditableAmount:
+      type: object
+      properties:
+        subscriptionChargeId:
+          type: string
+        creditableAmount:
+          type: number
+        maxCreditableAmount:
+          type: number
+    OrderJsonPaginationResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/OrderJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
+    OrderLineRuleWarningsJson:
+      type: object
+      properties:
+        lineIdentifier:
+          type: string
+        warnings:
+          type: array
+          items:
+            type: string
+    OrderAttributesUpdateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        shippingContactId:
+          type: string
+        billingContactId:
+          type: string
+        purchaseOrderNumber:
+          type: string
+        crmOpportunityId:
+          type: string
+        crmOpportunityName:
+          type: string
+        crmOpportunityStage:
+          type: string
+        crmOpportunityType:
+          type: string
+    BillingPeriod:
+      type: object
+      properties:
+        period:
+          $ref: '#/components/schemas/Period'
+        fullPeriod:
+          $ref: '#/components/schemas/Period'
+        recurrence:
+          $ref: '#/components/schemas/Recurrence'
+        start:
+          type: integer
+          format: int64
+        end:
+          type: integer
+          format: int64
+        fullPeriodDuration:
+          $ref: '#/components/schemas/Duration'
+        fullPeriodStart:
+          type: integer
+          format: int64
+        fullPeriodEnd:
+          type: integer
+          format: int64
+    CustomBillingScheduleInput:
+      type: object
+      required:
+      - version
+      properties:
+        version:
+          type: string
+          readOnly: true
+          enum:
+          - V1
+        orderId:
+          type: string
+          readOnly: true
+        orderLines:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        schedules:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CustomBillingPeriodInput'
+    CustomFieldEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        name:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        value:
+          type: string
+          readOnly: true
+        selections:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        required:
+          type: boolean
+          readOnly: true
+        source:
+          type: string
+          readOnly: true
+          enum:
+          - USER
+          - SYSTEM
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+    CustomBillingPeriodOutput:
+      type: object
+      properties:
+        amount:
+          type: number
+        triggerInstant:
+          type: integer
+          format: int64
+        recurrenceWithCount:
+          $ref: '#/components/schemas/CustomBillingRecurrence'
+        periods:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillingPeriod'
+    CustomBillingScheduleOutput:
+      type: object
+      properties:
+        id:
+          type: string
+        version:
+          type: string
+          enum:
+          - V1
+        orderId:
+          type: string
+        orderLines:
+          type: array
+          items:
+            type: string
+        schedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomBillingPeriodOutput'
+        isAdhocBilling:
+          type: boolean
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    DiscountJson:
+      type: object
+      properties:
+        name:
+          type: string
+        percent:
+          type: number
+        discountAmount:
+          type: number
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DEPRECATED
+        discountedPrice:
+          type: number
+    DiscountDetailJson:
+      type: object
+      properties:
+        name:
+          type: string
+        percent:
+          type: number
+        discountAmount:
+          type: number
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DEPRECATED
+        discountedPrice:
+          type: number
+        amount:
+          type: number
+    RuleTraceJson:
+      type: object
+      properties:
+        ruleName:
+          type: string
+        fired:
+          type: boolean
+        orderActionsPerformed:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleActionPerformedJson'
+        orderLineActionsPerformed:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLineActionsPerformedJson'
+        orderRuleWarnings:
+          type: array
+          items:
+            type: string
+        orderLineRuleWarnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLineRuleWarningsJson'
+    CustomBillingRecurrence:
+      type: object
+      properties:
+        recurrence:
+          $ref: '#/components/schemas/RecurrenceJson'
+        count:
+          type: integer
+          format: int32
+          readOnly: true
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
+    PricingOverrideJson:
+      type: object
+      properties:
+        priceTiers:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/PriceTierJson'
+        minQuantity:
+          type: integer
+          format: int64
+          readOnly: true
+        maxQuantity:
+          type: integer
+          format: int64
+          readOnly: true
+    PriceTierJson:
+      type: object
+      required:
+      - amount
+      - untilQuantity
+      properties:
+        untilQuantity:
+          type: string
+        amount:
+          type: number
+        overage:
+          type: number
+    OpportunityJson:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        entityId:
+          type: string
+        type:
+          type: string
+        stage:
+          type: string
+        crmId:
+          type: string
+        accountId:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        opportunityCrmType:
+          type: string
+          enum:
+          - SALESFORCE
+          - HUBSPOT
+        isClosed:
+          type: boolean
+        primaryOrderId:
+          type: string
+        opportunityId:
+          type: string
+        currency:
+          type: string
+        customFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldEntry'
+    CustomPredefinedTemplateOnOrder:
+      type: object
+      properties:
+        id:
+          type: string
+        orderId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        content:
+          type: string
+    DocumentCustomContent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        orderId:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+    RuleActionPerformedJson:
+      type: object
+      properties:
+        action:
+          type: string
+        actionMessage:
+          type: string
+    OrderLineItemJson:
+      type: object
+      required:
+      - chargeId
+      properties:
+        id:
+          type: string
+        itemGroupId:
+          type: string
+        isDryRunItem:
+          type: boolean
+        action:
+          type: string
+          enum:
+          - ADD
+          - UPDATE
+          - REMOVE
+          - RENEWAL
+          - NONE
+          - MISSING_RENEWAL
+          - RESTRUCTURE
+        planId:
+          type: string
+        subscriptionChargeId:
+          type: string
+        currencyConversionRateId:
+          type: string
+        subscriptionChargeGroupId:
+          type: string
+        chargeId:
+          type: string
+        quantity:
+          type: integer
+          format: int64
+        isRamp:
+          type: boolean
+        listUnitPrice:
+          type: number
+        sellUnitPrice:
+          type: number
+        discountAmount:
+          type: number
+        discounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/DiscountDetailJson'
+        predefinedDiscounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/TenantDiscountLineItemJson'
+        attributeReferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeReference'
+        amount:
+          type: number
+        listAmount:
+          type: number
+        annualizedAmount:
+          type: number
+        pricingOverride:
+          $ref: '#/components/schemas/PricingOverrideJson'
+        listPriceOverrideRatio:
+          type: number
+        listUnitPriceBeforeOverride:
+          type: number
+        listAmountBeforeOverride:
+          type: number
+        taxEstimate:
+          type: number
+        effectiveDate:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+        customFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldEntry'
+        arrOverride:
+          type: number
+        replacedPlanId:
+          type: string
+        dryRunItem:
+          type: boolean
+    OrderTerms:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        templateGroupId:
+          type: string
+        templateGroupVersion:
+          type: integer
+          format: int32
+        orderId:
+          type: string
+        levelType:
+          type: string
+          enum:
+          - ORDER
+          - PLAN
+        planIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        templateId:
+          type: string
+          readOnly: true
+        deleted:
+          type: boolean
+    TimeSeriesAmountJson:
+      type: object
+      properties:
+        instant:
+          type: integer
+          format: int64
+        amount:
+          type: number
+    Duration:
+      type: object
+      properties:
+        seconds:
+          type: integer
+          format: int64
+        zero:
+          type: boolean
+        nano:
+          type: integer
+          format: int32
+        negative:
+          type: boolean
+        units:
+          type: array
+          items:
+            $ref: '#/components/schemas/TemporalUnit'
+    RecurrenceJson:
+      type: object
+      required:
+      - cycle
+      - step
+      properties:
+        cycle:
+          type: string
+          enum:
+          - DAY
+          - MONTH
+          - QUARTER
+          - SEMI_ANNUAL
+          - YEAR
+          - PAID_IN_FULL
+          - CUSTOM
+        step:
+          type: integer
+          format: int32
+          minimum: 1
+    OrderCreationCustomizationOutputJson:
+      type: object
+      properties:
+        customizationRunSkipped:
+          type: boolean
+        customizationDefinitionMissing:
+          type: boolean
+        ruleTraces:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleTraceJson'
+    CompositeOrderJson:
+      type: object
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+          enum:
+          - UPSELL_AND_EARLY_RENEWAL
+          - CANCEL_SINGLE_SUBSCRIPTION_AND_RESTRUCTURE
+        isPrimaryCompositeOrderForCrmOpportunity:
+          type: boolean
+        entityId:
+          type: string
+        orders:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderJson'
+        crmOpportunityId:
+          type: string
+        crmOpportunityName:
+          type: string
+        crmOpportunityStage:
+          type: string
+        crmOpportunityType:
+          type: string
+        documentMasterTemplateId:
+          type: string
+          format: uuid
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - SUBMITTED
+          - APPROVED
+          - EXECUTED
+          - EXPIRED
+    Period:
+      type: object
+      properties:
+        start:
+          type: integer
+          format: int64
+        end:
+          type: integer
+          format: int64
+        valid:
+          type: boolean
+    OpportunityInput:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        type:
+          type: string
+        stage:
+          type: string
+        crmId:
+          type: string
+        accountId:
+          type: string
+        opportunityCrmType:
+          type: string
+          enum:
+          - SALESFORCE
+          - HUBSPOT
+        isClosed:
+          type: boolean
+        primaryOrderId:
+          type: string
+        opportunityId:
+          type: string
+        customFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldEntry'
+    CustomBillingPeriodInput:
+      type: object
+      required:
+      - recurrenceWithCount
+      properties:
+        amount:
+          type: number
+          readOnly: true
+        recurrenceWithCount:
+          $ref: '#/components/schemas/CustomBillingRecurrence'
+        triggerInstant:
+          type: integer
+          format: int64
+          readOnly: true
+        triggerDate:
+          type: string
+          readOnly: true
+    AttributeReference:
+      type: object
+      properties:
+        attributeDefinitionId:
+          type: string
+          readOnly: true
+        attributeValue:
+          type: string
+          readOnly: true
+    OrderLineActionsPerformedJson:
+      type: object
+      properties:
+        lineIdentifier:
+          type: string
+        actionsPerformed:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleActionPerformedJson'
+    TenantDiscountJson:
+      type: object
+      properties:
+        id:
+          type: string
+        percent:
+          type: number
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DEPRECATED
+    Recurrence:
+      type: object
+      properties:
+        cycle:
+          type: string
+          readOnly: true
+          enum:
+          - DAY
+          - MONTH
+          - QUARTER
+          - SEMI_ANNUAL
+          - YEAR
+          - PAID_IN_FULL
+          - CUSTOM
+        step:
+          type: integer
+          format: int32
+          readOnly: true
+        display:
+          type: string
+    OpportunityPaginationResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/OpportunityJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
+    OrderRequestJson:
+      type: object
+      required:
+      - orderType
+      - startDate
+      properties:
+        id:
+          type: string
+          example: ORD-AXBY123
+          description: System-generated unique identifier for the order.
+        externalId:
+          type: string
+          example: EXT-456789
+          description: Unique external reference ID for the order that can be used for integration with other systems. This ID can't be reused on multiple orders.
+        name:
+          type: string
+          example: CreativePro Monthly Subscription Order
+          description: Name or title of the order for easy identification.
+        accountId:
+          type: string
+          example: ACCT-ADE4567
+          description: Unique identifier of the account associated with this order.
+        orderType:
+          type: string
+          example: NEW
+          description: 'Type of order being placed. This value determines how the order will impact a subscription when it is executed.
+
+
+            Supported values:
+
+            * `NEW`: Create a new subscription.
+
+            * `CANCEL`: Cancel an existing subscription.
+
+            * `AMENDMENT`: Amend an existing subscription.
+
+            * `RENEWAL`: Renew an existing subscription.
+
+            * `RESTRUCTURE`: Restructure an existing subscription.'
+          enum:
+          - NEW
+          - AMENDMENT
+          - RENEWAL
+          - RESTRUCTURE
+        paymentTerm:
+          type: string
+          example: NET30
+          description: Specifies when the payment for the invoice is due. Supported values are `NET0`, `NET30`, `NET45`, `NET60`, and `NET90`.
+          enum:
+          - NET0
+          - NET30
+          - NET45
+          - NET60
+          - NET90
+        subscriptionId:
+          type: string
+          example: SUB-BCDE123
+          description: 'The ID of the subscription you want to amend, restructure, or cancel.
+
+            To renew a subscription, use the `renewalForSubscriptionId` field to specify the ID of the subscription you want to renew.
+
+            This field is not required while creating a new subscription.'
+        shippingContactId:
+          type: string
+          example: CONT-XYZ7891
+          description: ID of the contact to use for shipping information.
+        billingContactId:
+          type: string
+          example: CONT-ABC1234
+          description: ID of the contact to use for billing information.
+        predefinedDiscounts:
+          type: array
+          description: Array of predefined discount objects to apply to the order.
+          items:
+            $ref: '#/components/schemas/TenantDiscountJson'
+        creditableAmounts:
+          type: array
+          description: Array of creditable amount which can be refunded when one time charges are cancelled/debooked during amendment or cancellation of a subscription
+          items:
+            $ref: '#/components/schemas/CreditableAmount'
+        lineItems:
+          type: array
+          description: Array of line item objects (i.e., charges) you want to add to this order.
+          items:
+            $ref: '#/components/schemas/OrderLineItemRequestJson'
+        startDate:
+          type: integer
+          format: int64
+          example: 1672531200
+          description: Start date of the subscription in Unix timestamp format (seconds since epoch). This date is inclusive.
+        endDate:
+          type: integer
+          format: int64
+          example: 1704067200
+          description: "End date of the subscription in Unix timestamp format (seconds since epoch). If not provided for `TERMED` subscriptions, it will be calculated based on `termLength`. \n\n**NOTE:** This date is exclusive. For example, if the subscription's start date is 1735689600 (January 1, 2025 00:00:00) and the term length is 1 year, specify the end date as 1767225600 (January 1, 2026 00:00:00).\nSince the date is exclusive, the subscription is still active at December 31, 2025 23:59:59 but will have ended at January 1, 2026 00:00:00."
+        executedOn:
+          type: integer
+          format: int64
+          example: 1672617600
+          description: Date when the order was executed in Unix timestamp format. Don't include this field if you're creating an order with `orderType` = `NEW`. This field is required only when you're creating an order to amend, renew, restructure, or cancel an existing subscription.
+        termLength:
+          $ref: '#/components/schemas/RecurrenceJson'
+        billingCycle:
+          $ref: '#/components/schemas/RecurrenceJson'
+        billingTerm:
+          type: string
+          example: UP_FRONT
+          description: 'Specifies when billing occurs relative to service delivery.
+
+
+            Supported values:
+
+            * `UP_FRONT`: Billing occurs before the product or service is delivered
+
+            * `IN_ARREARS`: The customer is billed after receiving the product or service.'
+          enum:
+          - UP_FRONT
+          - IN_ARREARS
+        billingAnchorDate:
+          type: integer
+          format: int64
+          example: 1672531200
+          description: Specific date to anchor billing cycles to, in Unix timestamp format (seconds since epoch). Useful for aligning billing with specific dates (e.g., first of the month).
+        rampInterval:
+          type: array
+          example: '[1672531200, 1680307200, 1688083200]'
+          description: Array of timestamps (in Unix timestamp format) defining intervals for ramped pricing schedules. Used when implementing gradual quantity or price changes over time.
+          items:
+            type: integer
+            format: int64
+        orderFormTemplateIds:
+          type: array
+          example: '[a7b8c3d4-e5f6-4a1b-9c2d-3e4f5a6b7c8d5, f1e2d3c4-b5a6-4978-8364-1a2b3c4d5e6f]'
+          description: Array of document template IDs to use for generating order forms. Specified as UUIDs.
+          items:
+            type: string
+        sfdcOpportunityId:
+          type: string
+        isPrimaryOrderForSfdcOpportunity:
+          type: boolean
+        sfdcOpportunityName:
+          type: string
+        sfdcOpportunityType:
+          type: string
+        sfdcOpportunityStage:
+          type: string
+        opportunityCrmType:
+          type: string
+          example: SALESFORCE
+          description: Type of CRM where the opportunity is managed.
+          enum:
+          - SALESFORCE
+          - HUBSPOT
+        ownerId:
+          type: string
+          example: USR-12345AB
+          description: ID of the user who owns this order.
+        renewalForSubscriptionId:
+          type: string
+          example: SUB-A1B3C4D
+          description: ID of the subscription being renewed. Required only when `orderType` is `RENEWAL`.
+        documentMasterTemplateId:
+          type: string
+          example: f47ac10b-58cc-4372-a567-0e02b2c3d479
+          description: UUID of the master document template to use for generating order documents.
+        documentCustomContent:
+          $ref: '#/components/schemas/DocumentCustomContent'
+        purchaseOrderNumber:
+          type: string
+          example: '123456789'
+          description: The purchase order number associated with this order.
+        purchaseOrderRequiredForInvoicing:
+          type: boolean
+          example: true
+          description: Indicates whether a purchase order number is required to generate an invoice.
+        autoRenew:
+          type: boolean
+          example: false
+          description: Indicates whether the subscription should automatically renew at the end of its term.
+        approvalSegmentId:
+          type: string
+          example: APSG-ABC45
+          description: ID of the approval segment to use for routing this order through approval workflows.
+        attachmentId:
+          type: string
+          example: '12345678'
+          description: ID of an attachment associated with this order (e.g., signed contract).
+        compositeOrderId:
+          type: string
+        restructureForSubscriptionId:
+          type: string
+        expiresOn:
+          type: integer
+          format: int64
+          example: 1675209600
+          description: Date when the order expires if the `status` is not `EXECUTED`. Specified in Unix timestamp format (seconds since epoch).
+        entityId:
+          type: string
+          example: ENT-98765AB
+          description: ID of the entity (e.g., business or subsidiary) associated with this order.
+        customFields:
+          type: array
+          description: Array of custom fields to include additional metadata with the order.
+          items:
+            $ref: '#/components/schemas/CustomFieldEntry'
+        startDateType:
+          type: string
+          example: EXECUTION_DATE
+          description: 'Determines how the start date is calculated.
+
+
+            **NOTE:** If you include the `rampInterval` object dates for a ramped pricing schedule, `startDateType` must be set to `FIXED`.
+
+
+            Supported values:
+
+            * `FIXED`: Start date is the value of `startDate`, or the first `rampInterval` timestamp if specified.
+
+            * `EXECUTION_DATE`: Start date is the date when the order status changes to `EXECUTED`.'
+          enum:
+          - FIXED
+          - EXECUTION_DATE
+        currency:
+          type: string
+          example: USD
+          description: ISO 4217 currency code for the order. If you don't specify a value, the account's default currency is used.
+        customBillingSchedule:
+          $ref: '#/components/schemas/CustomBillingScheduleInput'
+        customPredefinedTemplatesOnOrder:
+          type: array
+          description: List of custom predefined templates to include on the order.
+          items:
+            $ref: '#/components/schemas/CustomPredefinedTemplateOnOrder'
+        subscriptionDurationModel:
+          type: string
+          example: TERMED
+          description: 'Determines the subscription term.
+
+
+            Supported values:
+
+            * `TERMED`: Subscription has a fixed term length.
+
+            * `EVERGREEN`: Subscription continues indefinitely until cancelled.'
+          enum:
+          - TERMED
+          - EVERGREEN
+        opportunityInput:
+          $ref: '#/components/schemas/OpportunityInput'
+      description: JSON object containing information required to create an order.
+    OrderLineItemRequestJson:
+      type: object
+      required:
+      - chargeId
+      properties:
+        id:
+          type: string
+        itemGroupId:
+          type: string
+        isDryRunItem:
+          type: boolean
+        action:
+          type: string
+          enum:
+          - ADD
+          - UPDATE
+          - REMOVE
+          - RENEWAL
+          - NONE
+          - MISSING_RENEWAL
+          - RESTRUCTURE
+        planId:
+          type: string
+        subscriptionChargeId:
+          type: string
+        chargeId:
+          type: string
+        quantity:
+          type: integer
+          format: int64
+        isRamp:
+          type: boolean
+        discounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/DiscountJson'
+        predefinedDiscounts:
+          type: array
+          items:
+            type: string
+        effectiveDate:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+        listUnitPrice:
+          type: number
+        listPriceOverrideRatio:
+          type: number
+        pricingOverride:
+          $ref: '#/components/schemas/PricingOverrideJson'
+        attributeReferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeReference'
+        customFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldEntry'
+        arrOverride:
+          type: number
+        replacedPlanId:
+          type: string
+        amount:
+          type: number
+        dryRunItem:
+          type: boolean
+    TemporalUnit:
+      type: object
+      properties:
+        durationEstimated:
+          type: boolean
+        duration:
+          $ref: '#/components/schemas/Duration'
+        timeBased:
+          type: boolean
+        dateBased:
+          type: boolean
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

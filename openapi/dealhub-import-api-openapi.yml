@@ -1,0 +1,292 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Import API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Import
+paths:
+  /import/{importId}/result:
+    get:
+      tags:
+      - Import
+      summary: Get import details
+      description: Returns the details of an import by its ID
+      operationId: getImportResult_2
+      parameters:
+      - name: importId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /import:
+    get:
+      tags:
+      - Import
+      summary: Gets all import items
+      description: Gets all items that was imported
+      operationId: getDataImports
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataImport'
+    post:
+      tags:
+      - Import
+      summary: Validate import file
+      description: Validates a multi-part import file. Returns an import ID on success.
+      operationId: validateMultiPartFileImport
+      requestBody:
+        $ref: '#/components/requestBodies/uploadApprovalMatrixCSV'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+  /import/{importId}:
+    get:
+      tags:
+      - Import
+      summary: Gets an import item
+      description: Gets an item that was imported by its ID
+      operationId: getDataImportById
+      parameters:
+      - name: importId
+        in: path
+        description: id of the item
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataImport'
+  /import/export/newOrders:
+    get:
+      tags:
+      - Import
+      summary: Get new orders in import CSV format
+      description: Gets new orders in a format appropriate for re-import. On success, the output is a csv containing the orders.
+      operationId: getNewOrderExportInImportFormat
+      parameters:
+      - name: useRealIds
+        in: query
+        description: use the subskribe ID instead of external ID for exported objects
+        required: false
+        schema:
+          type: boolean
+      responses:
+        default:
+          description: successful operation
+  /import/export/amendmentOrders:
+    get:
+      tags:
+      - Import
+      summary: Get amendment orders in import CSV format
+      description: Gets amendment orders in a format appropriate for re-import for the given generation. On success, the output is a csv containing the orders.
+      operationId: getAmendmentOrderExportInImportFormat
+      parameters:
+      - name: generation
+        in: query
+        description: the generation of amendments to include in the export, generations are defined as 1 based index of number of amendments applied to subscription
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: useRealIds
+        in: query
+        description: use the subskribe ID instead of external ID for exported objects
+        required: false
+        schema:
+          type: boolean
+      responses:
+        default:
+          description: successful operation
+  /import/export/accountContact:
+    get:
+      tags:
+      - Import
+      summary: Get account contacts for export
+      description: Gets account contacts in a format appropriate for re-import. On success, the output is a csv containing the account and contacts.
+      operationId: getAccountContactsInImportFormat
+      responses:
+        default:
+          description: successful operation
+  /import/export/catalog:
+    get:
+      tags:
+      - Import
+      summary: Get catalog data for export
+      description: Gets catalog data in a format appropriate for re-import. On success, the output is a csv containing the catalog data containing Product, Plan and Charge data.
+      operationId: getCatalogDataInImportFormat
+      responses:
+        default:
+          description: successful operation
+  /import/{importId}/process:
+    put:
+      tags:
+      - Import
+      summary: Process an import by ID
+      description: Processes the import specified.
+      operationId: processImport
+      parameters:
+      - name: importId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataImport'
+  /import/schemas:
+    get:
+      tags:
+      - Import
+      summary: Return available schemas
+      description: Returns the set of schemas available for import
+      operationId: getAvailableSchemas
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: array
+                  items:
+                    type: object
+  /import/flatfile/{domain}:
+    post:
+      tags:
+      - Import
+      summary: Create a Flatfile workbook
+      description: Creates a Flatfile workbook and adds it to a space
+      operationId: createFlatfileWorkbook
+      parameters:
+      - name: domain
+        in: path
+        description: the domain to import
+        required: true
+        schema:
+          type: string
+          enum:
+          - ORDER
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlatfileWorkbookResponse'
+components:
+  requestBodies:
+    uploadApprovalMatrixCSV:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+  schemas:
+    FlatfileWorkbookResponseData:
+      type: object
+      required:
+      - environmentId
+      - spaceId
+      properties:
+        spaceId:
+          type: string
+          readOnly: true
+        environmentId:
+          type: string
+          readOnly: true
+    FlatfileWorkbookResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/FlatfileWorkbookResponseData'
+    DataImport:
+      type: object
+      properties:
+        importId:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        fileName:
+          type: string
+        fileType:
+          type: string
+          enum:
+          - CSV
+        fileSizeBytes:
+          type: integer
+          format: int64
+        rowCount:
+          type: integer
+          format: int64
+        importedBy:
+          type: string
+        importedByUserId:
+          type: string
+        importedOn:
+          type: integer
+          format: int64
+        domain:
+          type: string
+          enum:
+          - CATALOG
+          - ACCOUNT
+          - ORDER
+          - USAGE
+          - BULK_ACCOUNT_UPDATE
+          - BULK_ORDER_UPDATE
+          - BULK_SUBSCRIPTION_UPDATE
+          - BULK_PRODUCT_UPDATE
+          - BULK_PLAN_UPDATE
+        operation:
+          type: string
+          enum:
+          - CREATE
+          - UPDATE
+        status:
+          type: string
+          enum:
+          - VALIDATED
+          - PROCESSING
+          - SUCCESSFUL
+          - FAILED
+          - PARTIALLY_SUCCESSFUL
+        completedOn:
+          type: integer
+          format: int64
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

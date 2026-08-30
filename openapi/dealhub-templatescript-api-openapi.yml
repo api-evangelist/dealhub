@@ -1,0 +1,115 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Template Script API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: TemplateScript
+paths:
+  /templateScript:
+    get:
+      tags:
+      - TemplateScript
+      summary: Fetch template scripts
+      description: Returns a list of template scripts of a certain type
+      operationId: getTemplateScripts
+      parameters:
+      - name: templateType
+        in: query
+        required: false
+        schema:
+          type: string
+          enum:
+          - ORDER
+          - COMPOSITE_ORDER
+          - INVOICE
+          - CREDIT_MEMO
+          - PREDEFINED_TERM
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TemplateScript'
+    post:
+      tags:
+      - TemplateScript
+      summary: Add a new template script
+      description: ''
+      operationId: addTemplateScript
+      requestBody:
+        $ref: '#/components/requestBodies/TemplateScript'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TemplateScript'
+    delete:
+      tags:
+      - TemplateScript
+      summary: Disable a template script
+      description: ''
+      operationId: disableTemplateScript
+      requestBody:
+        $ref: '#/components/requestBodies/TemplateScript'
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    TemplateScript:
+      type: object
+      required:
+      - enabled
+      - script
+      - templateType
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        templateType:
+          type: string
+          readOnly: true
+          enum:
+          - ORDER
+          - COMPOSITE_ORDER
+          - INVOICE
+          - CREDIT_MEMO
+          - PREDEFINED_TERM
+        script:
+          type: string
+          readOnly: true
+        enabled:
+          type: boolean
+          readOnly: true
+        createdBy:
+          type: string
+          readOnly: true
+        createdOn:
+          type: integer
+          format: int64
+          readOnly: true
+        updatedOn:
+          type: integer
+          format: int64
+          readOnly: true
+  requestBodies:
+    TemplateScript:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TemplateScript'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

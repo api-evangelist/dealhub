@@ -1,0 +1,113 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Product Provisioning API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Product Provisioning
+paths:
+  /rh/product-provisioning:
+    post:
+      tags:
+      - Product Provisioning
+      operationId: syncSkus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewSkuSyncRequest'
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    SkuSyncInput:
+      type: object
+      required:
+      - sku
+      - type
+      properties:
+        sku:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        subtype:
+          type: string
+          readOnly: true
+        desc:
+          type: string
+          readOnly: true
+        defaultTag:
+          type: string
+          readOnly: true
+        tags:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        productAttributes:
+          $ref: '#/components/schemas/SkuProductAttributes'
+    SkuProductAttributes:
+      type: object
+      properties:
+        subscriptionItemType:
+          type: string
+          readOnly: true
+        billingTerm:
+          type: string
+          readOnly: true
+        trackableARR:
+          type: boolean
+          readOnly: true
+        isEventBased:
+          type: boolean
+          readOnly: true
+        erpId:
+          type: string
+          readOnly: true
+        taxRateStrategyId:
+          type: string
+          readOnly: true
+        revRecognitionRuleId:
+          type: string
+          readOnly: true
+        taxLiabilityAccountId:
+          type: string
+          readOnly: true
+        deferredRevenueAccountId:
+          type: string
+          readOnly: true
+        recognizedRevenueAccountId:
+          type: string
+          readOnly: true
+        contractAssetAccountId:
+          type: string
+          readOnly: true
+        customAttributes:
+          type: object
+          readOnly: true
+          additionalProperties:
+            type: object
+    NewSkuSyncRequest:
+      type: object
+      required:
+      - skus
+      properties:
+        skus:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/SkuSyncInput'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

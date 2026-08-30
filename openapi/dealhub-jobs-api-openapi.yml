@@ -1,0 +1,204 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Jobs API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Jobs
+paths:
+  /tenantJobs/dispatch:
+    post:
+      tags:
+      - Jobs
+      summary: Dispatch tenant job
+      description: Executes a tenant job
+      operationId: dispatch
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TenantJob'
+      responses:
+        default:
+          description: successful operation
+  /tenantJobs/retry:
+    post:
+      tags:
+      - Jobs
+      summary: Retry tenant job
+      description: Executes a tenant job
+      operationId: executeTenantJob
+      parameters:
+      - name: jobId
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /tenantJobs/{jobId}/cancel:
+    post:
+      tags:
+      - Jobs
+      summary: Cancel tenant job
+      description: Cancels a tenant job. Any pending future tasks will be skipped
+      operationId: cancelTenantJob
+      parameters:
+      - name: jobId
+        in: path
+        description: Job id
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /tenantJobs/{jobId}:
+    get:
+      tags:
+      - Jobs
+      summary: Get tenant job
+      description: Get tenant job by id
+      operationId: getTenantJob
+      parameters:
+      - name: jobId
+        in: path
+        description: Job id
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    TenantJob:
+      type: object
+      properties:
+        module:
+          type: string
+          enum:
+          - HUBSPOT
+          - SALESFORCE
+          - QUICKBOOKS
+          - ERP
+          - REVENUE_RECOGNITION
+          - ACCOUNTING
+          - AUTOMATIC_INVOICE_GENERATION
+          - FOREIGN_EXCHANGE
+          - EVENT
+          - TENANT_MANAGEMENT
+          - PAYMENT
+          - PRISMATIC
+        objectId:
+          type: string
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        entityId:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - QUEUED
+          - PROCESSING
+          - SUCCESSFUL
+          - FAILED
+          - CANCELLED
+        tenantId:
+          type: string
+        jobType:
+          type: string
+          enum:
+          - HUBSPOT_ACCOUNT_SYNC
+          - HUBSPOT_ORDER_SYNC
+          - HUBSPOT_COMPOSITE_ORDER_SYNC
+          - SALESFORCE_ACCOUNT_SYNC
+          - SALESFORCE_ACCOUNT_ARR_SYNC
+          - SALESFORCE_ORDER_SYNC
+          - SALESFORCE_COMPOSITE_ORDER_SYNC
+          - SALESFORCE_SUBSCRIPTION_SYNC
+          - CRM_ORDER_DELETION_SYNC
+          - QBO_JOURNAL_ENTRY_CREATION
+          - QBO_JOURNAL_ENTRY_DELETION
+          - ERP_JOURNAL_ENTRY_CREATION
+          - ERP_JOURNAL_ENTRY_DELETION
+          - ERP_JOURNAL_ENTRY_CREATION_V2
+          - ERP_JOURNAL_ENTRY_DELETION_V2
+          - ERP_INVOICE_SYNC
+          - ERP_CREDIT_MEMO_SYNC
+          - ERP_VOID_INVOICE
+          - REV_GENERATE_SCHEDULE
+          - REV_REGENERATE_SCHEDULE
+          - REV_GENERATE_SCHEDULES_FOR_TENANT
+          - REV_REGENERATE_SCHEDULES_FOR_TENANT
+          - RECOGNIZE_REVENUE
+          - CRM_COMPOSITE_ORDER_DELETION_SYNC
+          - HUBSPOT_SUBSCRIPTION_SYNC
+          - HUBSPOT_ELECTRONIC_SIGNATURE_SYNC
+          - CRM_SUBSCRIPTION_DELETION_SYNC
+          - CREATE_JOURNAL_ENTRIES
+          - HUBSPOT_ORDER_ANNUAL_AMOUNT_SYNC
+          - SALESFORCE_TRANSACTIONAL_ARR_METRICS_SYNC
+          - EXCHANGE_RATE_REFRESH
+          - AUTOMATED_INVOICE_RULE_TRIGGER
+          - REPROCESS_EVENTS_FOR_TENANT
+          - TENANT_CREATED
+          - PAYMENT_RETRY
+          - PRISMATIC_INVOICE_SYNC
+        failureReason:
+          type: string
+        objectModel:
+          type: string
+          enum:
+          - ACCOUNT
+          - ORDER
+          - COMPOSITE_ORDER
+          - INVOICE
+          - CREDIT_MEMO
+          - SUBSCRIPTION
+          - CRM_OPPORTUNITY
+          - ACCOUNTING_PERIOD
+          - AUTOMATED_INVOICE_RULE
+          - EXCHANGE_RATE_REFRESH_DATE
+          - TENANT
+          - PAYMENT
+        delayedUntil:
+          type: integer
+          format: int64
+        jobId:
+          type: string
+        attempts:
+          type: integer
+          format: int32
+        startedOn:
+          type: integer
+          format: int64
+        endedOn:
+          type: integer
+          format: int64
+        partitionKey:
+          type: string
+        deduplicate:
+          type: boolean
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

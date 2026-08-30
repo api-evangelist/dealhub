@@ -1,0 +1,418 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Entities API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Entities
+paths:
+  /entities:
+    get:
+      tags:
+      - Entities
+      summary: Gets entities
+      description: Gets all entities
+      operationId: getEntities
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EntityJson'
+    post:
+      tags:
+      - Entities
+      summary: Create an entity
+      description: Create an entity. On success return the created entity.
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EntityJson'
+        description: entity
+      responses:
+        default:
+          description: successful operation
+  /entities/{id}:
+    get:
+      tags:
+      - Entities
+      summary: Gets entity details
+      description: Gets the entity details of the specified entity id
+      operationId: getEntityById
+      parameters:
+      - name: id
+        in: path
+        description: entity id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entity'
+    delete:
+      tags:
+      - Entities
+      summary: Delete entity
+      description: Delete the entity if there is no data associated with it.
+      operationId: deleteEntity
+      parameters:
+      - name: id
+        in: path
+        description: entity id
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /entities/logo/{entityId}:
+    get:
+      tags:
+      - Entities
+      summary: Get entity logo
+      description: Get the current logo stored for the given entity
+      operationId: getLogo
+      parameters:
+      - name: entityId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Entities
+      summary: Update entity logo
+      description: Updates the logo used in external facing communication such as order forms and invoices
+      operationId: uploadLogo
+      parameters:
+      - name: entityId
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/uploadApprovalMatrixCSV'
+      responses:
+        default:
+          description: successful operation
+components:
+  requestBodies:
+    uploadApprovalMatrixCSV:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+  schemas:
+    NumberConfig:
+      type: object
+      properties:
+        configId:
+          type: string
+        scheme:
+          type: string
+          enum:
+          - SEQUENCE
+          - PSEUDO_RANDOM
+        prefix:
+          type: string
+        length:
+          type: integer
+          format: int32
+        nextSequenceNumber:
+          type: integer
+          format: int64
+    CompanyContactJson:
+      type: object
+      required:
+      - address
+      properties:
+        firstName:
+          type: string
+          readOnly: true
+        lastName:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          readOnly: true
+        phoneNumber:
+          type: string
+          readOnly: true
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+    AccountContact:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        contactId:
+          type: string
+        externalId:
+          type: string
+          minLength: 0
+          maxLength: 36
+        erpId:
+          type: string
+          minLength: 0
+          maxLength: 100
+        crmId:
+          type: string
+          minLength: 0
+          maxLength: 100
+        accountId:
+          type: string
+        firstName:
+          type: string
+          minLength: 0
+          maxLength: 255
+        lastName:
+          type: string
+          minLength: 0
+          maxLength: 255
+        email:
+          type: string
+          minLength: 0
+          maxLength: 255
+        emailVerified:
+          type: boolean
+        phoneNumber:
+          type: string
+          minLength: 0
+          maxLength: 255
+        title:
+          type: string
+          minLength: 0
+          maxLength: 255
+        addressId:
+          type: string
+        address:
+          $ref: '#/components/schemas/AccountAddress'
+        state:
+          type: string
+          enum:
+          - ACTIVE
+          - DISABLED
+          - EXPIRED
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        fullName:
+          type: string
+    Entity:
+      type: object
+      required:
+      - functionalCurrency
+      - name
+      - prorationMode
+      - prorationScheme
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        tenantId:
+          type: string
+          readOnly: true
+        entityId:
+          type: string
+          readOnly: true
+        displayId:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        prorationScheme:
+          type: string
+          readOnly: true
+          enum:
+          - FIXED_DAYS
+          - CALENDAR_DAYS
+        prorationMode:
+          type: string
+          readOnly: true
+          enum:
+          - NORMALIZED
+          - EXACT_DAYS
+          - EXACT
+        invoiceConfigId:
+          type: string
+          readOnly: true
+        invoiceConfig:
+          $ref: '#/components/schemas/NumberConfig'
+        timezone:
+          $ref: '#/components/schemas/TimeZone'
+        functionalCurrency:
+          type: string
+          readOnly: true
+        wireInstruction:
+          type: string
+          readOnly: true
+        companyContact:
+          $ref: '#/components/schemas/AccountContact'
+        accountReceivableContact:
+          $ref: '#/components/schemas/AccountContact'
+        erpId:
+          type: string
+          readOnly: true
+    AccountAddressJson:
+      type: object
+      properties:
+        streetAddressLine1:
+          type: string
+          description: Address Line 1 of the Contact
+        streetAddressLine2:
+          type: string
+          description: Address Line 2 of the Contact
+        streetAddressLine3:
+          type: string
+          description: Address Line 3 of the Contact
+        city:
+          type: string
+          description: City of the Contact
+        state:
+          type: string
+          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
+        country:
+          type: string
+          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
+        zipcode:
+          type: string
+          description: Zip or Postal Code of the Contact
+    AccountReceivableContactJson:
+      type: object
+      required:
+      - address
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+    AccountAddress:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        addressId:
+          type: string
+        streetAddressLine1:
+          type: string
+        streetAddressLine2:
+          type: string
+        streetAddressLine3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        zipcode:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    EntityJson:
+      type: object
+      required:
+      - functionalCurrency
+      - name
+      - prorationMode
+      - prorationScheme
+      properties:
+        entityId:
+          type: string
+          readOnly: true
+        displayId:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        prorationScheme:
+          type: string
+          readOnly: true
+          enum:
+          - FIXED_DAYS
+          - CALENDAR_DAYS
+        prorationMode:
+          type: string
+          readOnly: true
+          enum:
+          - NORMALIZED
+          - EXACT_DAYS
+          - EXACT
+        invoiceConfigId:
+          type: string
+          readOnly: true
+        invoiceConfig:
+          $ref: '#/components/schemas/NumberConfig'
+        creditMemoConfig:
+          $ref: '#/components/schemas/NumberConfig'
+        timezone:
+          type: string
+          readOnly: true
+        functionalCurrency:
+          type: string
+          readOnly: true
+        wireInstruction:
+          type: string
+          readOnly: true
+        companyContact:
+          $ref: '#/components/schemas/CompanyContactJson'
+        accountReceivableContact:
+          $ref: '#/components/schemas/AccountReceivableContactJson'
+        erpId:
+          type: string
+          readOnly: true
+    TimeZone:
+      type: object
+      properties:
+        displayName:
+          type: string
+        id:
+          type: string
+        dstsavings:
+          type: integer
+          format: int32
+        rawOffset:
+          type: integer
+          format: int32
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

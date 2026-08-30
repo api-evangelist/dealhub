@@ -1,0 +1,165 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Authentication API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Authentication
+paths:
+  /apikey/revoke:
+    delete:
+      tags:
+      - Authentication
+      summary: revoke all keys
+      description: Revokes all keys for your tenant
+      operationId: revokeApiKey
+      responses:
+        default:
+          description: successful operation
+  /apikey/{id}:
+    get:
+      tags:
+      - Authentication
+      summary: Retrieve an API key by id
+      description: Retrieve an api key referenced by its id
+      operationId: getApiKeyById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /apikey:
+    get:
+      tags:
+      - Authentication
+      summary: Retrieves all API keys
+      description: Retrieves a list of (maximum 500 items) all API keys (including expired and deactivated keys)
+      operationId: getAllApiKeys
+      responses:
+        default:
+          description: successful operation
+    post:
+      tags:
+      - Authentication
+      summary: Create a new api key
+      description: Create a new api key with the specified parameters. The new key is returned
+      operationId: createApiKey
+      parameters:
+      - name: role
+        in: query
+        description: Role-based permissions to be associated with the key. Specify this OR userId.
+        required: false
+        schema:
+          type: string
+          enum:
+          - ADMIN
+          - FINANCE
+          - SALES
+          - DEAL_DESK
+          - BILLING_CLERK
+          - REVENUE_CLERK
+          - READ_ONLY
+          - EXECUTIVE
+          - CRM
+          - IMPORT
+      - name: expiry
+        in: query
+        description: Time of expiry in seconds since Epoch (GMT)
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: userId
+        in: query
+        description: User to associate key with. Specify this OR role.
+        required: false
+        schema:
+          type: string
+      - name: entityId
+        in: query
+        description: Scope of entities that the key has access to. Either specify a single entity or all entities (i.e. *).
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+  /apikey/revoke/{id}:
+    delete:
+      tags:
+      - Authentication
+      summary: revoke an API key by id
+      description: Revoke an api key referenced by its id
+      operationId: revokeApiKeyById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /auth/saml:
+    get:
+      tags:
+      - Authentication
+      summary: Get SAML Integration Status
+      description: Retrieves SAML integration status
+      operationId: getSamlIntegration
+      responses:
+        default:
+          description: successful operation
+    post:
+      tags:
+      - Authentication
+      summary: Add a saml integration
+      description: Adds a saml integration
+      operationId: addSamlIntegration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthSamlIntegrationJson'
+        description: saml representing the integration
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+      - Authentication
+      summary: Delete SAML Integration
+      description: Deletes existing SAML integration
+      operationId: deleteSamlIntegration
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    AuthSamlIntegrationJson:
+      type: object
+      properties:
+        attributeMapping:
+          type: object
+          additionalProperties:
+            type: string
+        metadataUrl:
+          type: string
+        providerName:
+          type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

@@ -1,0 +1,193 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Refunds API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Refunds
+paths:
+  /refunds:
+    get:
+      tags:
+      - Refunds
+      summary: Get refunds
+      description: Get all refunds for the specified account, OR if a credit memo number is specified in addition to the account id, get the details of only that.
+      operationId: getRefunds
+      parameters:
+      - name: accountId
+        in: query
+        description: id of the account
+        required: true
+        schema:
+          type: string
+      - name: creditMemoNumber
+        in: query
+        description: id of a credit memo
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RefundDetail'
+    post:
+      tags:
+      - Refunds
+      summary: Create and apply refund
+      description: Creates and applies a refund per the specified parameters. On success the id of the refund is returned.
+      operationId: createAndApplyRefund
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundRequestJson'
+        description: refund request details json
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /refunds/{id}:
+    get:
+      tags:
+      - Refunds
+      summary: Get refund details
+      description: Get the details of the specified refund.
+      operationId: getRefundById
+      parameters:
+      - name: accountId
+        in: query
+        description: id of the account
+        required: true
+        schema:
+          type: string
+      - name: id
+        in: path
+        description: id of the refund
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Refund'
+components:
+  schemas:
+    RefundDetail:
+      type: object
+      required:
+      - creditMemoNumber
+      - currency
+      - id
+      - paymentId
+      - refundDate
+      - refundId
+      properties:
+        id:
+          type: string
+        refundId:
+          type: string
+        referenceId:
+          type: string
+        creditMemoNumber:
+          type: string
+        amount:
+          type: number
+        refundDate:
+          type: integer
+          format: int64
+        paymentId:
+          type: string
+        paymentMethodType:
+          type: string
+        createdBy:
+          type: string
+        notes:
+          type: string
+        currency:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        eventObjectId:
+          type: string
+    RefundRequestJson:
+      type: object
+      required:
+      - amount
+      - createdBy
+      - creditMemoNumber
+      - paymentId
+      - refundDate
+      properties:
+        creditMemoNumber:
+          type: string
+        paymentId:
+          type: string
+        amount:
+          type: number
+        refundDate:
+          type: integer
+          format: int64
+        paymentMethodType:
+          type: string
+        createdBy:
+          type: string
+        notes:
+          type: string
+        referenceId:
+          type: string
+    Refund:
+      type: object
+      properties:
+        id:
+          type: string
+        refundId:
+          type: string
+        referenceId:
+          type: string
+        tenantId:
+          type: string
+        entityId:
+          type: string
+        creditMemoNumber:
+          type: string
+        amount:
+          type: number
+        refundDate:
+          type: integer
+          format: int64
+        paymentId:
+          type: string
+        paymentMethodType:
+          type: string
+        currencyCode:
+          type: string
+        notes:
+          type: string
+        createdBy:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

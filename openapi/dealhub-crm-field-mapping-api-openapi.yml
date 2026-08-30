@@ -1,0 +1,220 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe CRM field mapping API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: CRM field mapping
+paths:
+  /crmFieldMapping/csv:
+    get:
+      tags:
+      - CRM field mapping
+      summary: Get CRM field mapping upload list
+      description: Returns details regarding the CRM field mappings that have been uploaded
+      operationId: getAllImportDetails_1
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CrmFieldMappingImportDataJson'
+    post:
+      tags:
+      - CRM field mapping
+      summary: Upload of CRM field mappings
+      description: "    crmType: HUBSPOT, SALESFORCE\n    crmObjectType: OPPORTUNITY, ACCOUNT, ORDER\n    direction: INBOUND, OUTBOUND\n    crmFieldName\n    subskribeFieldName\n"
+      operationId: uploadCrmFieldMappingCsv
+      requestBody:
+        $ref: '#/components/requestBodies/uploadApprovalMatrixCSV'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmFieldMappingImportDataJson'
+  /crmFieldMapping/csv/{importId}:
+    get:
+      tags:
+      - CRM field mapping
+      summary: Get import details
+      description: Gets the details of an import specified by the passed ID
+      operationId: getImportDetailsById_1
+      parameters:
+      - name: importId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmFieldMappingImportDataJson'
+  /crmFieldMapping/csv/{importId}/download:
+    get:
+      tags:
+      - CRM field mapping
+      summary: Download the csv for an import
+      description: Downloads the CSV for an import activity specified by the passed ID
+      operationId: getImportResult_1
+      parameters:
+      - name: importId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /crmFieldMapping/csv/{importId}/preview:
+    get:
+      tags:
+      - CRM field mapping
+      summary: Preview import changes
+      description: Preview the changes that a CRM field mapping import will have once applied
+      operationId: getImportPreview_1
+      parameters:
+      - name: importId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CrmFieldMappingImportPreview'
+  /crmFieldMapping/csv/download:
+    get:
+      tags:
+      - CRM field mapping
+      summary: Download CRM field mappings
+      description: Downloads your CRM field mappings as a csv
+      operationId: getCrmFieldMappingAsCsv
+      responses:
+        default:
+          description: successful operation
+  /crmFieldMapping/csv/{importId}/submit:
+    post:
+      tags:
+      - CRM field mapping
+      summary: Finalize an import
+      description: Submit and finalize the import for the specified import operation.
+      operationId: submitCrmFieldMappingImport
+      parameters:
+      - name: importId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+components:
+  requestBodies:
+    uploadApprovalMatrixCSV:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+  schemas:
+    CrmFieldMappingImportPreview:
+      type: object
+      properties:
+        id:
+          type: string
+        uploadedBy:
+          type: string
+        crmFieldMappingChanges:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateCrmFieldMappingDetail'
+    UpdateCrmFieldMappingDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        failed:
+          type: boolean
+        failureReason:
+          type: string
+        deleted:
+          type: boolean
+        requestedCrmFieldName:
+          type: string
+        requestedSubskribeFieldName:
+          type: string
+        requestedCrmObjectType:
+          type: string
+          enum:
+          - OPPORTUNITY
+          - ACCOUNT
+          - ORDER
+          - ORDER_ITEM
+          - SUBSCRIPTION
+          - SUBSCRIPTION_ITEM
+        requestedDirection:
+          type: string
+          enum:
+          - INBOUND
+          - OUTBOUND
+        previousDirection:
+          type: string
+          enum:
+          - INBOUND
+          - OUTBOUND
+        previousCrmObjectType:
+          type: string
+          enum:
+          - OPPORTUNITY
+          - ACCOUNT
+          - ORDER
+          - ORDER_ITEM
+          - SUBSCRIPTION
+          - SUBSCRIPTION_ITEM
+        previousCrmFieldName:
+          type: string
+        previousSubskribeFieldName:
+          type: string
+        rowNumber:
+          type: integer
+          format: int64
+    CrmFieldMappingImportDataJson:
+      type: object
+      properties:
+        id:
+          type: string
+        fileName:
+          type: string
+        uploadedBy:
+          type: string
+        status:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

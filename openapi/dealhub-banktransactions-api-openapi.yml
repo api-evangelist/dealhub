@@ -1,0 +1,204 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Bank Transactions API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: BankTransactions
+paths:
+  /bankTransactions/potentialInvoices:
+    get:
+      tags:
+      - BankTransactions
+      summary: Get paginated bank transaction records
+      description: Returns all bank transaction records in a paginated fashion
+      operationId: getBankTransactionPotentialInvoices
+      parameters:
+      - name: limit
+        in: query
+        description: number of items per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: pageToken
+        in: query
+        description: pass this to subsequent calls
+        required: false
+        schema:
+          type: string
+      - name: bankAccountId
+        in: query
+        description: optionally pass in bank account Id, only bank transactions for this bank account will be returned
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBankTransactionPotentialInvoiceResponse'
+  /bankTransactions/{id}:
+    delete:
+      tags:
+      - BankTransactions
+      summary: Delete given bank transaction record
+      description: Delete given bank transaction record
+      operationId: deleteBankTransaction
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /bankTransactions/csv:
+    post:
+      tags:
+      - BankTransactions
+      summary: Import bank transactions via CSV
+      description: Import bank transactions via CSV
+      operationId: bankTransactionsCsv
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                entityId:
+                  type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BankTransactionsUploadResult'
+components:
+  schemas:
+    PotentialInvoice:
+      type: object
+      properties:
+        invoiceNumber:
+          type: string
+        invoiceAmount:
+          type: number
+        accountName:
+          type: string
+        invoiceDate:
+          type: integer
+          format: int64
+        matchingConfidence:
+          type: integer
+          format: int32
+    BankTransactionsUploadData:
+      type: object
+      properties:
+        failed:
+          type: boolean
+        paymentType:
+          type: string
+        failureReason:
+          type: string
+        bankAccountId:
+          type: string
+        externalTransactionId:
+          type: string
+        transactionAmount:
+          type: string
+        transactionDate:
+          type: string
+        payerName:
+          type: string
+        referenceNumber:
+          type: string
+        transactionCurrency:
+          type: string
+        transactionType:
+          type: string
+    BankTransactionsUploadResult:
+      type: object
+      properties:
+        bankTransactionsCount:
+          type: integer
+          format: int32
+        failedBankTransactionsCount:
+          type: integer
+          format: int32
+        successfulBankTransactionsCount:
+          type: integer
+          format: int32
+        bankTransactionsUploadData:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankTransactionsUploadData'
+    BankTransactionPotentialInvoice:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        entityId:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        status:
+          type: string
+        paymentType:
+          type: string
+        bankAccountId:
+          type: string
+        externalTransactionId:
+          type: string
+        transactionAmount:
+          type: number
+        transactionDate:
+          type: integer
+          format: int64
+        payerName:
+          type: string
+        referenceNumber:
+          type: string
+        transactionCurrency:
+          type: string
+        transactionType:
+          type: string
+        potentialInvoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/PotentialInvoice'
+        bankTransactionId:
+          type: string
+        bankAccountName:
+          type: string
+    PaginatedBankTransactionPotentialInvoiceResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankTransactionPotentialInvoice'
+        count:
+          type: integer
+          format: int32
+        pageToken:
+          type: string
+        totalCount:
+          type: integer
+          format: int32
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

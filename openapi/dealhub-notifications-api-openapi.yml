@@ -1,0 +1,181 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Notifications API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Notifications
+paths:
+  /notifications:
+    get:
+      tags:
+      - Notifications
+      summary: Get all notifications
+      description: Returns all notification subscriptions for your tenant
+      operationId: getAllNotificationSubscriptionsForTenant
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NotificationTargetAndSubscriptions'
+    post:
+      tags:
+      - Notifications
+      summary: Add a notification target
+      description: Adds a notification target and events according to the specified parameters
+      operationId: addTargetAndEventsSubscriptions
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NotificationTargetAndSubscriptions'
+        description: json representing the notification details
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationTargetAndSubscriptions'
+  /notifications/{notificationId}:
+    post:
+      tags:
+      - Notifications
+      summary: Attach an event to a notification
+      description: Attaches a notification event to the target specified by the notification id
+      operationId: subscribeExistingNotificationTargetToEvent
+      parameters:
+      - name: notificationId
+        in: path
+        description: id of the notification target
+        required: true
+        schema:
+          type: string
+      - name: notificationEventType
+        in: query
+        description: type of event
+        required: true
+        schema:
+          type: string
+          enum:
+          - INVOICE_POSTED
+          - SUBSCRIPTION_CREATED
+          - ORDER_SUBMITTED
+          - ORDER_EXECUTED
+      responses:
+        default:
+          description: successful operation
+  /notifications/unsubscribe/{notificationId}:
+    post:
+      tags:
+      - Notifications
+      summary: Unsubscribe from an event
+      description: Unsubscribes the specified notification target from the specified event
+      operationId: unsubscribeTargetOrEvent
+      parameters:
+      - name: notificationId
+        in: path
+        description: id of the notification target
+        required: true
+        schema:
+          type: string
+      - name: notificationEventType
+        in: query
+        description: type of event
+        required: true
+        schema:
+          type: string
+          enum:
+          - INVOICE_POSTED
+          - SUBSCRIPTION_CREATED
+          - ORDER_SUBMITTED
+          - ORDER_EXECUTED
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    NotificationTargetAndSubscriptions:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        notificationId:
+          type: string
+        notificationTargetType:
+          type: string
+          enum:
+          - SLACK
+          - WEBHOOK
+          - EMAIL
+        notificationTarget:
+          type: string
+        subscribedEvents:
+          type: array
+          items:
+            type: string
+            enum:
+            - INVOICE_POSTED
+            - INVOICE_VOIDED
+            - INVOICE_GENERATION_FAILED
+            - SUBSCRIPTION_CREATED
+            - SUBSCRIPTION_ACTIVATING
+            - SUBSCRIPTION_ACTIVATED
+            - SUBSCRIPTION_CHARGE_CHANGE
+            - SUBSCRIPTION_CANCELLING
+            - SUBSCRIPTION_CANCELLED
+            - SUBSCRIPTION_EXPIRING
+            - SUBSCRIPTION_EXPIRED
+            - SUBSCRIPTION_DELETED
+            - ORDER_SUBMITTED
+            - ORDER_EXECUTED
+            - ORDER_APPROVED
+            - ESIGNATURE_COMPLETED
+            - ESIGNATURE_PARTIALLY_SIGNED
+            - PAYMENT_PROCESSED
+            - PAYMENT_ATTEMPT_FAILED
+            - PAYMENT_RETRIES_EXHAUSTED
+            - ACCOUNT_PAYMENT_METHOD_SUSPENDED
+            - HUBSPOT_SYNC_FAILED
+            - SALESFORCE_SYNC_FAILED
+            - SALESFORCE_INVALID_CREDENTIALS
+            - CONTACT_CREATED
+            - CONTACT_UPDATED
+            - CONTACT_DELETED
+            - CHARGE_CREATED
+            - CHARGE_UPDATED
+            - CHARGE_DELETED
+            - PRODUCT_CREATED
+            - PRODUCT_UPDATED
+            - PRODUCT_DELETED
+            - PLAN_CREATED
+            - PLAN_UPDATED
+            - PLAN_DELETED
+            - PLAN_STATUS_CHANGED
+            - USER_CREATED
+            - USER_DISABLED
+            - USER_REACTIVATED
+            - REFUND_GENERATED
+            - ACCOUNTING_PERIOD_CLOSED
+            - ACCOUNTING_PERIOD_REOPENED
+            - DUNNING_EMAIL_SENT
+            - ACCOUNT_CREATED
+            - ACCOUNT_UPDATED
+            - ACCOUNT_DELETED
+            - INVOICE_RUN_FAILED
+            - INVOICE_RUN_SUCCEEDED
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

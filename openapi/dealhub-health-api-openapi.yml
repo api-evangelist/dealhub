@@ -1,0 +1,27 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Health API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Health
+paths:
+  /ping:
+    get:
+      tags:
+      - Health
+      summary: Simple ping with auth to check if everything is working fine
+      description: Call this resource to make sure API auth is setup correctly, a simple PONG message is returned and the assumption is that auth succeed
+      operationId: ping_1
+      responses:
+        default:
+          description: successful operation
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

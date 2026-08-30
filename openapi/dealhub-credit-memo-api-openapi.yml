@@ -1,0 +1,501 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Credit Memo API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Credit Memo
+paths:
+  /creditmemos/{creditMemoNumber}/void:
+    put:
+      tags:
+      - Credit Memo
+      summary: Mark Credit Memo as voided
+      description: Marks the specified Credit Memo as voided
+      operationId: voidCreditMemo
+      parameters:
+      - name: creditMemoNumber
+        in: path
+        description: number of the credit memo
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoidCreditMemoRequest'
+        description: json representing credit memo details
+        required: true
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditMemoJson'
+  /creditmemos:
+    get:
+      tags:
+      - Credit Memo
+      summary: Get credit memos for an account
+      description: Returns a paginated list of credit memos for the specified account. Pass the cursor returned to subsequent calls to retrieve all data.
+      operationId: getCreditMemoForAccount
+      parameters:
+      - name: accountId
+        in: query
+        description: id of the account
+        required: false
+        schema:
+          type: string
+      - name: cursor
+        in: query
+        description: cursor used to move the pages
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        description: number of results per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditMemoPaginationResponseJson'
+    post:
+      tags:
+      - Credit Memo
+      summary: Create a standalone credit memo
+      description: Creates a standalone credit memo for a specified account. On success the number of the new memo is returned
+      operationId: createStandaloneCreditMemo
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StandaloneCreditMemoRequest'
+        description: json representing the credit memo details
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+  /creditmemos/{creditMemoNumber}:
+    get:
+      tags:
+      - Credit Memo
+      summary: Get credit memo details
+      description: Returns the details of the specified credit memo
+      operationId: getCreditMemo
+      parameters:
+      - name: creditMemoNumber
+        in: path
+        description: number of the credit memo
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditMemoJson'
+    put:
+      tags:
+      - Credit Memo
+      summary: Update a credit memo
+      description: Updates the details of a credit memo in DRAFT status
+      operationId: updateDraftCreditMemo
+      parameters:
+      - name: creditMemoNumber
+        in: path
+        description: credit memo number
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StandaloneCreditMemoRequest'
+        description: json representation of the details to be updated
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditMemoJson'
+    delete:
+      tags:
+      - Credit Memo
+      summary: Delete a credit memo
+      description: Deletes the specified credit memo. The credit memo must be in DRAFT status
+      operationId: deleteCreditMemo
+      parameters:
+      - name: creditMemoNumber
+        in: path
+        description: number of the credit memo
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditMemoJson'
+  /creditmemos/{creditMemoNumber}/post:
+    post:
+      tags:
+      - Credit Memo
+      summary: Post a credit memo
+      description: Sets the status of the specified credit memo to POSTED
+      operationId: postCreditMemo
+      parameters:
+      - name: creditMemoNumber
+        in: path
+        description: number of the credit memo
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditMemoJson'
+  /creditmemos/{creditMemoNumber}/pdf:
+    get:
+      tags:
+      - Credit Memo
+      summary: Download credit memo pdf
+      description: Downloads the pdf version of the credit memo. Note the credit memo must already have been created. If the credit memo is still in the process of being created, HTTP 202 is returned.
+      operationId: getCreditMemoDocumentPdf
+      parameters:
+      - name: creditMemoNumber
+        in: path
+        description: number of the credit memo
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+    post:
+      tags:
+      - Credit Memo
+      summary: Create a credit memo document
+      description: Creates a pdf version of the credit memo
+      operationId: createCreditMemoDocument
+      parameters:
+      - name: creditMemoNumber
+        in: path
+        description: number of the credit memo
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /creditmemos/configuration:
+    get:
+      tags:
+      - Credit Memo
+      summary: Get credit memo configuration for the tenant
+      description: Returns the credit memo configuration for your tenant
+      operationId: getCreditMemoConfiguration
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantCreditMemoConfigurationJson'
+    post:
+      tags:
+      - Credit Memo
+      summary: Update credit memo configuration
+      description: Updates the credit memo configuration for you tenant.
+      operationId: updateCreditMemoConfiguration
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TenantCreditMemoConfigurationJson'
+        description: json representing the configuration
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantCreditMemoConfigurationJson'
+  /creditmemos/convert/{invoiceNumber}:
+    put:
+      tags:
+      - Credit Memo
+      summary: Convert invoice to credit memo
+      description: Converts the specified invoice to a credit memo. Note the invoice must be in DRAFT status and have a negative balance.
+      operationId: convertNegativeDraftInvoice
+      parameters:
+      - name: invoiceNumber
+        in: path
+        description: number of the invoice
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditMemoJson'
+  /creditmemos/{creditMemoNumber}/balance:
+    get:
+      tags:
+      - Credit Memo
+      summary: Get credit memo balance
+      description: Gets the balance of the specified credit memo
+      operationId: getCreditBalance
+      parameters:
+      - name: creditMemoNumber
+        in: path
+        description: number of the credit memo
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreditMemoBalanceJson'
+components:
+  schemas:
+    StandaloneCreditMemoRequest:
+      type: object
+      required:
+      - accountId
+      - amount
+      - currencyCode
+      - lineItems
+      - status
+      properties:
+        lineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditMemoLineItemRequestJson'
+        accountId:
+          type: string
+        entityId:
+          type: string
+        amount:
+          type: number
+        notes:
+          type: string
+        currencyCode:
+          type: string
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - POSTED
+          - CLOSED
+          - VOIDED
+        postedDate:
+          type: integer
+          format: int64
+        creditMemoDate:
+          type: integer
+          format: int64
+        billingContactId:
+          type: string
+        creditReason:
+          type: string
+        startDate:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+    CreditMemoBalanceJson:
+      type: object
+      properties:
+        accountId:
+          type: string
+        creditMemoId:
+          type: string
+          format: uuid
+        balance:
+          type: number
+        updatedOn:
+          type: integer
+          format: int64
+    CreditMemoPaginationResponseJson:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CreditMemoJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
+    CreditMemoLineItemRequestJson:
+      type: object
+      properties:
+        chargeId:
+          type: string
+        amount:
+          type: number
+        startDate:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+    VoidCreditMemoRequest:
+      type: object
+      required:
+      - voidedDate
+      properties:
+        voidedDate:
+          type: integer
+          format: int64
+        voidedNote:
+          type: string
+    CreditMemoJson:
+      type: object
+      required:
+      - accountId
+      - amount
+      - createdOn
+      - creditMemoNumber
+      - entityId
+      - lineItems
+      - status
+      - updatedOn
+      properties:
+        lineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreditMemoLineItemJson'
+        entityId:
+          type: string
+        accountId:
+          type: string
+        amount:
+          type: number
+        notes:
+          type: string
+        creditMemoNumber:
+          type: string
+        currencyCode:
+          type: string
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - POSTED
+          - CLOSED
+          - VOIDED
+        postedDate:
+          type: integer
+          format: int64
+        creditMemoDate:
+          type: integer
+          format: int64
+        createdFrom:
+          type: string
+        exchangeRateId:
+          type: string
+        exchangeRate:
+          type: number
+        exchangeRateDate:
+          type: integer
+          format: int64
+        functionalAmount:
+          type: number
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        erpId:
+          type: string
+        voidedDate:
+          type: integer
+          format: int64
+        voidedNote:
+          type: string
+    CreditMemoLineItemJson:
+      type: object
+      required:
+      - tenantId
+      properties:
+        tenantId:
+          type: string
+        chargeId:
+          type: string
+        amount:
+          type: number
+        taxAmount:
+          type: number
+        functionalAmount:
+          type: number
+        functionalTaxAmount:
+          type: number
+        startDate:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    TenantCreditMemoConfigurationJson:
+      type: object
+      properties:
+        creditMemoNumberPrefix:
+          type: string
+        creditMemoNumberScheme:
+          type: string
+        creditMemoNumberLength:
+          type: integer
+          format: int32
+        creditMemoNextNumber:
+          type: integer
+          format: int32
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

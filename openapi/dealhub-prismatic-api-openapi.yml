@@ -1,0 +1,113 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Prismatic API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Prismatic
+paths:
+  /prismatic/schema:
+    get:
+      tags:
+      - Prismatic
+      summary: Get JSON Schema for a Prismatic object type
+      description: Returns JSON Schema for ACCOUNT, INVOICE, or CREDIT_MEMO objects. Used by Prismatic to render field mappings.
+      operationId: getSchema
+      parameters:
+      - name: object
+        in: query
+        description: Object type (ACCOUNT, INVOICE)
+        required: true
+        schema:
+          type: string
+          enum:
+          - ACCOUNT
+          - INVOICE
+          - ACCOUNT_CONTACT
+          - PAYMENT
+      - name: tenantId
+        in: query
+        description: Tenant ID
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /prismatic/app-url:
+    get:
+      tags:
+      - Prismatic
+      summary: Get Prismatic app URL
+      description: Returns the Prismatic app URL if the Prismatic feature is enabled, null otherwise
+      operationId: getAppUrl
+      responses:
+        default:
+          description: successful operation
+  /prismatic/marketplace-jwt:
+    post:
+      tags:
+      - Prismatic
+      summary: Generate Prismatic marketplace JWT
+      description: Generates a signed JWT for authenticating the current user with Prismatic's embedded marketplace
+      operationId: generateMarketplaceJwt
+      responses:
+        default:
+          description: successful operation
+  /prismatic/syncInvoice/{invoiceId}:
+    post:
+      tags:
+      - Prismatic
+      summary: Trigger Prismatic invoice sync task
+      description: Trigger Prismatic invoice sync task for the given invoice id
+      operationId: syncInvoice
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /prismatic/syncInvoice/enabled:
+    get:
+      tags:
+      - Prismatic
+      summary: Check if Prismatic invoice sync is enabled
+      description: Checks if Prismatic invoice sync is enabled
+      operationId: isSyncInvoiceEnabled
+      responses:
+        default:
+          description: successful operation
+  /prismatic/syncInvoices:
+    post:
+      tags:
+      - Prismatic
+      summary: Trigger Prismatic invoice sync tasks for multiple invoices
+      description: Trigger Prismatic invoice sync tasks for the given list of invoice IDs
+      operationId: syncInvoices
+      requestBody:
+        $ref: '#/components/requestBodies/syncInvoicesToErpBody'
+      responses:
+        default:
+          description: successful operation
+components:
+  requestBodies:
+    syncInvoicesToErpBody:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
+      description: List of invoice IDs to sync
+      required: true
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

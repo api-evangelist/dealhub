@@ -1,0 +1,140 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Tenant API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Tenant
+paths:
+  /rh/tenants:
+    post:
+      tags:
+      - Tenant
+      operationId: createRevHubTenant
+      requestBody:
+        $ref: '#/components/requestBodies/TenantJson'
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    TenantJson:
+      type: object
+      properties:
+        tenantId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+        sourceInitiator:
+          type: string
+          readOnly: true
+          enum:
+          - CPQ
+          - BILLY
+        companyDomain:
+          type: string
+        cfacId:
+          type: integer
+          format: int64
+        isSandbox:
+          type: boolean
+        hasSalesforceIntegration:
+          type: boolean
+          readOnly: true
+        isDeleted:
+          type: boolean
+        isTest:
+          type: boolean
+        hasHubSpotIntegration:
+          type: boolean
+          readOnly: true
+        hasSso:
+          type: boolean
+          readOnly: true
+        createdOn:
+          type: integer
+          format: int64
+          readOnly: true
+        tenantSetting:
+          $ref: '#/components/schemas/TenantSettingJson'
+    AccountAddressJson:
+      type: object
+      properties:
+        streetAddressLine1:
+          type: string
+          description: Address Line 1 of the Contact
+        streetAddressLine2:
+          type: string
+          description: Address Line 2 of the Contact
+        streetAddressLine3:
+          type: string
+          description: Address Line 3 of the Contact
+        city:
+          type: string
+          description: City of the Contact
+        state:
+          type: string
+          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
+        country:
+          type: string
+          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
+        zipcode:
+          type: string
+          description: Zip or Postal Code of the Contact
+    TenantSettingJson:
+      type: object
+      properties:
+        defaultTimeZone:
+          type: string
+        supportedCurrencies:
+          type: array
+          items:
+            type: string
+        percentDerivedFrom:
+          type: string
+          enum:
+          - LIST_AMOUNT
+          - SELL_AMOUNT
+        tenantSettingSeal:
+          type: string
+          enum:
+          - 'ON'
+          - 'OFF'
+        orderExpiryDurationInDays:
+          type: string
+        signingOrder:
+          type: string
+          enum:
+          - ACCOUNT_FIRST
+          - TENANT_FIRST
+          - ACCOUNT_ONLY
+        globalBccEmail:
+          type: string
+        isUpdateOrderStartDateEnabled:
+          type: boolean
+        autoReplacePlans:
+          type: boolean
+        isDocxAdminOnly:
+          type: boolean
+        isDocxPasswordProtected:
+          type: boolean
+  requestBodies:
+    TenantJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TenantJson'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

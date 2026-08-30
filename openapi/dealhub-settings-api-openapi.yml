@@ -1,0 +1,1226 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe Settings API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: Settings
+paths:
+  /termsections/{id}:
+    get:
+      tags:
+      - Settings
+      summary: Get predefined terms section detail
+      description: Returns predefined terms section detail.
+      operationId: getTermSection
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentSection'
+    put:
+      tags:
+      - Settings
+      summary: Update predefined terms section
+      description: Updates the predefined terms section specified.
+      operationId: updateTermSection
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/DocumentSection'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentSection'
+    delete:
+      tags:
+      - Settings
+      summary: Delete predefined terms section
+      description: Deletes the predefined terms section specified.
+      operationId: deleteTermSection
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /termsections:
+    get:
+      tags:
+      - Settings
+      summary: Get predefined terms sections
+      description: Returns predefined terms sections.
+      operationId: getTermSections
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentSection'
+    post:
+      tags:
+      - Settings
+      summary: Add predefined terms section
+      description: Adds a predefined terms section.
+      operationId: addTermSection
+      requestBody:
+        $ref: '#/components/requestBodies/DocumentSection'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentSection'
+  /taxrates/strategies/{id}/{countryCode}:
+    get:
+      tags:
+      - Settings
+      summary: Get tax rate strategy by Id and Country Code
+      description: Retrieves the tax rate strategy object by Id and Country Code
+      operationId: getTaxRateStrategy
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: countryCode
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxRateStrategyJson'
+    put:
+      tags:
+      - Settings
+      summary: Update tax rate strategy
+      description: Updates the specific tax rate strategy object
+      operationId: updateTaxRateStrategy
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: countryCode
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/TaxRateStrategyJson'
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+      - Settings
+      summary: Delete tax rate strategy
+      description: Deletes the tax rate strategy object by Id and Country Code
+      operationId: deleteTaxRateStrategy
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: countryCode
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /taxrates:
+    get:
+      tags:
+      - Settings
+      summary: Get tax rates
+      description: Get all available tax rates. The result is paginated. To retrieve all results pass the cursor returned from a call to the next call until all results are returned.
+      operationId: getTaxRates
+      parameters:
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxRatePaginationResponseJson'
+    post:
+      tags:
+      - Settings
+      summary: Add tax rate
+      description: Add a new tax rate object
+      operationId: addTaxRate
+      requestBody:
+        $ref: '#/components/requestBodies/TaxRateJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxRateJson'
+  /taxrates/{id}:
+    get:
+      tags:
+      - Settings
+      summary: Get tax rate by Id
+      description: Retrieves the tax rate object by Id
+      operationId: getTaxRate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxRateJson'
+    put:
+      tags:
+      - Settings
+      summary: Update tax rate
+      description: Updates the specific tax rate object
+      operationId: updateTaxRate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        $ref: '#/components/requestBodies/TaxRateJson'
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+      - Settings
+      summary: Delete tax rate
+      description: Deletes the tax rate object by Id. If successful the deleted tax rate object is returned
+      operationId: deleteTaxRate
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxRateJson'
+  /taxrates/strategies:
+    get:
+      tags:
+      - Settings
+      summary: Get tax rate strategies
+      description: Get all available tax rate strategies. The result is paginated unless fetchAll=true. To retrieve all results pass the cursor returned from a call to the next call until all results are returned.
+      operationId: getTaxRateStrategies
+      parameters:
+      - name: limit
+        in: query
+        description: number of items per page
+        required: false
+        schema:
+          type: integer
+          format: int32
+      - name: pageToken
+        in: query
+        description: pass this to subsequent calls
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: fetchAll
+        in: query
+        description: if true, returns all strategies ignoring pagination
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxRateStrategyPaginatedResponse'
+    post:
+      tags:
+      - Settings
+      summary: Add tax rate strategy
+      description: Add a new tax rate strategy object
+      operationId: addTaxRateStrategy
+      requestBody:
+        $ref: '#/components/requestBodies/TaxRateStrategyJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxRateStrategyJson'
+  /taxrates/strategies/{id}:
+    get:
+      tags:
+      - Settings
+      summary: Get all tax rate strategies by Id
+      description: Retrieves all tax rate strategy objects with the given Id
+      operationId: getTaxRateStrategiesById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaxRateStrategyJson'
+    delete:
+      tags:
+      - Settings
+      summary: Delete all tax rate strategies by Id
+      description: Deletes all tax rate strategy objects with the given Id
+      operationId: deleteAllTaxRateStrategiesById
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /tenants:
+    get:
+      tags:
+      - Settings
+      summary: Get tenant details
+      description: Get the details of the current tenant
+      operationId: getTenant
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantJson'
+    put:
+      tags:
+      - Settings
+      summary: Update tenant details
+      description: Updates the details of the current tenant based on the input
+      operationId: updateTenant
+      requestBody:
+        $ref: '#/components/requestBodies/TenantJson'
+      responses:
+        default:
+          description: successful operation
+  /tenants/logo:
+    get:
+      tags:
+      - Settings
+      summary: Get tenant logo
+      description: Get the current logo stored
+      operationId: getTenantLogo
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Settings
+      summary: Update tenant logo
+      description: Updates the logo used in external facing communication such as order forms and invoices
+      operationId: uploadTenantLogo
+      requestBody:
+        $ref: '#/components/requestBodies/uploadApprovalMatrixCSV'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantJson'
+  /settings/ui/customizations:
+    get:
+      tags:
+      - Settings
+      summary: Fetch UI customization config for the tenant
+      description: ''
+      operationId: getTenantUICustomizationConfig
+      responses:
+        default:
+          description: successful operation
+    post:
+      tags:
+      - Settings
+      summary: Update UI customization config for the tenant
+      description: ''
+      operationId: updateTenantUICustomizationConfig
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TenantUiCustomization'
+      responses:
+        default:
+          description: successful operation
+    delete:
+      tags:
+      - Settings
+      summary: Remove UI customization config for the tenant
+      description: ''
+      operationId: deleteTenantUICustomizationConfig
+      responses:
+        default:
+          description: successful operation
+  /settings/docxSettings:
+    put:
+      tags:
+      - Settings
+      summary: Update DOCX settings
+      description: Update DOCX settings for your tenant
+      operationId: updateDocxSettings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocxSettings'
+      responses:
+        default:
+          description: successful operation
+  /settings/autoReplacePlans:
+    get:
+      tags:
+      - Settings
+      summary: Get plan replacement settings
+      description: Gets plan replacement settings
+      operationId: getAutoReplacePlans
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Settings
+      summary: Update plan replacement settings
+      description: Update plan replacement settings
+      operationId: updateAutoReplacePlans
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: boolean
+      responses:
+        default:
+          description: successful operation
+  /settings/paymentTerms:
+    get:
+      tags:
+      - Settings
+      summary: Get payment term settings
+      description: ''
+      operationId: getPaymentTermSettings
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Settings
+      summary: Update payment term settings
+      description: ''
+      operationId: updatePaymentTermSettings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentTermSettingsJson'
+        description: json representation of the payment term settings
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /settings/billingCycle:
+    get:
+      tags:
+      - Settings
+      summary: Get current billing cycle definitions
+      description: ''
+      operationId: getBillingCycleDefinitions
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BillingCycleDefinitionJson'
+    post:
+      tags:
+      - Settings
+      summary: Add new billing cycle definition
+      description: ''
+      operationId: addBillingCycleDefinition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillingCycleDefinitionAdd'
+        description: json representation of the billing cycle definition
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /settings/billingCycle/{id}:
+    get:
+      tags:
+      - Settings
+      summary: Get billing cycle definition by id
+      description: ''
+      operationId: getBillingCycleDefinition
+      parameters:
+      - name: id
+        in: path
+        description: id of the billing cycle definition
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingCycleDefinitionJson'
+    put:
+      tags:
+      - Settings
+      summary: Update billing cycle definition
+      description: ''
+      operationId: updateBillingCycleDefinition
+      parameters:
+      - name: id
+        in: path
+        description: id of the billing cycle definition
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BillingCycleDefinitionUpdateJson'
+        description: json representation of the billing cycle definition update
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /settings:
+    get:
+      tags:
+      - Settings
+      summary: Get tenant settings
+      description: Returns all tenant settings for your tenant.
+      operationId: getTenantSetting
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantSettingJson'
+    put:
+      tags:
+      - Settings
+      summary: Update tenant settings
+      description: Updates settings for your tenant.
+      operationId: updateTenantSetting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TenantSettingJson'
+        description: json representation of the settings
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /settings/billingCycle/setDefault:
+    post:
+      tags:
+      - Settings
+      summary: Set billing cycle with given id as default
+      description: ''
+      operationId: setDefaultBillingCycleDefinition
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DefaultBillingCycleDefinitionInput'
+        description: id of the billing cycle definition to set as default. If no id is provided, no default definition is set and all definitions have isDefault set to false.
+        required: true
+      responses:
+        default:
+          description: successful operation
+  /settings/supportedCurrencies:
+    get:
+      tags:
+      - Settings
+      summary: Get supported currencies
+      description: Get supported currencies for your tenant
+      operationId: getSupportedCurrencies
+      responses:
+        default:
+          description: successful operation
+    put:
+      tags:
+      - Settings
+      summary: Update supported currencies
+      description: Update supported currencies for your tenant
+      operationId: updateSupportedCurrencies
+      requestBody:
+        $ref: '#/components/requestBodies/postInvoicesForBulkInvoiceRunBody'
+      responses:
+        default:
+          description: successful operation
+  /unitsOfMeasure:
+    get:
+      tags:
+      - Settings
+      summary: Get units of measure
+      description: Returns a paginated list of units of measure
+      operationId: getUnitsOfMeasure
+      parameters:
+      - name: cursor
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitOfMeasurePaginationResponseJson'
+    post:
+      tags:
+      - Settings
+      summary: Add unit of measure
+      description: Add a new instance of unit of measure as specified by the input
+      operationId: addUnitOfMeasure
+      requestBody:
+        $ref: '#/components/requestBodies/UnitOfMeasureJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitOfMeasureJson'
+  /unitsOfMeasure/{id}:
+    put:
+      tags:
+      - Settings
+      summary: Update unit of measure
+      description: Update the unit of measure by Id provided.
+      operationId: updateUnitOfMeasure
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        $ref: '#/components/requestBodies/UnitOfMeasureJson'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitOfMeasureJson'
+    delete:
+      tags:
+      - Settings
+      summary: Delete unit of measure
+      description: Delete the unit of measure by Id provided. Returns the deleted unit of measure object if successful.
+      operationId: deleteUnitOfMeasure
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnitOfMeasureJson'
+  /unitsOfMeasure/{id}/activate:
+    post:
+      tags:
+      - Settings
+      summary: Activate unit of measure
+      description: Activates the specified unit of measure making it available to be attached to charges
+      operationId: activateUnitOfMeasure
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        default:
+          description: successful operation
+  /unitsOfMeasure/{id}/deprecate:
+    post:
+      tags:
+      - Settings
+      summary: Deprecate unit of measure
+      description: Deprecates the specified unit of measure making it unavailable to be attached to charges going forward
+      operationId: deprecateUnitOfMeasure
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        default:
+          description: successful operation
+components:
+  schemas:
+    TaxRateStrategyPaginatedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxRateStrategyJson'
+        count:
+          type: integer
+          format: int32
+        pageToken:
+          type: string
+        totalCount:
+          type: integer
+          format: int32
+    TenantSettingJson:
+      type: object
+      properties:
+        defaultTimeZone:
+          type: string
+        supportedCurrencies:
+          type: array
+          items:
+            type: string
+        percentDerivedFrom:
+          type: string
+          enum:
+          - LIST_AMOUNT
+          - SELL_AMOUNT
+        tenantSettingSeal:
+          type: string
+          enum:
+          - 'ON'
+          - 'OFF'
+        orderExpiryDurationInDays:
+          type: string
+        signingOrder:
+          type: string
+          enum:
+          - ACCOUNT_FIRST
+          - TENANT_FIRST
+          - ACCOUNT_ONLY
+        globalBccEmail:
+          type: string
+        isUpdateOrderStartDateEnabled:
+          type: boolean
+        autoReplacePlans:
+          type: boolean
+        isDocxAdminOnly:
+          type: boolean
+        isDocxPasswordProtected:
+          type: boolean
+    TenantJson:
+      type: object
+      properties:
+        tenantId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+        sourceInitiator:
+          type: string
+          readOnly: true
+          enum:
+          - CPQ
+          - BILLY
+        companyDomain:
+          type: string
+        cfacId:
+          type: integer
+          format: int64
+        isSandbox:
+          type: boolean
+        hasSalesforceIntegration:
+          type: boolean
+          readOnly: true
+        isDeleted:
+          type: boolean
+        isTest:
+          type: boolean
+        hasHubSpotIntegration:
+          type: boolean
+          readOnly: true
+        hasSso:
+          type: boolean
+          readOnly: true
+        createdOn:
+          type: integer
+          format: int64
+          readOnly: true
+        tenantSetting:
+          $ref: '#/components/schemas/TenantSettingJson'
+    TaxRateStrategyJson:
+      type: object
+      required:
+      - taxRateId
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        countryCode:
+          type: string
+        taxRateId:
+          type: string
+          format: uuid
+    DefaultValueDefinition:
+      type: object
+      properties:
+        path:
+          type: string
+        value:
+          type: string
+    BackendConfig:
+      type: object
+      properties:
+        id:
+          type: string
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Condition'
+    BillingCycleDefinitionJson:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        recurrence:
+          $ref: '#/components/schemas/RecurrenceJson'
+        status:
+          type: string
+          readOnly: true
+          enum:
+          - ACTIVE
+          - INACTIVE
+        isDefault:
+          type: boolean
+          readOnly: true
+    TenantUiCustomization:
+      type: object
+      required:
+      - version
+      properties:
+        version:
+          type: string
+          enum:
+          - V1_TENANT_LEVEL
+        customizations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Customization'
+    PaymentTermSettingsJson:
+      type: object
+      required:
+      - customPaymentTermsAllowed
+      - defaultPaymentTerm
+      - defaultPaymentTerms
+      properties:
+        defaultPaymentTerms:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        defaultPaymentTerm:
+          type: string
+          readOnly: true
+        customPaymentTermsAllowed:
+          type: boolean
+          readOnly: true
+    BillingCycleDefinitionAdd:
+      type: object
+      properties:
+        name:
+          type: string
+          readOnly: true
+        recurrence:
+          $ref: '#/components/schemas/RecurrenceJson'
+        status:
+          type: string
+          readOnly: true
+          enum:
+          - ACTIVE
+          - INACTIVE
+    TaxRateJson:
+      type: object
+      required:
+      - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        taxPercentage:
+          type: number
+        taxCode:
+          type: string
+        taxInclusive:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DISABLED
+          - EXPIRED
+        inUse:
+          type: boolean
+    DefaultBillingCycleDefinitionInput:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          readOnly: true
+    Condition:
+      type: object
+      properties:
+        key:
+          type: string
+        checks:
+          type: array
+          items:
+            type: string
+            enum:
+            - required
+            - empty
+        defaultValue:
+          type: string
+    DocumentSection:
+      type: object
+      required:
+      - location
+      properties:
+        id:
+          type: string
+          format: uuid
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+          minLength: 0
+          maxLength: 1024
+        title:
+          type: string
+          minLength: 0
+          maxLength: 1024
+        location:
+          type: string
+          enum:
+          - BEFORE_SIGNATURE
+          - AFTER_SIGNATURE
+        deleted:
+          type: boolean
+    DocxSettings:
+      type: object
+      properties:
+        isDocxAdminOnly:
+          type: boolean
+        isDocxPasswordProtected:
+          type: boolean
+    UnitOfMeasurePaginationResponseJson:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/UnitOfMeasureJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
+    Customization:
+      type: object
+      required:
+      - configType
+      properties:
+        id:
+          type: string
+        configType:
+          type: string
+          enum:
+          - state
+          - form
+          - dgpTable
+        hidden:
+          type: boolean
+        required:
+          type: boolean
+        defaultValueSetters:
+          type: array
+          items:
+            $ref: '#/components/schemas/DefaultValueDefinition'
+        columnOrdering:
+          type: array
+          items:
+            type: string
+        columnDefaultInvisible:
+          type: array
+          items:
+            type: string
+        backend:
+          $ref: '#/components/schemas/BackendConfig'
+    RecurrenceJson:
+      type: object
+      required:
+      - cycle
+      - step
+      properties:
+        cycle:
+          type: string
+          enum:
+          - DAY
+          - MONTH
+          - QUARTER
+          - SEMI_ANNUAL
+          - YEAR
+          - PAID_IN_FULL
+          - CUSTOM
+        step:
+          type: integer
+          format: int32
+          minimum: 1
+    BillingCycleDefinitionUpdateJson:
+      type: object
+      required:
+      - status
+      properties:
+        name:
+          type: string
+          readOnly: true
+        status:
+          type: string
+          readOnly: true
+          enum:
+          - ACTIVE
+          - INACTIVE
+    TaxRatePaginationResponseJson:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TaxRateJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
+    AccountAddressJson:
+      type: object
+      properties:
+        streetAddressLine1:
+          type: string
+          description: Address Line 1 of the Contact
+        streetAddressLine2:
+          type: string
+          description: Address Line 2 of the Contact
+        streetAddressLine3:
+          type: string
+          description: Address Line 3 of the Contact
+        city:
+          type: string
+          description: City of the Contact
+        state:
+          type: string
+          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
+        country:
+          type: string
+          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
+        zipcode:
+          type: string
+          description: Zip or Postal Code of the Contact
+    UnitOfMeasureJson:
+      type: object
+      required:
+      - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - ACTIVE
+          - DEPRECATED
+  requestBodies:
+    TaxRateJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TaxRateJson'
+    UnitOfMeasureJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnitOfMeasureJson'
+    TenantJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TenantJson'
+    DocumentSection:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DocumentSection'
+    TaxRateStrategyJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TaxRateStrategyJson'
+    uploadApprovalMatrixCSV:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+    postInvoicesForBulkInvoiceRunBody:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

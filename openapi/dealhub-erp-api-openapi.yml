@@ -1,0 +1,159 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe ERP API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: ERP
+paths:
+  /erp/processSyncTasks/{accountingPeriodId}:
+    post:
+      tags:
+      - ERP
+      summary: Trigger ERP journal entry sync task
+      description: Trigger ERP journal entry sync task for given accounting period id
+      operationId: processSyncTasks
+      parameters:
+      - name: accountingPeriodId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /erp/processDeleteTasks/{accountingPeriodId}:
+    post:
+      tags:
+      - ERP
+      summary: Trigger ERP journal entry deletion task
+      description: Trigger ERP journal entry deletion task for the given accounting period id
+      operationId: processDeleteTasks
+      parameters:
+      - name: accountingPeriodId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /erp/syncInvoice/{invoiceId}:
+    post:
+      tags:
+      - ERP
+      summary: Trigger ERP invoice sync task
+      description: Trigger ERP invoice sync task for the given invoice id
+      operationId: syncInvoiceToErp
+      parameters:
+      - name: invoiceId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /erp/syncInvoice/enabled:
+    get:
+      tags:
+      - ERP
+      summary: Check if invoice sync to ERP is enabled
+      description: Checks if invoice sync to ERP is enabled
+      operationId: isSyncInvoiceToErpEnabled
+      responses:
+        default:
+          description: successful operation
+  /erp/syncInvoices:
+    post:
+      tags:
+      - ERP
+      summary: Trigger ERP invoice sync tasks for multiple invoices
+      description: Trigger ERP invoice sync tasks for the given list of invoice IDs
+      operationId: syncInvoicesToErp
+      requestBody:
+        $ref: '#/components/requestBodies/syncInvoicesToErpBody'
+      responses:
+        default:
+          description: successful operation
+  /erp/syncCreditMemo/{creditMemoNumber}:
+    post:
+      tags:
+      - ERP
+      summary: Trigger ERP credit memo sync task
+      description: Trigger ERP credit memo sync task for the given credit memo number
+      operationId: syncCreditMemoToErp
+      parameters:
+      - name: creditMemoNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /erp/syncVoidInvoice/{invoiceNumber}:
+    post:
+      tags:
+      - ERP
+      summary: Trigger ERP void invoice sync task
+      description: Trigger ERP void invoice sync task for the given invoice number
+      operationId: syncVoidInvoiceToErp
+      parameters:
+      - name: invoiceNumber
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /rh/invoices/{invoiceId}/erpSync:
+    get:
+      tags:
+      - ERP
+      operationId: getInvoiceErpSyncData
+      parameters:
+      - name: invoiceId
+        in: path
+        description: Invoice number.
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /rh/payments/{paymentId}/erpSync:
+    get:
+      tags:
+      - ERP
+      operationId: getPaymentErpSyncData
+      parameters:
+      - name: paymentId
+        in: path
+        description: Payment id.
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+components:
+  requestBodies:
+    syncInvoicesToErpBody:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
+      description: List of invoice IDs to sync
+      required: true
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key

@@ -1,0 +1,237 @@
+openapi: 3.2.0
+info:
+  version: 1.0.0
+  title: Subskribe AI Agent API
+servers:
+- url: https://api.app.subskribe.com
+security:
+- ApiKeyAuth: []
+tags:
+- name: AI Agent
+paths:
+  /ai/zeppa/gen:
+    post:
+      tags:
+      - AI Agent
+      summary: Generate zeppa artifact based on the description provided
+      description: Generate zeppa code or documentation based on the input provided
+      operationId: generateZeppaArtifact
+      requestBody:
+        $ref: '#/components/requestBodies/generateZeppaArtifactBody'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/event-stream:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+  /ai/agents/session/{sessionId}:
+    get:
+      tags:
+      - AI Agent
+      summary: 'Get the agent session given the id, NOTE: at the moment there is no response body'
+      description: 'Get the agent session given the id, NOTE: at the moment there is no response body, if 200 is returned then session exists'
+      operationId: getAgentSession
+      parameters:
+      - name: sessionId
+        in: path
+        description: id of the session to be fetched
+        required: true
+        schema:
+          type: string
+      responses:
+        default:
+          description: successful operation
+  /ai/summary/subscription/{subscriptionId}:
+    get:
+      tags:
+      - AI Agent
+      summary: Generate a summary of the subscription in plain english in markdown format
+      description: Generate a complete summary of the subscription with the given id, a full detailed summary will be generated including metrics
+      operationId: generateSubscriptionSummary
+      parameters:
+      - name: subscriptionId
+        in: path
+        description: id of the subscription
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/event-stream:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+  /ai/agents/session:
+    post:
+      tags:
+      - AI Agent
+      summary: Create new conversational AI agent session
+      description: Create a new conversation session with Subskribe AI agent, this resource will return a session id which will be used for future conversations
+      operationId: createAgentSession
+      responses:
+        default:
+          description: successful operation
+  /ai/agents/session/{sessionId}/chat:
+    put:
+      tags:
+      - AI Agent
+      summary: Chat with a given session id and get back a response for a given message
+      description: The API responds user message, a session id is required to identify the session this message needs to be posted
+      operationId: chatResponse
+      parameters:
+      - name: sessionId
+        in: path
+        description: id of the session with which the conversation needs to happen
+        required: true
+        schema:
+          type: string
+      requestBody:
+        $ref: '#/components/requestBodies/generateZeppaArtifactBody'
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/plain:
+              schema:
+                type: string
+            application/json:
+              schema:
+                type: string
+  /ai/agents/session/{sessionId}/chatAsync:
+    get:
+      tags:
+      - AI Agent
+      summary: Chat with a given session id and get back a response for a given message in a async manner in the form of server side events
+      description: The API responds to user message, a session id is required to identify the session this message needs to be posted
+      operationId: chatResponseAsync
+      parameters:
+      - name: sessionId
+        in: path
+        description: id of the session with which the conversation needs to happen
+        required: true
+        schema:
+          type: string
+      - name: userMessage
+        in: query
+        description: the user message to which the AI can respond
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            text/event-stream:
+              schema:
+                $ref: '#/components/schemas/OutboundEvent'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutboundEvent'
+  /ai/agents/session/{sessionId}/messages:
+    get:
+      tags:
+      - AI Agent
+      summary: List the messages belong to this session
+      description: The message will be returned in the most recent order, with the latest being the first
+      operationId: chatMessages
+      parameters:
+      - name: sessionId
+        in: path
+        description: id of the session with which the conversation needs to happen
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: the number of message to fetch should be a number between 1 to 100 if present
+        required: false
+        schema:
+          type: integer
+          format: int32
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+components:
+  schemas:
+    MediaType:
+      type: object
+      properties:
+        type:
+          type: string
+        subtype:
+          type: string
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+        wildcardType:
+          type: boolean
+        wildcardSubtype:
+          type: boolean
+    Message:
+      type: object
+      required:
+      - createdAt
+      - message
+      - role
+      properties:
+        role:
+          type: string
+          readOnly: true
+        message:
+          type: string
+          readOnly: true
+        createdAt:
+          type: integer
+          format: int64
+          readOnly: true
+    OutboundEvent:
+      type: object
+      properties:
+        name:
+          type: string
+        comment:
+          type: string
+        id:
+          type: string
+        mediaType:
+          $ref: '#/components/schemas/MediaType'
+        data:
+          type: object
+        reconnectDelay:
+          type: integer
+          format: int64
+        genericType:
+          $ref: '#/components/schemas/Type'
+        reconnectDelaySet:
+          type: boolean
+    Type:
+      type: object
+      properties:
+        typeName:
+          type: string
+  requestBodies:
+    generateZeppaArtifactBody:
+      content:
+        text/plain:
+          schema:
+            type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
