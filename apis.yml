@@ -1,18 +1,15 @@
 aid: dealhub
 name: DealHub
-description: 'DealHub is an agentic quote-to-revenue platform that unifies CPQ (Configure,
-  Price, Quote), CLM (contract lifecycle management), DealRoom digital sales rooms,
-  subscription management, usage-based billing and revenue recognition. The platform
-  is governed by the customer''s CRM — with native connectors for Salesforce, HubSpot
-  and Microsoft Dynamics — and centers the quoting experience on a guided-selling
-  Playbook that generates products, calculates pricing and applies discount and
-  approval workflows automatically. DealHub publishes a public developer portal at
-  developers.dealhub.io covering eleven OpenAPI 3.0.3 contracts: Quote, Headless
-  Quote, Actions, CRM, CRM Import, User, Partner, Pricing and Version APIs on
-  api.dealhub.io, the Subskribe billing and revenue API acquired with Subskribe on
-  api.app.subskribe.com, plus two inbound callback contracts (External Query and
-  Callouts) that customers implement so DealHub can pull real-time data and pricing
-  from an external system during quote generation.'
+description: 'DealHub is an agentic quote-to-revenue platform that unifies CPQ (Configure, Price, Quote),
+  CLM (contract lifecycle management), DealRoom digital sales rooms, subscription management, usage-based
+  billing and revenue recognition. The platform is governed by the customer''s CRM — with native connectors
+  for Salesforce, HubSpot and Microsoft Dynamics — and centers the quoting experience on a guided-selling
+  Playbook that generates products, calculates pricing and applies discount and approval workflows automatically.
+  DealHub publishes a public developer portal at developers.dealhub.io covering eleven OpenAPI 3.0.3 contracts:
+  Quote, Headless Quote, Actions, CRM, CRM Import, User, Partner, Pricing and Version APIs on api.dealhub.io,
+  the Subskribe billing and revenue API acquired with Subskribe on api.app.subskribe.com, plus two inbound
+  callback contracts (External Query and Callouts) that customers implement so DealHub can pull real-time
+  data and pricing from an external system during quote generation.'
 deliveryModel:
   model: saas
   open_source: false
@@ -84,11 +81,10 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 apis:
-- aid: dealhub-crm-import-api
+- aid: dealhub:dealhub-crm-import-api
   name: DealHub CRM Import API
-  description: >-
-    Start, track, inspect and retry asynchronous imports of buyer accounts and contacts from a tenant's
-    connected CRM into DealHub, with per-id lookup and aggregate success/failure counts.
+  description: Start, track, inspect and retry asynchronous imports of buyer accounts and contacts from
+    a tenant's connected CRM into DealHub, with per-id lookup and aggregate success/failure counts.
   humanURL: https://developers.dealhub.io/docs/crm-import-overview
   baseURL: https://api.dealhub.io
   tags:
@@ -888,8 +884,7 @@ apis:
     url: https://developers.dealhub.io/reference/getpricing
 - aid: dealhub:dealhub-get-products-information-api
   name: DealHub Get Products Information API
-  description: >-
-    The Get Products Information API from DealHub — 2 operation(s) for get products information.
+  description: The Get Products Information API from DealHub — 2 operation(s) for get products information.
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
@@ -1041,8 +1036,7 @@ apis:
     url: https://developers.dealhub.io/reference/getpricing
 - aid: dealhub:dealhub-intelligent-sales-room-api
   name: DealHub Intelligent Sales Room API
-  description: >-
-    The Intelligent Sales Room API from DealHub — 41 operation(s) for intelligent sales room.
+  description: The Intelligent Sales Room API from DealHub — 41 operation(s) for intelligent sales room.
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
@@ -1378,9 +1372,8 @@ apis:
     url: https://developers.dealhub.io/reference/getpricing
 - aid: dealhub:dealhub-playbook-api
   name: DealHub Playbook API
-  description: >-
-    Endpoints for exporting Playbook configuration and data in JSON format, and for generating a Generate
-    Quote API request template based on the Playbook structure.
+  description: Endpoints for exporting Playbook configuration and data in JSON format, and for generating
+    a Generate Quote API request template based on the Playbook structure.
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
@@ -1470,8 +1463,7 @@ apis:
     url: https://developers.dealhub.io/reference/getpricing
 - aid: dealhub:dealhub-product-hierarchy-beta-api
   name: DealHub Product Hierarchy (Beta) API
-  description: >-
-    The Product Hierarchy (Beta) API from DealHub — 1 operation(s) for product hierarchy (beta).
+  description: The Product Hierarchy (Beta) API from DealHub — 1 operation(s) for product hierarchy (beta).
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
