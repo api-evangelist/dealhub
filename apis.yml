@@ -83,8 +83,9 @@ maintainers:
 apis:
 - aid: dealhub:dealhub-crm-import-api
   name: DealHub CRM Import API
-  description: Start, track, inspect and retry asynchronous imports of buyer accounts and contacts from
-    a tenant's connected CRM into DealHub, with per-id lookup and aggregate success/failure counts.
+  description: >-
+    Start, track, inspect and retry asynchronous imports of buyer accounts and contacts from a tenant's
+    connected CRM into DealHub, with per-id lookup and aggregate success/failure counts.
   humanURL: https://developers.dealhub.io/docs/crm-import-overview
   baseURL: https://api.dealhub.io
   tags:
@@ -822,36 +823,6 @@ apis:
     url: https://developers.dealhub.io/reference/fulfillexternalquery
   - type: APIReference
     url: https://developers.dealhub.io/reference/getpricing
-- aid: dealhub:dealhub-external-query-api
-  name: DealHub External Query API
-  description: The External Query API from DealHub — 1 operation(s) for external query.
-  humanURL: https://developers.dealhub.io/docs/quote-overview
-  baseURL: https://api.dealhub.io
-  tags:
-  - External Query
-  properties:
-  - type: OpenAPI
-    url: openapi/dealhub-external-query-api-openapi.yml
-  - type: APIReference
-    url: https://developers.dealhub.io/reference/getquotebyid
-  - type: APIReference
-    url: https://developers.dealhub.io/reference/simulatequote
-  - type: APIReference
-    url: https://developers.dealhub.io/reference/authenticateuser
-  - type: APIReference
-    url: https://developers.dealhub.io/reference/getuserbylogin
-  - type: APIReference
-    url: https://developers.dealhub.io/reference/authenticatepartneruser
-  - type: APIReference
-    url: https://developers.dealhub.io/reference/getproductsparameters
-  - type: APIReference
-    url: https://developers.dealhub.io/reference/getversionbyid
-  - type: APIReference
-    url: https://developers.dealhub.io/docs/create-a-subscription
-  - type: APIReference
-    url: https://developers.dealhub.io/reference/fulfillexternalquery
-  - type: APIReference
-    url: https://developers.dealhub.io/reference/getpricing
 - aid: dealhub:dealhub-foreign-exchange-api
   name: DealHub Foreign Exchange API
   description: The Foreign Exchange API from DealHub — 4 operation(s) for foreign exchange.
@@ -884,7 +855,8 @@ apis:
     url: https://developers.dealhub.io/reference/getpricing
 - aid: dealhub:dealhub-get-products-information-api
   name: DealHub Get Products Information API
-  description: The Get Products Information API from DealHub — 2 operation(s) for get products information.
+  description: >-
+    The Get Products Information API from DealHub — 2 operation(s) for get products information.
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
@@ -1036,7 +1008,8 @@ apis:
     url: https://developers.dealhub.io/reference/getpricing
 - aid: dealhub:dealhub-intelligent-sales-room-api
   name: DealHub Intelligent Sales Room API
-  description: The Intelligent Sales Room API from DealHub — 41 operation(s) for intelligent sales room.
+  description: >-
+    The Intelligent Sales Room API from DealHub — 41 operation(s) for intelligent sales room.
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
@@ -1372,8 +1345,9 @@ apis:
     url: https://developers.dealhub.io/reference/getpricing
 - aid: dealhub:dealhub-playbook-api
   name: DealHub Playbook API
-  description: Endpoints for exporting Playbook configuration and data in JSON format, and for generating
-    a Generate Quote API request template based on the Playbook structure.
+  description: >-
+    Endpoints for exporting Playbook configuration and data in JSON format, and for generating a Generate
+    Quote API request template based on the Playbook structure.
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
@@ -1463,7 +1437,8 @@ apis:
     url: https://developers.dealhub.io/reference/getpricing
 - aid: dealhub:dealhub-product-hierarchy-beta-api
   name: DealHub Product Hierarchy (Beta) API
-  description: The Product Hierarchy (Beta) API from DealHub — 1 operation(s) for product hierarchy (beta).
+  description: >-
+    The Product Hierarchy (Beta) API from DealHub — 1 operation(s) for product hierarchy (beta).
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
