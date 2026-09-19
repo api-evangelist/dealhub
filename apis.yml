@@ -197,6 +197,8 @@ apis:
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
+  - AI Agents
+  tags_raw:
   - AI Agent
   properties:
   - type: OpenAPI
@@ -1011,6 +1013,8 @@ apis:
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
+  - Invoices
+  tags_raw:
   - Invoice
   properties:
   - type: OpenAPI
@@ -1289,6 +1293,8 @@ apis:
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
+  - Playbooks
+  tags_raw:
   - Playbook
   properties:
   - type: OpenAPI
@@ -1712,6 +1718,8 @@ apis:
   humanURL: https://developers.dealhub.io/docs/quote-overview
   baseURL: https://api.dealhub.io
   tags:
+  - Tenants
+  tags_raw:
   - Tenant
   properties:
   - type: OpenAPI
