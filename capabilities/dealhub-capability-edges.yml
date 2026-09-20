@@ -63,7 +63,8 @@ edges:
   reason: Explicit quote generation, simulation, approval submission, publishing and signing — configure-price-quote
     lifecycle. Some overlap with Subscription Contracting, so not maximal confidence.
 - tag: MetricsReporting
-  spec_file: dealhub-metricsreporting-api-openapi.yml
+  spec_file: dealhub-metrics-reporting-api-openapi.yml
+  reanchored_from: dealhub-metricsreporting-api-openapi.yml
   capability_id: BC-4250.70
   capability_id_l1: BC-4250
   capability_name: Subscription Revenue Analytics
