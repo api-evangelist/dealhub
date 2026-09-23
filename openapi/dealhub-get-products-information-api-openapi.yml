@@ -1,14 +1,7 @@
 openapi: 3.2.0
 info:
   title: Pricing Get Products Information API
-  description: 'This API provides services to calculate prices for a given list of product SKUs. It involves a two-step process:
-
-    1.  **Get Products Parameters:** First, call the `/api/v1/products/parameters` endpoint with a list of SKUs to determine the specific "product factors" and "parameters" required to calculate a price for each one.
-
-    2.  **Get Products Pricing:** Next, call the `/api/v1/products/pricing` endpoint, providing the SKUs along with the required parameters (and their values) obtained from the first call. This will return the calculated price for each SKU.
-
-
-    All requests require a secret Bearer Token in the `Authorization` header.'
+  description: This API provides services to calculate prices for a given list of product SKUs.
   version: 1.0.0
 servers:
 - url: https://api.dealhub.io
@@ -173,97 +166,6 @@ paths:
           description: Forbidden. The authentication token is missing or invalid.
 components:
   schemas:
-    ParametersResponse:
-      type: object
-      properties:
-        skus:
-          type: array
-          items:
-            $ref: '#/components/schemas/SkuParameters'
-    PricingResponse:
-      type: object
-      properties:
-        currency:
-          type: string
-          description: The currency in which the prices are shown.
-        version:
-          type: string
-          description: The version for which the prices are related.
-        playbook:
-          type: string
-          description: The playbook name for which the prices are related.
-        skus:
-          type: array
-          items:
-            $ref: '#/components/schemas/SkuPrice'
-    SkuParameters:
-      type: object
-      properties:
-        sku:
-          type: string
-        parameters_for:
-          type: object
-          properties:
-            product_factors:
-              type: array
-              description: A list of product-specific factors required for price calculation of the given SKU.
-              items:
-                $ref: '#/components/schemas/ParameterDefinition'
-            parameters:
-              type: array
-              description: The list of parameters needed to resolve all of the relevant pricing formulas.
-              items:
-                $ref: '#/components/schemas/ParameterDefinition'
-    ParameterValue:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          oneOf:
-          - type: string
-          - type: number
-      required:
-      - name
-      - value
-    SkuPrice:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The identifier that represents the ordinal position as sent in the request.
-        sku:
-          type: string
-          description: The product's SKU.
-        price:
-          type: number
-          description: The calculated price per unit in the requested currency (0 if there was an error).
-        error:
-          type: string
-          description: An error message in case something went wrong (e.g., "Pricing could not be calculated").
-    PricingRequest:
-      type: object
-      properties:
-        currency:
-          type: string
-          description: The currency ISO code to base the pricing on.
-        geo:
-          type: string
-          description: The geographic region to be used for the pricing calculation.
-        version:
-          type: string
-          description: The version name to retrieve the parameters for. If not provided, the system will use the active version.
-        playbook:
-          type: string
-          description: The playbook name in case multiple playbooks exist.
-        skus:
-          type: array
-          items:
-            $ref: '#/components/schemas/SkuPricingRequest'
-      required:
-      - currency
-      - geo
-      - skus
     SkuPricingRequest:
       type: object
       properties:
@@ -282,18 +184,6 @@ components:
       - id
       - sku
       - parameters
-    ParameterDefinition:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the parameter to return.
-        type:
-          type: string
-          enum:
-          - number
-          - text
-          description: The expected value type.
     ParametersRequest:
       type: object
       properties:
@@ -318,6 +208,109 @@ components:
       - currency
       - geo
       - skus
+    PricingRequest:
+      type: object
+      properties:
+        currency:
+          type: string
+          description: The currency ISO code to base the pricing on.
+        geo:
+          type: string
+          description: The geographic region to be used for the pricing calculation.
+        version:
+          type: string
+          description: The version name to retrieve the parameters for. If not provided, the system will use the active version.
+        playbook:
+          type: string
+          description: The playbook name in case multiple playbooks exist.
+        skus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkuPricingRequest'
+      required:
+      - currency
+      - geo
+      - skus
+    SkuPrice:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier that represents the ordinal position as sent in the request.
+        sku:
+          type: string
+          description: The product's SKU.
+        price:
+          type: number
+          description: The calculated price per unit in the requested currency (0 if there was an error).
+        error:
+          type: string
+          description: An error message in case something went wrong (e.g., "Pricing could not be calculated").
+    ParameterValue:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          oneOf:
+          - type: string
+          - type: number
+      required:
+      - name
+      - value
+    ParametersResponse:
+      type: object
+      properties:
+        skus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkuParameters'
+    SkuParameters:
+      type: object
+      properties:
+        sku:
+          type: string
+        parameters_for:
+          type: object
+          properties:
+            product_factors:
+              type: array
+              description: A list of product-specific factors required for price calculation of the given SKU.
+              items:
+                $ref: '#/components/schemas/ParameterDefinition'
+            parameters:
+              type: array
+              description: The list of parameters needed to resolve all of the relevant pricing formulas.
+              items:
+                $ref: '#/components/schemas/ParameterDefinition'
+    ParameterDefinition:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the parameter to return.
+        type:
+          type: string
+          enum:
+          - number
+          - text
+          description: The expected value type.
+    PricingResponse:
+      type: object
+      properties:
+        currency:
+          type: string
+          description: The currency in which the prices are shown.
+        version:
+          type: string
+          description: The version for which the prices are related.
+        playbook:
+          type: string
+          description: The playbook name for which the prices are related.
+        skus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkuPrice'
   securitySchemes:
     bearerAuth:
       type: http

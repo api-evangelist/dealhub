@@ -281,79 +281,8 @@ paths:
           description: successful operation
 components:
   schemas:
-    UserPaginationResponseJson:
-      type: object
-      properties:
-        data:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/UserJson'
-        numElements:
-          type: integer
-          format: int32
-          readOnly: true
-        nextCursor:
-          type: string
-          format: uuid
-          readOnly: true
     InputStream:
       type: object
-    UserSsoUpdate:
-      type: object
-      properties:
-        ssoOnly:
-          type: boolean
-    EntityRef:
-      type: object
-      required:
-      - entityId
-      - name
-      properties:
-        entityId:
-          type: string
-          readOnly: true
-        displayId:
-          type: string
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-    ApprovalSegmentJson:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-    UserGroupJson:
-      type: object
-      properties:
-        id:
-          type: string
-        entityIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        name:
-          type: string
-        description:
-          type: string
-        users:
-          type: array
-          items:
-            type: string
-        externalId:
-          type: string
     UserInput:
       type: object
       properties:
@@ -399,7 +328,12 @@ components:
             type: string
         externalId:
           type: string
-    UserGroupRequestJson:
+    UserSsoUpdate:
+      type: object
+      properties:
+        ssoOnly:
+          type: boolean
+    UserGroupJson:
       type: object
       properties:
         id:
@@ -419,6 +353,37 @@ components:
             type: string
         externalId:
           type: string
+    EntityRef:
+      type: object
+      required:
+      - entityId
+      - name
+      properties:
+        entityId:
+          type: string
+          readOnly: true
+        displayId:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+    UserPaginationResponseJson:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/UserJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
     UserJson:
       type: object
       properties:
@@ -494,17 +459,52 @@ components:
           type: string
         eventObjectId:
           type: string
+    UserGroupRequestJson:
+      type: object
+      properties:
+        id:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        description:
+          type: string
+        users:
+          type: array
+          items:
+            type: string
+        externalId:
+          type: string
+    ApprovalSegmentJson:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
   requestBodies:
-    UserInput:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/UserInput'
     UserGroupRequestJson:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UserGroupRequestJson'
+    UserInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserInput'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

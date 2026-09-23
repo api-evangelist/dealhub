@@ -111,35 +111,156 @@ paths:
         default:
           description: successful operation
 components:
-  requestBodies:
-    uploadApprovalMatrixCSV:
-      content:
-        multipart/form-data:
-          schema:
-            type: object
-            properties:
-              file:
-                type: string
-                format: binary
   schemas:
-    NumberConfig:
+    AccountAddressJson:
       type: object
       properties:
-        configId:
+        streetAddressLine1:
           type: string
-        scheme:
+          description: Address Line 1 of the Contact
+        streetAddressLine2:
           type: string
+          description: Address Line 2 of the Contact
+        streetAddressLine3:
+          type: string
+          description: Address Line 3 of the Contact
+        city:
+          type: string
+          description: City of the Contact
+        state:
+          type: string
+          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
+        country:
+          type: string
+          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
+        zipcode:
+          type: string
+          description: Zip or Postal Code of the Contact
+    AccountReceivableContactJson:
+      type: object
+      required:
+      - address
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+    EntityJson:
+      type: object
+      required:
+      - functionalCurrency
+      - name
+      - prorationMode
+      - prorationScheme
+      properties:
+        entityId:
+          type: string
+          readOnly: true
+        displayId:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        prorationScheme:
+          type: string
+          readOnly: true
           enum:
-          - SEQUENCE
-          - PSEUDO_RANDOM
-        prefix:
+          - FIXED_DAYS
+          - CALENDAR_DAYS
+        prorationMode:
           type: string
-        length:
-          type: integer
-          format: int32
-        nextSequenceNumber:
-          type: integer
-          format: int64
+          readOnly: true
+          enum:
+          - NORMALIZED
+          - EXACT_DAYS
+          - EXACT
+        invoiceConfigId:
+          type: string
+          readOnly: true
+        invoiceConfig:
+          $ref: '#/components/schemas/NumberConfig'
+        creditMemoConfig:
+          $ref: '#/components/schemas/NumberConfig'
+        timezone:
+          type: string
+          readOnly: true
+        functionalCurrency:
+          type: string
+          readOnly: true
+        wireInstruction:
+          type: string
+          readOnly: true
+        companyContact:
+          $ref: '#/components/schemas/CompanyContactJson'
+        accountReceivableContact:
+          $ref: '#/components/schemas/AccountReceivableContactJson'
+        erpId:
+          type: string
+          readOnly: true
+    Entity:
+      type: object
+      required:
+      - functionalCurrency
+      - name
+      - prorationMode
+      - prorationScheme
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        tenantId:
+          type: string
+          readOnly: true
+        entityId:
+          type: string
+          readOnly: true
+        displayId:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        prorationScheme:
+          type: string
+          readOnly: true
+          enum:
+          - FIXED_DAYS
+          - CALENDAR_DAYS
+        prorationMode:
+          type: string
+          readOnly: true
+          enum:
+          - NORMALIZED
+          - EXACT_DAYS
+          - EXACT
+        invoiceConfigId:
+          type: string
+          readOnly: true
+        invoiceConfig:
+          $ref: '#/components/schemas/NumberConfig'
+        timezone:
+          $ref: '#/components/schemas/TimeZone'
+        functionalCurrency:
+          type: string
+          readOnly: true
+        wireInstruction:
+          type: string
+          readOnly: true
+        companyContact:
+          $ref: '#/components/schemas/AccountContact'
+        accountReceivableContact:
+          $ref: '#/components/schemas/AccountContact'
+        erpId:
+          type: string
+          readOnly: true
     CompanyContactJson:
       type: object
       required:
@@ -159,6 +280,65 @@ components:
           readOnly: true
         address:
           $ref: '#/components/schemas/AccountAddressJson'
+    NumberConfig:
+      type: object
+      properties:
+        configId:
+          type: string
+        scheme:
+          type: string
+          enum:
+          - SEQUENCE
+          - PSEUDO_RANDOM
+        prefix:
+          type: string
+        length:
+          type: integer
+          format: int32
+        nextSequenceNumber:
+          type: integer
+          format: int64
+    TimeZone:
+      type: object
+      properties:
+        displayName:
+          type: string
+        id:
+          type: string
+        dstsavings:
+          type: integer
+          format: int32
+        rawOffset:
+          type: integer
+          format: int32
+    AccountAddress:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        addressId:
+          type: string
+        streetAddressLine1:
+          type: string
+        streetAddressLine2:
+          type: string
+        streetAddressLine3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        zipcode:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
     AccountContact:
       type: object
       properties:
@@ -221,196 +401,16 @@ components:
           format: int64
         fullName:
           type: string
-    Entity:
-      type: object
-      required:
-      - functionalCurrency
-      - name
-      - prorationMode
-      - prorationScheme
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        tenantId:
-          type: string
-          readOnly: true
-        entityId:
-          type: string
-          readOnly: true
-        displayId:
-          type: string
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-        prorationScheme:
-          type: string
-          readOnly: true
-          enum:
-          - FIXED_DAYS
-          - CALENDAR_DAYS
-        prorationMode:
-          type: string
-          readOnly: true
-          enum:
-          - NORMALIZED
-          - EXACT_DAYS
-          - EXACT
-        invoiceConfigId:
-          type: string
-          readOnly: true
-        invoiceConfig:
-          $ref: '#/components/schemas/NumberConfig'
-        timezone:
-          $ref: '#/components/schemas/TimeZone'
-        functionalCurrency:
-          type: string
-          readOnly: true
-        wireInstruction:
-          type: string
-          readOnly: true
-        companyContact:
-          $ref: '#/components/schemas/AccountContact'
-        accountReceivableContact:
-          $ref: '#/components/schemas/AccountContact'
-        erpId:
-          type: string
-          readOnly: true
-    AccountAddressJson:
-      type: object
-      properties:
-        streetAddressLine1:
-          type: string
-          description: Address Line 1 of the Contact
-        streetAddressLine2:
-          type: string
-          description: Address Line 2 of the Contact
-        streetAddressLine3:
-          type: string
-          description: Address Line 3 of the Contact
-        city:
-          type: string
-          description: City of the Contact
-        state:
-          type: string
-          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
-        country:
-          type: string
-          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
-        zipcode:
-          type: string
-          description: Zip or Postal Code of the Contact
-    AccountReceivableContactJson:
-      type: object
-      required:
-      - address
-      properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-        phoneNumber:
-          type: string
-        address:
-          $ref: '#/components/schemas/AccountAddressJson'
-    AccountAddress:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        addressId:
-          type: string
-        streetAddressLine1:
-          type: string
-        streetAddressLine2:
-          type: string
-        streetAddressLine3:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        country:
-          type: string
-        zipcode:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-    EntityJson:
-      type: object
-      required:
-      - functionalCurrency
-      - name
-      - prorationMode
-      - prorationScheme
-      properties:
-        entityId:
-          type: string
-          readOnly: true
-        displayId:
-          type: string
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-        prorationScheme:
-          type: string
-          readOnly: true
-          enum:
-          - FIXED_DAYS
-          - CALENDAR_DAYS
-        prorationMode:
-          type: string
-          readOnly: true
-          enum:
-          - NORMALIZED
-          - EXACT_DAYS
-          - EXACT
-        invoiceConfigId:
-          type: string
-          readOnly: true
-        invoiceConfig:
-          $ref: '#/components/schemas/NumberConfig'
-        creditMemoConfig:
-          $ref: '#/components/schemas/NumberConfig'
-        timezone:
-          type: string
-          readOnly: true
-        functionalCurrency:
-          type: string
-          readOnly: true
-        wireInstruction:
-          type: string
-          readOnly: true
-        companyContact:
-          $ref: '#/components/schemas/CompanyContactJson'
-        accountReceivableContact:
-          $ref: '#/components/schemas/AccountReceivableContactJson'
-        erpId:
-          type: string
-          readOnly: true
-    TimeZone:
-      type: object
-      properties:
-        displayName:
-          type: string
-        id:
-          type: string
-        dstsavings:
-          type: integer
-          format: int32
-        rawOffset:
-          type: integer
-          format: int32
+  requestBodies:
+    uploadApprovalMatrixCSV:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

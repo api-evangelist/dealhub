@@ -203,21 +203,6 @@ components:
           type: boolean
         readOnly:
           type: boolean
-    AccountingEventPaginatedResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountingEvent'
-        count:
-          type: integer
-          format: int32
-        pageToken:
-          type: string
-        totalCount:
-          type: integer
-          format: int32
     AccountingPeriod:
       type: object
       properties:
@@ -266,36 +251,6 @@ components:
           type: string
         entityId:
           type: string
-    EntityRef:
-      type: object
-      required:
-      - entityId
-      - name
-      properties:
-        entityId:
-          type: string
-          readOnly: true
-        displayId:
-          type: string
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-    ApprovalSegmentJson:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
     AccountingEvent:
       type: object
       properties:
@@ -337,26 +292,6 @@ components:
         sourceEventSequenceNumber:
           type: integer
           format: int64
-    UserGroupJson:
-      type: object
-      properties:
-        id:
-          type: string
-        entityIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        name:
-          type: string
-        description:
-          type: string
-        users:
-          type: array
-          items:
-            type: string
-        externalId:
-          type: string
     AccountingPeriodCalculation:
       type: object
       properties:
@@ -408,6 +343,41 @@ components:
         default:
           type: boolean
         id:
+          type: string
+    EntityRef:
+      type: object
+      required:
+      - entityId
+      - name
+      properties:
+        entityId:
+          type: string
+          readOnly: true
+        displayId:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+    UserGroupJson:
+      type: object
+      properties:
+        id:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        description:
+          type: string
+        users:
+          type: array
+          items:
+            type: string
+        externalId:
           type: string
     UserJson:
       type: object
@@ -484,6 +454,36 @@ components:
           type: string
         eventObjectId:
           type: string
+    AccountingEventPaginatedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountingEvent'
+        count:
+          type: integer
+          format: int32
+        pageToken:
+          type: string
+        totalCount:
+          type: integer
+          format: int32
+    ApprovalSegmentJson:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -1,11 +1,7 @@
 openapi: 3.2.0
 info:
   title: Partner Integration API
-  description: 'This API allows users from Partner Relationship Management (PRM) systems and partner portals to securely access DealHub''s CPQ functionality. The integration follows a two-request flow:
-
-    1.  **Authentication (Server-to-Server):** The PRM system makes a server-side call to `/api/v1/authenticate/user` using a long-lived secret key to get a short-lived (60 seconds) one-time access token for a specific partner user.
-
-    2.  **Open DealHub CPQ (Client-Side):** The PRM''s client-side application uses the one-time access token to make a request to a DealHub endpoint (e.g., `/api/v1/create/quote`). DealHub returns a unique URL. The PRM should then redirect the user''s browser to this URL, giving them a seamless and authenticated session in the DealHub portal.'
+  description: This API allows users from Partner Relationship Management (PRM) systems and partner portals to securely access DealHub's CPQ functionality.
   version: 1.0.0
 servers:
 - url: https://api.dealhub.io
@@ -188,6 +184,17 @@ paths:
           description: Unauthenticated. The one-time access token is missing, invalid, or expired.
 components:
   schemas:
+    AuthenticationRequest:
+      type: object
+      properties:
+        authentication:
+          type: string
+          description: The long-lived DealHub authentication key generated in the system settings screen.
+        user_information:
+          $ref: '#/components/schemas/UserInformation'
+      required:
+      - authentication
+      - user_information
     UserInformation:
       type: object
       description: A list of fields required to create a user in DealHub.
@@ -247,6 +254,16 @@ components:
       - login
       - email
       - name
+    AuthenticationResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: A one-time access token, which expires after 60 seconds.
+        errors:
+          type: array
+          items:
+            type: object
     RedirectResponse:
       type: object
       properties:
@@ -258,27 +275,6 @@ components:
           type: array
           items:
             type: object
-    AuthenticationResponse:
-      type: object
-      properties:
-        access_token:
-          type: string
-          description: A one-time access token, which expires after 60 seconds.
-        errors:
-          type: array
-          items:
-            type: object
-    AuthenticationRequest:
-      type: object
-      properties:
-        authentication:
-          type: string
-          description: The long-lived DealHub authentication key generated in the system settings screen.
-        user_information:
-          $ref: '#/components/schemas/UserInformation'
-      required:
-      - authentication
-      - user_information
   securitySchemes:
     oneTimeAccessToken:
       type: http

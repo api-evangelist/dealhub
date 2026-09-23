@@ -30,9 +30,9 @@ paths:
         This endpoint allows you to fetch specific data points for any quote in DealHub. The level of detail in the response is controlled by the **`feature`** query parameter.
 
 
-        -   **Minimal Response**: If you don''t specify any `feature` parameters, the API returns a basic response containing only the `dealhub_quote_id`, its current `status`, and the `quote_upgrade_required` flag.
+        - **Minimal Response**: If you don''t specify any `feature` parameters, the API returns a basic response containing only the `dealhub_quote_id`, its current `status`, and the `quote_upgrade_required` flag.
 
-        -   **Detailed Response**: To get more information, you must include one or more `feature` query parameters in your request.
+        - **Detailed Response**: To get more information, you must include one or more `feature` query parameters in your request.
 
 
         If a Draft quote was created using an older one, now-inactive version, the `quote_upgrade_required` flag will be `true`. When this occurs, the API will not return any requested `feature` data for that quote.
@@ -190,7 +190,26 @@ paths:
       tags:
       - Quote Management
       summary: Get a List of Quotes
-      description: "Retrieves a list of quotes, with options for filtering and pagination. \n\nUse the `external_opportunity_id` query parameter to retrieve only the quotes linked to a specific opportunity in your CRM.\n\nThe level of detail returned for each quote is controlled by the `feature` query parameter.\n\nUse the `offset` and `limit` parameters to page through large sets of quotes. The default `limit` is 50 quotes per request.\n\nIf no quotes match the specified criteria, the API will return a `200 OK` status with an empty `quotes` array.\n\n> \U0001F4D8 Date Formats\n>\n> All date values in the response are returned in `yyyy-mm-dd hh:mm:ss` format."
+      description: 'Retrieves a list of quotes, with options for filtering and pagination.
+
+
+        Use the `external_opportunity_id` query parameter to retrieve only the quotes linked to a specific opportunity in your CRM.
+
+
+        The level of detail returned for each quote is controlled by the `feature` query parameter.
+
+
+        Use the `offset` and `limit` parameters to page through large sets of quotes. The default `limit` is 50 quotes per request.
+
+
+        If no quotes match the specified criteria, the API will return a `200 OK` status with an empty `quotes` array.
+
+
+        > 📘 Date Formats
+
+        >
+
+        > All date values in the response are returned in `yyyy-mm-dd hh:mm:ss` format.'
       operationId: getQuotes
       parameters:
       - name: external_opportunity_id
@@ -403,159 +422,38 @@ paths:
           description: Forbidden. Invalid or missing authentication token.
 components:
   schemas:
-    DealRoomSignersResponse:
+    CreateOpportunityRequest:
       type: object
-      properties:
-        dealroom_state:
-          type: string
-          description: State of the DealRoom.
-        buyer_signers:
-          type: array
-          description: List of signers from the buyer side.
-          items:
-            $ref: '#/components/schemas/Signer'
-        seller_signers:
-          type: array
-          description: List of signers from the selling organization side.
-          items:
-            $ref: '#/components/schemas/Signer'
-    Signer:
-      type: object
-      properties:
-        company_name:
-          type: string
-          description: Company name of the signer.
-        signee_name:
-          type: string
-          description: Name of the signer.
-        signee_title:
-          type: string
-          description: Title of the signer.
-        signature_date:
-          type: string
-          format: date-time
-          description: Date when the user signed the contract via the DealRoom.
-        ordinal:
-          type: integer
-          description: The order of the signer in the list of signers.
-    OpportunityOwner:
-      type: object
-      description: Details of opportunity owner.
       required:
-      - external_user_id
-      - email
-      - name
+      - external_opportunity_id
+      - external_opportunity_name
+      - opportunity_owner
+      - currency
+      - external_customer_id
+      - customer_name
       properties:
-        external_user_id:
-          type: string
-          maxLength: 200
-          description: CRM user ID (employee of the organization that integrates with DealHub).
-        login:
-          type: string
-          maxLength: 100
-          description: Login of the user.
-        email:
-          type: string
-          format: email
-          maxLength: 100
-          description: Primary email of the user.
-        name:
-          type: string
-          maxLength: 300
-          description: User full name.
-        position:
-          type: string
-          maxLength: 300
-          description: The role of the user in the organization (job title).
-        phone:
+        external_opportunity_id:
           type: string
           maxLength: 50
-          description: User phone number.
-        mobile:
+          description: CRM opportunity ID.
+        external_opportunity_name:
           type: string
-          maxLength: 100
-          description: User mobile phone number.
-        fax:
-          type: string
-          maxLength: 100
-          description: User fax number.
-        company:
-          type: string
-          maxLength: 100
-          description: User company name.
-        street:
-          type: string
-          maxLength: 128
-          description: Street name.
-        city:
-          type: string
-          maxLength: 32
-          description: City name.
-        state:
-          type: string
-          maxLength: 32
-          description: State name.
-        country:
-          type: string
-          maxLength: 32
-          description: Country name.
-        postal_code:
-          type: string
-          maxLength: 16
-          description: Postal code.
-        user_manager_login:
-          type: string
-          maxLength: 100
-          description: Login of user manager.
-    QuoteSummary:
-      type: object
-      properties:
+          maxLength: 200
+          description: CRM opportunity name.
+        opportunity_owner:
+          $ref: '#/components/schemas/OpportunityOwner'
         currency:
           type: string
-          description: Quote currency (ISO-4217 format).
-        total_list_price:
-          type: number
-          format: float
-          description: The total list price of the quote.
-        total_net_price:
-          type: number
-          format: float
-          description: Total net price of the quote.
-        total_discount:
-          type: number
-          format: float
-          description: Total discount of the quote.
-        sales_discount:
-          type: number
-          format: float
-          description: Total discount provided by seller.
-    Quote:
-      type: object
-      properties:
-        dealhub_quote_id:
+          maxLength: 3
+          description: Opportunity currency (ISO code).
+        external_customer_id:
           type: string
-        status:
+          maxLength: 50
+          description: CRM customer ID (buyer account).
+        customer_name:
           type: string
-        quote_upgrade_required:
-          type: boolean
-        info:
-          $ref: '#/components/schemas/QuoteInfo'
-        summary:
-          $ref: '#/components/schemas/QuoteSummary'
-        deal_room_info:
-          $ref: '#/components/schemas/DealRoomInfo'
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/LineItem'
-        answers:
-          type: array
-          items:
-            $ref: '#/components/schemas/PlaybookAnswer'
-        approvals:
-          type: array
-          items:
-            $ref: '#/components/schemas/Approval'
+          maxLength: 256
+          description: CRM customer name.
     Approval:
       type: object
       properties:
@@ -587,6 +485,179 @@ components:
         reviewer_comment:
           type: string
           description: Note added by reviewer.
+    PlaybookAnswer:
+      type: object
+      properties:
+        system_name:
+          type: string
+          description: Name of the system, relevant for multi-system concept.
+        system_id:
+          type: string
+          description: System ID, relevant for multi-system concept.
+        group_id:
+          type: string
+          description: Group ID.
+        group_name:
+          type: string
+          description: Group name.
+        question_id:
+          type: string
+          description: Question ID.
+        question:
+          type: string
+          description: Question text.
+        answer:
+          type: string
+          description: The answer.
+    DealRoomInfo:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: DealRoom URL.
+    DealRoomSignersResponse:
+      type: object
+      properties:
+        dealroom_state:
+          type: string
+          description: State of the DealRoom.
+        buyer_signers:
+          type: array
+          description: List of signers from the buyer side.
+          items:
+            $ref: '#/components/schemas/Signer'
+        seller_signers:
+          type: array
+          description: List of signers from the selling organization side.
+          items:
+            $ref: '#/components/schemas/Signer'
+    QuoteInfo:
+      type: object
+      properties:
+        external_opportunity_id:
+          type: string
+          description: External opportunity ID (CRM opportunity ID as provided during create quote call).
+        external_quote_id:
+          type: string
+          description: External quote ID (as provided during create quote call).
+        external_customer_id:
+          type: string
+          description: External customer ID (CRM customer account ID).
+        customer_id:
+          type: string
+          description: CPQ customer account ID.
+        account_name:
+          type: string
+          description: Account name (as provided during quote creation).
+        contact_name:
+          type: string
+          description: Primary customer contact full name.
+        contact_email:
+          type: string
+          format: email
+          description: Primary customer contact email.
+        dealhub_opportunity_id:
+          type: string
+          description: DealHub opportunity ID.
+        dealhub_quote_name:
+          type: string
+          description: DealHub quote name.
+        dealhub_quote_number:
+          type: string
+          description: Quote ID that is unique per account and presented to user in CPQ UI.
+        duplicate_from_quote:
+          type: string
+          description: Represents the quote ID (also referred as **Quote Num** in the CPQ UI) from which the current quote was created using the duplication process. If the current quote was duplicated or cloned from another quote, this field will contain the original quote's ID. If the quote was not created through duplication, this field will be empty.
+        primary_quote:
+          type: boolean
+          description: Primary quote flag.
+        created_by:
+          type: string
+          format: email
+          description: Login of the user who created the quote.
+        creation_date:
+          type: string
+          format: date-time
+          description: GMT date&time of quote creation.
+        submitted_by:
+          type: string
+          format: email
+          description: Login of the user who submitted the quote (if specific quote is submitted).
+        submission_date:
+          type: string
+          format: date-time
+          description: GMT date&time of quote submission (if specific quote is submitted).
+        expiration_date:
+          type: string
+          format: date-time
+          description: Quote expiration date.
+        won_date:
+          type: string
+          format: date-time
+          description: The date the quote was signed.
+        geo_code:
+          type: string
+          description: Geographic code.
+        currency:
+          type: string
+          description: Quote currency.
+        playbook:
+          type: string
+          description: Playbook name.
+        quote_url:
+          type: string
+          format: uri
+          description: Quote URL.
+        version_id:
+          type: string
+          description: ID of the version in which the quote is managed.
+    Signer:
+      type: object
+      properties:
+        company_name:
+          type: string
+          description: Company name of the signer.
+        signee_name:
+          type: string
+          description: Name of the signer.
+        signee_title:
+          type: string
+          description: Title of the signer.
+        signature_date:
+          type: string
+          format: date-time
+          description: Date when the user signed the contract via the DealRoom.
+        ordinal:
+          type: integer
+          description: The order of the signer in the list of signers.
+    Quote:
+      type: object
+      properties:
+        dealhub_quote_id:
+          type: string
+        status:
+          type: string
+        quote_upgrade_required:
+          type: boolean
+        info:
+          $ref: '#/components/schemas/QuoteInfo'
+        summary:
+          $ref: '#/components/schemas/QuoteSummary'
+        deal_room_info:
+          $ref: '#/components/schemas/DealRoomInfo'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItem'
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaybookAnswer'
+        approvals:
+          type: array
+          items:
+            $ref: '#/components/schemas/Approval'
     LineItem:
       type: object
       properties:
@@ -683,78 +754,28 @@ components:
           description: List of line item attributes (aka proposal attributes).
           additionalProperties:
             type: string
-    PaginatedQuotesResponse:
+    QuoteSummary:
       type: object
       properties:
-        info:
-          $ref: '#/components/schemas/PaginationInfo'
-        quotes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Quote'
-    PlaybookAnswer:
-      type: object
-      properties:
-        system_name:
-          type: string
-          description: Name of the system, relevant for multi-system concept.
-        system_id:
-          type: string
-          description: System ID, relevant for multi-system concept.
-        group_id:
-          type: string
-          description: Group ID.
-        group_name:
-          type: string
-          description: Group name.
-        question_id:
-          type: string
-          description: Question ID.
-        question:
-          type: string
-          description: Question text.
-        answer:
-          type: string
-          description: The answer.
-    DealRoomInfo:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-          description: DealRoom URL.
-    CreateOpportunityRequest:
-      type: object
-      required:
-      - external_opportunity_id
-      - external_opportunity_name
-      - opportunity_owner
-      - currency
-      - external_customer_id
-      - customer_name
-      properties:
-        external_opportunity_id:
-          type: string
-          maxLength: 50
-          description: CRM opportunity ID.
-        external_opportunity_name:
-          type: string
-          maxLength: 200
-          description: CRM opportunity name.
-        opportunity_owner:
-          $ref: '#/components/schemas/OpportunityOwner'
         currency:
           type: string
-          maxLength: 3
-          description: Opportunity currency (ISO code).
-        external_customer_id:
-          type: string
-          maxLength: 50
-          description: CRM customer ID (buyer account).
-        customer_name:
-          type: string
-          maxLength: 256
-          description: CRM customer name.
+          description: Quote currency (ISO-4217 format).
+        total_list_price:
+          type: number
+          format: float
+          description: The total list price of the quote.
+        total_net_price:
+          type: number
+          format: float
+          description: Total net price of the quote.
+        total_discount:
+          type: number
+          format: float
+          description: Total discount of the quote.
+        sales_discount:
+          type: number
+          format: float
+          description: Total discount provided by seller.
     PaginationInfo:
       type: object
       properties:
@@ -764,86 +785,84 @@ components:
           type: string
         limit:
           type: string
-    QuoteInfo:
+    OpportunityOwner:
+      type: object
+      description: Details of opportunity owner.
+      required:
+      - external_user_id
+      - email
+      - name
+      properties:
+        external_user_id:
+          type: string
+          maxLength: 200
+          description: CRM user ID (employee of the organization that integrates with DealHub).
+        login:
+          type: string
+          maxLength: 100
+          description: Login of the user.
+        email:
+          type: string
+          format: email
+          maxLength: 100
+          description: Primary email of the user.
+        name:
+          type: string
+          maxLength: 300
+          description: User full name.
+        position:
+          type: string
+          maxLength: 300
+          description: The role of the user in the organization (job title).
+        phone:
+          type: string
+          maxLength: 50
+          description: User phone number.
+        mobile:
+          type: string
+          maxLength: 100
+          description: User mobile phone number.
+        fax:
+          type: string
+          maxLength: 100
+          description: User fax number.
+        company:
+          type: string
+          maxLength: 100
+          description: User company name.
+        street:
+          type: string
+          maxLength: 128
+          description: Street name.
+        city:
+          type: string
+          maxLength: 32
+          description: City name.
+        state:
+          type: string
+          maxLength: 32
+          description: State name.
+        country:
+          type: string
+          maxLength: 32
+          description: Country name.
+        postal_code:
+          type: string
+          maxLength: 16
+          description: Postal code.
+        user_manager_login:
+          type: string
+          maxLength: 100
+          description: Login of user manager.
+    PaginatedQuotesResponse:
       type: object
       properties:
-        external_opportunity_id:
-          type: string
-          description: External opportunity ID (CRM opportunity ID as provided during create quote call).
-        external_quote_id:
-          type: string
-          description: External quote ID (as provided during create quote call).
-        external_customer_id:
-          type: string
-          description: External customer ID (CRM customer account ID).
-        customer_id:
-          type: string
-          description: CPQ customer account ID.
-        account_name:
-          type: string
-          description: Account name (as provided during quote creation).
-        contact_name:
-          type: string
-          description: Primary customer contact full name.
-        contact_email:
-          type: string
-          format: email
-          description: Primary customer contact email.
-        dealhub_opportunity_id:
-          type: string
-          description: DealHub opportunity ID.
-        dealhub_quote_name:
-          type: string
-          description: DealHub quote name.
-        dealhub_quote_number:
-          type: string
-          description: Quote ID that is unique per account and presented to user in CPQ UI.
-        duplicate_from_quote:
-          type: string
-          description: Represents the quote ID (also referred as **Quote Num** in the CPQ UI) from which the current quote was created using the duplication process. If the current quote was duplicated or cloned from another quote, this field will contain the original quote's ID. If the quote was not created through duplication, this field will be empty.
-        primary_quote:
-          type: boolean
-          description: Primary quote flag.
-        created_by:
-          type: string
-          format: email
-          description: Login of the user who created the quote.
-        creation_date:
-          type: string
-          format: date-time
-          description: GMT date&time of quote creation.
-        submitted_by:
-          type: string
-          format: email
-          description: Login of the user who submitted the quote (if specific quote is submitted).
-        submission_date:
-          type: string
-          format: date-time
-          description: GMT date&time of quote submission (if specific quote is submitted).
-        expiration_date:
-          type: string
-          format: date-time
-          description: Quote expiration date.
-        won_date:
-          type: string
-          format: date-time
-          description: The date the quote was signed.
-        geo_code:
-          type: string
-          description: Geographic code.
-        currency:
-          type: string
-          description: Quote currency.
-        playbook:
-          type: string
-          description: Playbook name.
-        quote_url:
-          type: string
-          format: uri
-          description: Quote URL.
-        version_id:
-          type: string
-          description: ID of the version in which the quote is managed.
+        info:
+          $ref: '#/components/schemas/PaginationInfo'
+        quotes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Quote'
   securitySchemes:
     bearerAuth:
       type: http

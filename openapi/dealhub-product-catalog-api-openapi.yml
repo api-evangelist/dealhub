@@ -2,7 +2,7 @@ openapi: 3.2.0
 info:
   title: Dealhub Product Catalog API
   version: 1.0.0
-  description: 'Operations tagged Product Catalog across 2 of this provider''s published API definitions: dealhub-subskribe-api-openapi.yml, dealhub-version-api-openapi.yml. Each path carries the servers of the definition it was published in.'
+  description: 'Operations tagged Product Catalog across 2 of this provider''s published API definitions: dealhub-subskribe-api-openapi.json, dealhub-version-api-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.app.subskribe.com
 - url: https://api.dealhub.io
@@ -405,7 +405,7 @@ paths:
       tags:
       - Product Catalog
       summary: Add charge to plan
-      description: Adds a charge to the specified plan.  Success response contains ID of the new charge.
+      description: Adds a charge to the specified plan. Success response contains ID of the new charge.
       operationId: addCharge
       parameters:
       - name: planId
@@ -1943,7 +1943,20 @@ paths:
       tags:
       - Product Catalog
       summary: Delete Specific Products by SKU
-      description: "Deletes specific products from the product catalog of a `DRAFT` version. \n* This operation can only be triggered for a catalog version with a **`DRAFT`** status.\n* Requests made for an `ACTIVE` or `DEACTIVATED` catalog version will fail with a `400 Bad Request` HTTP error.\n\nA product cannot be deleted if it is:\n* A parent to another product in the hierarchy.\n* Marked as mandatory.\n* Set as an alternative in the hierarchy tree."
+      description: 'Deletes specific products from the product catalog of a `DRAFT` version.
+
+        * This operation can only be triggered for a catalog version with a **`DRAFT`** status.
+
+        * Requests made for an `ACTIVE` or `DEACTIVATED` catalog version will fail with a `400 Bad Request` HTTP error.
+
+
+        A product cannot be deleted if it is:
+
+        * A parent to another product in the hierarchy.
+
+        * Marked as mandatory.
+
+        * Set as an alternative in the hierarchy tree.'
       operationId: deleteProductsBySku
       parameters:
       - name: version_id
@@ -1987,22 +2000,6 @@ paths:
           description: Your specific DealHub instance name (e.g., 'app', 'service-eu1').
 components:
   schemas:
-    PlanJsonPaginationResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/PlanJson'
-        numElements:
-          type: integer
-          format: int32
-          readOnly: true
-        nextCursor:
-          type: string
-          format: uuid
-          readOnly: true
     PlanJson:
       type: object
       required:
@@ -2075,16 +2072,122 @@ components:
         eventObjectId:
           type: string
       description: A plan is a collection of charges that dictates how a product is priced.
-    PlanMetadataJson:
+    RecurrenceJson:
       type: object
+      required:
+      - cycle
+      - step
       properties:
-        entityIds:
-          type: array
-          description: Entity ids to be updated
+        cycle:
+          type: string
+          enum:
+          - DAY
+          - MONTH
+          - QUARTER
+          - SEMI_ANNUAL
+          - YEAR
+          - PAID_IN_FULL
+          - CUSTOM
+        step:
+          type: integer
+          format: int32
+          minimum: 1
+    ChargePartialJson:
+      type: object
+      required:
+      - name
+      properties:
+        id:
+          type: string
+          description: System-generated unique identifier for the charge
           readOnly: true
-          uniqueItems: true
+        name:
+          type: string
+          description: Name of the charge
+        displayName:
+          type: string
+          description: Display name of the charge shown to customers
+        description:
+          type: string
+          description: Detailed description of the charge
+        taxRateId:
+          type: string
+          format: uuid
+          description: 'ID of the tax rate applied to this charge. To get a list of available tax rate IDs, call the [Get tax rates](/reference/gettaxrates) operation. DEPRECATED: Use taxRateStrategyId instead. (deprecated: use taxRateStrategyId)'
+        taxRateStrategyId:
+          type: string
+          description: ID of the tax rate strategy applied to this charge. This determines how taxes are calculated when multiple tax rates apply.
+        unitOfMeasureId:
+          type: string
+          format: uuid
+          description: ID of the unit of measure for this charge (e.g., GB, users, licenses). To get a list of available unit of measure IDs, call the [Get units of measure](/reference/getunitsofmeasure) operation.
+        isRenewable:
+          type: boolean
+          description: Indicates if the charge is renewable
+        isCreditable:
+          type: boolean
+          description: Indicates if the charge can be credited
+        isListPriceEditable:
+          type: boolean
+          description: Indicates if the list price can be edited
+        minQuantity:
+          type: integer
+          format: int64
+          description: Minimum quantity that must be ordered. Applicable only if the chargeModel is PER_UNIT or RATE_CARD_LOOKUP.
+        defaultQuantity:
+          type: integer
+          format: int64
+          description: Default quantity for this charge. Applicable only if the chargeModel is PER_UNIT or RATE_CARD_LOOKUP.
+        maxQuantity:
+          type: integer
+          format: int64
+          description: Maximum quantity that can be ordered. Applicable only if the chargeModel is PER_UNIT or RATE_CARD_LOOKUP.
+        externalId:
+          type: string
+          description: External identifier for the charge, used for integration with other systems
+        minAmount:
+          type: number
+          description: '**NOTE: This parameter is currently in beta**
+
+            Minimum monetary amount for this charge. Applies only when `type` is `PERCENTAGE_OF`.'
+        maxAmount:
+          type: number
+          description: '**NOTE: This parameter is currently in beta**
+
+            Maximum monetary amount for this charge. Applies only when `type` is `PERCENTAGE_OF`.'
+        recognitionRuleId:
+          type: string
+          description: ID of the revenue recognition rule associated with this charge
+        erpId:
+          type: string
+          description: ERP system identifier for this charge
+        itemCode:
+          type: string
+          description: Item code used for this charge in external systems
+        targetPlanIds:
+          type: array
+          description: List of plan IDs that this PERCENTAGE_OF charge applies to
           items:
             type: string
+        creditable:
+          type: boolean
+      description: JSON object representing the charge details.
+    PlanJsonPaginationResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/PlanJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
     ProductInputJson:
       type: object
       required:
@@ -2163,46 +2266,6 @@ components:
           description: External identifier for the product, used for integration with other systems
         eventObjectId:
           type: string
-    CustomFieldDefault:
-      type: object
-      properties:
-        value:
-          type: string
-        selections:
-          type: array
-          items:
-            type: string
-    PriceTierJson:
-      type: object
-      required:
-      - amount
-      - untilQuantity
-      properties:
-        untilQuantity:
-          type: string
-        amount:
-          type: number
-        overage:
-          type: number
-    LedgerAccountMapping:
-      type: object
-      properties:
-        taxLiabilityAccountId:
-          type: string
-          readOnly: true
-        deferredRevenueAccountId:
-          type: string
-          readOnly: true
-        recognizedRevenueAccountId:
-          type: string
-          readOnly: true
-        contractAssetAccountId:
-          type: string
-          readOnly: true
-        ledgerAccountIds:
-          type: array
-          items:
-            type: string
     ChargeJson:
       type: object
       required:
@@ -2416,6 +2479,34 @@ components:
         creditable:
           type: boolean
       description: JSON object representing the charge details.
+    LedgerAccountMapping:
+      type: object
+      properties:
+        taxLiabilityAccountId:
+          type: string
+          readOnly: true
+        deferredRevenueAccountId:
+          type: string
+          readOnly: true
+        recognizedRevenueAccountId:
+          type: string
+          readOnly: true
+        contractAssetAccountId:
+          type: string
+          readOnly: true
+        ledgerAccountIds:
+          type: array
+          items:
+            type: string
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
     LedgerAccount:
       type: object
       properties:
@@ -2452,6 +2543,18 @@ components:
           type: boolean
         id:
           type: string
+    PriceTierJson:
+      type: object
+      required:
+      - amount
+      - untilQuantity
+      properties:
+        untilQuantity:
+          type: string
+        amount:
+          type: number
+        overage:
+          type: number
     ProductCategoryPaginationResponse:
       type: object
       properties:
@@ -2468,50 +2571,6 @@ components:
           type: string
           format: uuid
           readOnly: true
-    RecurrenceJson:
-      type: object
-      required:
-      - cycle
-      - step
-      properties:
-        cycle:
-          type: string
-          enum:
-          - DAY
-          - MONTH
-          - QUARTER
-          - SEMI_ANNUAL
-          - YEAR
-          - PAID_IN_FULL
-          - CUSTOM
-        step:
-          type: integer
-          format: int32
-          minimum: 1
-    ProductCategory:
-      type: object
-      properties:
-        productCategoryId:
-          type: string
-        entityIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        name:
-          type: string
-          minLength: 0
-          maxLength: 100
-        description:
-          type: string
-        inUse:
-          type: boolean
-        updatedOn:
-          type: integer
-          format: int64
-        pkId:
-          type: string
-          format: uuid
     ProductJsonPaginationResponse:
       type: object
       properties:
@@ -2528,86 +2587,6 @@ components:
           type: string
           format: uuid
           readOnly: true
-    ChargePartialJson:
-      type: object
-      required:
-      - name
-      properties:
-        id:
-          type: string
-          description: System-generated unique identifier for the charge
-          readOnly: true
-        name:
-          type: string
-          description: Name of the charge
-        displayName:
-          type: string
-          description: Display name of the charge shown to customers
-        description:
-          type: string
-          description: Detailed description of the charge
-        taxRateId:
-          type: string
-          format: uuid
-          description: 'ID of the tax rate applied to this charge. To get a list of available tax rate IDs, call the [Get tax rates](/reference/gettaxrates) operation. DEPRECATED: Use taxRateStrategyId instead. (deprecated: use taxRateStrategyId)'
-        taxRateStrategyId:
-          type: string
-          description: ID of the tax rate strategy applied to this charge. This determines how taxes are calculated when multiple tax rates apply.
-        unitOfMeasureId:
-          type: string
-          format: uuid
-          description: ID of the unit of measure for this charge (e.g., GB, users, licenses). To get a list of available unit of measure IDs, call the [Get units of measure](/reference/getunitsofmeasure) operation.
-        isRenewable:
-          type: boolean
-          description: Indicates if the charge is renewable
-        isCreditable:
-          type: boolean
-          description: Indicates if the charge can be credited
-        isListPriceEditable:
-          type: boolean
-          description: Indicates if the list price can be edited
-        minQuantity:
-          type: integer
-          format: int64
-          description: Minimum quantity that must be ordered. Applicable only if the chargeModel is PER_UNIT or RATE_CARD_LOOKUP.
-        defaultQuantity:
-          type: integer
-          format: int64
-          description: Default quantity for this charge. Applicable only if the chargeModel is PER_UNIT or RATE_CARD_LOOKUP.
-        maxQuantity:
-          type: integer
-          format: int64
-          description: Maximum quantity that can be ordered. Applicable only if the chargeModel is PER_UNIT or RATE_CARD_LOOKUP.
-        externalId:
-          type: string
-          description: External identifier for the charge, used for integration with other systems
-        minAmount:
-          type: number
-          description: '**NOTE: This parameter is currently in beta**
-
-            Minimum monetary amount for this charge. Applies only when `type` is `PERCENTAGE_OF`.'
-        maxAmount:
-          type: number
-          description: '**NOTE: This parameter is currently in beta**
-
-            Maximum monetary amount for this charge. Applies only when `type` is `PERCENTAGE_OF`.'
-        recognitionRuleId:
-          type: string
-          description: ID of the revenue recognition rule associated with this charge
-        erpId:
-          type: string
-          description: ERP system identifier for this charge
-        itemCode:
-          type: string
-          description: Item code used for this charge in external systems
-        targetPlanIds:
-          type: array
-          description: List of plan IDs that this PERCENTAGE_OF charge applies to
-          items:
-            type: string
-        creditable:
-          type: boolean
-      description: JSON object representing the charge details.
     CustomFieldValue:
       type: object
       properties:
@@ -2648,28 +2627,228 @@ components:
           - SYSTEM
         defaultValue:
           $ref: '#/components/schemas/CustomFieldDefault'
-    ProductsBySkuRequest:
+    PlanMetadataJson:
       type: object
-      required:
-      - sku
+      properties:
+        entityIds:
+          type: array
+          description: Entity ids to be updated
+          readOnly: true
+          uniqueItems: true
+          items:
+            type: string
+    ProductCategory:
+      type: object
+      properties:
+        productCategoryId:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+          minLength: 0
+          maxLength: 100
+        description:
+          type: string
+        inUse:
+          type: boolean
+        updatedOn:
+          type: integer
+          format: int64
+        pkId:
+          type: string
+          format: uuid
+    AsyncResponse:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: The ID of the asynchronous request for tracking.
+    Info:
+      type: object
       properties:
         version_id:
           type: string
-          maxLength: 16
-          description: ID of the version. If omitted, the active version is used.
-        pricing_option:
+          description: The ID of the version for which products were retrieved.
+        version_status:
           type: string
-          enum:
-          - MIN
-          - MAX
-          - FIRST
-          description: Specifies which price to return for SKUs with multiple fixed prices.
-        sku:
+          description: The status of the version.
+        compared_with_version_id:
+          type: string
+          description: The ID of the version that was replaced by this one upon activation.
+        more_results_matching_the_request:
+          type: boolean
+          description: Flag indicating if more results are available for pagination.
+        offset:
+          type: string
+          description: The offset used in the request.
+        limit:
+          type: string
+          description: The limit used in the request.
+        error:
+          type: string
+          description: Error message if not all requested data could be retrieved.
+    ProductPricing:
+      type: object
+      required:
+      - pricing_rules
+      properties:
+        advanced:
+          type: boolean
+          default: false
+          description: Set to `true` for advanced pricing policy, `false` for basic.
+        pricing_rules:
+          type: array
+          description: 'List of the bundle pricing rules. The order of the elements determines the sequence in which they are evaluated. If `advanced` is `false`, the list must contain exactly one rule with `price_format: BASIC` — if not provided, a default rule with price `0` is created; if more than one `BASIC` rule is provided, only the first is used. If `advanced` is `true`, the list must contain at least one rule with `price_format: ADVANCED`; otherwise the bundle will not be created.'
+          items:
+            $ref: '#/components/schemas/PricingRuleProduct'
+    ProductPricingProduct:
+      type: object
+      required:
+      - pricing_rules
+      properties:
+        advanced:
+          type: boolean
+          default: false
+          description: Set to `true` for advanced pricing policy, `false` for basic. <br/> When you set `advanced` to `true`, the `pricing_rules.name is required.
+        pricing_rules:
+          type: array
+          description: 'List of the product pricing rules. The order of the elements determines the sequence in which they are evaluated. If `advanced` is `false`, the list must contain exactly one rule with `price_format: BASIC` — if not provided, a default rule with price `0` is created; if more than one `BASIC` rule is provided, only the first is used. If `advanced` is `true`, the list must contain at least one rule with `price_format: ADVANCED`; otherwise the product will not be created.'
+          items:
+            $ref: '#/components/schemas/PricingRuleProduct'
+    ConditionalName:
+      type: object
+      required:
+      - playbook
+      properties:
+        playbook:
+          type: string
+          description: The name of the playbook.
+        ordinal:
+          type: integer
+          description: 'The order in which the system evaluates the conditional name rules. For example, the rule with `ordinal: 0` is evaluated first.'
+        rule:
+          type: string
+          maxLength: 2048
+          description: The business condition that the system should evaluate.
+        name:
+          type: string
+          maxLength: 400
+          description: The name to be assigned to the specific product instance when the business condition (rule) evaluates to `true`.
+        description:
+          type: string
+          maxLength: 8192
+          description: The description to be assigned to the specific product instance when the business condition (rule) evaluates to `true`.
+    ProductCatalogPostRequest:
+      type: object
+      properties:
+        products:
+          type: array
+          description: 'List of products that should be created in the products catalog. Each element in the list contains the following information:'
+          items:
+            $ref: '#/components/schemas/ProductCatalogItem'
+        bundles:
+          type: array
+          description: 'List of bundles that should be created in the products catalog. Each element in the list contains the following information:'
+          items:
+            $ref: '#/components/schemas/BundleCatalogItem'
+    AssignmentRule:
+      type: object
+      required:
+      - name
+      - rule
+      - product_factors
+      properties:
+        ordinal:
+          type: integer
+          description: The order in which the rule is evaluated.
+        name:
+          type: string
+          maxLength: 200
+          description: The name of the assignment rule. Must be unique in the context of this SKU. If an empty value is provided, the system will use the `ordinal` value as the rule name.
+        rule:
+          type: string
+          maxLength: 2048
+          default: 'false'
+          description: The business condition that should trigger the rule. Send `null` if `assignment` is `NEVER`.
+        note:
+          type: string
+          maxLength: 4096
+          description: A free text note.
+        product_factors:
           type: array
           items:
+            $ref: '#/components/schemas/ProductFactor'
+          maxItems: 4
+          description: 'The list of available product factors configured in the context of the current assignment rule. At least one factor must have `applicable: true` with an explicit `value` defined; otherwise the rule creation will fail.'
+        proposal_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProposalAttribute'
+          description: 'The list of available proposal attributes configured in the context of the current assignment rule. If not specified, all proposal attributes will be treated as `applicable: true` and will receive an empty value.'
+    ProductAssignment:
+      type: object
+      required:
+      - playbook
+      properties:
+        assignment:
+          type: string
+          enum:
+          - RULE_BASED
+          - ALWAYS
+          - NEVER
+          default: NEVER
+          description: Directive for the product assignment. At least one rule must be provided in `assignment_rules` when this value is `RULE_BASED` or `ALWAYS`; otherwise the SKU creation will fail.
+        playbook:
+          type: string
+          description: The name of the existing playbook to which the assignment rules are meant to be applied.
+        assignment_rules:
+          type: array
+          description: List of assignment rules. The order of the elements in this list determines the sequence in which the rules are evaluated by the CPQ system. Must be an empty list if `assignment` is `NEVER`.
+          items:
+            $ref: '#/components/schemas/AssignmentRuleProduct'
+        assignment_templates:
+          type: array
+          readOnly: true
+          items:
             type: string
-            maxLength: 200
-          description: List of SKUs to retrieve.
+    AssignmentRuleProduct:
+      type: object
+      required:
+      - name
+      - rule
+      - product_factors
+      properties:
+        ordinal:
+          type: integer
+          description: The order in which the rule is evaluated.
+        name:
+          type: string
+          maxLength: 200
+          description: The name of the assignment rule. Must be unique in the context of this SKU. If an empty value is provided, the system will use the `ordinal` value as the rule name.
+        rule:
+          type: string
+          maxLength: 2048
+          default: 'false'
+          description: The business condition that should trigger the rule. Send `null` if `assignment` is `NEVER`.
+        note:
+          type: string
+          maxLength: 4096
+          description: A free text note.
+        product_factors:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductFactor'
+          maxItems: 4
+          description: 'The list of available product factors configured in the context of the current assignment rule. At least one factor must have `applicable: true` with an explicit `value` defined; otherwise the rule creation will fail.'
+        proposal_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProposalAttribute'
+          description: 'The list of available proposal attributes configured in the context of the current assignment rule. If not specified, all proposal attributes will be treated as `applicable: true` and will receive an empty value.'
     ProductFactor:
       type: object
       required:
@@ -2686,70 +2865,32 @@ components:
           type: boolean
           default: false
           description: Indicates if the factor is applicable in the context of the assignment rule.
-    ProductCatalogPostRequest:
+    BundleAssignment:
       type: object
-      properties:
-        products:
-          type: array
-          description: 'List of products that should be created in the products catalog. Each element in the list contains the following information:'
-          items:
-            $ref: '#/components/schemas/ProductCatalogItem'
-        bundles:
-          type: array
-          description: 'List of bundles that should be created in the products catalog. Each element in the list contains the following information:'
-          items:
-            $ref: '#/components/schemas/BundleCatalogItem'
-    ProductCatalogPatchBundle:
-      type: object
-      description: Represents an existing bundle whose data elements should be updated. Only `sku` is required. Include only the data categories (`product_attributes`, `product_assignments`, `product_pricing`, `bundle_items`) that should be updated; omitted categories are left untouched.
       required:
-      - sku
+      - playbook
       properties:
-        sku:
+        assignment:
           type: string
-          maxLength: 200
-          description: The unique identifier of an existing bundle in the catalog.
-        product_attributes:
-          type: object
-          description: 'Bundle attributes to update. Each entry is a key-value pair formatted as `"<attribute_name>": { "value": "<attribute_value>" }`. Attribute names must not exceed 50 characters; attribute values must not exceed 2000 characters. Use `;` as a delimiter for `TEXT_LIST` attribute types.'
-          additionalProperties:
-            $ref: '#/components/schemas/ProductAttribute'
-        product_assignments:
-          type: array
-          description: Assignment rules to update for this bundle. If `assignment` is `RULE_BASED` or `ALWAYS`, at least one rule must be provided.
-          items:
-            $ref: '#/components/schemas/BundleAssignment'
-        product_pricing:
-          description: Pricing definitions to update for this bundle. Can be an empty list if `assignment` is `NEVER`.
-          $ref: '#/components/schemas/ProductPricing'
-        bundle_items:
-          type: array
-          description: Products to update within this bundle. Each referenced SKU must already exist in the catalog.
-          items:
-            $ref: '#/components/schemas/BundleItem'
-    ProductCatalogPatchProduct:
-      type: object
-      description: Represents an existing product whose data elements should be updated. Only `sku` is required. Include only the data categories (`product_attributes`, `product_assignments`, `product_pricing`) that should be updated; omitted categories are left untouched.
-      required:
-      - sku
-      properties:
-        sku:
+          enum:
+          - RULE_BASED
+          - ALWAYS
+          - NEVER
+          default: NEVER
+          description: Directive for the bundle assignment. At least one rule must be provided in `assignment_rules` when this value is `RULE_BASED` or `ALWAYS`; otherwise the SKU creation will fail.
+        playbook:
           type: string
-          maxLength: 200
-          description: The unique identifier of an existing product in the catalog.
-        product_attributes:
-          type: object
-          description: 'Product attributes to update. Each entry is a key-value pair formatted as `"<attribute_name>": { "value": "<attribute_value>" }`. Attribute names must not exceed 50 characters; attribute values must not exceed 2000 characters. Use `;` as a delimiter for `TEXT_LIST` attribute types. Attributes must be pre-declared in the CPQ version.'
-          additionalProperties:
-            $ref: '#/components/schemas/ProductAttribute'
-        product_assignments:
+          description: The name of the existing playbook to which the assignment rules are meant to be applied.
+        assignment_rules:
           type: array
-          description: Assignment rules to update for this product. The structure of each element is the same as in the POST endpoint. If `assignment` is `RULE_BASED` or `ALWAYS`, at least one rule must be provided.
+          description: List of assignment rules. The order of the elements in this list determines the sequence in which the rules are evaluated by the CPQ system. Must be an empty list if `assignment` is `NEVER`.
           items:
-            $ref: '#/components/schemas/ProductAssignment'
-        product_pricing:
-          description: Pricing definitions to update for this product. Can be an empty list if `assignment` is `NEVER`.
-          $ref: '#/components/schemas/ProductPricingProduct'
+            $ref: '#/components/schemas/AssignmentRule'
+        assignment_templates:
+          type: array
+          readOnly: true
+          items:
+            type: string
     ProductBasic:
       type: object
       properties:
@@ -2785,95 +2926,40 @@ components:
           description: List of Product SKUs in the bundle (if type is BUNDLE).
           items:
             type: string
-    ProductCatalogPatchRequest:
-      type: object
-      description: Request body for the PATCH product catalog endpoint. Include only the products and/or bundles whose data elements should be updated.
-      properties:
-        products:
-          type: array
-          description: List of existing products whose data elements should be updated. Each element must reference an existing SKU in the catalog.
-          items:
-            $ref: '#/components/schemas/ProductCatalogPatchProduct'
-        bundles:
-          type: array
-          description: List of existing bundles whose data elements should be updated. Each element must reference an existing bundle SKU in the catalog.
-          items:
-            $ref: '#/components/schemas/ProductCatalogPatchBundle'
-    ProductPricing:
+    ProposalAttribute:
       type: object
       required:
-      - pricing_rules
+      - name
+      - value
       properties:
-        advanced:
-          type: boolean
-          default: false
-          description: Set to `true` for advanced pricing policy, `false` for basic.
-        pricing_rules:
-          type: array
-          description: 'List of the bundle pricing rules. The order of the elements determines the sequence in which they are evaluated. If `advanced` is `false`, the list must contain exactly one rule with `price_format: BASIC` — if not provided, a default rule with price `0` is created; if more than one `BASIC` rule is provided, only the first is used. If `advanced` is `true`, the list must contain at least one rule with `price_format: ADVANCED`; otherwise the bundle will not be created.'
-          items:
-            $ref: '#/components/schemas/PricingRuleProduct'
-    ConditionalName:
-      type: object
-      required:
-      - playbook
-      properties:
-        playbook:
-          type: string
-          description: The name of the playbook.
-        ordinal:
-          type: integer
-          description: 'The order in which the system evaluates the conditional name rules. For example, the rule with `ordinal: 0` is evaluated first.'
-        rule:
-          type: string
-          maxLength: 2048
-          description: The business condition that the system should evaluate.
         name:
           type: string
-          maxLength: 400
-          description: The name to be assigned to the specific product instance when the business condition (rule) evaluates to `true`.
-        description:
+          maxLength: 50
+          description: The name of the proposal attribute.
+        value:
           type: string
-          maxLength: 8192
-          description: The description to be assigned to the specific product instance when the business condition (rule) evaluates to `true`.
-    BundleItem:
-      type: object
-      required:
-      - sku
-      properties:
-        sku:
-          type: string
-          description: The unique identifier of the product in the catalog.
-        ordinal:
-          type: integer
-          default: 0
-          description: The order of the product in the bundle.
-        how_to_add:
-          type: string
-          enum:
-          - AUTOMATIC
-          - MANUAL
-          - COMBINED
-          description: Specifies how the product should be managed within the bundle during proposal configuration. For `FIXED_PRICE` bundles, only `AUTOMATIC` is valid. For `PRODUCT_SUMMARY` bundles, valid values are `AUTOMATIC`, `MANUAL`, and `COMBINED`.
-        enable_modify_factors:
+          maxLength: 2000
+          description: Attribute value. If `null` is provided, the system will define this attribute as not applicable in the context of the assignment rule.
+        applicable:
           type: boolean
-          description: Specifies if the seller is allowed to modify bundled product factors (e.g. quantity, duration). Relevant for `PRODUCT_SUMMARY` bundles only.
-        product_factors:
-          type: array
-          description: The list of product factors configured for this product in the context of the current bundle.
-          items:
-            $ref: '#/components/schemas/ProductFactor'
-        inherit_proposal_attributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/InheritedAttribute'
-          description: List of attributes that should inherit their value from the parent bundle.
-    AsyncResponse:
+          default: false
+          description: Indicates if the attribute is applicable in the context of the assignment rule.
+    ProductCatalogGetResponse:
       type: object
       properties:
-        request_id:
-          type: string
-          description: The ID of the asynchronous request for tracking.
+        info:
+          description: Basic information about returned payload
+          $ref: '#/components/schemas/Info'
+        products:
+          type: array
+          description: 'List of products matching specified criteria. Each element in the list contains the following information:'
+          items:
+            $ref: '#/components/schemas/ProductCatalogItem'
+        bundles:
+          type: array
+          description: 'List of bundles matching specified criteria. Each element in the list contains the following information:'
+          items:
+            $ref: '#/components/schemas/BundleCatalogItem'
     ProductCatalogItem:
       type: object
       required:
@@ -2925,117 +3011,34 @@ components:
           description: List of ‘conditional name’ rules for the specific SKU. The structure of each element in the list is defined in the product_conditional_names Structure section.
           items:
             $ref: '#/components/schemas/ConditionalName'
-    BundleAssignment:
+    ProductCatalogPatchBundle:
       type: object
+      description: Represents an existing bundle whose data elements should be updated. Only `sku` is required. Include only the data categories (`product_attributes`, `product_assignments`, `product_pricing`, `bundle_items`) that should be updated; omitted categories are left untouched.
       required:
-      - playbook
+      - sku
       properties:
-        assignment:
-          type: string
-          enum:
-          - RULE_BASED
-          - ALWAYS
-          - NEVER
-          default: NEVER
-          description: Directive for the bundle assignment. At least one rule must be provided in `assignment_rules` when this value is `RULE_BASED` or `ALWAYS`; otherwise the SKU creation will fail.
-        playbook:
-          type: string
-          description: The name of the existing playbook to which the assignment rules are meant to be applied.
-        assignment_rules:
-          type: array
-          description: List of assignment rules. The order of the elements in this list determines the sequence in which the rules are evaluated by the CPQ system. Must be an empty list if `assignment` is `NEVER`.
-          items:
-            $ref: '#/components/schemas/AssignmentRule'
-        assignment_templates:
-          type: array
-          readOnly: true
-          items:
-            type: string
-    InheritedAttribute:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the proposal attribute.
-        inherit:
-          type: boolean
-          description: Set to true to inherit the value from the bundle attribute.
-    ProposalAttribute:
-      type: object
-      required:
-      - name
-      - value
-      properties:
-        name:
-          type: string
-          maxLength: 50
-          description: The name of the proposal attribute.
-        value:
-          type: string
-          maxLength: 2000
-          description: Attribute value. If `null` is provided, the system will define this attribute as not applicable in the context of the assignment rule.
-        applicable:
-          type: boolean
-          default: false
-          description: Indicates if the attribute is applicable in the context of the assignment rule.
-    AssignmentRule:
-      type: object
-      required:
-      - name
-      - rule
-      - product_factors
-      properties:
-        ordinal:
-          type: integer
-          description: The order in which the rule is evaluated.
-        name:
+        sku:
           type: string
           maxLength: 200
-          description: The name of the assignment rule. Must be unique in the context of this SKU. If an empty value is provided, the system will use the `ordinal` value as the rule name.
-        rule:
-          type: string
-          maxLength: 2048
-          default: 'false'
-          description: The business condition that should trigger the rule. Send `null` if `assignment` is `NEVER`.
-        note:
-          type: string
-          maxLength: 4096
-          description: A free text note.
-        product_factors:
+          description: The unique identifier of an existing bundle in the catalog.
+        product_attributes:
+          type: object
+          description: 'Bundle attributes to update. Each entry is a key-value pair formatted as `"<attribute_name>": { "value": "<attribute_value>" }`. Attribute names must not exceed 50 characters; attribute values must not exceed 2000 characters. Use `;` as a delimiter for `TEXT_LIST` attribute types.'
+          additionalProperties:
+            $ref: '#/components/schemas/ProductAttribute'
+        product_assignments:
           type: array
+          description: Assignment rules to update for this bundle. If `assignment` is `RULE_BASED` or `ALWAYS`, at least one rule must be provided.
           items:
-            $ref: '#/components/schemas/ProductFactor'
-          maxItems: 4
-          description: 'The list of available product factors configured in the context of the current assignment rule. At least one factor must have `applicable: true` with an explicit `value` defined; otherwise the rule creation will fail.'
-        proposal_attributes:
+            $ref: '#/components/schemas/BundleAssignment'
+        product_pricing:
+          description: Pricing definitions to update for this bundle. Can be an empty list if `assignment` is `NEVER`.
+          $ref: '#/components/schemas/ProductPricing'
+        bundle_items:
           type: array
+          description: Products to update within this bundle. Each referenced SKU must already exist in the catalog.
           items:
-            $ref: '#/components/schemas/ProposalAttribute'
-          description: 'The list of available proposal attributes configured in the context of the current assignment rule. If not specified, all proposal attributes will be treated as `applicable: true` and will receive an empty value.'
-    Info:
-      type: object
-      properties:
-        version_id:
-          type: string
-          description: The ID of the version for which products were retrieved.
-        version_status:
-          type: string
-          description: The status of the version.
-        compared_with_version_id:
-          type: string
-          description: The ID of the version that was replaced by this one upon activation.
-        more_results_matching_the_request:
-          type: boolean
-          description: Flag indicating if more results are available for pagination.
-        offset:
-          type: string
-          description: The offset used in the request.
-        limit:
-          type: string
-          description: The limit used in the request.
-        error:
-          type: string
-          description: Error message if not all requested data could be retrieved.
+            $ref: '#/components/schemas/BundleItem'
     PricingRuleProduct:
       description: 'List of the product pricing rules. The order of the elements in this list determines the sequence in which the pricing rules are evaluated by the CPQ system. </br> If <code>advanced</code>: false`, the <code>pricing_rules</code> list should have only **1 rule definition** with <code>price_format</code>: BASIC`. </br> If such configuration won’t be provided in the request, the system will create a default rule with price <code>0</code>. </br> In case there are more than 1 rule in the <code>pricing_rules</code> list with <code>price_format</code>: BASIC`, the system will use the 1st definition and the rest will be ignored. </br> If <code>advanced</code>: true`, the <code>pricing_rules</code> list must have at least **1 rule definition** with <code>price_format</code>: ADVANCED`. Otherwise, the product won’t be created. '
       type: object
@@ -3158,6 +3161,20 @@ components:
           description: Applicable only when <code>price_type</code> is <code>GROUP_NEGATIVE</code>. Determines whether products with positive prices should also be included in the base amount calculation for the current rule. By default, only products with negative prices (matched by the specified tags) are included. When set to <code>true</code>, both positive- and negative-priced products are considered in the calculation.
         volume_discount:
           $ref: '#/components/schemas/VolumeDiscount'
+    ProductCatalogPatchRequest:
+      type: object
+      description: Request body for the PATCH product catalog endpoint. Include only the products and/or bundles whose data elements should be updated.
+      properties:
+        products:
+          type: array
+          description: List of existing products whose data elements should be updated. Each element must reference an existing SKU in the catalog.
+          items:
+            $ref: '#/components/schemas/ProductCatalogPatchProduct'
+        bundles:
+          type: array
+          description: List of existing bundles whose data elements should be updated. Each element must reference an existing bundle SKU in the catalog.
+          items:
+            $ref: '#/components/schemas/ProductCatalogPatchBundle'
     VolumeDiscount:
       type: object
       description: 'Defines the volume discount tables associated with the pricing rule. The value must be a key-value map where each entry represents a pair in the format <code>&lt;factor_name&gt;: &lt;volume_discount_table_name&gt;</code>. The <code>factor_name</code> corresponds to the pricing factor (e.g., Quantity, Duration), and the value specifies the volume discount table applied to that factor.</br></br>Example:</br><code>"volume_discount": { "Quantity": "VolD1", "Duration": "VolD2" }</code>'
@@ -3166,66 +3183,38 @@ components:
         Duration: VolD2
       additionalProperties:
         type: string
-    AssignmentRuleProduct:
+    ProductCatalogPatchProduct:
       type: object
+      description: Represents an existing product whose data elements should be updated. Only `sku` is required. Include only the data categories (`product_attributes`, `product_assignments`, `product_pricing`) that should be updated; omitted categories are left untouched.
       required:
-      - name
-      - rule
-      - product_factors
+      - sku
       properties:
-        ordinal:
-          type: integer
-          description: The order in which the rule is evaluated.
-        name:
+        sku:
           type: string
           maxLength: 200
-          description: The name of the assignment rule. Must be unique in the context of this SKU. If an empty value is provided, the system will use the `ordinal` value as the rule name.
-        rule:
-          type: string
-          maxLength: 2048
-          default: 'false'
-          description: The business condition that should trigger the rule. Send `null` if `assignment` is `NEVER`.
-        note:
-          type: string
-          maxLength: 4096
-          description: A free text note.
-        product_factors:
+          description: The unique identifier of an existing product in the catalog.
+        product_attributes:
+          type: object
+          description: 'Product attributes to update. Each entry is a key-value pair formatted as `"<attribute_name>": { "value": "<attribute_value>" }`. Attribute names must not exceed 50 characters; attribute values must not exceed 2000 characters. Use `;` as a delimiter for `TEXT_LIST` attribute types. Attributes must be pre-declared in the CPQ version.'
+          additionalProperties:
+            $ref: '#/components/schemas/ProductAttribute'
+        product_assignments:
           type: array
+          description: Assignment rules to update for this product. The structure of each element is the same as in the POST endpoint. If `assignment` is `RULE_BASED` or `ALWAYS`, at least one rule must be provided.
           items:
-            $ref: '#/components/schemas/ProductFactor'
-          maxItems: 4
-          description: 'The list of available product factors configured in the context of the current assignment rule. At least one factor must have `applicable: true` with an explicit `value` defined; otherwise the rule creation will fail.'
-        proposal_attributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProposalAttribute'
-          description: 'The list of available proposal attributes configured in the context of the current assignment rule. If not specified, all proposal attributes will be treated as `applicable: true` and will receive an empty value.'
-    ProductAssignment:
+            $ref: '#/components/schemas/ProductAssignment'
+        product_pricing:
+          description: Pricing definitions to update for this product. Can be an empty list if `assignment` is `NEVER`.
+          $ref: '#/components/schemas/ProductPricingProduct'
+    InheritedAttribute:
       type: object
-      required:
-      - playbook
       properties:
-        assignment:
+        name:
           type: string
-          enum:
-          - RULE_BASED
-          - ALWAYS
-          - NEVER
-          default: NEVER
-          description: Directive for the product assignment. At least one rule must be provided in `assignment_rules` when this value is `RULE_BASED` or `ALWAYS`; otherwise the SKU creation will fail.
-        playbook:
-          type: string
-          description: The name of the existing playbook to which the assignment rules are meant to be applied.
-        assignment_rules:
-          type: array
-          description: List of assignment rules. The order of the elements in this list determines the sequence in which the rules are evaluated by the CPQ system. Must be an empty list if `assignment` is `NEVER`.
-          items:
-            $ref: '#/components/schemas/AssignmentRuleProduct'
-        assignment_templates:
-          type: array
-          readOnly: true
-          items:
-            type: string
+          description: The name of the proposal attribute.
+        inherit:
+          type: boolean
+          description: Set to true to inherit the value from the bundle attribute.
     VersionProductsResponse:
       type: object
       properties:
@@ -3235,36 +3224,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ProductBasic'
-    ProductCatalogGetResponse:
-      type: object
-      properties:
-        info:
-          description: Basic information about returned payload
-          $ref: '#/components/schemas/Info'
-        products:
-          type: array
-          description: 'List of products matching specified criteria. Each element in the list contains the following information:'
-          items:
-            $ref: '#/components/schemas/ProductCatalogItem'
-        bundles:
-          type: array
-          description: 'List of bundles matching specified criteria. Each element in the list contains the following information:'
-          items:
-            $ref: '#/components/schemas/BundleCatalogItem'
-    ProductPricingProduct:
+    ProductsBySkuRequest:
       type: object
       required:
-      - pricing_rules
+      - sku
       properties:
-        advanced:
-          type: boolean
-          default: false
-          description: Set to `true` for advanced pricing policy, `false` for basic. <br/> When you set `advanced` to `true`, the `pricing_rules.name is required.
-        pricing_rules:
+        version_id:
+          type: string
+          maxLength: 16
+          description: ID of the version. If omitted, the active version is used.
+        pricing_option:
+          type: string
+          enum:
+          - MIN
+          - MAX
+          - FIRST
+          description: Specifies which price to return for SKUs with multiple fixed prices.
+        sku:
           type: array
-          description: 'List of the product pricing rules. The order of the elements determines the sequence in which they are evaluated. If `advanced` is `false`, the list must contain exactly one rule with `price_format: BASIC` — if not provided, a default rule with price `0` is created; if more than one `BASIC` rule is provided, only the first is used. If `advanced` is `true`, the list must contain at least one rule with `price_format: ADVANCED`; otherwise the product will not be created.'
           items:
-            $ref: '#/components/schemas/PricingRuleProduct'
+            type: string
+            maxLength: 200
+          description: List of SKUs to retrieve.
     BundleCatalogItem:
       type: object
       required:
@@ -3337,6 +3318,38 @@ components:
           description: List of the products included into the bundle. The structure of each element in the list is defined in the bundle_items Structure section.
           items:
             $ref: '#/components/schemas/BundleItem'
+    BundleItem:
+      type: object
+      required:
+      - sku
+      properties:
+        sku:
+          type: string
+          description: The unique identifier of the product in the catalog.
+        ordinal:
+          type: integer
+          default: 0
+          description: The order of the product in the bundle.
+        how_to_add:
+          type: string
+          enum:
+          - AUTOMATIC
+          - MANUAL
+          - COMBINED
+          description: Specifies how the product should be managed within the bundle during proposal configuration. For `FIXED_PRICE` bundles, only `AUTOMATIC` is valid. For `PRODUCT_SUMMARY` bundles, valid values are `AUTOMATIC`, `MANUAL`, and `COMBINED`.
+        enable_modify_factors:
+          type: boolean
+          description: Specifies if the seller is allowed to modify bundled product factors (e.g. quantity, duration). Relevant for `PRODUCT_SUMMARY` bundles only.
+        product_factors:
+          type: array
+          description: The list of product factors configured for this product in the context of the current bundle.
+          items:
+            $ref: '#/components/schemas/ProductFactor'
+        inherit_proposal_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/InheritedAttribute'
+          description: List of attributes that should inherit their value from the parent bundle.
     ProductAttribute:
       type: object
       properties:
@@ -3352,26 +3365,12 @@ components:
         value:
           type: string
   requestBodies:
-    ProductCategory:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ProductCategory'
-      description: product category details json
-      required: true
     PlanJson:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/PlanJson'
       description: json of the plan details
-      required: true
-    ProductInputJson:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ProductInputJson'
-      description: product details json
       required: true
     uploadApprovalMatrixCSV:
       content:
@@ -3382,6 +3381,20 @@ components:
               file:
                 type: string
                 format: binary
+    ProductInputJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductInputJson'
+      description: product details json
+      required: true
+    ProductCategory:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProductCategory'
+      description: product category details json
+      required: true
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
@@ -3392,8 +3405,8 @@ components:
       scheme: bearer
       description: A secret token generated by a CPQ administrator.
 x-refined-from:
-- dealhub-subskribe-api-openapi.yml
-- dealhub-version-api-openapi.yml
+- dealhub-subskribe-api-openapi.json
+- dealhub-version-api-openapi.json
 x-readme:
   explorer-enabled: true
   proxy-enabled: true

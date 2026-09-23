@@ -71,6 +71,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/EmailSetting'
 components:
+  requestBodies:
+    EmailSetting:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EmailSetting'
   schemas:
     EmailSetting:
       type: object
@@ -106,12 +112,6 @@ components:
           type: integer
           format: int64
           readOnly: true
-  requestBodies:
-    EmailSetting:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/EmailSetting'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

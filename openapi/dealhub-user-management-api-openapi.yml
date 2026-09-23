@@ -276,17 +276,13 @@ paths:
           description: Forbidden. Invalid or missing authentication token.
 components:
   schemas:
-    User:
+    UserUpdateV1:
       type: object
       properties:
         login:
           type: string
           maxLength: 100
-          description: Login of the user.
-        id:
-          type: string
-          maxLength: 16
-          description: DealHub user ID.
+          description: Login of the user. An immutable field used as an identifier.
         email:
           type: string
           format: email
@@ -296,13 +292,13 @@ components:
           type: string
           maxLength: 300
           description: User's full name.
+        is_active:
+          type: boolean
+          description: The flag that specifies if a user should be marked as active in the CPQ system. When a user is inactive, he/she cannot access CPQ.
         position:
           type: string
           maxLength: 300
           description: The role of the user in the organization (job title).
-        business_title:
-          type: string
-          description: Business title of the user in the CRM organization.
         phone:
           type: string
           maxLength: 50
@@ -343,9 +339,25 @@ components:
           type: string
           maxLength: 100
           description: Login of the user's manager.
-        is_active:
-          type: boolean
-          description: Flag indicating if the user is active.
+      required:
+      - login
+      - email
+      - name
+      - is_active
+    UserUpdateError:
+      type: object
+      properties:
+        login:
+          type: string
+        message:
+          type: string
+    UserUpdateErrorResponse:
+      type: object
+      properties:
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserUpdateError'
     UserUpdateV2:
       type: object
       properties:
@@ -422,27 +434,17 @@ components:
       - name
       - external_user_id
       - is_active
-    UserUpdateError:
-      type: object
-      properties:
-        login:
-          type: string
-        message:
-          type: string
-    UserUpdateErrorResponse:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserUpdateError'
-    UserUpdateV1:
+    User:
       type: object
       properties:
         login:
           type: string
           maxLength: 100
-          description: Login of the user. An immutable field used as an identifier.
+          description: Login of the user.
+        id:
+          type: string
+          maxLength: 16
+          description: DealHub user ID.
         email:
           type: string
           format: email
@@ -452,13 +454,13 @@ components:
           type: string
           maxLength: 300
           description: User's full name.
-        is_active:
-          type: boolean
-          description: The flag that specifies if a user should be marked as active in the CPQ system. When a user is inactive, he/she cannot access CPQ.
         position:
           type: string
           maxLength: 300
           description: The role of the user in the organization (job title).
+        business_title:
+          type: string
+          description: Business title of the user in the CRM organization.
         phone:
           type: string
           maxLength: 50
@@ -499,11 +501,9 @@ components:
           type: string
           maxLength: 100
           description: Login of the user's manager.
-      required:
-      - login
-      - email
-      - name
-      - is_active
+        is_active:
+          type: boolean
+          description: Flag indicating if the user is active.
   securitySchemes:
     bearerAuth:
       type: http

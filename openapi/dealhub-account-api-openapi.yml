@@ -24,6 +24,8 @@ paths:
       responses:
         default:
           description: successful operation
+      summary: Get cpq sourced account
+      x-summary-source: derived
     put:
       tags:
       - Account
@@ -40,6 +42,8 @@ paths:
       responses:
         default:
           description: successful operation
+      summary: Update cpq sourced account
+      x-summary-source: derived
   /rh/accounts:
     post:
       tags:
@@ -50,6 +54,8 @@ paths:
       responses:
         default:
           description: successful operation
+      summary: Add cpq sourced account
+      x-summary-source: derived
   /rh/accounts/bulk:
     post:
       tags:
@@ -63,6 +69,8 @@ paths:
       responses:
         default:
           description: successful operation
+      summary: Get cpq sourced accounts
+      x-summary-source: derived
   /rh/accounts/cfac-id:
     get:
       tags:
@@ -79,6 +87,8 @@ paths:
       responses:
         default:
           description: successful operation
+      summary: Get cpq sourced accounts by uvca cfac id
+      x-summary-source: derived
   /rh/accounts/{accountId}/contacts:
     get:
       tags:
@@ -94,6 +104,8 @@ paths:
       responses:
         default:
           description: successful operation
+      summary: Get cpq sourced account contacts
+      x-summary-source: derived
     post:
       tags:
       - Account
@@ -110,6 +122,8 @@ paths:
       responses:
         default:
           description: successful operation
+      summary: Add cpq sourced account contact
+      x-summary-source: derived
   /rh/accounts/{accountId}/contacts/{contactId}:
     get:
       tags:
@@ -131,6 +145,8 @@ paths:
       responses:
         default:
           description: successful operation
+      summary: Get cpq sourced account contact
+      x-summary-source: derived
     put:
       tags:
       - Account
@@ -153,65 +169,21 @@ paths:
       responses:
         default:
           description: successful operation
+      summary: Update cpq sourced account contact
+      x-summary-source: derived
 components:
   requestBodies:
-    NewAccountJson:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/NewAccountJson'
     NewAccountContactJson:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/NewAccountContactJson'
+    NewAccountJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NewAccountJson'
   schemas:
-    NewAccountContactJson:
-      type: object
-      required:
-      - accountId
-      - email
-      properties:
-        contactId:
-          type: string
-          description: Contact ID - Used for CPQ-RevenuHub integration
-          minLength: 0
-          maxLength: 36
-        accountId:
-          type: string
-          description: Uniquely identifies the Account
-          minLength: 0
-          maxLength: 36
-        firstName:
-          type: string
-          description: (optional) First Name of the Contact
-        lastName:
-          type: string
-          description: (optional) Last Name of the Contact
-        email:
-          type: string
-          description: Email of the Contact
-        phoneNumber:
-          type: string
-          description: (optional) Phone Number of the Contact
-        title:
-          type: string
-          description: (optional) Title of the Contact
-        address:
-          $ref: '#/components/schemas/AccountAddressJson'
-        externalId:
-          type: string
-          description: (optional) External system identifier
-        erpId:
-          type: string
-          description: (optional) ERP system identifier
-        crmId:
-          type: string
-          description: (optional) CRM system identifier
-        fullName:
-          type: string
-        eventObjectId:
-          type: string
     AccountAddressJson:
       type: object
       properties:
@@ -349,6 +321,52 @@ components:
             type: string
           maxItems: 100
           minItems: 0
+    NewAccountContactJson:
+      type: object
+      required:
+      - accountId
+      - email
+      properties:
+        contactId:
+          type: string
+          description: Contact ID - Used for CPQ-RevenuHub integration
+          minLength: 0
+          maxLength: 36
+        accountId:
+          type: string
+          description: Uniquely identifies the Account
+          minLength: 0
+          maxLength: 36
+        firstName:
+          type: string
+          description: (optional) First Name of the Contact
+        lastName:
+          type: string
+          description: (optional) Last Name of the Contact
+        email:
+          type: string
+          description: Email of the Contact
+        phoneNumber:
+          type: string
+          description: (optional) Phone Number of the Contact
+        title:
+          type: string
+          description: (optional) Title of the Contact
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+        externalId:
+          type: string
+          description: (optional) External system identifier
+        erpId:
+          type: string
+          description: (optional) ERP system identifier
+        crmId:
+          type: string
+          description: (optional) CRM system identifier
+        fullName:
+          type: string
+        eventObjectId:
+          type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

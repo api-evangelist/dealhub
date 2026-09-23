@@ -70,30 +70,6 @@ paths:
           description: successful operation
 components:
   schemas:
-    TrackDealPulseEventRequest:
-      type: object
-      required:
-      - eventType
-      properties:
-        eventType:
-          type: string
-          enum:
-          - CONTACT_ADD
-          - CONTACT_EDIT
-          - FILE_DOWNLOAD
-          - LOAD
-          - PAGE_FOCUS
-          - YOUTUBE_COMPLETE
-          - ORDER_PDF_DOWNLOAD
-          - YOUTUBE_PLAY
-          - LINK_CLICK
-          - SCROLL
-        metadata:
-          type: object
-          additionalProperties:
-            type: object
-        userEmail:
-          type: string
     DealPulseOverview:
       type: object
       required:
@@ -160,6 +136,30 @@ components:
           type: integer
           format: int64
           readOnly: true
+    TrackDealPulseEventRequest:
+      type: object
+      required:
+      - eventType
+      properties:
+        eventType:
+          type: string
+          enum:
+          - CONTACT_ADD
+          - CONTACT_EDIT
+          - FILE_DOWNLOAD
+          - LOAD
+          - PAGE_FOCUS
+          - YOUTUBE_COMPLETE
+          - ORDER_PDF_DOWNLOAD
+          - YOUTUBE_PLAY
+          - LINK_CLICK
+          - SCROLL
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+        userEmail:
+          type: string
     DealPulseListResponse:
       type: object
       required:

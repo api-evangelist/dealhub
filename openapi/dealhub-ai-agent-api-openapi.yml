@@ -32,7 +32,7 @@ paths:
     get:
       tags:
       - AI Agent
-      summary: 'Get the agent session given the id, NOTE: at the moment there is no response body'
+      summary: 'Get the agent session given the id, NOTE: at the moment there is no response…'
       description: 'Get the agent session given the id, NOTE: at the moment there is no response body, if 200 is returned then session exists'
       operationId: getAgentSession
       parameters:
@@ -109,7 +109,7 @@ paths:
     get:
       tags:
       - AI Agent
-      summary: Chat with a given session id and get back a response for a given message in a async manner in the form of server side events
+      summary: Chat with a given session id and get back a response for a given message in a…
       description: The API responds to user message, a session id is required to identify the session this message needs to be posted
       operationId: chatResponseAsync
       parameters:
@@ -182,23 +182,11 @@ components:
           type: boolean
         wildcardSubtype:
           type: boolean
-    Message:
+    Type:
       type: object
-      required:
-      - createdAt
-      - message
-      - role
       properties:
-        role:
+        typeName:
           type: string
-          readOnly: true
-        message:
-          type: string
-          readOnly: true
-        createdAt:
-          type: integer
-          format: int64
-          readOnly: true
     OutboundEvent:
       type: object
       properties:
@@ -219,11 +207,23 @@ components:
           $ref: '#/components/schemas/Type'
         reconnectDelaySet:
           type: boolean
-    Type:
+    Message:
       type: object
+      required:
+      - createdAt
+      - message
+      - role
       properties:
-        typeName:
+        role:
           type: string
+          readOnly: true
+        message:
+          type: string
+          readOnly: true
+        createdAt:
+          type: integer
+          format: int64
+          readOnly: true
   requestBodies:
     generateZeppaArtifactBody:
       content:

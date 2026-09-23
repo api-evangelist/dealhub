@@ -23,7 +23,15 @@ paths:
       tags:
       - Customization
       summary: Add or Update selection customization script
-      description: "Add or Update the selection customization zeppa script in the platform. \n - once the update happens new selection customization script will take effect \n - the updated version of the script is returned with the API call \nNOTE: the account id required for this is only for test before submission \nNOTE: it *does not mean* that this customization is run only for this account.\n"
+      description: 'Add or Update the selection customization zeppa script in the platform.
+
+        - once the update happens new selection customization script will take effect
+
+        - the updated version of the script is returned with the API call
+
+        NOTE: the account id required for this is only for test before submission
+
+        NOTE: it *does not mean* that this customization is run only for this account.'
       operationId: addSelectionCustomization
       parameters:
       - name: testAccountId
@@ -58,7 +66,15 @@ paths:
       tags:
       - Customization
       summary: Add or Update order creation customization script
-      description: "Add or Update the order creation customization zeppa script in the platform.\n - once the update happens new this script will take effect for all order creations\n - the updated version of the script is returned with the API call\nNOTE: the order id required for this is only for test before submission\nNOTE: it *does not mean* that this customization is run only for this order.\n"
+      description: 'Add or Update the order creation customization zeppa script in the platform.
+
+        - once the update happens new this script will take effect for all order creations
+
+        - the updated version of the script is returned with the API call
+
+        NOTE: the order id required for this is only for test before submission
+
+        NOTE: it *does not mean* that this customization is run only for this order.'
       operationId: addOrderCreationCustomization
       parameters:
       - name: testOrderId

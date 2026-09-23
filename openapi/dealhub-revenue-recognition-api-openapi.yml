@@ -231,88 +231,7 @@ paths:
         default:
           description: successful operation
 components:
-  requestBodies:
-    uploadApprovalMatrixCSV:
-      content:
-        multipart/form-data:
-          schema:
-            type: object
-            properties:
-              file:
-                type: string
-                format: binary
   schemas:
-    BulkRevenueRecognitionItem:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        bulkRevenueRecognitionId:
-          type: string
-        accountingPeriodId:
-          type: string
-        isRecognized:
-          type: boolean
-        journalEntriesGenerated:
-          type: boolean
-        isClosed:
-          type: boolean
-        failureReason:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-    BulkRevenueRecognitionInput:
-      type: object
-      properties:
-        entityId:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        targetDate:
-          type: integer
-          format: int64
-    RecognitionEventCompletion:
-      type: object
-      required:
-      - unitOfCompletion
-      properties:
-        tenantId:
-          type: string
-        entityId:
-          type: string
-        subscriptionId:
-          type: string
-        chargeId:
-          type: string
-        aliasId:
-          type: string
-        accountingPeriodId:
-          type: string
-        unitOfCompletion:
-          type: number
-        status:
-          type: string
-          enum:
-          - ACCEPTED
-          - PROCESSED
-        arrivedOn:
-          type: integer
-          format: int64
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-        deleted:
-          type: boolean
     RecognitionRule:
       type: object
       properties:
@@ -362,6 +281,41 @@ components:
           type: boolean
         id:
           type: string
+    RecognitionEventCompletion:
+      type: object
+      required:
+      - unitOfCompletion
+      properties:
+        tenantId:
+          type: string
+        entityId:
+          type: string
+        subscriptionId:
+          type: string
+        chargeId:
+          type: string
+        aliasId:
+          type: string
+        accountingPeriodId:
+          type: string
+        unitOfCompletion:
+          type: number
+        status:
+          type: string
+          enum:
+          - ACCEPTED
+          - PROCESSED
+        arrivedOn:
+          type: integer
+          format: int64
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        deleted:
+          type: boolean
     BulkRevenueRecognition:
       type: object
       properties:
@@ -405,6 +359,52 @@ components:
         updatedOn:
           type: integer
           format: int64
+    BulkRevenueRecognitionItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        bulkRevenueRecognitionId:
+          type: string
+        accountingPeriodId:
+          type: string
+        isRecognized:
+          type: boolean
+        journalEntriesGenerated:
+          type: boolean
+        isClosed:
+          type: boolean
+        failureReason:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    BulkRevenueRecognitionInput:
+      type: object
+      properties:
+        entityId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        targetDate:
+          type: integer
+          format: int64
+  requestBodies:
+    uploadApprovalMatrixCSV:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

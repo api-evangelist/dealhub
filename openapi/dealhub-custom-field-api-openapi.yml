@@ -236,40 +236,6 @@ paths:
           description: successful operation
 components:
   schemas:
-    CustomFieldUpdateInput:
-      type: object
-      properties:
-        value:
-          type: string
-          readOnly: true
-        selections:
-          type: array
-          readOnly: true
-          items:
-            type: string
-    CustomFieldDefinitionUpdateInput:
-      type: object
-      properties:
-        fieldName:
-          type: string
-          readOnly: true
-        fieldLabel:
-          type: string
-          readOnly: true
-        fieldType:
-          type: string
-          readOnly: true
-          enum:
-          - STRING
-          - PICKLIST
-          - MULTISELECT_PICKLIST
-        options:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        defaultValue:
-          $ref: '#/components/schemas/CustomFieldDefault'
     CustomFieldDefault:
       type: object
       properties:
@@ -328,6 +294,29 @@ components:
           type: integer
           format: int64
           readOnly: true
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+    CustomFieldDefinitionUpdateInput:
+      type: object
+      properties:
+        fieldName:
+          type: string
+          readOnly: true
+        fieldLabel:
+          type: string
+          readOnly: true
+        fieldType:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
         defaultValue:
           $ref: '#/components/schemas/CustomFieldDefault'
     CustomFieldDefinitionCreateInput:
@@ -419,14 +408,18 @@ components:
           - SYSTEM
         defaultValue:
           $ref: '#/components/schemas/CustomFieldDefault'
-  requestBodies:
     CustomFieldUpdateInput:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CustomFieldUpdateInput'
-      description: custom field value
-      required: true
+      type: object
+      properties:
+        value:
+          type: string
+          readOnly: true
+        selections:
+          type: array
+          readOnly: true
+          items:
+            type: string
+  requestBodies:
     updateCustomFieldsBody:
       content:
         application/json:
@@ -435,6 +428,13 @@ components:
             additionalProperties:
               $ref: '#/components/schemas/CustomFieldValue'
       description: custom field values
+      required: true
+    CustomFieldUpdateInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CustomFieldUpdateInput'
+      description: custom field value
       required: true
   securitySchemes:
     ApiKeyAuth:

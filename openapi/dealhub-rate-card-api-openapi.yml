@@ -7,12 +7,12 @@ servers:
 security:
 - ApiKeyAuth: []
 tags:
-- name: RateCard
+- name: Rate Card
 paths:
   /ratecards/{id}/csv:
     put:
       tags:
-      - RateCard
+      - Rate Card
       summary: create a rate card using CSV price table multipart form data
       description: create a rate card using the multipart form data, where a CSV can be passed in for the price table
       operationId: updateRateCardCsv
@@ -31,9 +31,8 @@ paths:
   /ratecards:
     get:
       tags:
-      - RateCard
+      - Rate Card
       summary: Fetch the list of rate cards stored in the system
-      description: Fetch the list of rate cards stored in the system
       operationId: getRateCards
       responses:
         default:
@@ -41,7 +40,7 @@ paths:
   /ratecards/csv:
     post:
       tags:
-      - RateCard
+      - Rate Card
       summary: create a rate card using CSV price table multipart form data
       description: create a rate card using the multipart form data, where a CSV can be passed in for the price table
       operationId: addRateCardCsv
@@ -53,7 +52,7 @@ paths:
   /ratecards/attributes/csv:
     get:
       tags:
-      - RateCard
+      - Rate Card
       summary: Fetch the price attributes defined in the system in CSV format
       description: Get all the price attributes in the system in CSV format one per row
       operationId: getPriceAttributesCsv
@@ -62,7 +61,7 @@ paths:
           description: successful operation
     post:
       tags:
-      - RateCard
+      - Rate Card
       summary: Import price attributes into the system
       description: Import the price attributes from an input CSV file, the output provides details on each row of the input
       operationId: importPriceAttributes
@@ -74,7 +73,7 @@ paths:
   /ratecards/{id}/priceTable:
     get:
       tags:
-      - RateCard
+      - Rate Card
       summary: Fetch the price table for the rate card given the id
       description: Get the price table for the rate card given the id
       operationId: getRateCardPriceTable

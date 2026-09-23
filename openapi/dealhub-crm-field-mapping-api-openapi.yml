@@ -29,7 +29,15 @@ paths:
       tags:
       - CRM field mapping
       summary: Upload of CRM field mappings
-      description: "    crmType: HUBSPOT, SALESFORCE\n    crmObjectType: OPPORTUNITY, ACCOUNT, ORDER\n    direction: INBOUND, OUTBOUND\n    crmFieldName\n    subskribeFieldName\n"
+      description: 'crmType: HUBSPOT, SALESFORCE
+
+        crmObjectType: OPPORTUNITY, ACCOUNT, ORDER
+
+        direction: INBOUND, OUTBOUND
+
+        crmFieldName
+
+        subskribeFieldName'
       operationId: uploadCrmFieldMappingCsv
       requestBody:
         $ref: '#/components/requestBodies/uploadApprovalMatrixCSV'
@@ -134,6 +142,23 @@ components:
                 type: string
                 format: binary
   schemas:
+    CrmFieldMappingImportDataJson:
+      type: object
+      properties:
+        id:
+          type: string
+        fileName:
+          type: string
+        uploadedBy:
+          type: string
+        status:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
     CrmFieldMappingImportPreview:
       type: object
       properties:
@@ -194,23 +219,6 @@ components:
         previousSubskribeFieldName:
           type: string
         rowNumber:
-          type: integer
-          format: int64
-    CrmFieldMappingImportDataJson:
-      type: object
-      properties:
-        id:
-          type: string
-        fileName:
-          type: string
-        uploadedBy:
-          type: string
-        status:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
           type: integer
           format: int64
   securitySchemes:

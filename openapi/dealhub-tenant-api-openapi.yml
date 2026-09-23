@@ -19,53 +19,16 @@ paths:
       responses:
         default:
           description: successful operation
+      summary: Create rev hub tenant
+      x-summary-source: derived
 components:
-  schemas:
+  requestBodies:
     TenantJson:
-      type: object
-      properties:
-        tenantId:
-          type: string
-        name:
-          type: string
-        email:
-          type: string
-        phoneNumber:
-          type: string
-        address:
-          $ref: '#/components/schemas/AccountAddressJson'
-        sourceInitiator:
-          type: string
-          readOnly: true
-          enum:
-          - CPQ
-          - BILLY
-        companyDomain:
-          type: string
-        cfacId:
-          type: integer
-          format: int64
-        isSandbox:
-          type: boolean
-        hasSalesforceIntegration:
-          type: boolean
-          readOnly: true
-        isDeleted:
-          type: boolean
-        isTest:
-          type: boolean
-        hasHubSpotIntegration:
-          type: boolean
-          readOnly: true
-        hasSso:
-          type: boolean
-          readOnly: true
-        createdOn:
-          type: integer
-          format: int64
-          readOnly: true
-        tenantSetting:
-          $ref: '#/components/schemas/TenantSettingJson'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TenantJson'
+  schemas:
     AccountAddressJson:
       type: object
       properties:
@@ -127,12 +90,51 @@ components:
           type: boolean
         isDocxPasswordProtected:
           type: boolean
-  requestBodies:
     TenantJson:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TenantJson'
+      type: object
+      properties:
+        tenantId:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+        sourceInitiator:
+          type: string
+          readOnly: true
+          enum:
+          - CPQ
+          - BILLY
+        companyDomain:
+          type: string
+        cfacId:
+          type: integer
+          format: int64
+        isSandbox:
+          type: boolean
+        hasSalesforceIntegration:
+          type: boolean
+          readOnly: true
+        isDeleted:
+          type: boolean
+        isTest:
+          type: boolean
+        hasHubSpotIntegration:
+          type: boolean
+          readOnly: true
+        hasSso:
+          type: boolean
+          readOnly: true
+        createdOn:
+          type: integer
+          format: int64
+          readOnly: true
+        tenantSetting:
+          $ref: '#/components/schemas/TenantSettingJson'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

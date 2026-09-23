@@ -1,18 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   title: CRM Import API
-  description: 'Public, token-authenticated services that bulk-migrate a tenant''s buyer accounts and their contacts out of
-    the tenant''s connected CRM (Salesforce, HubSpot, or Microsoft Dynamics) and into DealHub.
-
-
-    The caller provides a list of buyer-account CRM ids; for each id the system fetches the matching account and all of its
-    contacts from the CRM and persists them. The import is asynchronous — the start call returns a `request_id` immediately
-    and the work runs in the background. Progress and per-record outcomes are tracked through the status / detail / lookup
-    services, and a partially failed import can be re-run with the retry service.
-
-
-    Accounts that already exist in DealHub (matched by CRM id) and ids not found in the CRM are skipped, so the import is
-    safe to run again.'
+  description: Public, token-authenticated services that bulk-migrate a tenant's buyer accounts and their contacts out of the tenant's connected CRM (Salesforce, HubSpot, or Microsoft Dynamics) and into DealHub.
   version: 1.0.0
 servers:
 - url: https://api.dealhub.io
@@ -32,9 +21,7 @@ paths:
       tags:
       - CRM Import
       summary: Start CRM Import
-      description: Starts (or joins) a CRM import for the authenticated tenant. Accepts the list of buyer-account CRM ids
-        to migrate; duplicate ids are ignored. If an import is already running for the tenant, its `request_id` is returned
-        instead of starting a new one.
+      description: Starts (or joins) a CRM import for the authenticated tenant. Accepts the list of buyer-account CRM ids to migrate; duplicate ids are ignored. If an import is already running for the tenant, its `request_id` is returned instead of starting a new one.
       operationId: startCrmImport
       requestBody:
         required: true
@@ -105,8 +92,7 @@ paths:
       tags:
       - CRM Import
       summary: Get CRM Import Status
-      description: 'Retrieves the summary of an import: aggregate counts plus a flat list of per-id failures with reasons.
-        This is the service to poll. When `request_id` is omitted, the tenant''s most recent import is used.'
+      description: 'Retrieves the summary of an import: aggregate counts plus a flat list of per-id failures with reasons. This is the service to poll. When `request_id` is omitted, the tenant''s most recent import is used.'
       operationId: getCrmImportStatus
       parameters:
       - name: request_id
@@ -164,9 +150,7 @@ paths:
       tags:
       - CRM Import
       summary: Get CRM Import Detail
-      description: 'Retrieves the full picture of an import: the same summary as the status service plus every buyer account
-        and each of its contacts, each with its own state and (if failed) reason. Use this to see exactly which contacts within
-        an account did or did not migrate. When `request_id` is omitted, the tenant''s most recent import is used.'
+      description: 'Retrieves the full picture of an import: the same summary as the status service plus every buyer account and each of its contacts, each with its own state and (if failed) reason. Use this to see exactly which contacts within an account did or did not migrate. When `request_id` is omitted, the tenant''s most recent import is used.'
       operationId: getCrmImportDetail
       parameters:
       - name: request_id
@@ -238,9 +222,7 @@ paths:
       tags:
       - CRM Import
       summary: Lookup CRM Import Id
-      description: 'Resolves a single CRM id within an import: whether it is a buyer account or a contact (or not part of
-        the import), its state, and the failure reason if any. For a contact match, the buyer-account CRM id it belongs to
-        is also returned.'
+      description: 'Resolves a single CRM id within an import: whether it is a buyer account or a contact (or not part of the import), its state, and the failure reason if any. For a contact match, the buyer-account CRM id it belongs to is also returned.'
       operationId: lookupCrmImportId
       parameters:
       - name: crm_id
@@ -310,10 +292,7 @@ paths:
       tags:
       - CRM Import
       summary: Retry CRM Import
-      description: 'Re-runs the failed ids of an import (plus any unfinished ids from an interruption) under the same `request_id`.
-        Already-imported accounts are skipped, so retrying is safe. No-op when there is nothing to reprocess. Like Start CRM
-        Import, retry is asynchronous: it re-enqueues the failed ids and returns the `request_id` immediately — poll Get CRM
-        Import Status (same `request_id`) for the outcome as the re-run progresses.'
+      description: 'Re-runs the failed ids of an import (plus any unfinished ids from an interruption) under the same `request_id`. Already-imported accounts are skipped, so retrying is safe. No-op when there is nothing to reprocess. Like Start CRM Import, retry is asynchronous: it re-enqueues the failed ids and returns the `request_id` immediately — poll Get CRM Import Status (same `request_id`) for the outcome as the re-run progresses.'
       operationId: retryCrmImport
       parameters:
       - name: request_id
@@ -367,13 +346,105 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
-  securitySchemes:
-    bearerToken:
-      type: http
-      scheme: bearer
-      description: DealHub authentication token generated by the CPQ administrator and shared with the consuming application
-        in advance. The tenant is resolved from the token — it is never passed in the request.
   schemas:
+    CrmImportDetailResponse:
+      allOf:
+      - $ref: '#/components/schemas/CrmImportStatusResponse'
+      - type: object
+        properties:
+          accounts:
+            type: array
+            description: Per buyer-account results.
+            items:
+              $ref: '#/components/schemas/CrmImportAccountResult'
+    CrmImportRequestResponse:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: ID of the asynchronous import request. Use it for the status / detail / lookup / retry services, or wait for the `crmImport` completion webhook (same request_id).
+    CrmImportLookupResponse:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: ID of the import request.
+        crm_id:
+          type: string
+          description: The looked-up CRM id.
+        type:
+          type: string
+          enum:
+          - ACCOUNT
+          - CONTACT
+          - NOT_FOUND
+          description: What the id resolved to.
+        account_crm_id:
+          type:
+          - string
+          - 'null'
+          description: For a contact match, the buyer-account CRM id it belongs to. Present only when type = CONTACT.
+        state:
+          type:
+          - string
+          - 'null'
+          enum:
+          - SUCCEEDED
+          - FAILED
+          - SKIPPED
+          - PENDING
+          - null
+          description: Empty when type = NOT_FOUND.
+        reason:
+          type:
+          - string
+          - 'null'
+          description: Failure reason, if any.
+    CrmImportAccountResult:
+      type: object
+      properties:
+        crm_id:
+          type: string
+          description: Buyer-account CRM id.
+        state:
+          type: string
+          enum:
+          - SUCCEEDED
+          - FAILED
+          - SKIPPED
+          - PENDING
+        reason:
+          type:
+          - string
+          - 'null'
+          description: Failure reason (account level). Present only when state = FAILED.
+        contacts:
+          type: array
+          description: Per-contact results for the account.
+          items:
+            $ref: '#/components/schemas/CrmImportContactResult'
+    CrmImportContactResult:
+      type: object
+      properties:
+        crm_id:
+          type:
+          - string
+          - 'null'
+          description: Contact CRM id. Null when the contact has no CRM id (identified by email).
+        email:
+          type: string
+          format: email
+          description: Contact email.
+        state:
+          type: string
+          enum:
+          - SUCCEEDED
+          - FAILED
+        reason:
+          type:
+          - string
+          - 'null'
+          description: Failure reason (contact level). Present only when state = FAILED.
     StartCrmImportRequest:
       type: object
       properties:
@@ -385,13 +456,6 @@ components:
           minItems: 1
       required:
       - buyer_account_crm_ids
-    CrmImportRequestResponse:
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: ID of the asynchronous import request. Use it for the status / detail / lookup / retry services, or
-            wait for the `crmImport` completion webhook (same request_id).
     CrmImportFailure:
       type: object
       properties:
@@ -401,6 +465,13 @@ components:
         reason:
           type: string
           description: Human-readable failure reason.
+    ErrorResponse:
+      type: object
+      description: A generic error response. The specific message will vary based on the context.
+      properties:
+        message:
+          type: string
+          example: Unauthenticated
     CrmImportStatusResponse:
       type: object
       properties:
@@ -434,99 +505,11 @@ components:
           description: Per-id failures. Empty when nothing failed.
           items:
             $ref: '#/components/schemas/CrmImportFailure'
-    CrmImportContactResult:
-      type: object
-      properties:
-        crm_id:
-          type: string
-          nullable: true
-          description: Contact CRM id. Null when the contact has no CRM id (identified by email).
-        email:
-          type: string
-          format: email
-          description: Contact email.
-        state:
-          type: string
-          enum:
-          - SUCCEEDED
-          - FAILED
-        reason:
-          type: string
-          nullable: true
-          description: Failure reason (contact level). Present only when state = FAILED.
-    CrmImportAccountResult:
-      type: object
-      properties:
-        crm_id:
-          type: string
-          description: Buyer-account CRM id.
-        state:
-          type: string
-          enum:
-          - SUCCEEDED
-          - FAILED
-          - SKIPPED
-          - PENDING
-        reason:
-          type: string
-          nullable: true
-          description: Failure reason (account level). Present only when state = FAILED.
-        contacts:
-          type: array
-          description: Per-contact results for the account.
-          items:
-            $ref: '#/components/schemas/CrmImportContactResult'
-    CrmImportDetailResponse:
-      allOf:
-      - $ref: '#/components/schemas/CrmImportStatusResponse'
-      - type: object
-        properties:
-          accounts:
-            type: array
-            description: Per buyer-account results.
-            items:
-              $ref: '#/components/schemas/CrmImportAccountResult'
-    CrmImportLookupResponse:
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: ID of the import request.
-        crm_id:
-          type: string
-          description: The looked-up CRM id.
-        type:
-          type: string
-          enum:
-          - ACCOUNT
-          - CONTACT
-          - NOT_FOUND
-          description: What the id resolved to.
-        account_crm_id:
-          type: string
-          nullable: true
-          description: For a contact match, the buyer-account CRM id it belongs to. Present only when type = CONTACT.
-        state:
-          type: string
-          nullable: true
-          enum:
-          - SUCCEEDED
-          - FAILED
-          - SKIPPED
-          - PENDING
-          - null
-          description: Empty when type = NOT_FOUND.
-        reason:
-          type: string
-          nullable: true
-          description: Failure reason, if any.
-    ErrorResponse:
-      type: object
-      description: A generic error response. The specific message will vary based on the context.
-      properties:
-        message:
-          type: string
-          example: Unauthenticated
+  securitySchemes:
+    bearerToken:
+      type: http
+      scheme: bearer
+      description: DealHub authentication token generated by the CPQ administrator and shared with the consuming application in advance. The tenant is resolved from the token — it is never passed in the request.
 x-readme:
   explorer-enabled: true
   proxy-enabled: true

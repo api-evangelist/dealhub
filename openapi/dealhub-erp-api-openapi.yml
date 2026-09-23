@@ -126,6 +126,8 @@ paths:
       responses:
         default:
           description: successful operation
+      summary: Get invoice erp sync data
+      x-summary-source: derived
   /rh/payments/{paymentId}/erpSync:
     get:
       tags:
@@ -141,6 +143,8 @@ paths:
       responses:
         default:
           description: successful operation
+      summary: Get payment erp sync data
+      x-summary-source: derived
 components:
   requestBodies:
     syncInvoicesToErpBody:

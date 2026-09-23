@@ -1,0 +1,27 @@
+# Front Door AI Index — dealhub — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: dealhub
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: dealhub.io
+  final_host: dealhub.io
+  ownership: own
+  owner: dealhub
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 7
+  host_score: 7
+  density: 4.55
+  words: 1540
+  tiers:
+    agentic: 3
+    core: 4
+    model: 0
+  ambiguous: 4
+  top_terms:
+    AI: 4
+    automation: 4
+    agentic: 3

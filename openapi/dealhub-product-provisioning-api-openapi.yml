@@ -22,6 +22,8 @@ paths:
       responses:
         default:
           description: successful operation
+      summary: Sync skus
+      x-summary-source: derived
 components:
   schemas:
     SkuSyncInput:

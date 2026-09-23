@@ -7,12 +7,12 @@ servers:
 security:
 - ApiKeyAuth: []
 tags:
-- name: MetricsReporting
+- name: Metrics/Reporting
 paths:
   /metricsReporting/externalArrMetrics/{id}:
     get:
       tags:
-      - MetricsReporting
+      - Metrics/Reporting
       summary: gets external arr metrics request for the provided id
       description: returns the external arr metrics request for the provided id
       operationId: getExternalArrMetrics
@@ -29,7 +29,7 @@ paths:
   /metricsReporting/externalArrMetrics:
     get:
       tags:
-      - MetricsReporting
+      - Metrics/Reporting
       summary: gets external arr metrics requests submitted
       description: returns the paginated list of external arr metrics requests
       operationId: getExternalArrMetrics_1
@@ -51,7 +51,7 @@ paths:
           description: successful operation
     post:
       tags:
-      - MetricsReporting
+      - Metrics/Reporting
       summary: submit request to generate external arr metrics
       description: returns the request with its captured id. Arr metrics will be generated as a backend job
       operationId: addExternalArrMetrics
@@ -66,7 +66,7 @@ paths:
   /metricsReporting/populateArrMetrics/subscriptions/{subscriptionId}:
     put:
       tags:
-      - MetricsReporting
+      - Metrics/Reporting
       summary: submit request to generate/regenerate arr metrics for a subscription
       description: returns 200 if the result is successfully submitted to a background task
       operationId: populateArrMetricsForSubscription

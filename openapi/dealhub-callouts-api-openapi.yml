@@ -169,6 +169,65 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    ResponseItem:
+      oneOf:
+      - $ref: '#/components/schemas/ProductResponseItem'
+      - $ref: '#/components/schemas/BundleResponseItem'
+      description: An item in the response can be either a single product or a bundle.
+    BaseResponseItem:
+      type: object
+      description: Common properties for any item returned in the response.
+      required:
+      - id
+      - sku
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Same 'id' as sent in the request payload.
+        sku:
+          type: string
+          description: Same 'sku' as sent in the request payload.
+        MSRP:
+          type: number
+          format: float
+          description: Manufacturer's Suggested Retail Price.
+        partner_discount1:
+          type: number
+          format: float
+          description: Partner discount value (e.g., 10 for 10%).
+        partner_discount2:
+          type: number
+          format: float
+          description: Partner discount value (e.g., 10 for 10%).
+        start_date:
+          type: string
+          format: date-time
+          description: A date value, expected in ISO 8601 format (e.g., "2025-09-01T15:39:25Z").
+      additionalProperties: true
+    CalloutResponse:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          description: The list of items with their calculated prices and attributes.
+          items:
+            $ref: '#/components/schemas/ResponseItem'
+    BundleResponseItem:
+      description: Represents a bundle containing other items. The top-level bundle may not have a price itself.
+      allOf:
+      - $ref: '#/components/schemas/BaseResponseItem'
+      - type: object
+        required:
+        - bundle_items
+        properties:
+          bundle_items:
+            type: array
+            description: A list of child items within the bundle. Each item in this list must have a price.
+            items:
+              $ref: '#/components/schemas/ProductResponseItem'
     Item:
       type: object
       description: Represents a single product or a bundle within the quote. Can contain additional, customer-defined product attributes configured by the admin.
@@ -209,85 +268,6 @@ components:
       - sku
       - type
       additionalProperties: true
-    ErrorResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          description: A formatted error message from the external system that will be displayed to the user in the DealHub UI.
-      required:
-      - message
-    BundleResponseItem:
-      description: Represents a bundle containing other items. The top-level bundle may not have a price itself.
-      allOf:
-      - $ref: '#/components/schemas/BaseResponseItem'
-      - type: object
-        required:
-        - bundle_items
-        properties:
-          bundle_items:
-            type: array
-            description: A list of child items within the bundle. Each item in this list must have a price.
-            items:
-              $ref: '#/components/schemas/ProductResponseItem'
-    CalloutResponse:
-      type: object
-      required:
-      - items
-      properties:
-        items:
-          type: array
-          description: The list of items with their calculated prices and attributes.
-          items:
-            $ref: '#/components/schemas/ResponseItem'
-    ProductResponseItem:
-      description: Represents a single product with a mandatory price.
-      allOf:
-      - $ref: '#/components/schemas/BaseResponseItem'
-      - type: object
-        required:
-        - list_price
-        properties:
-          list_price:
-            type: number
-            format: float
-            description: List price of the line item. This field is mandatory for every product item.
-    BaseResponseItem:
-      type: object
-      description: Common properties for any item returned in the response.
-      required:
-      - id
-      - sku
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: Same 'id' as sent in the request payload.
-        sku:
-          type: string
-          description: Same 'sku' as sent in the request payload.
-        MSRP:
-          type: number
-          format: float
-          description: Manufacturer's Suggested Retail Price.
-        partner_discount1:
-          type: number
-          format: float
-          description: Partner discount value (e.g., 10 for 10%).
-        partner_discount2:
-          type: number
-          format: float
-          description: Partner discount value (e.g., 10 for 10%).
-        start_date:
-          type: string
-          format: date-time
-          description: A date value, expected in ISO 8601 format (e.g., "2025-09-01T15:39:25Z").
-      additionalProperties: true
-    ResponseItem:
-      oneOf:
-      - $ref: '#/components/schemas/ProductResponseItem'
-      - $ref: '#/components/schemas/BundleResponseItem'
-      description: An item in the response can be either a single product or a bundle.
     CalloutRequest:
       type: object
       properties:
@@ -309,6 +289,26 @@ components:
       required:
       - items
       - request_id
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: A formatted error message from the external system that will be displayed to the user in the DealHub UI.
+      required:
+      - message
+    ProductResponseItem:
+      description: Represents a single product with a mandatory price.
+      allOf:
+      - $ref: '#/components/schemas/BaseResponseItem'
+      - type: object
+        required:
+        - list_price
+        properties:
+          list_price:
+            type: number
+            format: float
+            description: List price of the line item. This field is mandatory for every product item.
   securitySchemes:
     bearerAuth:
       type: http

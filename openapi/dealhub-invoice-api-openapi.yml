@@ -50,6 +50,8 @@ paths:
       responses:
         default:
           description: successful operation
+      summary: Get cpq sourced account invoices
+      x-summary-source: derived
 components:
   securitySchemes:
     ApiKeyAuth:

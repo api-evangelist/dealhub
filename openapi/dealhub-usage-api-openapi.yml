@@ -14,7 +14,6 @@ paths:
       tags:
       - Usage
       summary: Match bank transactions
-      description: Match bank transactions
       operationId: bankTransactionsMatch
       requestBody:
         content:
@@ -215,53 +214,16 @@ paths:
           description: successful operation
 components:
   schemas:
-    Entry:
+    RawUsagesData:
       type: object
+      required:
+      - data
       properties:
-        rowNumber:
-          type: integer
-          format: int64
-        failed:
-          type: boolean
-        failureReason:
-          type: string
-    PrepaidStats:
-      type: object
-      properties:
-        accountId:
-          type: string
-        accountName:
-          type: string
-        accountCrmId:
-          type: string
-        subscriptionId:
-          type: string
-        entityDisplayId:
-          type: string
-        subscriptionStartDate:
-          type: integer
-          format: int64
-        subscriptionEndDate:
-          type: integer
-          format: int64
-        planName:
-          type: string
-        drawdownChargeName:
-          type: string
-        provisionedQuantity:
-          type: number
-        startingQuantity:
-          type: number
-        remainingQuantity:
-          type: number
-        consumedQuantity:
-          type: number
-        periodStart:
-          type: integer
-          format: int64
-        periodEnd:
-          type: integer
-          format: int64
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RawUsage'
+      description: A list of RawUsage objects
     BulkPaymentUploadData:
       type: object
       properties:
@@ -302,6 +264,126 @@ components:
           type: array
           items:
             type: string
+    UsageBatchInsertResult:
+      type: object
+      properties:
+        rawUsagesTotal:
+          type: integer
+          format: int32
+        totalFailed:
+          type: integer
+          format: int32
+        totalDuplicates:
+          type: integer
+          format: int32
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entry'
+    BulkPaymentUploadResult:
+      type: object
+      properties:
+        paymentsRequestCount:
+          type: integer
+          format: int32
+        failedPaymentsCount:
+          type: integer
+          format: int32
+        bulkPaymentUploadData:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkPaymentUploadData'
+    PrepaidStats:
+      type: object
+      properties:
+        accountId:
+          type: string
+        accountName:
+          type: string
+        accountCrmId:
+          type: string
+        subscriptionId:
+          type: string
+        entityDisplayId:
+          type: string
+        subscriptionStartDate:
+          type: integer
+          format: int64
+        subscriptionEndDate:
+          type: integer
+          format: int64
+        planName:
+          type: string
+        drawdownChargeName:
+          type: string
+        provisionedQuantity:
+          type: number
+        startingQuantity:
+          type: number
+        remainingQuantity:
+          type: number
+        consumedQuantity:
+          type: number
+        periodStart:
+          type: integer
+          format: int64
+        periodEnd:
+          type: integer
+          format: int64
+    UsageAggregateOutput:
+      type: object
+      properties:
+        subscriptionId:
+          type: string
+        subscriptionChargeGroupId:
+          type: string
+        attributeReferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeReference'
+        startAt:
+          type: integer
+          format: int64
+        endAt:
+          type: integer
+          format: int64
+        observedDataPoints:
+          type: integer
+          format: int32
+        usageSum:
+          type: number
+        usageMax:
+          type: number
+        usageMin:
+          type: number
+    RawUsage:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for a particular usage record
+        aliasId:
+          type: string
+          description: Alias ID for an usage based subscription item. This value is required if subscriptionId and subscriptionChargeId are not provided
+        subscriptionId:
+          type: string
+          description: SubscriptionId to attach usage record to. This value is required if aliasId is not provided
+        chargeId:
+          type: string
+          description: ChargeId of an usage based charge to attach usage record to. This value is required if aliasId is not provided
+        usageTime:
+          type: integer
+          format: int64
+          description: Usage time in unix timestamp (seconds)
+        usageQuantity:
+          type: integer
+          format: int64
+        attributeReferences:
+          type: array
+          description: List of attribute references to derive the price for the usage record
+          items:
+            $ref: '#/components/schemas/AttributeReference'
+      description: A raw usage record
     InvoiceBankTransactionMatchResponse:
       type: object
       properties:
@@ -337,99 +419,16 @@ components:
         attributeValue:
           type: string
           readOnly: true
-    BulkPaymentUploadResult:
+    Entry:
       type: object
       properties:
-        paymentsRequestCount:
-          type: integer
-          format: int32
-        failedPaymentsCount:
-          type: integer
-          format: int32
-        bulkPaymentUploadData:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkPaymentUploadData'
-    UsageAggregateOutput:
-      type: object
-      properties:
-        subscriptionId:
-          type: string
-        subscriptionChargeGroupId:
-          type: string
-        attributeReferences:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributeReference'
-        startAt:
+        rowNumber:
           type: integer
           format: int64
-        endAt:
-          type: integer
-          format: int64
-        observedDataPoints:
-          type: integer
-          format: int32
-        usageSum:
-          type: number
-        usageMax:
-          type: number
-        usageMin:
-          type: number
-    RawUsagesData:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/RawUsage'
-      description: A list of RawUsage objects
-    RawUsage:
-      type: object
-      properties:
-        id:
+        failed:
+          type: boolean
+        failureReason:
           type: string
-          description: Unique identifier for a particular usage record
-        aliasId:
-          type: string
-          description: Alias ID for an usage based subscription item. This value is required if subscriptionId and subscriptionChargeId are not provided
-        subscriptionId:
-          type: string
-          description: SubscriptionId to attach usage record to. This value is required if aliasId is not provided
-        chargeId:
-          type: string
-          description: ChargeId of an usage based charge to attach usage record to. This value is required if aliasId is not provided
-        usageTime:
-          type: integer
-          format: int64
-          description: Usage time in unix timestamp (seconds)
-        usageQuantity:
-          type: integer
-          format: int64
-        attributeReferences:
-          type: array
-          description: List of attribute references to derive the price for the usage record
-          items:
-            $ref: '#/components/schemas/AttributeReference'
-      description: A raw usage record
-    UsageBatchInsertResult:
-      type: object
-      properties:
-        rawUsagesTotal:
-          type: integer
-          format: int32
-        totalFailed:
-          type: integer
-          format: int32
-        totalDuplicates:
-          type: integer
-          format: int32
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/Entry'
   requestBodies:
     uploadApprovalMatrixCSV:
       content:
