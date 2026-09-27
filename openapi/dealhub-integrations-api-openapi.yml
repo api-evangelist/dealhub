@@ -777,24 +777,100 @@ paths:
                 $ref: '#/components/schemas/TaxJarIntegration'
 components:
   schemas:
-    DiscountDetailJson:
+    SalesforceAccountBillingAddress:
       type: object
       properties:
+        street:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        postalCode:
+          type: string
+        country:
+          type: string
+    Opportunity:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        entityId:
+          type: string
         name:
           type: string
-        percent:
-          type: number
-        discountAmount:
-          type: number
-        status:
+        type:
+          type: string
+        stage:
+          type: string
+        crmId:
+          type: string
+        accountId:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        opportunityCrmType:
           type: string
           enum:
-          - ACTIVE
-          - DEPRECATED
-        discountedPrice:
-          type: number
-        amount:
-          type: number
+          - SALESFORCE
+          - HUBSPOT
+        isClosed:
+          type: boolean
+        primaryOrderId:
+          type: string
+        opportunityId:
+          type: string
+        currency:
+          type: string
+        customFields:
+          $ref: '#/components/schemas/CustomField'
+    CrmOpportunityNameChangeNotificationRequest:
+      type: object
+      required:
+      - id
+      - newName
+      properties:
+        id:
+          type: string
+        oldName:
+          type: string
+        newName:
+          type: string
+    SubskribeSalesforceContact:
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        mailingStreet:
+          type: string
+        mailingCity:
+          type: string
+        mailingState:
+          type: string
+        mailingPostalCode:
+          type: string
+        mailingCountry:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        title:
+          type: string
+        action:
+          type: string
+          enum:
+          - UPDATE
+          - INSERT
     OrderLineActionsPerformedJson:
       type: object
       properties:
@@ -804,6 +880,308 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RuleActionPerformedJson'
+    DocuSignIntegrationRequestJson:
+      type: object
+      properties:
+        clientId:
+          type: string
+        clientSecret:
+          type: string
+        environment:
+          type: string
+          enum:
+          - DEMO
+          - PRODUCTION
+    CustomPredefinedTemplateOnOrder:
+      type: object
+      properties:
+        id:
+          type: string
+        orderId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        content:
+          type: string
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
+    RuleTraceJson:
+      type: object
+      properties:
+        ruleName:
+          type: string
+        fired:
+          type: boolean
+        orderActionsPerformed:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleActionPerformedJson'
+        orderLineActionsPerformed:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLineActionsPerformedJson'
+        orderRuleWarnings:
+          type: array
+          items:
+            type: string
+        orderLineRuleWarnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLineRuleWarningsJson'
+    TaxJarIntegration:
+      type: object
+      properties:
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        tenantId:
+          type: string
+        integrationId:
+          type: string
+        maskedApiKey:
+          type: string
+        isDeleted:
+          type: boolean
+        isSandbox:
+          type: boolean
+    AttributeReference:
+      type: object
+      properties:
+        attributeDefinitionId:
+          type: string
+          readOnly: true
+        attributeValue:
+          type: string
+          readOnly: true
+    OrderLineItemJson:
+      type: object
+      required:
+      - chargeId
+      properties:
+        id:
+          type: string
+        itemGroupId:
+          type: string
+        isDryRunItem:
+          type: boolean
+        action:
+          type: string
+          enum:
+          - ADD
+          - UPDATE
+          - REMOVE
+          - RENEWAL
+          - NONE
+          - MISSING_RENEWAL
+          - RESTRUCTURE
+        planId:
+          type: string
+        subscriptionChargeId:
+          type: string
+        currencyConversionRateId:
+          type: string
+        subscriptionChargeGroupId:
+          type: string
+        chargeId:
+          type: string
+        quantity:
+          type: integer
+          format: int64
+        isRamp:
+          type: boolean
+        listUnitPrice:
+          type: number
+        sellUnitPrice:
+          type: number
+        discountAmount:
+          type: number
+        discounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/DiscountDetailJson'
+        predefinedDiscounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/TenantDiscountLineItemJson'
+        attributeReferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeReference'
+        amount:
+          type: number
+        listAmount:
+          type: number
+        annualizedAmount:
+          type: number
+        pricingOverride:
+          $ref: '#/components/schemas/PricingOverrideJson'
+        listPriceOverrideRatio:
+          type: number
+        listUnitPriceBeforeOverride:
+          type: number
+        listAmountBeforeOverride:
+          type: number
+        taxEstimate:
+          type: number
+        effectiveDate:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+        customFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldEntry'
+        arrOverride:
+          type: number
+        replacedPlanId:
+          type: string
+        dryRunItem:
+          type: boolean
+    OpportunityJson:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        entityId:
+          type: string
+        type:
+          type: string
+        stage:
+          type: string
+        crmId:
+          type: string
+        accountId:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        opportunityCrmType:
+          type: string
+          enum:
+          - SALESFORCE
+          - HUBSPOT
+        isClosed:
+          type: boolean
+        primaryOrderId:
+          type: string
+        opportunityId:
+          type: string
+        currency:
+          type: string
+        customFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldEntry'
+    Integration:
+      type: object
+      properties:
+        targetService:
+          type: string
+          enum:
+          - QUICKBOOKS
+          - XERO
+          - NETSUITE
+          - ANROK
+          - THOMSON_REUTERS
+        clientId:
+          type: string
+        environment:
+          type: string
+        realmId:
+          type: string
+        status:
+          type: string
+          enum:
+          - PENDING
+          - ACTIVE
+          - DELETED
+        metadata:
+          $ref: '#/components/schemas/JSONObject'
+        maskedApiKey:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        deleted:
+          type: boolean
+        id:
+          type: string
+          format: uuid
+    PricingOverrideJson:
+      type: object
+      properties:
+        priceTiers:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/PriceTierJson'
+        minQuantity:
+          type: integer
+          format: int64
+          readOnly: true
+        maxQuantity:
+          type: integer
+          format: int64
+          readOnly: true
+    TenantDiscountLineItemJson:
+      type: object
+      properties:
+        id:
+          type: string
+        percent:
+          type: number
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DEPRECATED
+        amount:
+          type: number
+    AvalaraIntegrationInput:
+      type: object
+      properties:
+        accountId:
+          type: string
+          minLength: 0
+          maxLength: 1024
+        companyCode:
+          type: string
+          minLength: 0
+          maxLength: 25
+        accountLicenseKey:
+          type: string
+        sandboxEnvironment:
+          type: boolean
+        shouldCommitDocuments:
+          type: boolean
     RecurrenceJson:
       type: object
       required:
@@ -824,24 +1202,10 @@ components:
           type: integer
           format: int32
           minimum: 1
-    AvalaraIntegration:
+    JSONObject:
       type: object
       properties:
-        accountId:
-          type: string
-        companyCode:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-        sandboxEnvironment:
-          type: boolean
-        integrationId:
-          type: string
-        shouldCommitDocuments:
+        empty:
           type: boolean
     CreditableAmount:
       type: object
@@ -852,22 +1216,6 @@ components:
           type: number
         maxCreditableAmount:
           type: number
-    PricingOverrideJson:
-      type: object
-      properties:
-        priceTiers:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/PriceTierJson'
-        minQuantity:
-          type: integer
-          format: int64
-          readOnly: true
-        maxQuantity:
-          type: integer
-          format: int64
-          readOnly: true
     UpsertCRMContactResponse:
       type: object
       properties:
@@ -881,6 +1229,130 @@ components:
           $ref: '#/components/schemas/CrmContact'
         upsertedContact:
           $ref: '#/components/schemas/AccountContactJson'
+    CrmContact:
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        mailingStreet:
+          type: string
+        mailingCity:
+          type: string
+        mailingState:
+          type: string
+        mailingPostalCode:
+          type: string
+        mailingCountry:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        title:
+          type: string
+        action:
+          type: string
+          enum:
+          - UPDATE
+          - INSERT
+        crmType:
+          type: string
+          enum:
+          - SALESFORCE
+          - HUBSPOT
+    PriceTierJson:
+      type: object
+      required:
+      - amount
+      - untilQuantity
+      properties:
+        untilQuantity:
+          type: string
+        amount:
+          type: number
+        overage:
+          type: number
+    CustomField:
+      type: object
+      properties:
+        entries:
+          type: object
+          readOnly: true
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValue'
+        empty:
+          type: boolean
+    CustomFieldEntry:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        name:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        value:
+          type: string
+          readOnly: true
+        selections:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        required:
+          type: boolean
+          readOnly: true
+        source:
+          type: string
+          readOnly: true
+          enum:
+          - USER
+          - SYSTEM
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+    AccountAddressJson:
+      type: object
+      properties:
+        streetAddressLine1:
+          type: string
+          description: Address Line 1 of the Contact
+        streetAddressLine2:
+          type: string
+          description: Address Line 2 of the Contact
+        streetAddressLine3:
+          type: string
+          description: Address Line 3 of the Contact
+        city:
+          type: string
+          description: City of the Contact
+        state:
+          type: string
+          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
+        country:
+          type: string
+          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
+        zipcode:
+          type: string
+          description: Zip or Postal Code of the Contact
     DocuSignIntegrationResponseJson:
       type: object
       properties:
@@ -898,6 +1370,21 @@ components:
         refreshTokenExpiresOn:
           type: integer
           format: int64
+    SalesforceAccount:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        billingAddress:
+          $ref: '#/components/schemas/SalesforceAccountBillingAddress'
+        phone:
+          type: string
+        CurrencyIsoCode:
+          type: string
     OrderJson:
       type: object
       required:
@@ -1246,407 +1733,6 @@ components:
           $ref: '#/components/schemas/OpportunityJson'
         zeppaOutput:
           $ref: '#/components/schemas/OrderCreationCustomizationOutputJson'
-    AccountAddressJson:
-      type: object
-      properties:
-        streetAddressLine1:
-          type: string
-          description: Address Line 1 of the Contact
-        streetAddressLine2:
-          type: string
-          description: Address Line 2 of the Contact
-        streetAddressLine3:
-          type: string
-          description: Address Line 3 of the Contact
-        city:
-          type: string
-          description: City of the Contact
-        state:
-          type: string
-          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
-        country:
-          type: string
-          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
-        zipcode:
-          type: string
-          description: Zip or Postal Code of the Contact
-    Integration:
-      type: object
-      properties:
-        targetService:
-          type: string
-          enum:
-          - QUICKBOOKS
-          - XERO
-          - NETSUITE
-          - ANROK
-          - THOMSON_REUTERS
-        clientId:
-          type: string
-        environment:
-          type: string
-        realmId:
-          type: string
-        status:
-          type: string
-          enum:
-          - PENDING
-          - ACTIVE
-          - DELETED
-        metadata:
-          $ref: '#/components/schemas/JSONObject'
-        maskedApiKey:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-        deleted:
-          type: boolean
-        id:
-          type: string
-          format: uuid
-    OrderLineItemJson:
-      type: object
-      required:
-      - chargeId
-      properties:
-        id:
-          type: string
-        itemGroupId:
-          type: string
-        isDryRunItem:
-          type: boolean
-        action:
-          type: string
-          enum:
-          - ADD
-          - UPDATE
-          - REMOVE
-          - RENEWAL
-          - NONE
-          - MISSING_RENEWAL
-          - RESTRUCTURE
-        planId:
-          type: string
-        subscriptionChargeId:
-          type: string
-        currencyConversionRateId:
-          type: string
-        subscriptionChargeGroupId:
-          type: string
-        chargeId:
-          type: string
-        quantity:
-          type: integer
-          format: int64
-        isRamp:
-          type: boolean
-        listUnitPrice:
-          type: number
-        sellUnitPrice:
-          type: number
-        discountAmount:
-          type: number
-        discounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/DiscountDetailJson'
-        predefinedDiscounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/TenantDiscountLineItemJson'
-        attributeReferences:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributeReference'
-        amount:
-          type: number
-        listAmount:
-          type: number
-        annualizedAmount:
-          type: number
-        pricingOverride:
-          $ref: '#/components/schemas/PricingOverrideJson'
-        listPriceOverrideRatio:
-          type: number
-        listUnitPriceBeforeOverride:
-          type: number
-        listAmountBeforeOverride:
-          type: number
-        taxEstimate:
-          type: number
-        effectiveDate:
-          type: integer
-          format: int64
-        endDate:
-          type: integer
-          format: int64
-        customFields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldEntry'
-        arrOverride:
-          type: number
-        replacedPlanId:
-          type: string
-        dryRunItem:
-          type: boolean
-    SalesforceClientIntegrationRequestJson:
-      type: object
-      properties:
-        clientId:
-          type: string
-        clientSecret:
-          type: string
-        redirectUri:
-          type: string
-        baseLoginUrl:
-          type: string
-    CustomPredefinedTemplateOnOrder:
-      type: object
-      properties:
-        id:
-          type: string
-        orderId:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        content:
-          type: string
-    Opportunity:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        entityId:
-          type: string
-        name:
-          type: string
-        type:
-          type: string
-        stage:
-          type: string
-        crmId:
-          type: string
-        accountId:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-        opportunityCrmType:
-          type: string
-          enum:
-          - SALESFORCE
-          - HUBSPOT
-        isClosed:
-          type: boolean
-        primaryOrderId:
-          type: string
-        opportunityId:
-          type: string
-        currency:
-          type: string
-        customFields:
-          $ref: '#/components/schemas/CustomField'
-    AnrokIntegrationInput:
-      type: object
-      required:
-      - apiKey
-      properties:
-        apiKey:
-          type: string
-          readOnly: true
-    DocuSignIntegrationRequestJson:
-      type: object
-      properties:
-        clientId:
-          type: string
-        clientSecret:
-          type: string
-        environment:
-          type: string
-          enum:
-          - DEMO
-          - PRODUCTION
-    RuleActionPerformedJson:
-      type: object
-      properties:
-        action:
-          type: string
-        actionMessage:
-          type: string
-    CustomFieldDefault:
-      type: object
-      properties:
-        value:
-          type: string
-        selections:
-          type: array
-          items:
-            type: string
-    AvalaraIntegrationInput:
-      type: object
-      properties:
-        accountId:
-          type: string
-          minLength: 0
-          maxLength: 1024
-        companyCode:
-          type: string
-          minLength: 0
-          maxLength: 25
-        accountLicenseKey:
-          type: string
-        sandboxEnvironment:
-          type: boolean
-        shouldCommitDocuments:
-          type: boolean
-    UpsertCrmContactsRequest:
-      type: object
-      properties:
-        accountId:
-          type: string
-        contactCrmIds:
-          type: array
-          items:
-            type: string
-          maxItems: 500
-          minItems: 0
-    RuleTraceJson:
-      type: object
-      properties:
-        ruleName:
-          type: string
-        fired:
-          type: boolean
-        orderActionsPerformed:
-          type: array
-          items:
-            $ref: '#/components/schemas/RuleActionPerformedJson'
-        orderLineActionsPerformed:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrderLineActionsPerformedJson'
-        orderRuleWarnings:
-          type: array
-          items:
-            type: string
-        orderLineRuleWarnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrderLineRuleWarningsJson'
-    DocuSignReauthenticationResponseJson:
-      type: object
-      required:
-      - redirectUri
-      properties:
-        redirectUri:
-          type: string
-          readOnly: true
-    OrderCreationCustomizationOutputJson:
-      type: object
-      properties:
-        customizationRunSkipped:
-          type: boolean
-        customizationDefinitionMissing:
-          type: boolean
-        ruleTraces:
-          type: array
-          items:
-            $ref: '#/components/schemas/RuleTraceJson'
-    OrderLineRuleWarningsJson:
-      type: object
-      properties:
-        lineIdentifier:
-          type: string
-        warnings:
-          type: array
-          items:
-            type: string
-    CrmContact:
-      type: object
-      properties:
-        id:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        mailingStreet:
-          type: string
-        mailingCity:
-          type: string
-        mailingState:
-          type: string
-        mailingPostalCode:
-          type: string
-        mailingCountry:
-          type: string
-        phone:
-          type: string
-        email:
-          type: string
-        title:
-          type: string
-        action:
-          type: string
-          enum:
-          - UPDATE
-          - INSERT
-        crmType:
-          type: string
-          enum:
-          - SALESFORCE
-          - HUBSPOT
-    OpportunityJson:
-      type: object
-      properties:
-        name:
-          type: string
-        id:
-          type: string
-        entityId:
-          type: string
-        type:
-          type: string
-        stage:
-          type: string
-        crmId:
-          type: string
-        accountId:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-        opportunityCrmType:
-          type: string
-          enum:
-          - SALESFORCE
-          - HUBSPOT
-        isClosed:
-          type: boolean
-        primaryOrderId:
-          type: string
-        opportunityId:
-          type: string
-        currency:
-          type: string
-        customFields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldEntry'
     TaxJarIntegrationInput:
       type: object
       required:
@@ -1658,102 +1744,92 @@ components:
         isSandbox:
           type: boolean
           readOnly: true
-    PriceTierJson:
+    AnrokIntegrationInput:
       type: object
       required:
-      - amount
-      - untilQuantity
+      - apiKey
       properties:
-        untilQuantity:
+        apiKey:
           type: string
-        amount:
-          type: number
-        overage:
-          type: number
-    AccountContactJson:
+          readOnly: true
+    SalesforceClientIntegrationRequestJson:
       type: object
-      required:
-      - accountId
       properties:
-        id:
+        clientId:
           type: string
-          description: This is a system-generated Account Contact ID
+        clientSecret:
+          type: string
+        redirectUri:
+          type: string
+        baseLoginUrl:
+          type: string
+    UpsertCrmContactsRequest:
+      type: object
+      properties:
         accountId:
           type: string
-          description: Uniquely identifies the Account
-        firstName:
+        contactCrmIds:
+          type: array
+          items:
+            type: string
+          maxItems: 500
+          minItems: 0
+    DocuSignReauthenticationResponseJson:
+      type: object
+      required:
+      - redirectUri
+      properties:
+        redirectUri:
           type: string
-          description: First Name of the Contact
-        lastName:
-          type: string
-          description: (optional) Last Name of the Contact
-        email:
-          type: string
-          description: Email of the Contact
-        phoneNumber:
-          type: string
-          description: (optional) Phone Number of the Contact
-        title:
-          type: string
-          description: (optional) Title of the Contact
-        address:
-          $ref: '#/components/schemas/AccountAddressJson'
-        externalId:
-          type: string
-        erpId:
-          type: string
-        fullName:
-          type: string
-        eventObjectId:
-          type: string
-    SalesforceAccountBillingAddress:
+          readOnly: true
+    DiscountDetailJson:
       type: object
       properties:
-        street:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        postalCode:
-          type: string
-        country:
-          type: string
-    TenantDiscountJson:
-      type: object
-      properties:
-        id:
+        name:
           type: string
         percent:
           type: number
-        name:
-          type: string
-        type:
-          type: string
-        description:
-          type: string
+        discountAmount:
+          type: number
         status:
           type: string
           enum:
           - ACTIVE
           - DEPRECATED
-    CrmOpportunityNameChangeNotificationRequest:
-      type: object
-      required:
-      - id
-      - newName
-      properties:
-        id:
-          type: string
-        oldName:
-          type: string
-        newName:
-          type: string
-    JSONObject:
+        discountedPrice:
+          type: number
+        amount:
+          type: number
+    AvalaraIntegration:
       type: object
       properties:
-        empty:
+        accountId:
+          type: string
+        companyCode:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        sandboxEnvironment:
           type: boolean
+        integrationId:
+          type: string
+        shouldCommitDocuments:
+          type: boolean
+    OrderCreationCustomizationOutputJson:
+      type: object
+      properties:
+        customizationRunSkipped:
+          type: boolean
+        customizationDefinitionMissing:
+          type: boolean
+        ruleTraces:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleTraceJson'
     CustomFieldValue:
       type: object
       properties:
@@ -1794,50 +1870,14 @@ components:
           - SYSTEM
         defaultValue:
           $ref: '#/components/schemas/CustomFieldDefault'
-    CustomFieldEntry:
+    RuleActionPerformedJson:
       type: object
       properties:
-        id:
+        action:
           type: string
-          readOnly: true
-        type:
+        actionMessage:
           type: string
-          readOnly: true
-          enum:
-          - STRING
-          - PICKLIST
-          - MULTISELECT_PICKLIST
-        name:
-          type: string
-          readOnly: true
-        label:
-          type: string
-          readOnly: true
-        value:
-          type: string
-          readOnly: true
-        selections:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        options:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        required:
-          type: boolean
-          readOnly: true
-        source:
-          type: string
-          readOnly: true
-          enum:
-          - USER
-          - SYSTEM
-        defaultValue:
-          $ref: '#/components/schemas/CustomFieldDefault'
-    TenantDiscountLineItemJson:
+    TenantDiscountJson:
       type: object
       properties:
         id:
@@ -1855,95 +1895,6 @@ components:
           enum:
           - ACTIVE
           - DEPRECATED
-        amount:
-          type: number
-    OrderTerms:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        templateGroupId:
-          type: string
-        templateGroupVersion:
-          type: integer
-          format: int32
-        orderId:
-          type: string
-        levelType:
-          type: string
-          enum:
-          - ORDER
-          - PLAN
-        planIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        templateId:
-          type: string
-          readOnly: true
-        deleted:
-          type: boolean
-    SubskribeSalesforceContact:
-      type: object
-      properties:
-        id:
-          type: string
-        firstName:
-          type: string
-        lastName:
-          type: string
-        mailingStreet:
-          type: string
-        mailingCity:
-          type: string
-        mailingState:
-          type: string
-        mailingPostalCode:
-          type: string
-        mailingCountry:
-          type: string
-        phone:
-          type: string
-        email:
-          type: string
-        title:
-          type: string
-        action:
-          type: string
-          enum:
-          - UPDATE
-          - INSERT
-    CustomField:
-      type: object
-      properties:
-        entries:
-          type: object
-          readOnly: true
-          additionalProperties:
-            $ref: '#/components/schemas/CustomFieldValue'
-        empty:
-          type: boolean
-    TaxJarIntegration:
-      type: object
-      properties:
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-        tenantId:
-          type: string
-        integrationId:
-          type: string
-        maskedApiKey:
-          type: string
-        isDeleted:
-          type: boolean
-        isSandbox:
-          type: boolean
     AccountAddress:
       type: object
       properties:
@@ -1972,49 +1923,98 @@ components:
         updatedOn:
           type: integer
           format: int64
-    SalesforceAccount:
+    OrderLineRuleWarningsJson:
+      type: object
+      properties:
+        lineIdentifier:
+          type: string
+        warnings:
+          type: array
+          items:
+            type: string
+    OrderTerms:
       type: object
       properties:
         id:
           type: string
-        name:
+          format: uuid
+        templateGroupId:
           type: string
-        description:
+        templateGroupVersion:
+          type: integer
+          format: int32
+        orderId:
           type: string
-        billingAddress:
-          $ref: '#/components/schemas/SalesforceAccountBillingAddress'
-        phone:
+        levelType:
           type: string
-        CurrencyIsoCode:
+          enum:
+          - ORDER
+          - PLAN
+        planIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        templateId:
           type: string
-    AttributeReference:
+          readOnly: true
+        deleted:
+          type: boolean
+    AccountContactJson:
       type: object
+      required:
+      - accountId
       properties:
-        attributeDefinitionId:
+        id:
           type: string
-          readOnly: true
-        attributeValue:
+          description: This is a system-generated Account Contact ID
+        accountId:
           type: string
-          readOnly: true
+          description: Uniquely identifies the Account
+        firstName:
+          type: string
+          description: First Name of the Contact
+        lastName:
+          type: string
+          description: (optional) Last Name of the Contact
+        email:
+          type: string
+          description: Email of the Contact
+        phoneNumber:
+          type: string
+          description: (optional) Phone Number of the Contact
+        title:
+          type: string
+          description: (optional) Title of the Contact
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+        externalId:
+          type: string
+        erpId:
+          type: string
+        fullName:
+          type: string
+        eventObjectId:
+          type: string
   requestBodies:
-    AnrokIntegrationInput:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/AnrokIntegrationInput'
-      description: Integration input as a JSON
-    TaxJarIntegrationInput:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TaxJarIntegrationInput'
-      description: Integration input as a JSON
     AccountAddress:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/AccountAddress'
       description: Address input as a JSON
+    TaxJarIntegrationInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TaxJarIntegrationInput'
+      description: Integration input as a JSON
+    AnrokIntegrationInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AnrokIntegrationInput'
+      description: Integration input as a JSON
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

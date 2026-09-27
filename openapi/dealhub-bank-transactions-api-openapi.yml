@@ -84,22 +84,31 @@ paths:
                 $ref: '#/components/schemas/BankTransactionsUploadResult'
 components:
   schemas:
-    BankTransactionsUploadResult:
+    BankTransactionsUploadData:
       type: object
       properties:
-        bankTransactionsCount:
-          type: integer
-          format: int32
-        failedBankTransactionsCount:
-          type: integer
-          format: int32
-        successfulBankTransactionsCount:
-          type: integer
-          format: int32
-        bankTransactionsUploadData:
-          type: array
-          items:
-            $ref: '#/components/schemas/BankTransactionsUploadData'
+        failed:
+          type: boolean
+        paymentType:
+          type: string
+        failureReason:
+          type: string
+        bankAccountId:
+          type: string
+        externalTransactionId:
+          type: string
+        transactionAmount:
+          type: string
+        transactionDate:
+          type: string
+        payerName:
+          type: string
+        referenceNumber:
+          type: string
+        transactionCurrency:
+          type: string
+        transactionType:
+          type: string
     BankTransactionPotentialInvoice:
       type: object
       properties:
@@ -155,6 +164,22 @@ components:
         totalCount:
           type: integer
           format: int32
+    BankTransactionsUploadResult:
+      type: object
+      properties:
+        bankTransactionsCount:
+          type: integer
+          format: int32
+        failedBankTransactionsCount:
+          type: integer
+          format: int32
+        successfulBankTransactionsCount:
+          type: integer
+          format: int32
+        bankTransactionsUploadData:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankTransactionsUploadData'
     PotentialInvoice:
       type: object
       properties:
@@ -170,31 +195,6 @@ components:
         matchingConfidence:
           type: integer
           format: int32
-    BankTransactionsUploadData:
-      type: object
-      properties:
-        failed:
-          type: boolean
-        paymentType:
-          type: string
-        failureReason:
-          type: string
-        bankAccountId:
-          type: string
-        externalTransactionId:
-          type: string
-        transactionAmount:
-          type: string
-        transactionDate:
-          type: string
-        payerName:
-          type: string
-        referenceNumber:
-          type: string
-        transactionCurrency:
-          type: string
-        transactionType:
-          type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

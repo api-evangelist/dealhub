@@ -166,24 +166,24 @@ paths:
           description: Forbidden. The authentication token is missing or invalid.
 components:
   schemas:
-    SkuPricingRequest:
+    SkuParameters:
       type: object
       properties:
-        id:
-          type: string
-          description: A unique identifier that represents the ordinal position of this SKU in the request.
         sku:
           type: string
-          description: SKU of the product.
-        parameters:
-          type: array
-          items:
-            $ref: '#/components/schemas/ParameterValue'
-          description: List of parameters required for price calculation.
-      required:
-      - id
-      - sku
-      - parameters
+        parameters_for:
+          type: object
+          properties:
+            product_factors:
+              type: array
+              description: A list of product-specific factors required for price calculation of the given SKU.
+              items:
+                $ref: '#/components/schemas/ParameterDefinition'
+            parameters:
+              type: array
+              description: The list of parameters needed to resolve all of the relevant pricing formulas.
+              items:
+                $ref: '#/components/schemas/ParameterDefinition'
     ParametersRequest:
       type: object
       properties:
@@ -231,21 +231,6 @@ components:
       - currency
       - geo
       - skus
-    SkuPrice:
-      type: object
-      properties:
-        id:
-          type: string
-          description: The identifier that represents the ordinal position as sent in the request.
-        sku:
-          type: string
-          description: The product's SKU.
-        price:
-          type: number
-          description: The calculated price per unit in the requested currency (0 if there was an error).
-        error:
-          type: string
-          description: An error message in case something went wrong (e.g., "Pricing could not be calculated").
     ParameterValue:
       type: object
       properties:
@@ -258,31 +243,6 @@ components:
       required:
       - name
       - value
-    ParametersResponse:
-      type: object
-      properties:
-        skus:
-          type: array
-          items:
-            $ref: '#/components/schemas/SkuParameters'
-    SkuParameters:
-      type: object
-      properties:
-        sku:
-          type: string
-        parameters_for:
-          type: object
-          properties:
-            product_factors:
-              type: array
-              description: A list of product-specific factors required for price calculation of the given SKU.
-              items:
-                $ref: '#/components/schemas/ParameterDefinition'
-            parameters:
-              type: array
-              description: The list of parameters needed to resolve all of the relevant pricing formulas.
-              items:
-                $ref: '#/components/schemas/ParameterDefinition'
     ParameterDefinition:
       type: object
       properties:
@@ -295,6 +255,24 @@ components:
           - number
           - text
           description: The expected value type.
+    SkuPricingRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          description: A unique identifier that represents the ordinal position of this SKU in the request.
+        sku:
+          type: string
+          description: SKU of the product.
+        parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParameterValue'
+          description: List of parameters required for price calculation.
+      required:
+      - id
+      - sku
+      - parameters
     PricingResponse:
       type: object
       properties:
@@ -311,6 +289,28 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SkuPrice'
+    SkuPrice:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The identifier that represents the ordinal position as sent in the request.
+        sku:
+          type: string
+          description: The product's SKU.
+        price:
+          type: number
+          description: The calculated price per unit in the requested currency (0 if there was an error).
+        error:
+          type: string
+          description: An error message in case something went wrong (e.g., "Pricing could not be calculated").
+    ParametersResponse:
+      type: object
+      properties:
+        skus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkuParameters'
   securitySchemes:
     bearerAuth:
       type: http

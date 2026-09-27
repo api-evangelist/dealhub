@@ -431,40 +431,14 @@ paths:
               schema:
                 $ref: '#/components/schemas/AccountPaymentConfigurationJson'
 components:
-  requestBodies:
-    AccountContactJson:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/AccountContactJson'
-    AccountJson:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/AccountJson'
   schemas:
-    CustomFieldDefault:
+    ErpInputJson:
       type: object
       properties:
-        value:
+        erpId:
           type: string
-        selections:
-          type: array
-          items:
-            type: string
-    PaginatedAccountsResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountJson'
-        numElements:
-          type: integer
-          format: int32
-        nextCursor:
-          type: string
-          format: uuid
+          minLength: 0
+          maxLength: 100
     AccountAddressJson:
       type: object
       properties:
@@ -489,13 +463,6 @@ components:
         zipcode:
           type: string
           description: Zip or Postal Code of the Contact
-    CrmAccountImportResponse:
-      type: object
-      properties:
-        accountUrl:
-          type: string
-        accountId:
-          type: string
     AccountPaymentMethodJson:
       type: object
       required:
@@ -523,74 +490,46 @@ components:
           - EXTERNAL
         paymentMethodId:
           type: string
-    ErpInputJson:
+    CrmAccountImportResponse:
       type: object
       properties:
-        erpId:
+        accountUrl:
           type: string
-          minLength: 0
-          maxLength: 100
-    AccountContactJson:
+        accountId:
+          type: string
+    PaginatedAccountsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountJson'
+        numElements:
+          type: integer
+          format: int32
+        nextCursor:
+          type: string
+          format: uuid
+    TimeSeriesAmountJson:
+      type: object
+      properties:
+        instant:
+          type: integer
+          format: int64
+        amount:
+          type: number
+    AccountPaymentConfigurationJson:
       type: object
       required:
       - accountId
+      - excludeFromPaymentRetries
       properties:
         id:
           type: string
-          description: This is a system-generated Account Contact ID
         accountId:
           type: string
-          description: Uniquely identifies the Account
-        firstName:
-          type: string
-          description: First Name of the Contact
-        lastName:
-          type: string
-          description: (optional) Last Name of the Contact
-        email:
-          type: string
-          description: Email of the Contact
-        phoneNumber:
-          type: string
-          description: (optional) Phone Number of the Contact
-        title:
-          type: string
-          description: (optional) Title of the Contact
-        address:
-          $ref: '#/components/schemas/AccountAddressJson'
-        externalId:
-          type: string
-        erpId:
-          type: string
-        fullName:
-          type: string
-        eventObjectId:
-          type: string
-    MetricsJson:
-      type: object
-      properties:
-        tcv:
-          type: number
-        recurringTotal:
-          type: number
-        nonRecurringTotal:
-          type: number
-        arr:
-          type: number
-        entryArr:
-          type: number
-        exitArr:
-          type: number
-        averageArr:
-          type: number
-        arrTrend:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimeSeriesAmountJson'
-        deltaTcv:
-          type: number
-        deltaArr:
-          type: number
+        excludeFromPaymentRetries:
+          type: boolean
     CustomFieldValue:
       type: object
       properties:
@@ -631,6 +570,15 @@ components:
           - SYSTEM
         defaultValue:
           $ref: '#/components/schemas/CustomFieldDefault'
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
     AccountJson:
       type: object
       required:
@@ -733,26 +681,78 @@ components:
           uniqueItems: true
           items:
             type: string
-    AccountPaymentConfigurationJson:
+    MetricsJson:
+      type: object
+      properties:
+        tcv:
+          type: number
+        recurringTotal:
+          type: number
+        nonRecurringTotal:
+          type: number
+        arr:
+          type: number
+        entryArr:
+          type: number
+        exitArr:
+          type: number
+        averageArr:
+          type: number
+        arrTrend:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSeriesAmountJson'
+        deltaTcv:
+          type: number
+        deltaArr:
+          type: number
+    AccountContactJson:
       type: object
       required:
       - accountId
-      - excludeFromPaymentRetries
       properties:
         id:
           type: string
+          description: This is a system-generated Account Contact ID
         accountId:
           type: string
-        excludeFromPaymentRetries:
-          type: boolean
-    TimeSeriesAmountJson:
-      type: object
-      properties:
-        instant:
-          type: integer
-          format: int64
-        amount:
-          type: number
+          description: Uniquely identifies the Account
+        firstName:
+          type: string
+          description: First Name of the Contact
+        lastName:
+          type: string
+          description: (optional) Last Name of the Contact
+        email:
+          type: string
+          description: Email of the Contact
+        phoneNumber:
+          type: string
+          description: (optional) Phone Number of the Contact
+        title:
+          type: string
+          description: (optional) Title of the Contact
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+        externalId:
+          type: string
+        erpId:
+          type: string
+        fullName:
+          type: string
+        eventObjectId:
+          type: string
+  requestBodies:
+    AccountJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccountJson'
+    AccountContactJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AccountContactJson'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

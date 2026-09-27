@@ -167,26 +167,23 @@ paths:
                   $ref: '#/components/schemas/Message'
 components:
   schemas:
-    MediaType:
+    Message:
       type: object
+      required:
+      - createdAt
+      - message
+      - role
       properties:
-        type:
+        role:
           type: string
-        subtype:
+          readOnly: true
+        message:
           type: string
-        parameters:
-          type: object
-          additionalProperties:
-            type: string
-        wildcardType:
-          type: boolean
-        wildcardSubtype:
-          type: boolean
-    Type:
-      type: object
-      properties:
-        typeName:
-          type: string
+          readOnly: true
+        createdAt:
+          type: integer
+          format: int64
+          readOnly: true
     OutboundEvent:
       type: object
       properties:
@@ -207,23 +204,26 @@ components:
           $ref: '#/components/schemas/Type'
         reconnectDelaySet:
           type: boolean
-    Message:
+    Type:
       type: object
-      required:
-      - createdAt
-      - message
-      - role
       properties:
-        role:
+        typeName:
           type: string
-          readOnly: true
-        message:
+    MediaType:
+      type: object
+      properties:
+        type:
           type: string
-          readOnly: true
-        createdAt:
-          type: integer
-          format: int64
-          readOnly: true
+        subtype:
+          type: string
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+        wildcardType:
+          type: boolean
+        wildcardSubtype:
+          type: boolean
   requestBodies:
     generateZeppaArtifactBody:
       content:

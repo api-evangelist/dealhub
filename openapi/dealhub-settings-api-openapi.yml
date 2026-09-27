@@ -761,58 +761,79 @@ paths:
         default:
           description: successful operation
 components:
-  schemas:
+  requestBodies:
+    TaxRateJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TaxRateJson'
+    TaxRateStrategyJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TaxRateStrategyJson'
     UnitOfMeasureJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnitOfMeasureJson'
+    TenantJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TenantJson'
+    DocumentSection:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DocumentSection'
+    postInvoicesForBulkInvoiceRunBody:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
+    uploadApprovalMatrixCSV:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
+  schemas:
+    Condition:
       type: object
-      required:
-      - status
       properties:
-        id:
+        key:
           type: string
-          format: uuid
-        name:
-          type: string
-        description:
-          type: string
-        status:
-          type: string
-          enum:
-          - DRAFT
-          - ACTIVE
-          - DEPRECATED
-    TaxRateStrategyPaginatedResponse:
-      type: object
-      properties:
-        data:
+        checks:
           type: array
           items:
-            $ref: '#/components/schemas/TaxRateStrategyJson'
-        count:
-          type: integer
-          format: int32
-        pageToken:
+            type: string
+            enum:
+            - required
+            - empty
+        defaultValue:
           type: string
-        totalCount:
-          type: integer
-          format: int32
-    BillingCycleDefinitionJson:
+    PaymentTermSettingsJson:
       type: object
+      required:
+      - customPaymentTermsAllowed
+      - defaultPaymentTerm
+      - defaultPaymentTerms
       properties:
-        id:
+        defaultPaymentTerms:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        defaultPaymentTerm:
           type: string
           readOnly: true
-        name:
-          type: string
-          readOnly: true
-        recurrence:
-          $ref: '#/components/schemas/RecurrenceJson'
-        status:
-          type: string
-          readOnly: true
-          enum:
-          - ACTIVE
-          - INACTIVE
-        isDefault:
+        customPaymentTermsAllowed:
           type: boolean
           readOnly: true
     RecurrenceJson:
@@ -835,41 +856,6 @@ components:
           type: integer
           format: int32
           minimum: 1
-    DocumentSection:
-      type: object
-      required:
-      - location
-      properties:
-        id:
-          type: string
-          format: uuid
-        entityIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        name:
-          type: string
-          minLength: 0
-          maxLength: 1024
-        title:
-          type: string
-          minLength: 0
-          maxLength: 1024
-        location:
-          type: string
-          enum:
-          - BEFORE_SIGNATURE
-          - AFTER_SIGNATURE
-        deleted:
-          type: boolean
-    DefaultValueDefinition:
-      type: object
-      properties:
-        path:
-          type: string
-        value:
-          type: string
     BillingCycleDefinitionUpdateJson:
       type: object
       required:
@@ -884,6 +870,110 @@ components:
           enum:
           - ACTIVE
           - INACTIVE
+    BackendConfig:
+      type: object
+      properties:
+        id:
+          type: string
+        conditions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Condition'
+    BillingCycleDefinitionJson:
+      type: object
+      properties:
+        id:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        recurrence:
+          $ref: '#/components/schemas/RecurrenceJson'
+        status:
+          type: string
+          readOnly: true
+          enum:
+          - ACTIVE
+          - INACTIVE
+        isDefault:
+          type: boolean
+          readOnly: true
+    TaxRatePaginationResponseJson:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/TaxRateJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
+    DefaultValueDefinition:
+      type: object
+      properties:
+        path:
+          type: string
+        value:
+          type: string
+    TenantSettingJson:
+      type: object
+      properties:
+        defaultTimeZone:
+          type: string
+        supportedCurrencies:
+          type: array
+          items:
+            type: string
+        percentDerivedFrom:
+          type: string
+          enum:
+          - LIST_AMOUNT
+          - SELL_AMOUNT
+        tenantSettingSeal:
+          type: string
+          enum:
+          - 'ON'
+          - 'OFF'
+        orderExpiryDurationInDays:
+          type: string
+        signingOrder:
+          type: string
+          enum:
+          - ACCOUNT_FIRST
+          - TENANT_FIRST
+          - ACCOUNT_ONLY
+        globalBccEmail:
+          type: string
+        isUpdateOrderStartDateEnabled:
+          type: boolean
+        autoReplacePlans:
+          type: boolean
+        isDocxAdminOnly:
+          type: boolean
+        isDocxPasswordProtected:
+          type: boolean
+    TaxRateStrategyPaginatedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxRateStrategyJson'
+        count:
+          type: integer
+          format: int32
+        pageToken:
+          type: string
+        totalCount:
+          type: integer
+          format: int32
     AccountAddressJson:
       type: object
       properties:
@@ -908,6 +998,32 @@ components:
         zipcode:
           type: string
           description: Zip or Postal Code of the Contact
+    TaxRateJson:
+      type: object
+      required:
+      - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        taxPercentage:
+          type: number
+        taxCode:
+          type: string
+        taxInclusive:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DISABLED
+          - EXPIRED
+        inUse:
+          type: boolean
     DocxSettings:
       type: object
       properties:
@@ -915,14 +1031,33 @@ components:
           type: boolean
         isDocxPasswordProtected:
           type: boolean
-    DefaultBillingCycleDefinitionInput:
+    TenantUiCustomization:
       type: object
       required:
-      - id
+      - version
+      properties:
+        version:
+          type: string
+          enum:
+          - V1_TENANT_LEVEL
+        customizations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Customization'
+    TaxRateStrategyJson:
+      type: object
+      required:
+      - taxRateId
       properties:
         id:
           type: string
-          readOnly: true
+        name:
+          type: string
+        countryCode:
+          type: string
+        taxRateId:
+          type: string
+          format: uuid
     UnitOfMeasurePaginationResponseJson:
       type: object
       properties:
@@ -939,22 +1074,24 @@ components:
           type: string
           format: uuid
           readOnly: true
-    TaxRatePaginationResponseJson:
+    UnitOfMeasureJson:
       type: object
+      required:
+      - status
       properties:
-        data:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/TaxRateJson'
-        numElements:
-          type: integer
-          format: int32
-          readOnly: true
-        nextCursor:
+        id:
           type: string
           format: uuid
-          readOnly: true
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - ACTIVE
+          - DEPRECATED
     Customization:
       type: object
       required:
@@ -1000,119 +1137,6 @@ components:
           enum:
           - ACTIVE
           - INACTIVE
-    TenantUiCustomization:
-      type: object
-      required:
-      - version
-      properties:
-        version:
-          type: string
-          enum:
-          - V1_TENANT_LEVEL
-        customizations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Customization'
-    TaxRateStrategyJson:
-      type: object
-      required:
-      - taxRateId
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        countryCode:
-          type: string
-        taxRateId:
-          type: string
-          format: uuid
-    TaxRateJson:
-      type: object
-      required:
-      - status
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        description:
-          type: string
-        taxPercentage:
-          type: number
-        taxCode:
-          type: string
-        taxInclusive:
-          type: boolean
-        status:
-          type: string
-          enum:
-          - ACTIVE
-          - DISABLED
-          - EXPIRED
-        inUse:
-          type: boolean
-    BackendConfig:
-      type: object
-      properties:
-        id:
-          type: string
-        conditions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Condition'
-    Condition:
-      type: object
-      properties:
-        key:
-          type: string
-        checks:
-          type: array
-          items:
-            type: string
-            enum:
-            - required
-            - empty
-        defaultValue:
-          type: string
-    TenantSettingJson:
-      type: object
-      properties:
-        defaultTimeZone:
-          type: string
-        supportedCurrencies:
-          type: array
-          items:
-            type: string
-        percentDerivedFrom:
-          type: string
-          enum:
-          - LIST_AMOUNT
-          - SELL_AMOUNT
-        tenantSettingSeal:
-          type: string
-          enum:
-          - 'ON'
-          - 'OFF'
-        orderExpiryDurationInDays:
-          type: string
-        signingOrder:
-          type: string
-          enum:
-          - ACCOUNT_FIRST
-          - TENANT_FIRST
-          - ACCOUNT_ONLY
-        globalBccEmail:
-          type: string
-        isUpdateOrderStartDateEnabled:
-          type: boolean
-        autoReplacePlans:
-          type: boolean
-        isDocxAdminOnly:
-          type: boolean
-        isDocxPasswordProtected:
-          type: boolean
     TenantJson:
       type: object
       properties:
@@ -1158,66 +1182,42 @@ components:
           readOnly: true
         tenantSetting:
           $ref: '#/components/schemas/TenantSettingJson'
-    PaymentTermSettingsJson:
+    DefaultBillingCycleDefinitionInput:
       type: object
       required:
-      - customPaymentTermsAllowed
-      - defaultPaymentTerm
-      - defaultPaymentTerms
+      - id
       properties:
-        defaultPaymentTerms:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        defaultPaymentTerm:
+        id:
           type: string
           readOnly: true
-        customPaymentTermsAllowed:
-          type: boolean
-          readOnly: true
-  requestBodies:
-    uploadApprovalMatrixCSV:
-      content:
-        multipart/form-data:
-          schema:
-            type: object
-            properties:
-              file:
-                type: string
-                format: binary
-    TaxRateJson:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TaxRateJson'
-    TenantJson:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TenantJson'
-    UnitOfMeasureJson:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/UnitOfMeasureJson'
-    postInvoicesForBulkInvoiceRunBody:
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              type: string
-    TaxRateStrategyJson:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TaxRateStrategyJson'
     DocumentSection:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/DocumentSection'
+      type: object
+      required:
+      - location
+      properties:
+        id:
+          type: string
+          format: uuid
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+          minLength: 0
+          maxLength: 1024
+        title:
+          type: string
+          minLength: 0
+          maxLength: 1024
+        location:
+          type: string
+          enum:
+          - BEFORE_SIGNATURE
+          - AFTER_SIGNATURE
+        deleted:
+          type: boolean
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

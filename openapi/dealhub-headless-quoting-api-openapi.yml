@@ -533,17 +533,204 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    SignActionRequest:
-      allOf:
-      - $ref: '#/components/schemas/ActionRequest'
-      - type: object
-        properties:
-          sign_externally_comment:
+    OpportunityOwner:
+      type: object
+      description: Information about the opportunity owner.
+      properties:
+        external_user_id:
+          type: string
+          maxLength: 200
+          description: The CRM user ID. Represents an employee of the organization integrating with DealHub.
+        login:
+          type: string
+          maxLength: 100
+          description: The user's login identifier. If not provided, the system uses the email as the login. The login must be unique across all DealHub tenants.
+        email:
+          type: string
+          maxLength: 100
+          description: The primary email address of the user.
+        name:
+          type: string
+          maxLength: 300
+          description: The user's full name.
+        position:
+          type: string
+          maxLength: 300
+          description: The user's role or job title within the organization.
+        phone:
+          type: string
+          maxLength: 50
+          description: The user's phone number.
+        mobile:
+          type: string
+          maxLength: 100
+          description: The user's mobile phone number.
+        fax:
+          type: string
+          maxLength: 100
+          description: The user's fax number.
+        company:
+          type: string
+          maxLength: 100
+          description: The name of the user's company.
+        street:
+          type: string
+          maxLength: 128
+          description: The street address of the user.
+        city:
+          type: string
+          maxLength: 32
+          description: The city where the user is located.
+        state:
+          type: string
+          maxLength: 32
+          description: The state where the user is located.
+        country:
+          type: string
+          maxLength: 32
+          description: The user's country.
+        postal_code:
+          type: string
+          maxLength: 16
+          description: The postal code of the user's location.
+        user_manager_login:
+          type: string
+          maxLength: 100
+          description: The login ID of the user's manager.
+      required:
+      - external_user_id
+      - email
+      - name
+    LineItem:
+      type: object
+      properties:
+        sku:
+          type: string
+          description: Unique product catalog identifier. It must exist in the DealHub product catalog.
+        item_name:
+          type: string
+          maxLength: 400
+          description: Catalog product name.
+        bundle_ref_sku:
+          type: string
+          description: The SKU of the bundle product to which this line item belongs. The value is required if the line item is a component of a bundle. The bundle SKU must exist in the DealHub catalog. This field should be empty for the bundle product itself.
+        bundle_ref_id:
+          type: integer
+          description: The unique identifier for a bundle instance. This is required for all line items within a bundle and for the bundle's line item itself. It is used to differentiate between multiple instances of the same bundle in a single import.
+        list_price:
+          type: number
+          description: List price of the line item.
+        net_price_per_unit:
+          type: number
+          description: Net price per unit of the line item.
+        net_price:
+          type: number
+          description: Total net price (net per unit x product factors).
+        msrp:
+          type: number
+          description: line item MSRP (Manufacturer Suggested Retail Price).
+        msrp_discount:
+          type: number
+          description: Discount applied to the MSRP.
+        sales_discount:
+          type: number
+          description: Line item sales discount.
+        total_discount:
+          type: number
+          description: Line item total discount.
+        partner_program_data:
+          type: array
+          items:
+            type: object
+            properties:
+              partner_program_name:
+                type: string
+                maxLength: 200
+                description: Partner program name.
+              partner_level_item_price:
+                type: number
+                description: Item price after partner program level discount.
+              partner_level_item_discount:
+                type: number
+                description: Discount applied to the partner program level.
+        product_factors:
+          type: object
+          description: List of product-specific factors (e.g., quantity, duration).
+          additionalProperties:
+            type: integer
+        attributes:
+          type: object
+          description: List of line-item-specific proposal attributes.
+          additionalProperties:
             type: string
-            maxLength: 1000
-            description: Includes the necessary comments for external signing.
-        required:
-        - sign_externally_comment
+      required:
+      - sku
+    CustomerAddress:
+      type: object
+      description: Address details for a customer.
+      properties:
+        street:
+          type: string
+          maxLength: 128
+          description: The street address.
+        city:
+          type: string
+          maxLength: 32
+          description: The city.
+        state:
+          type: string
+          maxLength: 32
+          description: The state.
+        country:
+          type: string
+          maxLength: 32
+          description: The country.
+        postal_code:
+          type: string
+          maxLength: 16
+          description: The postal code.
+    QuoteData:
+      type: object
+      properties:
+        group_id:
+          type: string
+          maxLength: 50
+          description: DealHub group ID.
+        questions:
+          type: array
+          description: 'List of questions data including question ID and answer/s. The following answer types are supported:
+
+
+            * **Text List:** Contains one or more case-sensitive values, restricted to predefined options. Supports single or multi-select (delimiter: `;`).
+
+            * **Text Answer:** Captures the value exactly as provided in the request payload.
+
+            * **Radio Button:** Single case-sensitive value from predefined radio button selections.
+
+            * **Manual Item:** Valid SKU existing in the system.
+
+            * **Numeric List:** One or more numeric values from the answer predefined list (delimiter: `;`).
+
+            * **Numeric Answer/Range:** Single numeric value within a predefined range.
+
+            * **Date:** Date in `yyyy-mm-dd` format.'
+          items:
+            type: object
+            additionalProperties:
+              oneOf:
+              - type: string
+              - type: number
+              - type: boolean
+      required:
+      - group_id
+      - questions
+    PartnerProgram:
+      type: object
+      properties:
+        partner_level_name:
+          type: string
+        program_name:
+          type: string
     ActionRequest:
       type: object
       properties:
@@ -554,6 +741,51 @@ components:
           - all
           default: basic
           description: Specifies the level of detail to include in the response for line items.
+    ResponseSummary:
+      type: object
+      properties:
+        currency:
+          type: string
+        total_list_price:
+          type: number
+        total_net_price:
+          type: number
+        total_discount:
+          type: number
+        total_sales_discount:
+          type: number
+    ResponseAdditionalData:
+      type: object
+      properties:
+        primary_tag:
+          type: string
+        msrp:
+          type: number
+        msrp_discount:
+          type: number
+        user_price:
+          type: number
+        net_per_unit:
+          type: number
+        partner_discounts:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              discount:
+                type: number
+              price:
+                type: number
+        sales_discount:
+          type: number
+        attributes:
+          type: object
+          additionalProperties:
+            oneOf:
+            - type: string
+            - type: number
     GenerateQuoteRequest:
       type: object
       properties:
@@ -635,111 +867,17 @@ components:
       - request_action
       - document_type
       - quote_data
-    QuoteResponse:
-      type: object
-      properties:
-        status:
-          type: string
-        dealhub_proposal_id:
-          type: string
-        dealhub_quote_id:
-          type: string
-        dealroom_url:
-          type: string
-          format: uri
-        approval_flows:
-          type: boolean
-        summary:
-          $ref: '#/components/schemas/ResponseSummary'
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResponseLineItem'
-    QuoteData:
-      type: object
-      properties:
-        group_id:
-          type: string
-          maxLength: 50
-          description: DealHub group ID.
-        questions:
-          type: array
-          description: 'List of questions data including question ID and answer/s. The following answer types are supported:
-
-
-            * **Text List:** Contains one or more case-sensitive values, restricted to predefined options. Supports single or multi-select (delimiter: `;`).
-
-            * **Text Answer:** Captures the value exactly as provided in the request payload.
-
-            * **Radio Button:** Single case-sensitive value from predefined radio button selections.
-
-            * **Manual Item:** Valid SKU existing in the system.
-
-            * **Numeric List:** One or more numeric values from the answer predefined list (delimiter: `;`).
-
-            * **Numeric Answer/Range:** Single numeric value within a predefined range.
-
-            * **Date:** Date in `yyyy-mm-dd` format.'
-          items:
-            type: object
-            additionalProperties:
-              oneOf:
-              - type: string
-              - type: number
-              - type: boolean
-      required:
-      - group_id
-      - questions
-    CustomerContact:
-      type: object
-      description: Details about a customer contact person.
-      properties:
-        salutation:
-          type: string
-          maxLength: 50
-          description: Salutation for the contact (e.g., Mr., Ms.).
-        first_name:
-          type: string
-          maxLength: 128
-          description: First name of the contact.
-        last_name:
-          type: string
-          maxLength: 128
-          description: Last name of the contact.
-        title:
-          type: string
-          maxLength: 400
-          description: Job title of the contact.
-        email:
-          type: string
-          maxLength: 100
-          description: Primary email address of the contact.
-        phone:
-          type: string
-          maxLength: 50
-          description: Phone number of the contact.
-        account_name:
-          type: string
-          maxLength: 100
-          description: Name of the contact's company.
-        mailing_address:
-          type: string
-          maxLength: 250
-          description: Postal address of the contact.
-        primary_contact:
-          type: boolean
-          description: Whether this is the primary contact.
-      required:
-      - first_name
-      - last_name
-      - email
-    PartnerProgram:
-      type: object
-      properties:
-        partner_level_name:
-          type: string
-        program_name:
-          type: string
+    SignActionRequest:
+      allOf:
+      - $ref: '#/components/schemas/ActionRequest'
+      - type: object
+        properties:
+          sign_externally_comment:
+            type: string
+            maxLength: 1000
+            description: Includes the necessary comments for external signing.
+        required:
+        - sign_externally_comment
     SimulateQuoteRequest:
       type: object
       properties:
@@ -792,38 +930,49 @@ components:
           description: A list of line items along with their associated data.
       required:
       - quote_data
-    ResponseAdditionalData:
+    ResponseLineItem:
       type: object
       properties:
-        primary_tag:
+        id:
           type: string
-        msrp:
+        sku:
+          type: string
+        bundle_ref:
+          type: string
+        name:
+          type: string
+        list_price:
           type: number
-        msrp_discount:
+        net_price:
           type: number
-        user_price:
-          type: number
-        net_per_unit:
-          type: number
-        partner_discounts:
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-              discount:
-                type: number
-              price:
-                type: number
-        sales_discount:
-          type: number
-        attributes:
+        product_factors:
           type: object
           additionalProperties:
-            oneOf:
-            - type: string
-            - type: number
+            type: string
+        total_discount:
+          type: number
+        additional_data:
+          $ref: '#/components/schemas/ResponseAdditionalData'
+    QuoteResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        dealhub_proposal_id:
+          type: string
+        dealhub_quote_id:
+          type: string
+        dealroom_url:
+          type: string
+          format: uri
+        approval_flows:
+          type: boolean
+        summary:
+          $ref: '#/components/schemas/ResponseSummary'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseLineItem'
     OpportunityData:
       type: object
       description: Opportunity context required when the DealHub tenant uses the CRM API integration type.
@@ -868,203 +1017,54 @@ components:
       - customer_name
       - geo_code
       - currency
-    LineItem:
-      type: object
-      properties:
-        sku:
-          type: string
-          description: Unique product catalog identifier. It must exist in the DealHub product catalog.
-        item_name:
-          type: string
-          maxLength: 400
-          description: Catalog product name.
-        bundle_ref_sku:
-          type: string
-          description: The SKU of the bundle product to which this line item belongs. The value is required if the line item is a component of a bundle. The bundle SKU must exist in the DealHub catalog. This field should be empty for the bundle product itself.
-        bundle_ref_id:
-          type: integer
-          description: The unique identifier for a bundle instance. This is required for all line items within a bundle and for the bundle's line item itself. It is used to differentiate between multiple instances of the same bundle in a single import.
-        list_price:
-          type: number
-          description: List price of the line item.
-        net_price_per_unit:
-          type: number
-          description: Net price per unit of the line item.
-        net_price:
-          type: number
-          description: Total net price (net per unit x product factors).
-        msrp:
-          type: number
-          description: line item MSRP (Manufacturer Suggested Retail Price).
-        msrp_discount:
-          type: number
-          description: Discount applied to the MSRP.
-        sales_discount:
-          type: number
-          description: Line item sales discount.
-        total_discount:
-          type: number
-          description: Line item total discount.
-        partner_program_data:
-          type: array
-          items:
-            type: object
-            properties:
-              partner_program_name:
-                type: string
-                maxLength: 200
-                description: Partner program name.
-              partner_level_item_price:
-                type: number
-                description: Item price after partner program level discount.
-              partner_level_item_discount:
-                type: number
-                description: Discount applied to the partner program level.
-        product_factors:
-          type: object
-          description: List of product-specific factors (e.g., quantity, duration).
-          additionalProperties:
-            type: integer
-        attributes:
-          type: object
-          description: List of line-item-specific proposal attributes.
-          additionalProperties:
-            type: string
-      required:
-      - sku
     ErrorResponse:
       type: object
       properties:
         error:
           type: string
-    CustomerAddress:
+    CustomerContact:
       type: object
-      description: Address details for a customer.
+      description: Details about a customer contact person.
       properties:
-        street:
+        salutation:
+          type: string
+          maxLength: 50
+          description: Salutation for the contact (e.g., Mr., Ms.).
+        first_name:
           type: string
           maxLength: 128
-          description: The street address.
-        city:
+          description: First name of the contact.
+        last_name:
           type: string
-          maxLength: 32
-          description: The city.
-        state:
+          maxLength: 128
+          description: Last name of the contact.
+        title:
           type: string
-          maxLength: 32
-          description: The state.
-        country:
-          type: string
-          maxLength: 32
-          description: The country.
-        postal_code:
-          type: string
-          maxLength: 16
-          description: The postal code.
-    ResponseLineItem:
-      type: object
-      properties:
-        id:
-          type: string
-        sku:
-          type: string
-        bundle_ref:
-          type: string
-        name:
-          type: string
-        list_price:
-          type: number
-        net_price:
-          type: number
-        product_factors:
-          type: object
-          additionalProperties:
-            type: string
-        total_discount:
-          type: number
-        additional_data:
-          $ref: '#/components/schemas/ResponseAdditionalData'
-    OpportunityOwner:
-      type: object
-      description: Information about the opportunity owner.
-      properties:
-        external_user_id:
-          type: string
-          maxLength: 200
-          description: The CRM user ID. Represents an employee of the organization integrating with DealHub.
-        login:
-          type: string
-          maxLength: 100
-          description: The user's login identifier. If not provided, the system uses the email as the login. The login must be unique across all DealHub tenants.
+          maxLength: 400
+          description: Job title of the contact.
         email:
           type: string
           maxLength: 100
-          description: The primary email address of the user.
-        name:
-          type: string
-          maxLength: 300
-          description: The user's full name.
-        position:
-          type: string
-          maxLength: 300
-          description: The user's role or job title within the organization.
+          description: Primary email address of the contact.
         phone:
           type: string
           maxLength: 50
-          description: The user's phone number.
-        mobile:
+          description: Phone number of the contact.
+        account_name:
           type: string
           maxLength: 100
-          description: The user's mobile phone number.
-        fax:
+          description: Name of the contact's company.
+        mailing_address:
           type: string
-          maxLength: 100
-          description: The user's fax number.
-        company:
-          type: string
-          maxLength: 100
-          description: The name of the user's company.
-        street:
-          type: string
-          maxLength: 128
-          description: The street address of the user.
-        city:
-          type: string
-          maxLength: 32
-          description: The city where the user is located.
-        state:
-          type: string
-          maxLength: 32
-          description: The state where the user is located.
-        country:
-          type: string
-          maxLength: 32
-          description: The user's country.
-        postal_code:
-          type: string
-          maxLength: 16
-          description: The postal code of the user's location.
-        user_manager_login:
-          type: string
-          maxLength: 100
-          description: The login ID of the user's manager.
+          maxLength: 250
+          description: Postal address of the contact.
+        primary_contact:
+          type: boolean
+          description: Whether this is the primary contact.
       required:
-      - external_user_id
+      - first_name
+      - last_name
       - email
-      - name
-    ResponseSummary:
-      type: object
-      properties:
-        currency:
-          type: string
-        total_list_price:
-          type: number
-        total_net_price:
-          type: number
-        total_discount:
-          type: number
-        total_sales_discount:
-          type: number
   securitySchemes:
     bearerAuth:
       type: http

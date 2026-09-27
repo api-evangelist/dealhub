@@ -347,22 +347,71 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    CrmImportDetailResponse:
-      allOf:
-      - $ref: '#/components/schemas/CrmImportStatusResponse'
-      - type: object
-        properties:
-          accounts:
-            type: array
-            description: Per buyer-account results.
-            items:
-              $ref: '#/components/schemas/CrmImportAccountResult'
-    CrmImportRequestResponse:
+    CrmImportFailure:
+      type: object
+      properties:
+        crm_id:
+          type: string
+          description: The buyer-account CRM id that failed.
+        reason:
+          type: string
+          description: Human-readable failure reason.
+    CrmImportAccountResult:
+      type: object
+      properties:
+        crm_id:
+          type: string
+          description: Buyer-account CRM id.
+        state:
+          type: string
+          enum:
+          - SUCCEEDED
+          - FAILED
+          - SKIPPED
+          - PENDING
+        reason:
+          type:
+          - string
+          - 'null'
+          description: Failure reason (account level). Present only when state = FAILED.
+        contacts:
+          type: array
+          description: Per-contact results for the account.
+          items:
+            $ref: '#/components/schemas/CrmImportContactResult'
+    CrmImportStatusResponse:
       type: object
       properties:
         request_id:
           type: string
-          description: ID of the asynchronous import request. Use it for the status / detail / lookup / retry services, or wait for the `crmImport` completion webhook (same request_id).
+          description: ID of the import request.
+        status:
+          type: string
+          enum:
+          - RUNNING
+          - COMPLETED
+          - INTERRUPTED
+          description: COMPLETED does not imply zero failures — check the failed count.
+        total:
+          type: integer
+          description: Number of (de-duplicated) ids in the import.
+        processed:
+          type: integer
+          description: Number of ids that reached a terminal state (succeeded + failed + skipped).
+        succeeded:
+          type: integer
+          description: Number of accounts imported.
+        failed:
+          type: integer
+          description: Number of ids that errored. See failures for reasons.
+        skipped:
+          type: integer
+          description: Number of ids skipped — already in DealHub, or not found in the CRM.
+        failures:
+          type: array
+          description: Per-id failures. Empty when nothing failed.
+          items:
+            $ref: '#/components/schemas/CrmImportFailure'
     CrmImportLookupResponse:
       type: object
       properties:
@@ -400,29 +449,16 @@ components:
           - string
           - 'null'
           description: Failure reason, if any.
-    CrmImportAccountResult:
-      type: object
-      properties:
-        crm_id:
-          type: string
-          description: Buyer-account CRM id.
-        state:
-          type: string
-          enum:
-          - SUCCEEDED
-          - FAILED
-          - SKIPPED
-          - PENDING
-        reason:
-          type:
-          - string
-          - 'null'
-          description: Failure reason (account level). Present only when state = FAILED.
-        contacts:
-          type: array
-          description: Per-contact results for the account.
-          items:
-            $ref: '#/components/schemas/CrmImportContactResult'
+    CrmImportDetailResponse:
+      allOf:
+      - $ref: '#/components/schemas/CrmImportStatusResponse'
+      - type: object
+        properties:
+          accounts:
+            type: array
+            description: Per buyer-account results.
+            items:
+              $ref: '#/components/schemas/CrmImportAccountResult'
     CrmImportContactResult:
       type: object
       properties:
@@ -456,15 +492,12 @@ components:
           minItems: 1
       required:
       - buyer_account_crm_ids
-    CrmImportFailure:
+    CrmImportRequestResponse:
       type: object
       properties:
-        crm_id:
+        request_id:
           type: string
-          description: The buyer-account CRM id that failed.
-        reason:
-          type: string
-          description: Human-readable failure reason.
+          description: ID of the asynchronous import request. Use it for the status / detail / lookup / retry services, or wait for the `crmImport` completion webhook (same request_id).
     ErrorResponse:
       type: object
       description: A generic error response. The specific message will vary based on the context.
@@ -472,39 +505,6 @@ components:
         message:
           type: string
           example: Unauthenticated
-    CrmImportStatusResponse:
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: ID of the import request.
-        status:
-          type: string
-          enum:
-          - RUNNING
-          - COMPLETED
-          - INTERRUPTED
-          description: COMPLETED does not imply zero failures — check the failed count.
-        total:
-          type: integer
-          description: Number of (de-duplicated) ids in the import.
-        processed:
-          type: integer
-          description: Number of ids that reached a terminal state (succeeded + failed + skipped).
-        succeeded:
-          type: integer
-          description: Number of accounts imported.
-        failed:
-          type: integer
-          description: Number of ids that errored. See failures for reasons.
-        skipped:
-          type: integer
-          description: Number of ids skipped — already in DealHub, or not found in the CRM.
-        failures:
-          type: array
-          description: Per-id failures. Empty when nothing failed.
-          items:
-            $ref: '#/components/schemas/CrmImportFailure'
   securitySchemes:
     bearerToken:
       type: http

@@ -64,6 +64,12 @@ paths:
         default:
           description: successful operation
 components:
+  requestBodies:
+    TemplateScript:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TemplateScript'
   schemas:
     TemplateScript:
       type: object
@@ -102,12 +108,6 @@ components:
           type: integer
           format: int64
           readOnly: true
-  requestBodies:
-    TemplateScript:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TemplateScript'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

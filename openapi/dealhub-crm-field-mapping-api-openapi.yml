@@ -131,45 +131,7 @@ paths:
         default:
           description: successful operation
 components:
-  requestBodies:
-    uploadApprovalMatrixCSV:
-      content:
-        multipart/form-data:
-          schema:
-            type: object
-            properties:
-              file:
-                type: string
-                format: binary
   schemas:
-    CrmFieldMappingImportDataJson:
-      type: object
-      properties:
-        id:
-          type: string
-        fileName:
-          type: string
-        uploadedBy:
-          type: string
-        status:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-    CrmFieldMappingImportPreview:
-      type: object
-      properties:
-        id:
-          type: string
-        uploadedBy:
-          type: string
-        crmFieldMappingChanges:
-          type: array
-          items:
-            $ref: '#/components/schemas/UpdateCrmFieldMappingDetail'
     UpdateCrmFieldMappingDetail:
       type: object
       properties:
@@ -221,6 +183,44 @@ components:
         rowNumber:
           type: integer
           format: int64
+    CrmFieldMappingImportDataJson:
+      type: object
+      properties:
+        id:
+          type: string
+        fileName:
+          type: string
+        uploadedBy:
+          type: string
+        status:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    CrmFieldMappingImportPreview:
+      type: object
+      properties:
+        id:
+          type: string
+        uploadedBy:
+          type: string
+        crmFieldMappingChanges:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateCrmFieldMappingDetail'
+  requestBodies:
+    uploadApprovalMatrixCSV:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

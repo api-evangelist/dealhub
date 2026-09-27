@@ -283,56 +283,6 @@ components:
   schemas:
     InputStream:
       type: object
-    UserInput:
-      type: object
-      properties:
-        id:
-          type: string
-        displayName:
-          type: string
-        title:
-          type: string
-        email:
-          type: string
-        phoneNumber:
-          type: string
-        state:
-          type: string
-          enum:
-          - ACTIVE
-          - DISABLED
-          - EXPIRED
-        role:
-          type: string
-          enum:
-          - ADMIN
-          - FINANCE
-          - SALES
-          - SALES_MANAGER
-          - ACCOUNTANT
-          - BILLING_CLERK
-          - REVENUE_CLERK
-          - READ_ONLY
-          - EXECUTIVE
-          - CRM
-          - IMPORT
-          - BILLY_ADMIN
-          - BILLY_ENGINEER
-          - BILLY_SUPPORT
-          - BILLY_JOB
-        ssoOnly:
-          type: boolean
-        entityIds:
-          type: array
-          items:
-            type: string
-        externalId:
-          type: string
-    UserSsoUpdate:
-      type: object
-      properties:
-        ssoOnly:
-          type: boolean
     UserGroupJson:
       type: object
       properties:
@@ -353,37 +303,6 @@ components:
             type: string
         externalId:
           type: string
-    EntityRef:
-      type: object
-      required:
-      - entityId
-      - name
-      properties:
-        entityId:
-          type: string
-          readOnly: true
-        displayId:
-          type: string
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-    UserPaginationResponseJson:
-      type: object
-      properties:
-        data:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/UserJson'
-        numElements:
-          type: integer
-          format: int32
-          readOnly: true
-        nextCursor:
-          type: string
-          format: uuid
-          readOnly: true
     UserJson:
       type: object
       properties:
@@ -459,21 +378,82 @@ components:
           type: string
         eventObjectId:
           type: string
-    UserGroupRequestJson:
+    EntityRef:
+      type: object
+      required:
+      - entityId
+      - name
+      properties:
+        entityId:
+          type: string
+          readOnly: true
+        displayId:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+    UserSsoUpdate:
+      type: object
+      properties:
+        ssoOnly:
+          type: boolean
+    UserPaginationResponseJson:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/UserJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
+    UserInput:
       type: object
       properties:
         id:
           type: string
+        displayName:
+          type: string
+        title:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        state:
+          type: string
+          enum:
+          - ACTIVE
+          - DISABLED
+          - EXPIRED
+        role:
+          type: string
+          enum:
+          - ADMIN
+          - FINANCE
+          - SALES
+          - SALES_MANAGER
+          - ACCOUNTANT
+          - BILLING_CLERK
+          - REVENUE_CLERK
+          - READ_ONLY
+          - EXECUTIVE
+          - CRM
+          - IMPORT
+          - BILLY_ADMIN
+          - BILLY_ENGINEER
+          - BILLY_SUPPORT
+          - BILLY_JOB
+        ssoOnly:
+          type: boolean
         entityIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        name:
-          type: string
-        description:
-          type: string
-        users:
           type: array
           items:
             type: string
@@ -494,6 +474,26 @@ components:
         updatedOn:
           type: integer
           format: int64
+    UserGroupRequestJson:
+      type: object
+      properties:
+        id:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        description:
+          type: string
+        users:
+          type: array
+          items:
+            type: string
+        externalId:
+          type: string
   requestBodies:
     UserGroupRequestJson:
       content:

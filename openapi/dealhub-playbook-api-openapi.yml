@@ -209,6 +209,62 @@ paths:
                 $ref: '#/components/schemas/PlaybookErrorResponse'
 components:
   schemas:
+    PlaybookQuestion:
+      type: object
+      properties:
+        question_id:
+          type: string
+          description: Unique question ID.
+        question:
+          type: string
+          description: Question label/text.
+        question_type:
+          type: string
+          description: 'Type of question. Valid values: `text`, `text_list`, `numeric`, `date`.'
+        answers:
+          type: string
+          description: Possible answers, separated by a semicolon.
+        default_answer:
+          type:
+          - string
+          - 'null'
+          description: Default answer used for API template generation.
+    PlaybookMetadata:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Internal playbook name.
+        display:
+          type: string
+          description: Playbook display name.
+        document_type:
+          type: array
+          items:
+            type: string
+            enum:
+            - PDF
+            - WORD
+            - EXCEL
+            - DEALROOM
+          description: List of allowed proposal document types.
+        geo_factors_settings:
+          type: boolean
+          description: Enables geo factor logic.
+        present_proposal_summary:
+          type: boolean
+          description: Shows the proposal summary.
+        enable_partner_support:
+          type: boolean
+          description: Indicates whether partner support is enabled.
+        sync_docs_settings:
+          allOf:
+          - $ref: '#/components/schemas/PlaybookSyncSettings'
+          description: Sync docs configuration.
+        sync_products_settings:
+          allOf:
+          - $ref: '#/components/schemas/PlaybookSyncSettings'
+          description: Sync products configuration.
     GenerateQuoteTemplateResponse:
       type: object
       description: Preformatted JSON template for the Generate Quote API, based on the Playbook structure.
@@ -284,130 +340,6 @@ components:
           type: string
           maxLength: 1000
           description: Conditionally required. Comment for external signing. Required if `request_action` = `sign_externally`.
-    PlaybookErrorResponse:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error message.
-        code:
-          type: integer
-          description: HTTP status code.
-    QuoteTemplateQuoteData:
-      type: object
-      properties:
-        group_id:
-          type: string
-          maxLength: 50
-          description: DealHub group ID. Required for each group in `quote_data`.
-        questions:
-          type: array
-          items:
-            type: object
-            additionalProperties:
-              type: string
-            description: Keys are `question_id`, values are answers. Multi-select answers use the `;` delimiter.
-          description: Required. List of question answers. The template uses the default answer or the first answer for each question.
-    PlaybookMetadata:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Internal playbook name.
-        display:
-          type: string
-          description: Playbook display name.
-        document_type:
-          type: array
-          items:
-            type: string
-            enum:
-            - PDF
-            - WORD
-            - EXCEL
-            - DEALROOM
-          description: List of allowed proposal document types.
-        geo_factors_settings:
-          type: boolean
-          description: Enables geo factor logic.
-        present_proposal_summary:
-          type: boolean
-          description: Shows the proposal summary.
-        enable_partner_support:
-          type: boolean
-          description: Indicates whether partner support is enabled.
-        sync_docs_settings:
-          allOf:
-          - $ref: '#/components/schemas/PlaybookSyncSettings'
-          description: Sync docs configuration.
-        sync_products_settings:
-          allOf:
-          - $ref: '#/components/schemas/PlaybookSyncSettings'
-          description: Sync products configuration.
-    PlaybookGroup:
-      type: object
-      properties:
-        group_id:
-          type: string
-          description: Unique group identifier.
-        group_name:
-          type: string
-          description: Display name of the group.
-        group_type:
-          type: string
-          enum:
-          - QUESTIONS_GROUP
-          - REPEATABLE_GROUP
-          description: Group type.
-        group_external_object:
-          type:
-          - string
-          - 'null'
-          description: External object reference.
-        question_data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PlaybookQuestion'
-          description: List of questions in the group.
-    PlaybookExportResponse:
-      type: object
-      properties:
-        playbook_metadata:
-          allOf:
-          - $ref: '#/components/schemas/PlaybookMetadata'
-          description: Playbook configuration metadata.
-        playbook_data:
-          type: array
-          items:
-            $ref: '#/components/schemas/PlaybookGroup'
-          description: List of question groups in the Playbook.
-    PlaybookSyncSettings:
-      type: object
-      properties:
-        enabled:
-          type: string
-          description: 'Sync configuration mode. Valid values: `ALWAYS`, `RULE_BASED`, `DISABLED`.'
-        based_on:
-          type:
-          - string
-          - 'null'
-          description: Question ID used for the rule. Returns `null` when no rule applies.
-    QuoteTemplatePartnerProgramData:
-      type: object
-      description: Partner program-specific discounts.
-      properties:
-        partner_program_name:
-          type: string
-          maxLength: 200
-          description: Partner program name.
-        partner_level_item_price:
-          type: number
-          format: double
-          description: Partner level item price.
-        partner_level_item_discount:
-          type: number
-          format: double
-          description: Partner level item discount.
     QuoteTemplateLineItem:
       type: object
       properties:
@@ -474,26 +406,94 @@ components:
         program_name:
           type: string
           description: Partner program name.
-    PlaybookQuestion:
+    QuoteTemplateQuoteData:
       type: object
       properties:
-        question_id:
+        group_id:
           type: string
-          description: Unique question ID.
-        question:
+          maxLength: 50
+          description: DealHub group ID. Required for each group in `quote_data`.
+        questions:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+            description: Keys are `question_id`, values are answers. Multi-select answers use the `;` delimiter.
+          description: Required. List of question answers. The template uses the default answer or the first answer for each question.
+    QuoteTemplatePartnerProgramData:
+      type: object
+      description: Partner program-specific discounts.
+      properties:
+        partner_program_name:
           type: string
-          description: Question label/text.
-        question_type:
+          maxLength: 200
+          description: Partner program name.
+        partner_level_item_price:
+          type: number
+          format: double
+          description: Partner level item price.
+        partner_level_item_discount:
+          type: number
+          format: double
+          description: Partner level item discount.
+    PlaybookSyncSettings:
+      type: object
+      properties:
+        enabled:
           type: string
-          description: 'Type of question. Valid values: `text`, `text_list`, `numeric`, `date`.'
-        answers:
-          type: string
-          description: Possible answers, separated by a semicolon.
-        default_answer:
+          description: 'Sync configuration mode. Valid values: `ALWAYS`, `RULE_BASED`, `DISABLED`.'
+        based_on:
           type:
           - string
           - 'null'
-          description: Default answer used for API template generation.
+          description: Question ID used for the rule. Returns `null` when no rule applies.
+    PlaybookErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message.
+        code:
+          type: integer
+          description: HTTP status code.
+    PlaybookGroup:
+      type: object
+      properties:
+        group_id:
+          type: string
+          description: Unique group identifier.
+        group_name:
+          type: string
+          description: Display name of the group.
+        group_type:
+          type: string
+          enum:
+          - QUESTIONS_GROUP
+          - REPEATABLE_GROUP
+          description: Group type.
+        group_external_object:
+          type:
+          - string
+          - 'null'
+          description: External object reference.
+        question_data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaybookQuestion'
+          description: List of questions in the group.
+    PlaybookExportResponse:
+      type: object
+      properties:
+        playbook_metadata:
+          allOf:
+          - $ref: '#/components/schemas/PlaybookMetadata'
+          description: Playbook configuration metadata.
+        playbook_data:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaybookGroup'
+          description: List of question groups in the Playbook.
   securitySchemes:
     bearerAuth:
       type: http

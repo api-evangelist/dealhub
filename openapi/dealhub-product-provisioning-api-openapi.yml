@@ -26,6 +26,16 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    NewSkuSyncRequest:
+      type: object
+      required:
+      - skus
+      properties:
+        skus:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/SkuSyncInput'
     SkuSyncInput:
       type: object
       required:
@@ -98,16 +108,6 @@ components:
           readOnly: true
           additionalProperties:
             type: object
-    NewSkuSyncRequest:
-      type: object
-      required:
-      - skus
-      properties:
-        skus:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/SkuSyncInput'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

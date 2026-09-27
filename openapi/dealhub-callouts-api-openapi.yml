@@ -169,11 +169,16 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    ResponseItem:
-      oneOf:
-      - $ref: '#/components/schemas/ProductResponseItem'
-      - $ref: '#/components/schemas/BundleResponseItem'
-      description: An item in the response can be either a single product or a bundle.
+    CalloutResponse:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          description: The list of items with their calculated prices and attributes.
+          items:
+            $ref: '#/components/schemas/ResponseItem'
     BaseResponseItem:
       type: object
       description: Common properties for any item returned in the response.
@@ -205,16 +210,6 @@ components:
           format: date-time
           description: A date value, expected in ISO 8601 format (e.g., "2025-09-01T15:39:25Z").
       additionalProperties: true
-    CalloutResponse:
-      type: object
-      required:
-      - items
-      properties:
-        items:
-          type: array
-          description: The list of items with their calculated prices and attributes.
-          items:
-            $ref: '#/components/schemas/ResponseItem'
     BundleResponseItem:
       description: Represents a bundle containing other items. The top-level bundle may not have a price itself.
       allOf:
@@ -289,14 +284,6 @@ components:
       required:
       - items
       - request_id
-    ErrorResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          description: A formatted error message from the external system that will be displayed to the user in the DealHub UI.
-      required:
-      - message
     ProductResponseItem:
       description: Represents a single product with a mandatory price.
       allOf:
@@ -309,6 +296,19 @@ components:
             type: number
             format: float
             description: List price of the line item. This field is mandatory for every product item.
+    ResponseItem:
+      oneOf:
+      - $ref: '#/components/schemas/ProductResponseItem'
+      - $ref: '#/components/schemas/BundleResponseItem'
+      description: An item in the response can be either a single product or a bundle.
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: A formatted error message from the external system that will be displayed to the user in the DealHub UI.
+      required:
+      - message
   securitySchemes:
     bearerAuth:
       type: http

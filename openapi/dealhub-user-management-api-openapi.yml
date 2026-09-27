@@ -276,6 +276,83 @@ paths:
           description: Forbidden. Invalid or missing authentication token.
 components:
   schemas:
+    UserUpdateError:
+      type: object
+      properties:
+        login:
+          type: string
+        message:
+          type: string
+    User:
+      type: object
+      properties:
+        login:
+          type: string
+          maxLength: 100
+          description: Login of the user.
+        id:
+          type: string
+          maxLength: 16
+          description: DealHub user ID.
+        email:
+          type: string
+          format: email
+          maxLength: 100
+          description: Primary email of the user.
+        name:
+          type: string
+          maxLength: 300
+          description: User's full name.
+        position:
+          type: string
+          maxLength: 300
+          description: The role of the user in the organization (job title).
+        business_title:
+          type: string
+          description: Business title of the user in the CRM organization.
+        phone:
+          type: string
+          maxLength: 50
+          description: User's phone number.
+        mobile:
+          type: string
+          maxLength: 100
+          description: User's mobile phone number.
+        fax:
+          type: string
+          maxLength: 100
+          description: User's fax number.
+        company:
+          type: string
+          maxLength: 100
+          description: User's company name.
+        street:
+          type: string
+          maxLength: 128
+          description: Street name.
+        city:
+          type: string
+          maxLength: 32
+          description: City name.
+        state:
+          type: string
+          maxLength: 32
+          description: State name.
+        country:
+          type: string
+          maxLength: 32
+          description: Country name.
+        postal_code:
+          type: string
+          maxLength: 16
+          description: Postal code.
+        user_manager_login:
+          type: string
+          maxLength: 100
+          description: Login of the user's manager.
+        is_active:
+          type: boolean
+          description: Flag indicating if the user is active.
     UserUpdateV1:
       type: object
       properties:
@@ -344,20 +421,6 @@ components:
       - email
       - name
       - is_active
-    UserUpdateError:
-      type: object
-      properties:
-        login:
-          type: string
-        message:
-          type: string
-    UserUpdateErrorResponse:
-      type: object
-      properties:
-        errors:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserUpdateError'
     UserUpdateV2:
       type: object
       properties:
@@ -434,76 +497,13 @@ components:
       - name
       - external_user_id
       - is_active
-    User:
+    UserUpdateErrorResponse:
       type: object
       properties:
-        login:
-          type: string
-          maxLength: 100
-          description: Login of the user.
-        id:
-          type: string
-          maxLength: 16
-          description: DealHub user ID.
-        email:
-          type: string
-          format: email
-          maxLength: 100
-          description: Primary email of the user.
-        name:
-          type: string
-          maxLength: 300
-          description: User's full name.
-        position:
-          type: string
-          maxLength: 300
-          description: The role of the user in the organization (job title).
-        business_title:
-          type: string
-          description: Business title of the user in the CRM organization.
-        phone:
-          type: string
-          maxLength: 50
-          description: User's phone number.
-        mobile:
-          type: string
-          maxLength: 100
-          description: User's mobile phone number.
-        fax:
-          type: string
-          maxLength: 100
-          description: User's fax number.
-        company:
-          type: string
-          maxLength: 100
-          description: User's company name.
-        street:
-          type: string
-          maxLength: 128
-          description: Street name.
-        city:
-          type: string
-          maxLength: 32
-          description: City name.
-        state:
-          type: string
-          maxLength: 32
-          description: State name.
-        country:
-          type: string
-          maxLength: 32
-          description: Country name.
-        postal_code:
-          type: string
-          maxLength: 16
-          description: Postal code.
-        user_manager_login:
-          type: string
-          maxLength: 100
-          description: Login of the user's manager.
-        is_active:
-          type: boolean
-          description: Flag indicating if the user is active.
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserUpdateError'
   securitySchemes:
     bearerAuth:
       type: http

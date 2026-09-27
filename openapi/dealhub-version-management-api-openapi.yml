@@ -179,12 +179,6 @@ paths:
                     request_id: 4D114DAD97
 components:
   schemas:
-    AsyncResponse:
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: The ID of the asynchronous request for tracking.
     DuplicateVersionRequest:
       type: object
       required:
@@ -206,6 +200,12 @@ components:
         to_account_instance:
           type: string
           description: Instance name of the Account where the version should be duplicated to (e.g., for Sandbox to Production).
+    AsyncResponse:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: The ID of the asynchronous request for tracking.
     ActivateVersionRequest:
       type: object
       required:

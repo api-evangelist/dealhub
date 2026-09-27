@@ -1078,41 +1078,6 @@ paths:
           description: successful operation
 components:
   schemas:
-    InvoicePreviewJson:
-      type: object
-      properties:
-        orderId:
-          type: string
-        lineItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoiceItemPreviewJson'
-        invoiceItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoiceItemJson'
-        total:
-          type: number
-        totalDiscount:
-          type: number
-        createdOn:
-          type: integer
-          format: int64
-    AccountReceivableContactJson:
-      type: object
-      required:
-      - address
-      properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
-        email:
-          type: string
-        phoneNumber:
-          type: string
-        address:
-          $ref: '#/components/schemas/AccountAddressJson'
     SubscriptionChargeAlias:
       type: object
       properties:
@@ -1131,58 +1096,81 @@ components:
         createdOn:
           type: integer
           format: int64
-    AutomatedInvoiceRule:
+    InvoiceItemPreviewJson:
       type: object
       properties:
-        name:
+        orderLineItemId:
           type: string
+        amount:
+          type: number
+        listAmount:
+          type: number
+        discountAmount:
+          type: number
+        listUnitPrice:
+          type: number
+        sellUnitPrice:
+          type: number
+    PaymentBankAccountJson:
+      type: object
+      required:
+      - currencyCode
+      - entityIds
+      - status
+      properties:
         id:
           type: string
-          format: uuid
-        enabled:
-          type: boolean
+          readOnly: true
         entityIds:
           type: array
-          uniqueItems: true
           items:
             type: string
+        externalId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        currencyCode:
+          type: string
+        cashLedgerAccountId:
+          type: string
+        expenseLedgerAccountId:
+          type: string
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - ACTIVE
+          - DEPRECATED
+        hasExistingPayments:
+          type: boolean
         createdOn:
           type: integer
           format: int64
+          readOnly: true
         updatedOn:
           type: integer
           format: int64
-        cronExpression:
-          type: string
-        automatedInvoiceRuleId:
-          type: string
-        cronExpressionMeaning:
-          type: string
-        lastExecutionDate:
-          type: integer
-          format: int64
-        nextExecutionDate:
-          type: integer
-          format: int64
-        targetDuration:
-          type: integer
-          format: int32
-        invoiceDuration:
-          type: integer
-          format: int32
-        includeUsageCharge:
+          readOnly: true
+    InvoiceDeletableResponse:
+      type: object
+      properties:
+        deletable:
           type: boolean
-        includeNonUsageCharge:
-          type: boolean
-        autoPostInvoice:
-          type: boolean
-        autoEmailInvoice:
-          type: boolean
-        firstExecutionDate:
-          type: integer
-          format: int64
-        description:
+          readOnly: true
+        message:
           type: string
+          readOnly: true
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
     InvoiceItemJson:
       type: object
       properties:
@@ -1240,590 +1228,6 @@ components:
         functionalTaxAmount:
           type: number
         triggerOn:
-          type: integer
-          format: int64
-    DunningSettingJson:
-      type: object
-      required:
-      - isEnabled
-      properties:
-        isEnabled:
-          type: boolean
-        dunningTypeMap:
-          type: object
-          additionalProperties:
-            type: boolean
-    AccountAddressJson:
-      type: object
-      properties:
-        streetAddressLine1:
-          type: string
-          description: Address Line 1 of the Contact
-        streetAddressLine2:
-          type: string
-          description: Address Line 2 of the Contact
-        streetAddressLine3:
-          type: string
-          description: Address Line 3 of the Contact
-        city:
-          type: string
-          description: City of the Contact
-        state:
-          type: string
-          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
-        country:
-          type: string
-          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
-        zipcode:
-          type: string
-          description: Zip or Postal Code of the Contact
-    InvoiceDeletableResponse:
-      type: object
-      properties:
-        deletable:
-          type: boolean
-          readOnly: true
-        message:
-          type: string
-          readOnly: true
-    InvoiceNumberPrefix:
-      type: object
-      properties:
-        prefix:
-          type: string
-    CreditMemoUnapplicationJson:
-      type: object
-      required:
-      - creditMemoNumber
-      - settlementToUnapplyId
-      properties:
-        invoiceNumber:
-          type: string
-        invoiceBalanceAmount:
-          type: string
-        creditMemoNumber:
-          type: string
-        creditMemoBalanceAmount:
-          type: string
-        settlementToUnapplyId:
-          type: string
-          format: uuid
-        note:
-          type: string
-    EmailNotifiersList:
-      type: object
-      properties:
-        toIds:
-          type: array
-          items:
-            type: string
-        ccIds:
-          type: array
-          items:
-            type: string
-        bccIds:
-          type: array
-          items:
-            type: string
-    BulkInvoiceRunExclusions:
-      type: object
-      properties:
-        accounts:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/AccountJson'
-        accountIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    TenantInvoiceConfig:
-      type: object
-      properties:
-        invoiceConfigId:
-          type: string
-        invoiceNumberPrefix:
-          $ref: '#/components/schemas/InvoiceNumberPrefix'
-        invoiceNumberScheme:
-          type: string
-          enum:
-          - SEQUENCE
-          - PSEUDO_RANDOM
-        invoiceNextNumber:
-          type: integer
-          format: int64
-        invoiceNumberLength:
-          type: integer
-          format: int32
-    ApplyPaymentRequest:
-      type: object
-      properties:
-        invoiceNumber:
-          type: string
-        invoiceAmount:
-          type: string
-        paymentMethodId:
-          type: string
-          format: uuid
-        paymentBankAccountId:
-          type: string
-        paymentType:
-          type: string
-          enum:
-          - ACH
-          - CARD
-          - CHECK
-          - WIRE
-          - INVOICE
-          - DEPOSIT
-          - EXTERNAL
-        amount:
-          type: number
-        bankFee:
-          type: number
-        note:
-          type: string
-        paymentDate:
-          type: integer
-          format: int64
-    CustomFieldDefault:
-      type: object
-      properties:
-        value:
-          type: string
-        selections:
-          type: array
-          items:
-            type: string
-    TaxRateJson:
-      type: object
-      required:
-      - status
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        description:
-          type: string
-        taxPercentage:
-          type: number
-        taxCode:
-          type: string
-        taxInclusive:
-          type: boolean
-        status:
-          type: string
-          enum:
-          - ACTIVE
-          - DISABLED
-          - EXPIRED
-        inUse:
-          type: boolean
-    UpdateInvoiceRequest:
-      type: object
-      required:
-      - invoiceDate
-      properties:
-        invoiceDate:
-          type: integer
-          format: int64
-        dueDate:
-          type: integer
-          format: int64
-        note:
-          type: string
-          minLength: 0
-          maxLength: 1000
-        purchaseOrderNumber:
-          type: string
-          minLength: 0
-          maxLength: 255
-        billingContactId:
-          type: string
-        emailNotifiersList:
-          $ref: '#/components/schemas/EmailNotifiersList'
-    BulkInvoiceRunInput:
-      type: object
-      properties:
-        entityId:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        targetDate:
-          type: integer
-          format: int64
-        invoiceDate:
-          type: integer
-          format: int64
-        chargeInclusionOption:
-          type: string
-          enum:
-          - INCLUDE_USAGE
-          - EXCLUDE_USAGE
-          - ONLY_USAGE
-        isHistorical:
-          type: boolean
-    SettlementApplication:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        entityId:
-          type: string
-        customerAccountId:
-          type: string
-        invoiceNumber:
-          type: string
-        paymentId:
-          type: string
-        creditMemoNumber:
-          type: string
-        applicationType:
-          type: string
-          enum:
-          - PAYMENT
-          - VOID_PAYMENT
-          - CREDIT
-          - UNAPPLY_CREDIT
-        amount:
-          type: number
-        note:
-          type: string
-        appliedOn:
-          type: integer
-          format: int64
-        exchangeRateId:
-          type: string
-        exchangeRate:
-          type: number
-        exchangeRateDate:
-          type: integer
-          format: int64
-        functionalAmount:
-          type: number
-        createdOn:
-          type: integer
-          format: int64
-        status:
-          type: string
-          enum:
-          - ATTEMPTING_PAYMENT_COLLECTION
-          - APPLIED_PAYMENT
-          - FAILED
-        negatedSettlementId:
-          type: string
-          format: uuid
-    BillingEventInput:
-      type: object
-      required:
-      - amount
-      properties:
-        subscriptionId:
-          type: string
-          readOnly: true
-        subscriptionChargeId:
-          type: string
-          readOnly: true
-        triggerOn:
-          type: integer
-          format: int64
-          readOnly: true
-        amount:
-          type: number
-          readOnly: true
-    VoidInvoiceRequest:
-      type: object
-      required:
-      - invoiceBalance
-      - voidDate
-      properties:
-        voidDate:
-          type: integer
-          format: int64
-        invoiceBalance:
-          type: number
-    InvoiceJson:
-      type: object
-      properties:
-        entityId:
-          type: string
-        invoiceNumber:
-          type: string
-        postedDate:
-          type: integer
-          format: int64
-        invoiceDate:
-          type: integer
-          format: int64
-        voidedDate:
-          type: integer
-          format: int64
-        dueDate:
-          type: integer
-          format: int64
-        currency:
-          type: string
-        paymentTerm:
-          type: string
-        totalDiscount:
-          type: number
-        subTotal:
-          type: number
-        taxTotal:
-          type: number
-        taxTransactionCode:
-          type: string
-        total:
-          type: number
-        subscriptionId:
-          type: string
-        accountId:
-          type: string
-        resellerAccountId:
-          type: string
-        invoiceItems:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvoiceItemJson'
-        billingContact:
-          $ref: '#/components/schemas/AccountContactJson'
-        shippingContact:
-          $ref: '#/components/schemas/AccountContactJson'
-        status:
-          type: string
-          enum:
-          - DRAFT
-          - POSTED
-          - PAID
-          - CONVERTED
-          - VOIDED
-        purchaseOrderNumber:
-          type: string
-        purchaseOrderRequired:
-          type: boolean
-        note:
-          type: string
-        emailNotifiersList:
-          $ref: '#/components/schemas/EmailNotifiersList'
-        erpId:
-          type: string
-        generationMethod:
-          type: string
-          enum:
-          - USER_INITIATED
-          - API_INITIATED
-          - BULK_INVOICE_RUN
-          - AUTOMATED_INVOICE_JOB
-          - RULE_DRIVEN_INVOICE_JOB
-          - UNKNOWN
-        generatedBy:
-          type: string
-        exchangeRateId:
-          type: string
-        exchangeRate:
-          type: number
-        exchangeRateDate:
-          type: integer
-          format: int64
-        functionalTotalDiscount:
-          type: number
-        functionalSubTotal:
-          type: number
-        functionalTaxTotal:
-          type: number
-        functionalTotal:
-          type: number
-        customFields:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CustomFieldValue'
-    InvoiceItemPreviewJson:
-      type: object
-      properties:
-        orderLineItemId:
-          type: string
-        amount:
-          type: number
-        listAmount:
-          type: number
-        discountAmount:
-          type: number
-        listUnitPrice:
-          type: number
-        sellUnitPrice:
-          type: number
-    AccountContactJson:
-      type: object
-      required:
-      - accountId
-      properties:
-        id:
-          type: string
-          description: This is a system-generated Account Contact ID
-        accountId:
-          type: string
-          description: Uniquely identifies the Account
-        firstName:
-          type: string
-          description: First Name of the Contact
-        lastName:
-          type: string
-          description: (optional) Last Name of the Contact
-        email:
-          type: string
-          description: Email of the Contact
-        phoneNumber:
-          type: string
-          description: (optional) Phone Number of the Contact
-        title:
-          type: string
-          description: (optional) Title of the Contact
-        address:
-          $ref: '#/components/schemas/AccountAddressJson'
-        externalId:
-          type: string
-        erpId:
-          type: string
-        fullName:
-          type: string
-        eventObjectId:
-          type: string
-    InvoiceJsonPaginationResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/InvoiceJson'
-        numElements:
-          type: integer
-          format: int32
-          readOnly: true
-        nextCursor:
-          type: string
-          format: uuid
-          readOnly: true
-    CustomFieldValue:
-      type: object
-      properties:
-        type:
-          type: string
-          readOnly: true
-          enum:
-          - STRING
-          - PICKLIST
-          - MULTISELECT_PICKLIST
-        name:
-          type: string
-          readOnly: true
-        label:
-          type: string
-          readOnly: true
-        value:
-          type: string
-          readOnly: true
-        selections:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        options:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        required:
-          type: boolean
-          readOnly: true
-        source:
-          type: string
-          readOnly: true
-          enum:
-          - USER
-          - SYSTEM
-        defaultValue:
-          $ref: '#/components/schemas/CustomFieldDefault'
-    BillingEventEntry:
-      type: object
-      properties:
-        id:
-          type: string
-          readOnly: true
-        triggerOn:
-          type: integer
-          format: int64
-          readOnly: true
-        amount:
-          type: number
-          readOnly: true
-        createdOn:
-          type: integer
-          format: int64
-          readOnly: true
-    BulkInvoiceRun:
-      type: object
-      properties:
-        entityId:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        targetDate:
-          type: integer
-          format: int64
-        invoiceDate:
-          type: integer
-          format: int64
-        chargeInclusionOption:
-          type: string
-          enum:
-          - INCLUDE_USAGE
-          - EXCLUDE_USAGE
-          - ONLY_USAGE
-        isHistorical:
-          type: boolean
-        id:
-          type: string
-        bulkInvoiceRunId:
-          type: string
-        automatedInvoiceRuleId:
-          type: string
-        status:
-          type: string
-          enum:
-          - QUEUED
-          - CREATED
-          - PROCESSING
-          - FAILED
-          - COMPLETED
-          - RUNNING
-        phase:
-          type: string
-          enum:
-          - INVOICE_GENERATION_NOT_STARTED
-          - NO_INVOICES_FOUND
-          - INVOICES_GENERATING
-          - INVOICES_GENERATED
-          - INVOICES_POSTING
-          - INVOICES_POSTED
-          - INVOICES_EMAILING
-          - INVOICES_EMAILED
-        invoiceSelector:
-          $ref: '#/components/schemas/BulkInvoiceRunSelector'
-        failureReason:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
           type: integer
           format: int64
     AccountJson:
@@ -1928,30 +1332,195 @@ components:
           uniqueItems: true
           items:
             type: string
-    AutomatedInvoiceRuleRequestJson:
+    BillingEventEntry:
       type: object
-      required:
-      - cronExpression
-      - firstExecutionDate
-      - name
       properties:
         id:
           type: string
+          readOnly: true
+        triggerOn:
+          type: integer
+          format: int64
+          readOnly: true
+        amount:
+          type: number
+          readOnly: true
+        createdOn:
+          type: integer
+          format: int64
+          readOnly: true
+    BulkInvoiceRun:
+      type: object
+      properties:
+        entityId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        targetDate:
+          type: integer
+          format: int64
+        invoiceDate:
+          type: integer
+          format: int64
+        chargeInclusionOption:
+          type: string
+          enum:
+          - INCLUDE_USAGE
+          - EXCLUDE_USAGE
+          - ONLY_USAGE
+        isHistorical:
+          type: boolean
+        id:
+          type: string
+        bulkInvoiceRunId:
+          type: string
+        automatedInvoiceRuleId:
+          type: string
+        status:
+          type: string
+          enum:
+          - QUEUED
+          - CREATED
+          - PROCESSING
+          - FAILED
+          - COMPLETED
+          - RUNNING
+        phase:
+          type: string
+          enum:
+          - INVOICE_GENERATION_NOT_STARTED
+          - NO_INVOICES_FOUND
+          - INVOICES_GENERATING
+          - INVOICES_GENERATED
+          - INVOICES_POSTING
+          - INVOICES_POSTED
+          - INVOICES_EMAILING
+          - INVOICES_EMAILED
+        invoiceSelector:
+          $ref: '#/components/schemas/BulkInvoiceRunSelector'
+        failureReason:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    InvoiceJsonPaginationResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/InvoiceJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
+    SettlementApplication:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        entityId:
+          type: string
+        customerAccountId:
+          type: string
+        invoiceNumber:
+          type: string
+        paymentId:
+          type: string
+        creditMemoNumber:
+          type: string
+        applicationType:
+          type: string
+          enum:
+          - PAYMENT
+          - VOID_PAYMENT
+          - CREDIT
+          - UNAPPLY_CREDIT
+        amount:
+          type: number
+        note:
+          type: string
+        appliedOn:
+          type: integer
+          format: int64
+        exchangeRateId:
+          type: string
+        exchangeRate:
+          type: number
+        exchangeRateDate:
+          type: integer
+          format: int64
+        functionalAmount:
+          type: number
+        createdOn:
+          type: integer
+          format: int64
+        status:
+          type: string
+          enum:
+          - ATTEMPTING_PAYMENT_COLLECTION
+          - APPLIED_PAYMENT
+          - FAILED
+        negatedSettlementId:
+          type: string
+          format: uuid
+    EmailNotifiersList:
+      type: object
+      properties:
+        toIds:
+          type: array
+          items:
+            type: string
+        ccIds:
+          type: array
+          items:
+            type: string
+        bccIds:
+          type: array
+          items:
+            type: string
+    AutomatedInvoiceRule:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+          format: uuid
+        enabled:
+          type: boolean
         entityIds:
           type: array
           uniqueItems: true
           items:
             type: string
-        name:
-          type: string
-        description:
-          type: string
-        cronExpression:
-          type: string
-        firstExecutionDate:
+        createdOn:
           type: integer
           format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        cronExpression:
+          type: string
+        automatedInvoiceRuleId:
+          type: string
+        cronExpressionMeaning:
+          type: string
         lastExecutionDate:
+          type: integer
+          format: int64
+        nextExecutionDate:
           type: integer
           format: int64
         targetDuration:
@@ -1968,67 +1537,26 @@ components:
           type: boolean
         autoEmailInvoice:
           type: boolean
-        enabled:
-          type: boolean
-    InvoiceBalanceJson:
-      type: object
-      properties:
-        accountId:
-          type: string
-        invoiceNumber:
-          type: string
-        balance:
-          type: number
-        updatedOn:
+        firstExecutionDate:
           type: integer
           format: int64
-    BulkInvoiceRunSelector:
-      type: object
-      properties:
-        exclusions:
-          $ref: '#/components/schemas/BulkInvoiceRunExclusions'
-    PaymentBankAccountJson:
-      type: object
-      required:
-      - currencyCode
-      - entityIds
-      - status
-      properties:
-        id:
-          type: string
-          readOnly: true
-        entityIds:
-          type: array
-          items:
-            type: string
-        externalId:
-          type: string
-        name:
-          type: string
         description:
           type: string
-        currencyCode:
+    AccountReceivableContactJson:
+      type: object
+      required:
+      - address
+      properties:
+        firstName:
           type: string
-        cashLedgerAccountId:
+        lastName:
           type: string
-        expenseLedgerAccountId:
+        email:
           type: string
-        status:
+        phoneNumber:
           type: string
-          enum:
-          - DRAFT
-          - ACTIVE
-          - DEPRECATED
-        hasExistingPayments:
-          type: boolean
-        createdOn:
-          type: integer
-          format: int64
-          readOnly: true
-        updatedOn:
-          type: integer
-          format: int64
-          readOnly: true
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
     BulkInvoiceRunItem:
       type: object
       properties:
@@ -2080,6 +1608,102 @@ components:
           type: boolean
         includedForEmailing:
           type: boolean
+    UpdateInvoiceRequest:
+      type: object
+      required:
+      - invoiceDate
+      properties:
+        invoiceDate:
+          type: integer
+          format: int64
+        dueDate:
+          type: integer
+          format: int64
+        note:
+          type: string
+          minLength: 0
+          maxLength: 1000
+        purchaseOrderNumber:
+          type: string
+          minLength: 0
+          maxLength: 255
+        billingContactId:
+          type: string
+        emailNotifiersList:
+          $ref: '#/components/schemas/EmailNotifiersList'
+    AccountAddressJson:
+      type: object
+      properties:
+        streetAddressLine1:
+          type: string
+          description: Address Line 1 of the Contact
+        streetAddressLine2:
+          type: string
+          description: Address Line 2 of the Contact
+        streetAddressLine3:
+          type: string
+          description: Address Line 3 of the Contact
+        city:
+          type: string
+          description: City of the Contact
+        state:
+          type: string
+          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
+        country:
+          type: string
+          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
+        zipcode:
+          type: string
+          description: Zip or Postal Code of the Contact
+    InvoiceBalanceJson:
+      type: object
+      properties:
+        accountId:
+          type: string
+        invoiceNumber:
+          type: string
+        balance:
+          type: number
+        updatedOn:
+          type: integer
+          format: int64
+    TaxRateJson:
+      type: object
+      required:
+      - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        description:
+          type: string
+        taxPercentage:
+          type: number
+        taxCode:
+          type: string
+        taxInclusive:
+          type: boolean
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DISABLED
+          - EXPIRED
+        inUse:
+          type: boolean
+    VoidInvoiceRequest:
+      type: object
+      required:
+      - invoiceBalance
+      - voidDate
+      properties:
+        voidDate:
+          type: integer
+          format: int64
+        invoiceBalance:
+          type: number
     CreditMemoApplicationJson:
       type: object
       required:
@@ -2099,14 +1723,383 @@ components:
           type: number
         note:
           type: string
+    BulkInvoiceRunInput:
+      type: object
+      properties:
+        entityId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        targetDate:
+          type: integer
+          format: int64
+        invoiceDate:
+          type: integer
+          format: int64
+        chargeInclusionOption:
+          type: string
+          enum:
+          - INCLUDE_USAGE
+          - EXCLUDE_USAGE
+          - ONLY_USAGE
+        isHistorical:
+          type: boolean
+    InvoiceNumberPrefix:
+      type: object
+      properties:
+        prefix:
+          type: string
+    BulkInvoiceRunExclusions:
+      type: object
+      properties:
+        accounts:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/AccountJson'
+        accountIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+    CreditMemoUnapplicationJson:
+      type: object
+      required:
+      - creditMemoNumber
+      - settlementToUnapplyId
+      properties:
+        invoiceNumber:
+          type: string
+        invoiceBalanceAmount:
+          type: string
+        creditMemoNumber:
+          type: string
+        creditMemoBalanceAmount:
+          type: string
+        settlementToUnapplyId:
+          type: string
+          format: uuid
+        note:
+          type: string
+    BulkInvoiceRunSelector:
+      type: object
+      properties:
+        exclusions:
+          $ref: '#/components/schemas/BulkInvoiceRunExclusions'
+    BillingEventInput:
+      type: object
+      required:
+      - amount
+      properties:
+        subscriptionId:
+          type: string
+          readOnly: true
+        subscriptionChargeId:
+          type: string
+          readOnly: true
+        triggerOn:
+          type: integer
+          format: int64
+          readOnly: true
+        amount:
+          type: number
+          readOnly: true
+    AutomatedInvoiceRuleRequestJson:
+      type: object
+      required:
+      - cronExpression
+      - firstExecutionDate
+      - name
+      properties:
+        id:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        description:
+          type: string
+        cronExpression:
+          type: string
+        firstExecutionDate:
+          type: integer
+          format: int64
+        lastExecutionDate:
+          type: integer
+          format: int64
+        targetDuration:
+          type: integer
+          format: int32
+        invoiceDuration:
+          type: integer
+          format: int32
+        includeUsageCharge:
+          type: boolean
+        includeNonUsageCharge:
+          type: boolean
+        autoPostInvoice:
+          type: boolean
+        autoEmailInvoice:
+          type: boolean
+        enabled:
+          type: boolean
+    InvoiceJson:
+      type: object
+      properties:
+        entityId:
+          type: string
+        invoiceNumber:
+          type: string
+        postedDate:
+          type: integer
+          format: int64
+        invoiceDate:
+          type: integer
+          format: int64
+        voidedDate:
+          type: integer
+          format: int64
+        dueDate:
+          type: integer
+          format: int64
+        currency:
+          type: string
+        paymentTerm:
+          type: string
+        totalDiscount:
+          type: number
+        subTotal:
+          type: number
+        taxTotal:
+          type: number
+        taxTransactionCode:
+          type: string
+        total:
+          type: number
+        subscriptionId:
+          type: string
+        accountId:
+          type: string
+        resellerAccountId:
+          type: string
+        invoiceItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceItemJson'
+        billingContact:
+          $ref: '#/components/schemas/AccountContactJson'
+        shippingContact:
+          $ref: '#/components/schemas/AccountContactJson'
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - POSTED
+          - PAID
+          - CONVERTED
+          - VOIDED
+        purchaseOrderNumber:
+          type: string
+        purchaseOrderRequired:
+          type: boolean
+        note:
+          type: string
+        emailNotifiersList:
+          $ref: '#/components/schemas/EmailNotifiersList'
+        erpId:
+          type: string
+        generationMethod:
+          type: string
+          enum:
+          - USER_INITIATED
+          - API_INITIATED
+          - BULK_INVOICE_RUN
+          - AUTOMATED_INVOICE_JOB
+          - RULE_DRIVEN_INVOICE_JOB
+          - UNKNOWN
+        generatedBy:
+          type: string
+        exchangeRateId:
+          type: string
+        exchangeRate:
+          type: number
+        exchangeRateDate:
+          type: integer
+          format: int64
+        functionalTotalDiscount:
+          type: number
+        functionalSubTotal:
+          type: number
+        functionalTaxTotal:
+          type: number
+        functionalTotal:
+          type: number
+        customFields:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValue'
+    CustomFieldValue:
+      type: object
+      properties:
+        type:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        name:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        value:
+          type: string
+          readOnly: true
+        selections:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        required:
+          type: boolean
+          readOnly: true
+        source:
+          type: string
+          readOnly: true
+          enum:
+          - USER
+          - SYSTEM
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+    TenantInvoiceConfig:
+      type: object
+      properties:
+        invoiceConfigId:
+          type: string
+        invoiceNumberPrefix:
+          $ref: '#/components/schemas/InvoiceNumberPrefix'
+        invoiceNumberScheme:
+          type: string
+          enum:
+          - SEQUENCE
+          - PSEUDO_RANDOM
+        invoiceNextNumber:
+          type: integer
+          format: int64
+        invoiceNumberLength:
+          type: integer
+          format: int32
+    ApplyPaymentRequest:
+      type: object
+      properties:
+        invoiceNumber:
+          type: string
+        invoiceAmount:
+          type: string
+        paymentMethodId:
+          type: string
+          format: uuid
+        paymentBankAccountId:
+          type: string
+        paymentType:
+          type: string
+          enum:
+          - ACH
+          - CARD
+          - CHECK
+          - WIRE
+          - INVOICE
+          - DEPOSIT
+          - EXTERNAL
+        amount:
+          type: number
+        bankFee:
+          type: number
+        note:
+          type: string
+        paymentDate:
+          type: integer
+          format: int64
+    DunningSettingJson:
+      type: object
+      required:
+      - isEnabled
+      properties:
+        isEnabled:
+          type: boolean
+        dunningTypeMap:
+          type: object
+          additionalProperties:
+            type: boolean
+    InvoicePreviewJson:
+      type: object
+      properties:
+        orderId:
+          type: string
+        lineItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceItemPreviewJson'
+        invoiceItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvoiceItemJson'
+        total:
+          type: number
+        totalDiscount:
+          type: number
+        createdOn:
+          type: integer
+          format: int64
+    AccountContactJson:
+      type: object
+      required:
+      - accountId
+      properties:
+        id:
+          type: string
+          description: This is a system-generated Account Contact ID
+        accountId:
+          type: string
+          description: Uniquely identifies the Account
+        firstName:
+          type: string
+          description: First Name of the Contact
+        lastName:
+          type: string
+          description: (optional) Last Name of the Contact
+        email:
+          type: string
+          description: Email of the Contact
+        phoneNumber:
+          type: string
+          description: (optional) Phone Number of the Contact
+        title:
+          type: string
+          description: (optional) Title of the Contact
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+        externalId:
+          type: string
+        erpId:
+          type: string
+        fullName:
+          type: string
+        eventObjectId:
+          type: string
   requestBodies:
-    postInvoicesForBulkInvoiceRunBody:
-      content:
-        application/json:
-          schema:
-            type: array
-            items:
-              type: string
     AutomatedInvoiceRuleRequestJson:
       content:
         application/json:
@@ -2114,6 +2107,13 @@ components:
             $ref: '#/components/schemas/AutomatedInvoiceRuleRequestJson'
       description: automated invoice rule
       required: true
+    postInvoicesForBulkInvoiceRunBody:
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

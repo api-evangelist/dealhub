@@ -80,18 +80,28 @@ paths:
                 $ref: '#/components/schemas/PredefinedReportDefsJson'
 components:
   schemas:
-    PredefinedReportJson:
+    PredefinedReportDefJson:
       type: object
       properties:
         reportId:
           type: string
-        params:
-          type: object
-          additionalProperties:
-            type: object
-        duration:
-          $ref: '#/components/schemas/ReportDuration'
-        reportDate:
+        name:
+          type: string
+        description:
+          type: string
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredefinedReportParamObject'
+        chart:
+          $ref: '#/components/schemas/PredefinedReportDefChartJson'
+    ReportDuration:
+      type: object
+      properties:
+        start:
+          type: integer
+          format: int64
+        end:
           type: integer
           format: int64
     PredefinedReportParamObject:
@@ -124,44 +134,6 @@ components:
           type: object
         optional:
           type: boolean
-    ReportDuration:
-      type: object
-      properties:
-        start:
-          type: integer
-          format: int64
-        end:
-          type: integer
-          format: int64
-    PredefinedReportDefJson:
-      type: object
-      properties:
-        reportId:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        filters:
-          type: array
-          items:
-            $ref: '#/components/schemas/PredefinedReportParamObject'
-        chart:
-          $ref: '#/components/schemas/PredefinedReportDefChartJson'
-    ReportJobResponse:
-      type: object
-      properties:
-        reportId:
-          type: string
-        reportRunId:
-          type: string
-        status:
-          type: string
-          enum:
-          - OK
-          - FAILED
-        uri:
-          type: string
     PredefinedReportDefChartJson:
       type: object
       properties:
@@ -192,6 +164,34 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PredefinedReportDefJson'
+    ReportJobResponse:
+      type: object
+      properties:
+        reportId:
+          type: string
+        reportRunId:
+          type: string
+        status:
+          type: string
+          enum:
+          - OK
+          - FAILED
+        uri:
+          type: string
+    PredefinedReportJson:
+      type: object
+      properties:
+        reportId:
+          type: string
+        params:
+          type: object
+          additionalProperties:
+            type: object
+        duration:
+          $ref: '#/components/schemas/ReportDuration'
+        reportDate:
+          type: integer
+          format: int64
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

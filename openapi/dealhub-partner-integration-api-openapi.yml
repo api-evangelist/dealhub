@@ -184,6 +184,17 @@ paths:
           description: Unauthenticated. The one-time access token is missing, invalid, or expired.
 components:
   schemas:
+    RedirectResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: The URL to which the user's browser should be redirected.
+        errors:
+          type: array
+          items:
+            type: object
     AuthenticationRequest:
       type: object
       properties:
@@ -195,6 +206,16 @@ components:
       required:
       - authentication
       - user_information
+    AuthenticationResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: A one-time access token, which expires after 60 seconds.
+        errors:
+          type: array
+          items:
+            type: object
     UserInformation:
       type: object
       description: A list of fields required to create a user in DealHub.
@@ -254,27 +275,6 @@ components:
       - login
       - email
       - name
-    AuthenticationResponse:
-      type: object
-      properties:
-        access_token:
-          type: string
-          description: A one-time access token, which expires after 60 seconds.
-        errors:
-          type: array
-          items:
-            type: object
-    RedirectResponse:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-          description: The URL to which the user's browser should be redirected.
-        errors:
-          type: array
-          items:
-            type: object
   securitySchemes:
     oneTimeAccessToken:
       type: http

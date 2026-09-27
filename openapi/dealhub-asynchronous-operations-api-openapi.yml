@@ -81,18 +81,6 @@ paths:
                       errors: []
 components:
   schemas:
-    RequestSummaryResponse:
-      type: object
-      properties:
-        status:
-          type: string
-          enum:
-          - In Progress
-          - Completed
-          - Error
-          description: The status of the asynchronous request.
-        summary:
-          $ref: '#/components/schemas/RequestSummary'
     RequestStatus:
       type: object
       properties:
@@ -132,6 +120,18 @@ components:
           items:
             type: string
           description: List of errors that occurred during execution.
+    RequestSummaryResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+          - In Progress
+          - Completed
+          - Error
+          description: The status of the asynchronous request.
+        summary:
+          $ref: '#/components/schemas/RequestSummary'
   securitySchemes:
     bearerAuth:
       type: http

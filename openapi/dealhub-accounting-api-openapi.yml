@@ -179,6 +179,47 @@ paths:
                   $ref: '#/components/schemas/LedgerAccount'
 components:
   schemas:
+    AccountingEvent:
+      type: object
+      properties:
+        id:
+          type: string
+        entityId:
+          type: string
+        accountingDate:
+          type: integer
+          format: int64
+        accountId:
+          type: string
+        subscriptionId:
+          type: string
+        sourceTransactionType:
+          type: string
+          enum:
+          - INVOICE_POSTED
+          - PAYMENT_PROCESSED
+          - CREDIT_MEMO_POSTED
+          - REVENUE_RECOGNIZED
+          - PAYMENT_VOIDED
+          - INVOICE_VOIDED
+          - REALIZED_GAIN_LOSS_POSTED
+          - REFUND
+        sourceTransactionId:
+          type: string
+        sourceEventId:
+          type: string
+        sourceEventTimestamp:
+          type: integer
+          format: int64
+        sourceEventPayload:
+          $ref: '#/components/schemas/ByteBuffer'
+        sourceEventMetadata:
+          type: object
+          additionalProperties:
+            type: string
+        sourceEventSequenceNumber:
+          type: integer
+          format: int64
     ByteBuffer:
       type: object
       properties:
@@ -251,63 +292,6 @@ components:
           type: string
         entityId:
           type: string
-    AccountingEvent:
-      type: object
-      properties:
-        id:
-          type: string
-        entityId:
-          type: string
-        accountingDate:
-          type: integer
-          format: int64
-        accountId:
-          type: string
-        subscriptionId:
-          type: string
-        sourceTransactionType:
-          type: string
-          enum:
-          - INVOICE_POSTED
-          - PAYMENT_PROCESSED
-          - CREDIT_MEMO_POSTED
-          - REVENUE_RECOGNIZED
-          - PAYMENT_VOIDED
-          - INVOICE_VOIDED
-          - REALIZED_GAIN_LOSS_POSTED
-          - REFUND
-        sourceTransactionId:
-          type: string
-        sourceEventId:
-          type: string
-        sourceEventTimestamp:
-          type: integer
-          format: int64
-        sourceEventPayload:
-          $ref: '#/components/schemas/ByteBuffer'
-        sourceEventMetadata:
-          type: object
-          additionalProperties:
-            type: string
-        sourceEventSequenceNumber:
-          type: integer
-          format: int64
-    AccountingPeriodCalculation:
-      type: object
-      properties:
-        deferredRevenueStartingBalance:
-          type: number
-        deferredRevenueEndingBalance:
-          type: number
-        additionalRevenue:
-          type: number
-        recognizedRevenue:
-          type: number
-        unrecognizedRevenue:
-          type: number
-        unrecognizedTransactionCount:
-          type: integer
-          format: int32
     LedgerAccount:
       type: object
       properties:
@@ -344,21 +328,6 @@ components:
           type: boolean
         id:
           type: string
-    EntityRef:
-      type: object
-      required:
-      - entityId
-      - name
-      properties:
-        entityId:
-          type: string
-          readOnly: true
-        displayId:
-          type: string
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
     UserGroupJson:
       type: object
       properties:
@@ -454,6 +423,37 @@ components:
           type: string
         eventObjectId:
           type: string
+    EntityRef:
+      type: object
+      required:
+      - entityId
+      - name
+      properties:
+        entityId:
+          type: string
+          readOnly: true
+        displayId:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+    AccountingPeriodCalculation:
+      type: object
+      properties:
+        deferredRevenueStartingBalance:
+          type: number
+        deferredRevenueEndingBalance:
+          type: number
+        additionalRevenue:
+          type: number
+        recognizedRevenue:
+          type: number
+        unrecognizedRevenue:
+          type: number
+        unrecognizedTransactionCount:
+          type: integer
+          format: int32
     AccountingEventPaginatedResponse:
       type: object
       properties:

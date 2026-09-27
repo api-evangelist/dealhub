@@ -74,129 +74,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Factor:
-      type: object
-      required:
-      - id
-      - name
-      - value
-      properties:
-        name:
-          type: string
-          readOnly: true
-        id:
-          type: string
-          readOnly: true
-        value:
-          type: number
-          readOnly: true
-    OrderPeriodMetadata:
-      type: object
-      required:
-      - endDate
-      - startDate
-      properties:
-        startDate:
-          type: integer
-          format: int64
-          readOnly: true
-        endDate:
-          type: integer
-          format: int64
-          readOnly: true
-        metadata:
-          type: object
-          readOnly: true
-          additionalProperties:
-            type: object
-    RecurrenceJson:
-      type: object
-      required:
-      - cycle
-      - step
-      properties:
-        cycle:
-          type: string
-          enum:
-          - DAY
-          - MONTH
-          - QUARTER
-          - SEMI_ANNUAL
-          - YEAR
-          - PAID_IN_FULL
-          - CUSTOM
-        step:
-          type: integer
-          format: int32
-          minimum: 1
-    NewOrderLineItemInput:
-      type: object
-      required:
-      - endDate
-      - lineItemIdentifier
-      - listAmount
-      - listUnitPrice
-      - pricingBlock
-      - sellAmount
-      - sellUnitPrice
-      - sku
-      - startDate
-      properties:
-        lineItemIdentifier:
-          type: string
-          readOnly: true
-        sku:
-          type: string
-          readOnly: true
-        groupId:
-          type: string
-          readOnly: true
-        startDate:
-          type: integer
-          format: int64
-          readOnly: true
-        endDate:
-          type: integer
-          format: int64
-          readOnly: true
-        listUnitPrice:
-          type: number
-          readOnly: true
-        sellUnitPrice:
-          type: number
-          readOnly: true
-        sellAmount:
-          type: number
-          readOnly: true
-        listAmount:
-          type: number
-          readOnly: true
-        factors:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/Factor'
-        pricingBlock:
-          type: string
-          readOnly: true
-        renewable:
-          type: boolean
-          readOnly: true
-        billingCycle:
-          $ref: '#/components/schemas/RecurrenceJson'
-        customAttributes:
-          type: string
-          readOnly: true
-    NewOrderRequest:
-      type: object
-      required:
-      - order
-      properties:
-        order:
-          $ref: '#/components/schemas/NewOrderInput'
-        validateStructure:
-          type: boolean
-          readOnly: true
     OrderLineItem:
       type: object
       required:
@@ -272,6 +149,214 @@ components:
           readOnly: true
         subscriptionChargeGroupId:
           type: string
+          readOnly: true
+    NewOrderInput:
+      type: object
+      required:
+      - billingContactId
+      - billingCycle
+      - billingTerm
+      - buyerAccountId
+      - currency
+      - endDate
+      - listAmount
+      - orderIdentifier
+      - paymentTerm
+      - shippingContactId
+      - startDate
+      - totalAmount
+      properties:
+        entityId:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        orderIdentifier:
+          type: string
+          readOnly: true
+        buyerAccountId:
+          type: string
+          readOnly: true
+        shippingContactId:
+          type: string
+          readOnly: true
+        billingContactId:
+          type: string
+          readOnly: true
+        currency:
+          type: string
+          readOnly: true
+        paymentTerm:
+          type: string
+          readOnly: true
+        startDate:
+          type: integer
+          format: int64
+          readOnly: true
+        endDate:
+          type: integer
+          format: int64
+          readOnly: true
+        billingAnchorDate:
+          type: integer
+          format: int64
+          readOnly: true
+        periodMetadata:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/OrderPeriodMetadata'
+        billingCycle:
+          $ref: '#/components/schemas/RecurrenceJson'
+        billingTerm:
+          type: string
+          readOnly: true
+          enum:
+          - UP_FRONT
+          - IN_ARREARS
+        listAmount:
+          type: number
+          readOnly: true
+        totalAmount:
+          type: number
+          readOnly: true
+        submittedBy:
+          type: string
+          readOnly: true
+        purchaseOrderRequiredForInvoicing:
+          type: boolean
+          readOnly: true
+        purchaseOrderNumber:
+          type: string
+          readOnly: true
+        orderLineItems:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/NewOrderLineItemInput'
+    NewOrderLineItemInput:
+      type: object
+      required:
+      - endDate
+      - lineItemIdentifier
+      - listAmount
+      - listUnitPrice
+      - pricingBlock
+      - sellAmount
+      - sellUnitPrice
+      - sku
+      - startDate
+      properties:
+        lineItemIdentifier:
+          type: string
+          readOnly: true
+        sku:
+          type: string
+          readOnly: true
+        groupId:
+          type: string
+          readOnly: true
+        startDate:
+          type: integer
+          format: int64
+          readOnly: true
+        endDate:
+          type: integer
+          format: int64
+          readOnly: true
+        listUnitPrice:
+          type: number
+          readOnly: true
+        sellUnitPrice:
+          type: number
+          readOnly: true
+        sellAmount:
+          type: number
+          readOnly: true
+        listAmount:
+          type: number
+          readOnly: true
+        factors:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Factor'
+        pricingBlock:
+          type: string
+          readOnly: true
+        renewable:
+          type: boolean
+          readOnly: true
+        billingCycle:
+          $ref: '#/components/schemas/RecurrenceJson'
+        customAttributes:
+          type: string
+          readOnly: true
+    Factor:
+      type: object
+      required:
+      - id
+      - name
+      - value
+      properties:
+        name:
+          type: string
+          readOnly: true
+        id:
+          type: string
+          readOnly: true
+        value:
+          type: number
+          readOnly: true
+    RecurrenceJson:
+      type: object
+      required:
+      - cycle
+      - step
+      properties:
+        cycle:
+          type: string
+          enum:
+          - DAY
+          - MONTH
+          - QUARTER
+          - SEMI_ANNUAL
+          - YEAR
+          - PAID_IN_FULL
+          - CUSTOM
+        step:
+          type: integer
+          format: int32
+          minimum: 1
+    OrderPeriodMetadata:
+      type: object
+      required:
+      - endDate
+      - startDate
+      properties:
+        startDate:
+          type: integer
+          format: int64
+          readOnly: true
+        endDate:
+          type: integer
+          format: int64
+          readOnly: true
+        metadata:
+          type: object
+          readOnly: true
+          additionalProperties:
+            type: object
+    NewOrderRequest:
+      type: object
+      required:
+      - order
+      properties:
+        order:
+          $ref: '#/components/schemas/NewOrderInput'
+        validateStructure:
+          type: boolean
           readOnly: true
     Order:
       type: object
@@ -381,91 +466,6 @@ components:
         subscriptionId:
           type: string
           readOnly: true
-    NewOrderInput:
-      type: object
-      required:
-      - billingContactId
-      - billingCycle
-      - billingTerm
-      - buyerAccountId
-      - currency
-      - endDate
-      - listAmount
-      - orderIdentifier
-      - paymentTerm
-      - shippingContactId
-      - startDate
-      - totalAmount
-      properties:
-        entityId:
-          type: string
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-        orderIdentifier:
-          type: string
-          readOnly: true
-        buyerAccountId:
-          type: string
-          readOnly: true
-        shippingContactId:
-          type: string
-          readOnly: true
-        billingContactId:
-          type: string
-          readOnly: true
-        currency:
-          type: string
-          readOnly: true
-        paymentTerm:
-          type: string
-          readOnly: true
-        startDate:
-          type: integer
-          format: int64
-          readOnly: true
-        endDate:
-          type: integer
-          format: int64
-          readOnly: true
-        billingAnchorDate:
-          type: integer
-          format: int64
-          readOnly: true
-        periodMetadata:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/OrderPeriodMetadata'
-        billingCycle:
-          $ref: '#/components/schemas/RecurrenceJson'
-        billingTerm:
-          type: string
-          readOnly: true
-          enum:
-          - UP_FRONT
-          - IN_ARREARS
-        listAmount:
-          type: number
-          readOnly: true
-        totalAmount:
-          type: number
-          readOnly: true
-        submittedBy:
-          type: string
-          readOnly: true
-        purchaseOrderRequiredForInvoicing:
-          type: boolean
-          readOnly: true
-        purchaseOrderNumber:
-          type: string
-          readOnly: true
-        orderLineItems:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/NewOrderLineItemInput'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

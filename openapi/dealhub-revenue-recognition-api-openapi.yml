@@ -232,55 +232,6 @@ paths:
           description: successful operation
 components:
   schemas:
-    RecognitionRule:
-      type: object
-      properties:
-        entityIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        name:
-          type: string
-        source:
-          type: string
-          enum:
-          - ORDER
-          - INVOICE
-        recognitionType:
-          type: string
-          enum:
-          - OVER_TIME
-          - POINT_IN_TIME
-          - EVENT
-        distributionMethod:
-          type: string
-          enum:
-          - DAYS
-          - MONTHS_EVEN
-          - MONTHS_PARTIAL_PRORATED
-        recognitionDateAlignment:
-          type: string
-          enum:
-          - INVOICE_START_DATE
-          - INVOICE_END_DATE
-        isCatchupRequired:
-          type: boolean
-        recognitionEventType:
-          type: string
-          enum:
-          - PERCENTAGE_OF_COMPLETION
-          - AMOUNT
-        deferredRevenueAccountId:
-          type: string
-        recognizedRevenueAccountId:
-          type: string
-        inUse:
-          type: boolean
-        catchupRequired:
-          type: boolean
-        id:
-          type: string
     RecognitionEventCompletion:
       type: object
       required:
@@ -383,6 +334,55 @@ components:
         updatedOn:
           type: integer
           format: int64
+    RecognitionRule:
+      type: object
+      properties:
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        source:
+          type: string
+          enum:
+          - ORDER
+          - INVOICE
+        recognitionType:
+          type: string
+          enum:
+          - OVER_TIME
+          - POINT_IN_TIME
+          - EVENT
+        distributionMethod:
+          type: string
+          enum:
+          - DAYS
+          - MONTHS_EVEN
+          - MONTHS_PARTIAL_PRORATED
+        recognitionDateAlignment:
+          type: string
+          enum:
+          - INVOICE_START_DATE
+          - INVOICE_END_DATE
+        isCatchupRequired:
+          type: boolean
+        recognitionEventType:
+          type: string
+          enum:
+          - PERCENTAGE_OF_COMPLETION
+          - AMOUNT
+        deferredRevenueAccountId:
+          type: string
+        recognizedRevenueAccountId:
+          type: string
+        inUse:
+          type: boolean
+        catchupRequired:
+          type: boolean
+        id:
+          type: string
     BulkRevenueRecognitionInput:
       type: object
       properties:

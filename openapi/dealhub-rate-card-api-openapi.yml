@@ -89,15 +89,6 @@ paths:
           description: successful operation
 components:
   requestBodies:
-    uploadApprovalMatrixCSV:
-      content:
-        multipart/form-data:
-          schema:
-            type: object
-            properties:
-              file:
-                type: string
-                format: binary
     updateRateCardCsv:
       content:
         multipart/form-data:
@@ -110,6 +101,15 @@ components:
                 type: string
               currency:
                 type: string
+              file:
+                type: string
+                format: binary
+    uploadApprovalMatrixCSV:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
               file:
                 type: string
                 format: binary

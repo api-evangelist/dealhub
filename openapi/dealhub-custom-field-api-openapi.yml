@@ -235,7 +235,58 @@ paths:
         default:
           description: successful operation
 components:
+  requestBodies:
+    updateCustomFieldsBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties:
+              $ref: '#/components/schemas/CustomFieldValue'
+      description: custom field values
+      required: true
+    CustomFieldUpdateInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CustomFieldUpdateInput'
+      description: custom field value
+      required: true
   schemas:
+    CustomFieldUpdateInput:
+      type: object
+      properties:
+        value:
+          type: string
+          readOnly: true
+        selections:
+          type: array
+          readOnly: true
+          items:
+            type: string
+    CustomFieldDefinitionUpdateInput:
+      type: object
+      properties:
+        fieldName:
+          type: string
+          readOnly: true
+        fieldLabel:
+          type: string
+          readOnly: true
+        fieldType:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
     CustomFieldDefault:
       type: object
       properties:
@@ -245,6 +296,46 @@ components:
           type: array
           items:
             type: string
+    CustomFieldValue:
+      type: object
+      properties:
+        type:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        name:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        value:
+          type: string
+          readOnly: true
+        selections:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        required:
+          type: boolean
+          readOnly: true
+        source:
+          type: string
+          readOnly: true
+          enum:
+          - USER
+          - SYSTEM
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
     CustomFieldDefinitionJson:
       type: object
       properties:
@@ -296,29 +387,6 @@ components:
           readOnly: true
         defaultValue:
           $ref: '#/components/schemas/CustomFieldDefault'
-    CustomFieldDefinitionUpdateInput:
-      type: object
-      properties:
-        fieldName:
-          type: string
-          readOnly: true
-        fieldLabel:
-          type: string
-          readOnly: true
-        fieldType:
-          type: string
-          readOnly: true
-          enum:
-          - STRING
-          - PICKLIST
-          - MULTISELECT_PICKLIST
-        options:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        defaultValue:
-          $ref: '#/components/schemas/CustomFieldDefault'
     CustomFieldDefinitionCreateInput:
       type: object
       required:
@@ -368,74 +436,6 @@ components:
           - SYSTEM
         defaultValue:
           $ref: '#/components/schemas/CustomFieldDefault'
-    CustomFieldValue:
-      type: object
-      properties:
-        type:
-          type: string
-          readOnly: true
-          enum:
-          - STRING
-          - PICKLIST
-          - MULTISELECT_PICKLIST
-        name:
-          type: string
-          readOnly: true
-        label:
-          type: string
-          readOnly: true
-        value:
-          type: string
-          readOnly: true
-        selections:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        options:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        required:
-          type: boolean
-          readOnly: true
-        source:
-          type: string
-          readOnly: true
-          enum:
-          - USER
-          - SYSTEM
-        defaultValue:
-          $ref: '#/components/schemas/CustomFieldDefault'
-    CustomFieldUpdateInput:
-      type: object
-      properties:
-        value:
-          type: string
-          readOnly: true
-        selections:
-          type: array
-          readOnly: true
-          items:
-            type: string
-  requestBodies:
-    updateCustomFieldsBody:
-      content:
-        application/json:
-          schema:
-            type: object
-            additionalProperties:
-              $ref: '#/components/schemas/CustomFieldValue'
-      description: custom field values
-      required: true
-    CustomFieldUpdateInput:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/CustomFieldUpdateInput'
-      description: custom field value
-      required: true
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
