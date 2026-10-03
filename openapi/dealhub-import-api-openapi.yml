@@ -199,6 +199,25 @@ paths:
                 $ref: '#/components/schemas/FlatfileWorkbookResponse'
 components:
   schemas:
+    FlatfileWorkbookResponseData:
+      type: object
+      required:
+      - environmentId
+      - spaceId
+      properties:
+        spaceId:
+          type: string
+          readOnly: true
+        environmentId:
+          type: string
+          readOnly: true
+    FlatfileWorkbookResponse:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          $ref: '#/components/schemas/FlatfileWorkbookResponseData'
     DataImport:
       type: object
       properties:
@@ -256,25 +275,6 @@ components:
         completedOn:
           type: integer
           format: int64
-    FlatfileWorkbookResponseData:
-      type: object
-      required:
-      - environmentId
-      - spaceId
-      properties:
-        spaceId:
-          type: string
-          readOnly: true
-        environmentId:
-          type: string
-          readOnly: true
-    FlatfileWorkbookResponse:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          $ref: '#/components/schemas/FlatfileWorkbookResponseData'
   requestBodies:
     uploadApprovalMatrixCSV:
       content:

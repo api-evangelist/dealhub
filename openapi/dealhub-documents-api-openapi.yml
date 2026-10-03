@@ -185,46 +185,6 @@ paths:
                 $ref: '#/components/schemas/DocumentTemplateJson'
 components:
   schemas:
-    DocumentTemplateRequestJson:
-      type: object
-      required:
-      - type
-      properties:
-        id:
-          type: string
-        entityIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        name:
-          type: string
-        sectionUuid:
-          type: string
-        type:
-          type: string
-          enum:
-          - ORDER
-          - INVOICE
-          - INVOICE_EMAIL
-          - CREDIT_MEMO
-          - EMAIL
-          - UPSELL_EARLY_RENEWAL
-          - DUNNING
-          - CANCEL_AND_RESTRUCTURE
-          - ESIGN
-        description:
-          type: string
-        content:
-          type: string
-        status:
-          type: string
-          enum:
-          - DRAFT
-          - ACTIVE
-          - DEPRECATED
-        isUserSelectable:
-          type: boolean
     DocumentTemplateJson:
       type: object
       required:
@@ -269,6 +229,46 @@ components:
           type: integer
           format: int32
         hasNewerVersion:
+          type: boolean
+    DocumentTemplateRequestJson:
+      type: object
+      required:
+      - type
+      properties:
+        id:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        sectionUuid:
+          type: string
+        type:
+          type: string
+          enum:
+          - ORDER
+          - INVOICE
+          - INVOICE_EMAIL
+          - CREDIT_MEMO
+          - EMAIL
+          - UPSELL_EARLY_RENEWAL
+          - DUNNING
+          - CANCEL_AND_RESTRUCTURE
+          - ESIGN
+        description:
+          type: string
+        content:
+          type: string
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - ACTIVE
+          - DEPRECATED
+        isUserSelectable:
           type: boolean
   requestBodies:
     DocumentTemplateRequestJson:

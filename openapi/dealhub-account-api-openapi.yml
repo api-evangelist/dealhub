@@ -172,42 +172,7 @@ paths:
       summary: Update cpq sourced account contact
       x-summary-source: derived
 components:
-  requestBodies:
-    NewAccountContactJson:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/NewAccountContactJson'
-    NewAccountJson:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/NewAccountJson'
   schemas:
-    AccountAddressJson:
-      type: object
-      properties:
-        streetAddressLine1:
-          type: string
-          description: Address Line 1 of the Contact
-        streetAddressLine2:
-          type: string
-          description: Address Line 2 of the Contact
-        streetAddressLine3:
-          type: string
-          description: Address Line 3 of the Contact
-        city:
-          type: string
-          description: City of the Contact
-        state:
-          type: string
-          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
-        country:
-          type: string
-          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
-        zipcode:
-          type: string
-          description: Zip or Postal Code of the Contact
     NewAccountJson:
       type: object
       required:
@@ -309,6 +274,30 @@ components:
           type: integer
           format: int64
           description: (optional) Last updated timestamp (epoch seconds)
+    AccountAddressJson:
+      type: object
+      properties:
+        streetAddressLine1:
+          type: string
+          description: Address Line 1 of the Contact
+        streetAddressLine2:
+          type: string
+          description: Address Line 2 of the Contact
+        streetAddressLine3:
+          type: string
+          description: Address Line 3 of the Contact
+        city:
+          type: string
+          description: City of the Contact
+        state:
+          type: string
+          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
+        country:
+          type: string
+          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
+        zipcode:
+          type: string
+          description: Zip or Postal Code of the Contact
     AccountQueryRequest:
       type: object
       required:
@@ -367,6 +356,17 @@ components:
           type: string
         eventObjectId:
           type: string
+  requestBodies:
+    NewAccountJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NewAccountJson'
+    NewAccountContactJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NewAccountContactJson'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

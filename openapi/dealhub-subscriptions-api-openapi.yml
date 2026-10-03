@@ -535,22 +535,250 @@ paths:
           description: successful operation
 components:
   schemas:
-    Factor:
+    SubscriptionStatusChangeSchedule:
       type: object
-      required:
-      - id
-      - name
-      - value
       properties:
+        id:
+          type: string
+          format: uuid
+        changesOn:
+          type: integer
+          format: int64
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        subscriptionId:
+          type: string
+        isDeleted:
+          type: boolean
+        subscriptionVersion:
+          type: integer
+          format: int32
+        changeEventType:
+          type: string
+          enum:
+          - INVOICE_POSTED
+          - INVOICE_POSTED_V2
+          - INVOICE_GENERATION_FAILED
+          - PAYMENT_PROCESSED
+          - PAYMENT_ATTEMPT_FAILED
+          - PAYMENT_RETRIES_EXHAUSTED
+          - ACCOUNT_PAYMENT_METHOD_SUSPENDED
+          - CREDIT_MEMO_POSTED
+          - REVENUE_RECOGNIZED
+          - PAYMENT_VOIDED
+          - INVOICE_VOIDED
+          - INVOICE_VOIDED_V2
+          - CREDIT_MEMO_VOIDED
+          - REALIZED_GAIN_LOSS_POSTED
+          - ORDER_SUBMITTED
+          - ORDER_EXECUTED
+          - ORDER_APPROVED
+          - ORDER_REVERTED_TO_DRAFT
+          - ORDER_APPROVAL_FLOWS_EVALUATED
+          - SUBSCRIPTION_CREATED
+          - SUBSCRIPTION_UPDATED
+          - SUBSCRIPTION_ACTIVATING
+          - SUBSCRIPTION_ACTIVATED
+          - SUBSCRIPTION_CANCELLING
+          - SUBSCRIPTION_CANCELLED
+          - SUBSCRIPTION_EXPIRING
+          - SUBSCRIPTION_EXPIRED
+          - SUBSCRIPTION_CHARGE_CHANGE
+          - SUBSCRIPTION_DELETED
+          - ESIGNATURE_COMPLETED
+          - ESIGNATURE_VOIDED
+          - ESIGNATURE_PARTIALLY_SIGNED
+          - TASK_SCHEDULED
+          - TASK_COMPLETED
+          - TASK_EXECUTING
+          - HUBSPOT_SYNC_FAILED
+          - SALESFORCE_SYNC_FAILED
+          - SALESFORCE_INVALID_CREDENTIALS
+          - CONTACT_CREATED
+          - CONTACT_UPDATED
+          - CONTACT_DELETED
+          - CHARGE_CREATED
+          - CHARGE_UPDATED
+          - CHARGE_DELETED
+          - PRODUCT_CREATED
+          - PRODUCT_UPDATED
+          - PRODUCT_DELETED
+          - PLAN_CREATED
+          - PLAN_UPDATED
+          - PLAN_DELETED
+          - PLAN_STATUS_CHANGED
+          - USER_CREATED
+          - USER_DISABLED
+          - USER_REACTIVATED
+          - REFUND_GENERATED
+          - ACCOUNTING_PERIOD_REOPENED
+          - ACCOUNTING_PERIOD_CLOSED
+          - INVOICE_PAID
+          - DUNNING_EMAIL_SENT
+          - ACCOUNT_CREATED
+          - ACCOUNT_UPDATED
+          - ACCOUNT_DELETED
+          - INVOICE_RUN_SUCCEEDED
+          - INVOICE_RUN_FAILED
+          - ACCOUNT_CUSTOM_FIELDS_UPDATED
+          - ORDER_CUSTOM_FIELDS_UPDATED
+          - SUBSCRIPTION_CUSTOM_FIELDS_UPDATED
+          - PLAN_CUSTOM_FIELDS_UPDATED
+          - CHARGE_CUSTOM_FIELDS_UPDATED
+          - INVOICE_CUSTOM_FIELDS_UPDATED
+          - SALES_ROOM_CUSTOM_FIELDS_UPDATED
+          - OPPORTUNITY_CUSTOM_FIELDS_UPDATED
+        isProcessed:
+          type: boolean
+    OrderCreationCustomizationOutputJson:
+      type: object
+      properties:
+        customizationRunSkipped:
+          type: boolean
+        customizationDefinitionMissing:
+          type: boolean
+        ruleTraces:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleTraceJson'
+    SubscriptionUpdateJson:
+      type: object
+      properties:
+        shippingContactId:
+          type: string
+        billingContactId:
+          type: string
+        purchaseOrderNumber:
+          type: string
+        purchaseOrderRequiredForInvoicing:
+          type: boolean
+        externalId:
+          type: string
+        autoRenew:
+          type: boolean
+        emailNotifiersList:
+          $ref: '#/components/schemas/EmailNotifiersList'
+        activationDate:
+          type: integer
+          format: int64
         name:
           type: string
-          readOnly: true
+          minLength: 0
+          maxLength: 255
+    CustomFieldEntry:
+      type: object
+      properties:
         id:
           type: string
           readOnly: true
-        value:
-          type: number
+        type:
+          type: string
           readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        name:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        value:
+          type: string
+          readOnly: true
+        selections:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        required:
+          type: boolean
+          readOnly: true
+        source:
+          type: string
+          readOnly: true
+          enum:
+          - USER
+          - SYSTEM
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+    RenewalOrderRequest:
+      type: object
+      required:
+      - order
+      properties:
+        order:
+          $ref: '#/components/schemas/RenewalOrderInput'
+    SubscriptionChargeJson:
+      type: object
+      required:
+      - accountId
+      - chargeId
+      - endDate
+      - isRamp
+      - orderLines
+      - quantity
+      - startDate
+      properties:
+        id:
+          type: string
+        groupId:
+          type: string
+        accountId:
+          type: string
+        chargeId:
+          type: string
+        quantity:
+          type: integer
+          format: int64
+        isRamp:
+          type: boolean
+        currencyConversionRateId:
+          type: string
+        discounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/DiscountJson'
+        predefinedDiscounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/TenantDiscountLineItemJson'
+        attributeReferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeReference'
+        pricingOverride:
+          $ref: '#/components/schemas/PricingOverrideJson'
+        listUnitPrice:
+          type: number
+        sellUnitPrice:
+          type: number
+        discountAmount:
+          type: number
+        startDate:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+        orderLines:
+          type: array
+          items:
+            type: string
+        customFields:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValue'
     ModificationLineItem:
       type: object
       required:
@@ -620,463 +848,6 @@ components:
           - ADD
           - RENEWAL
         modifyingSubscriptionLineId:
-          type: string
-          readOnly: true
-    OrderLineActionsPerformedJson:
-      type: object
-      properties:
-        lineIdentifier:
-          type: string
-        actionsPerformed:
-          type: array
-          items:
-            $ref: '#/components/schemas/RuleActionPerformedJson'
-    TimeSeriesAmountJson:
-      type: object
-      properties:
-        instant:
-          type: integer
-          format: int64
-        amount:
-          type: number
-    PurchaseOrder:
-      type: object
-      properties:
-        purchaseOrderNumber:
-          type: string
-          minLength: 0
-          maxLength: 255
-        originOrderId:
-          type: string
-        addedOn:
-          type: integer
-          format: int64
-    SubscriptionChargeJson:
-      type: object
-      required:
-      - accountId
-      - chargeId
-      - endDate
-      - isRamp
-      - orderLines
-      - quantity
-      - startDate
-      properties:
-        id:
-          type: string
-        groupId:
-          type: string
-        accountId:
-          type: string
-        chargeId:
-          type: string
-        quantity:
-          type: integer
-          format: int64
-        isRamp:
-          type: boolean
-        currencyConversionRateId:
-          type: string
-        discounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/DiscountJson'
-        predefinedDiscounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/TenantDiscountLineItemJson'
-        attributeReferences:
-          type: array
-          items:
-            $ref: '#/components/schemas/AttributeReference'
-        pricingOverride:
-          $ref: '#/components/schemas/PricingOverrideJson'
-        listUnitPrice:
-          type: number
-        sellUnitPrice:
-          type: number
-        discountAmount:
-          type: number
-        startDate:
-          type: integer
-          format: int64
-        endDate:
-          type: integer
-          format: int64
-        orderLines:
-          type: array
-          items:
-            type: string
-        customFields:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CustomFieldValue'
-    CustomPredefinedTemplateOnOrder:
-      type: object
-      properties:
-        id:
-          type: string
-        orderId:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        content:
-          type: string
-    SubscriptionJson:
-      type: object
-      required:
-      - accountId
-      - billingCycle
-      - charges
-      - creationTime
-      - endDate
-      - entityId
-      - orders
-      - startDate
-      - state
-      - termLength
-      - version
-      properties:
-        id:
-          type: string
-        version:
-          type: integer
-          format: int32
-        entityId:
-          type: string
-        externalId:
-          type: string
-        accountId:
-          type: string
-        shippingContactId:
-          type: string
-        billingContactId:
-          type: string
-        state:
-          type: string
-          enum:
-          - ACTIVE
-          - EXPIRED
-          - CANCELLED
-          - PENDING
-          - PENDING_CANCELLATION
-        startDate:
-          type: integer
-          format: int64
-        endDate:
-          type: integer
-          format: int64
-        canceledDate:
-          type: integer
-          format: int64
-        termLength:
-          $ref: '#/components/schemas/RecurrenceJson'
-        billingCycle:
-          $ref: '#/components/schemas/RecurrenceJson'
-        paymentTerm:
-          type: string
-        billingTerm:
-          type: string
-          enum:
-          - UP_FRONT
-          - IN_ARREARS
-        charges:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionChargeJson'
-        predefinedDiscounts:
-          type: array
-          items:
-            $ref: '#/components/schemas/TenantDiscountJson'
-        orders:
-          type: array
-          items:
-            type: string
-        purchaseOrders:
-          type: array
-          items:
-            $ref: '#/components/schemas/PurchaseOrder'
-        purchaseOrderRequiredForInvoicing:
-          type: boolean
-        creationTime:
-          type: integer
-          format: int64
-        rampInterval:
-          type: array
-          items:
-            type: integer
-            format: int64
-        renewedFromSubscriptionId:
-          type: string
-        renewedFromDate:
-          type: integer
-          format: int64
-        renewedToSubscriptionId:
-          type: string
-        renewedToDate:
-          type: integer
-          format: int64
-        restructuredFromSubscriptionId:
-          type: string
-        restructuredFromDate:
-          type: integer
-          format: int64
-        restructuredToSubscriptionId:
-          type: string
-        restructuredToDate:
-          type: integer
-          format: int64
-        autoRenew:
-          type: boolean
-        activationDate:
-          type: integer
-          format: int64
-        name:
-          type: string
-        customFields:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/CustomFieldValue'
-    CustomFieldDefault:
-      type: object
-      properties:
-        value:
-          type: string
-        selections:
-          type: array
-          items:
-            type: string
-    CancelOrderInput:
-      type: object
-      required:
-      - listAmount
-      - orderIdentifier
-      - startDate
-      - subscriptionId
-      - subscriptionVersion
-      - totalAmount
-      properties:
-        subscriptionId:
-          type: string
-          readOnly: true
-        subscriptionVersion:
-          type: integer
-          format: int32
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-        orderIdentifier:
-          type: string
-          readOnly: true
-        startDate:
-          type: integer
-          format: int64
-          readOnly: true
-        listAmount:
-          type: number
-          readOnly: true
-        totalAmount:
-          type: number
-          readOnly: true
-        submittedBy:
-          type: string
-          readOnly: true
-        cancelLineItems:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/CancelLineItemInput'
-    SubscriptionChargeChangeSchedule:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        changesOn:
-          type: integer
-          format: int64
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-        subscriptionId:
-          type: string
-        isDeleted:
-          type: boolean
-        subscriptionVersion:
-          type: integer
-          format: int32
-        chargeIdsStarting:
-          type: string
-        chargeIdsEnding:
-          type: string
-        isProcessed:
-          type: boolean
-    RenewalOrderRequest:
-      type: object
-      required:
-      - order
-      properties:
-        order:
-          $ref: '#/components/schemas/RenewalOrderInput'
-    RuleTraceJson:
-      type: object
-      properties:
-        ruleName:
-          type: string
-        fired:
-          type: boolean
-        orderActionsPerformed:
-          type: array
-          items:
-            $ref: '#/components/schemas/RuleActionPerformedJson'
-        orderLineActionsPerformed:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrderLineActionsPerformedJson'
-        orderRuleWarnings:
-          type: array
-          items:
-            type: string
-        orderLineRuleWarnings:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrderLineRuleWarningsJson'
-    CancelLineItemInput:
-      type: object
-      required:
-      - cancellingSubscriptionLineId
-      - endDate
-      - lineItemIdentifier
-      - listAmount
-      - listUnitPrice
-      - pricingBlock
-      - sellAmount
-      - sellUnitPrice
-      - sku
-      - startDate
-      properties:
-        lineItemIdentifier:
-          type: string
-          readOnly: true
-        sku:
-          type: string
-          readOnly: true
-        groupId:
-          type: string
-          readOnly: true
-        startDate:
-          type: integer
-          format: int64
-          readOnly: true
-        endDate:
-          type: integer
-          format: int64
-          readOnly: true
-        listUnitPrice:
-          type: number
-          readOnly: true
-        sellUnitPrice:
-          type: number
-          readOnly: true
-        sellAmount:
-          type: number
-          readOnly: true
-        listAmount:
-          type: number
-          readOnly: true
-        factors:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/Factor'
-        pricingBlock:
-          type: string
-          readOnly: true
-        renewable:
-          type: boolean
-          readOnly: true
-        billingCycle:
-          $ref: '#/components/schemas/RecurrenceJson'
-        customAttributes:
-          type: string
-          readOnly: true
-        cancellingSubscriptionLineId:
-          type: string
-          readOnly: true
-    RenewalLineItemInput:
-      type: object
-      required:
-      - endDate
-      - lineItemIdentifier
-      - listAmount
-      - listUnitPrice
-      - pricingBlock
-      - sellAmount
-      - sellUnitPrice
-      - sku
-      - startDate
-      properties:
-        lineItemIdentifier:
-          type: string
-          readOnly: true
-        sku:
-          type: string
-          readOnly: true
-        groupId:
-          type: string
-          readOnly: true
-        startDate:
-          type: integer
-          format: int64
-          readOnly: true
-        endDate:
-          type: integer
-          format: int64
-          readOnly: true
-        listUnitPrice:
-          type: number
-          readOnly: true
-        sellUnitPrice:
-          type: number
-          readOnly: true
-        sellAmount:
-          type: number
-          readOnly: true
-        listAmount:
-          type: number
-          readOnly: true
-        factors:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/Factor'
-        pricingBlock:
-          type: string
-          readOnly: true
-        renewable:
-          type: boolean
-          readOnly: true
-        billingCycle:
-          $ref: '#/components/schemas/RecurrenceJson'
-        customAttributes:
-          type: string
-          readOnly: true
-        renewedFromSubscriptionLineId:
-          type: string
-          readOnly: true
-    AttributeReference:
-      type: object
-      properties:
-        attributeDefinitionId:
-          type: string
-          readOnly: true
-        attributeValue:
           type: string
           readOnly: true
     OrderLineItemJson:
@@ -1165,70 +936,24 @@ components:
           type: string
         dryRunItem:
           type: boolean
-    OpportunityJson:
+    PaginatedResultSubscription:
       type: object
-      properties:
-        name:
-          type: string
-        id:
-          type: string
-        entityId:
-          type: string
-        type:
-          type: string
-        stage:
-          type: string
-        crmId:
-          type: string
-        accountId:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-        opportunityCrmType:
-          type: string
-          enum:
-          - SALESFORCE
-          - HUBSPOT
-        isClosed:
-          type: boolean
-        primaryOrderId:
-          type: string
-        opportunityId:
-          type: string
-        currency:
-          type: string
-        customFields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldEntry'
-    SubscriptionSchedules:
-      type: object
-      properties:
-        chargeChangeSchedules:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionChargeChangeSchedule'
-        statusChangeSchedules:
-          type: array
-          items:
-            $ref: '#/components/schemas/SubscriptionStatusChangeSchedule'
-    PaginatedSubscriptionsResponse:
-      type: object
+      required:
+      - count
+      - data
       properties:
         data:
           type: array
+          readOnly: true
           items:
-            $ref: '#/components/schemas/SubscriptionJson'
-        numElements:
+            type: object
+        count:
           type: integer
           format: int32
-        nextCursor:
+          readOnly: true
+        pageToken:
           type: string
-          format: uuid
+          readOnly: true
     PricingOverrideJson:
       type: object
       properties:
@@ -1245,26 +970,6 @@ components:
           type: integer
           format: int64
           readOnly: true
-    TenantDiscountLineItemJson:
-      type: object
-      properties:
-        id:
-          type: string
-        percent:
-          type: number
-        name:
-          type: string
-        type:
-          type: string
-        description:
-          type: string
-        status:
-          type: string
-          enum:
-          - ACTIVE
-          - DEPRECATED
-        amount:
-          type: number
     EmailNotifiersList:
       type: object
       properties:
@@ -1280,6 +985,122 @@ components:
           type: array
           items:
             type: string
+    RuleTraceJson:
+      type: object
+      properties:
+        ruleName:
+          type: string
+        fired:
+          type: boolean
+        orderActionsPerformed:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleActionPerformedJson'
+        orderLineActionsPerformed:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLineActionsPerformedJson'
+        orderRuleWarnings:
+          type: array
+          items:
+            type: string
+        orderLineRuleWarnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLineRuleWarningsJson'
+    PaginatedSubscriptionsResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionJson'
+        numElements:
+          type: integer
+          format: int32
+        nextCursor:
+          type: string
+          format: uuid
+    AmendmentOrderRequest:
+      type: object
+      required:
+      - order
+      properties:
+        order:
+          $ref: '#/components/schemas/AmendmentOrderInput'
+    CancelOrderInput:
+      type: object
+      required:
+      - listAmount
+      - orderIdentifier
+      - startDate
+      - subscriptionId
+      - subscriptionVersion
+      - totalAmount
+      properties:
+        subscriptionId:
+          type: string
+          readOnly: true
+        subscriptionVersion:
+          type: integer
+          format: int32
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        orderIdentifier:
+          type: string
+          readOnly: true
+        startDate:
+          type: integer
+          format: int64
+          readOnly: true
+        listAmount:
+          type: number
+          readOnly: true
+        totalAmount:
+          type: number
+          readOnly: true
+        submittedBy:
+          type: string
+          readOnly: true
+        cancelLineItems:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CancelLineItemInput'
+    PurchaseOrder:
+      type: object
+      properties:
+        purchaseOrderNumber:
+          type: string
+          minLength: 0
+          maxLength: 255
+        originOrderId:
+          type: string
+        addedOn:
+          type: integer
+          format: int64
+    SubscriptionSchedules:
+      type: object
+      properties:
+        chargeChangeSchedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionChargeChangeSchedule'
+        statusChangeSchedules:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionStatusChangeSchedule'
+    AttributeReference:
+      type: object
+      properties:
+        attributeDefinitionId:
+          type: string
+          readOnly: true
+        attributeValue:
+          type: string
+          readOnly: true
     RecurrenceJson:
       type: object
       required:
@@ -1309,213 +1130,136 @@ components:
           type: number
         maxCreditableAmount:
           type: number
-    RenewalOrderInput:
+    SubscriptionLine:
       type: object
       required:
-      - billingContactId
       - billingCycle
-      - billingTerm
       - endDate
+      - id
       - listAmount
-      - orderIdentifier
-      - paymentTerm
-      - shippingContactId
-      - subscriptionId
-      - subscriptionVersion
-      - totalAmount
+      - listUnitPrice
+      - pricingBlock
+      - renewable
+      - sellAmount
+      - sellUnitPrice
+      - sku
+      - startDate
+      - status
       properties:
-        name:
+        id:
           type: string
           readOnly: true
-        subscriptionId:
+        sku:
           type: string
           readOnly: true
-        subscriptionVersion:
+        startDate:
           type: integer
-          format: int32
-          readOnly: true
-        orderIdentifier:
-          type: string
-          readOnly: true
-        shippingContactId:
-          type: string
-          readOnly: true
-        billingContactId:
-          type: string
-          readOnly: true
-        paymentTerm:
-          type: string
+          format: int64
           readOnly: true
         endDate:
           type: integer
           format: int64
           readOnly: true
-        billingAnchorDate:
-          type: integer
-          format: int64
+        listUnitPrice:
+          type: number
           readOnly: true
-        periodMetadata:
+        sellUnitPrice:
+          type: number
+          readOnly: true
+        factors:
           type: array
           readOnly: true
           items:
-            $ref: '#/components/schemas/OrderPeriodMetadata'
-        billingCycle:
-          $ref: '#/components/schemas/RecurrenceJson'
-        billingTerm:
+            $ref: '#/components/schemas/Factor'
+        pricingBlock:
           type: string
           readOnly: true
-          enum:
-          - UP_FRONT
-          - IN_ARREARS
+        groupId:
+          type: string
+          readOnly: true
         listAmount:
           type: number
           readOnly: true
-        totalAmount:
+        sellAmount:
           type: number
           readOnly: true
-        submittedBy:
-          type: string
-          readOnly: true
-        purchaseOrderRequiredForInvoicing:
+        billingCycle:
+          $ref: '#/components/schemas/RecurrenceJson'
+        renewable:
           type: boolean
           readOnly: true
-        purchaseOrderNumber:
+        customAttributes:
           type: string
           readOnly: true
-        renewalLineItems:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/RenewalLineItemInput'
-    PriceTierJson:
-      type: object
-      required:
-      - amount
-      - untilQuantity
-      properties:
-        untilQuantity:
-          type: string
-        amount:
-          type: number
-        overage:
-          type: number
-    SubscriptionUpdateJson:
-      type: object
-      properties:
-        shippingContactId:
-          type: string
-        billingContactId:
-          type: string
-        purchaseOrderNumber:
-          type: string
-        purchaseOrderRequiredForInvoicing:
-          type: boolean
-        externalId:
-          type: string
-        autoRenew:
-          type: boolean
-        emailNotifiersList:
-          $ref: '#/components/schemas/EmailNotifiersList'
-        activationDate:
-          type: integer
-          format: int64
-        name:
-          type: string
-          minLength: 0
-          maxLength: 255
-    CustomFieldEntry:
-      type: object
-      properties:
-        id:
-          type: string
-          readOnly: true
-        type:
-          type: string
-          readOnly: true
-          enum:
-          - STRING
-          - PICKLIST
-          - MULTISELECT_PICKLIST
-        name:
-          type: string
-          readOnly: true
-        label:
-          type: string
-          readOnly: true
-        value:
-          type: string
-          readOnly: true
-        selections:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        options:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        required:
-          type: boolean
-          readOnly: true
-        source:
-          type: string
-          readOnly: true
-          enum:
-          - USER
-          - SYSTEM
-        defaultValue:
-          $ref: '#/components/schemas/CustomFieldDefault'
-    PaginatedResultSubscriptionHead:
-      type: object
-      required:
-      - count
-      - data
-      properties:
-        data:
-          type: array
-          readOnly: true
-          items:
-            type: object
-        count:
-          type: integer
-          format: int32
-          readOnly: true
-        pageToken:
-          type: string
-          readOnly: true
-    DiscountJson:
-      type: object
-      properties:
-        name:
-          type: string
-        percent:
-          type: number
-        discountAmount:
-          type: number
         status:
           type: string
+          readOnly: true
           enum:
+          - PENDING
           - ACTIVE
-          - DEPRECATED
-        discountedPrice:
-          type: number
-    PaginatedResultSubscription:
+          - EXPIRED
+          - TERMINATED
+          - CANCELLED
+    CancelLineItemInput:
       type: object
       required:
-      - count
-      - data
+      - cancellingSubscriptionLineId
+      - endDate
+      - lineItemIdentifier
+      - listAmount
+      - listUnitPrice
+      - pricingBlock
+      - sellAmount
+      - sellUnitPrice
+      - sku
+      - startDate
       properties:
-        data:
+        lineItemIdentifier:
+          type: string
+          readOnly: true
+        sku:
+          type: string
+          readOnly: true
+        groupId:
+          type: string
+          readOnly: true
+        startDate:
+          type: integer
+          format: int64
+          readOnly: true
+        endDate:
+          type: integer
+          format: int64
+          readOnly: true
+        listUnitPrice:
+          type: number
+          readOnly: true
+        sellUnitPrice:
+          type: number
+          readOnly: true
+        sellAmount:
+          type: number
+          readOnly: true
+        listAmount:
+          type: number
+          readOnly: true
+        factors:
           type: array
           readOnly: true
           items:
-            type: object
-        count:
-          type: integer
-          format: int32
+            $ref: '#/components/schemas/Factor'
+        pricingBlock:
+          type: string
           readOnly: true
-        pageToken:
+        renewable:
+          type: boolean
+          readOnly: true
+        billingCycle:
+          $ref: '#/components/schemas/RecurrenceJson'
+        customAttributes:
+          type: string
+          readOnly: true
+        cancellingSubscriptionLineId:
           type: string
           readOnly: true
     MetricsJson:
@@ -1543,6 +1287,60 @@ components:
           type: number
         deltaArr:
           type: number
+    TimeSeriesAmountJson:
+      type: object
+      properties:
+        instant:
+          type: integer
+          format: int64
+        amount:
+          type: number
+    DiscountDetailJson:
+      type: object
+      properties:
+        name:
+          type: string
+        percent:
+          type: number
+        discountAmount:
+          type: number
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DEPRECATED
+        discountedPrice:
+          type: number
+        amount:
+          type: number
+    SubscriptionChargeChangeSchedule:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        changesOn:
+          type: integer
+          format: int64
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        subscriptionId:
+          type: string
+        isDeleted:
+          type: boolean
+        subscriptionVersion:
+          type: integer
+          format: int32
+        chargeIdsStarting:
+          type: string
+        chargeIdsEnding:
+          type: string
+        isProcessed:
+          type: boolean
     OrderJson:
       type: object
       required:
@@ -1891,259 +1689,31 @@ components:
           $ref: '#/components/schemas/OpportunityJson'
         zeppaOutput:
           $ref: '#/components/schemas/OrderCreationCustomizationOutputJson'
-    AmendmentOrderRequest:
-      type: object
-      required:
-      - order
-      properties:
-        order:
-          $ref: '#/components/schemas/AmendmentOrderInput'
-    SubscriptionStatusChangeSchedule:
+    TenantDiscountJson:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
-        changesOn:
-          type: integer
-          format: int64
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-        subscriptionId:
-          type: string
-        isDeleted:
-          type: boolean
-        subscriptionVersion:
-          type: integer
-          format: int32
-        changeEventType:
-          type: string
-          enum:
-          - INVOICE_POSTED
-          - INVOICE_POSTED_V2
-          - INVOICE_GENERATION_FAILED
-          - PAYMENT_PROCESSED
-          - PAYMENT_ATTEMPT_FAILED
-          - PAYMENT_RETRIES_EXHAUSTED
-          - ACCOUNT_PAYMENT_METHOD_SUSPENDED
-          - CREDIT_MEMO_POSTED
-          - REVENUE_RECOGNIZED
-          - PAYMENT_VOIDED
-          - INVOICE_VOIDED
-          - INVOICE_VOIDED_V2
-          - CREDIT_MEMO_VOIDED
-          - REALIZED_GAIN_LOSS_POSTED
-          - ORDER_SUBMITTED
-          - ORDER_EXECUTED
-          - ORDER_APPROVED
-          - ORDER_REVERTED_TO_DRAFT
-          - ORDER_APPROVAL_FLOWS_EVALUATED
-          - SUBSCRIPTION_CREATED
-          - SUBSCRIPTION_UPDATED
-          - SUBSCRIPTION_ACTIVATING
-          - SUBSCRIPTION_ACTIVATED
-          - SUBSCRIPTION_CANCELLING
-          - SUBSCRIPTION_CANCELLED
-          - SUBSCRIPTION_EXPIRING
-          - SUBSCRIPTION_EXPIRED
-          - SUBSCRIPTION_CHARGE_CHANGE
-          - SUBSCRIPTION_DELETED
-          - ESIGNATURE_COMPLETED
-          - ESIGNATURE_VOIDED
-          - ESIGNATURE_PARTIALLY_SIGNED
-          - TASK_SCHEDULED
-          - TASK_COMPLETED
-          - TASK_EXECUTING
-          - HUBSPOT_SYNC_FAILED
-          - SALESFORCE_SYNC_FAILED
-          - SALESFORCE_INVALID_CREDENTIALS
-          - CONTACT_CREATED
-          - CONTACT_UPDATED
-          - CONTACT_DELETED
-          - CHARGE_CREATED
-          - CHARGE_UPDATED
-          - CHARGE_DELETED
-          - PRODUCT_CREATED
-          - PRODUCT_UPDATED
-          - PRODUCT_DELETED
-          - PLAN_CREATED
-          - PLAN_UPDATED
-          - PLAN_DELETED
-          - PLAN_STATUS_CHANGED
-          - USER_CREATED
-          - USER_DISABLED
-          - USER_REACTIVATED
-          - REFUND_GENERATED
-          - ACCOUNTING_PERIOD_REOPENED
-          - ACCOUNTING_PERIOD_CLOSED
-          - INVOICE_PAID
-          - DUNNING_EMAIL_SENT
-          - ACCOUNT_CREATED
-          - ACCOUNT_UPDATED
-          - ACCOUNT_DELETED
-          - INVOICE_RUN_SUCCEEDED
-          - INVOICE_RUN_FAILED
-          - ACCOUNT_CUSTOM_FIELDS_UPDATED
-          - ORDER_CUSTOM_FIELDS_UPDATED
-          - SUBSCRIPTION_CUSTOM_FIELDS_UPDATED
-          - PLAN_CUSTOM_FIELDS_UPDATED
-          - CHARGE_CUSTOM_FIELDS_UPDATED
-          - INVOICE_CUSTOM_FIELDS_UPDATED
-          - SALES_ROOM_CUSTOM_FIELDS_UPDATED
-          - OPPORTUNITY_CUSTOM_FIELDS_UPDATED
-        isProcessed:
-          type: boolean
-    SubscriptionLine:
-      type: object
-      required:
-      - billingCycle
-      - endDate
-      - id
-      - listAmount
-      - listUnitPrice
-      - pricingBlock
-      - renewable
-      - sellAmount
-      - sellUnitPrice
-      - sku
-      - startDate
-      - status
-      properties:
-        id:
-          type: string
-          readOnly: true
-        sku:
-          type: string
-          readOnly: true
-        startDate:
-          type: integer
-          format: int64
-          readOnly: true
-        endDate:
-          type: integer
-          format: int64
-          readOnly: true
-        listUnitPrice:
-          type: number
-          readOnly: true
-        sellUnitPrice:
-          type: number
-          readOnly: true
-        factors:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/Factor'
-        pricingBlock:
-          type: string
-          readOnly: true
-        groupId:
-          type: string
-          readOnly: true
-        listAmount:
-          type: number
-          readOnly: true
-        sellAmount:
-          type: number
-          readOnly: true
-        billingCycle:
-          $ref: '#/components/schemas/RecurrenceJson'
-        renewable:
-          type: boolean
-          readOnly: true
-        customAttributes:
-          type: string
-          readOnly: true
-        status:
-          type: string
-          readOnly: true
-          enum:
-          - PENDING
-          - ACTIVE
-          - EXPIRED
-          - TERMINATED
-          - CANCELLED
-    CancelOrderRequest:
-      type: object
-      required:
-      - order
-      properties:
-        order:
-          $ref: '#/components/schemas/CancelOrderInput'
-    DiscountDetailJson:
-      type: object
-      properties:
-        name:
           type: string
         percent:
           type: number
-        discountAmount:
-          type: number
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
         status:
           type: string
           enum:
           - ACTIVE
           - DEPRECATED
-        discountedPrice:
-          type: number
-        amount:
-          type: number
-    AmendmentOrderInput:
-      type: object
-      required:
-      - listAmount
-      - orderIdentifier
-      - startDate
-      - subscriptionId
-      - subscriptionVersion
-      - totalAmount
-      properties:
-        subscriptionId:
-          type: string
-          readOnly: true
-        subscriptionVersion:
-          type: integer
-          format: int32
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-        orderIdentifier:
-          type: string
-          readOnly: true
-        startDate:
-          type: integer
-          format: int64
-          readOnly: true
-        listAmount:
-          type: number
-          readOnly: true
-        totalAmount:
-          type: number
-          readOnly: true
-        submittedBy:
-          type: string
-          readOnly: true
-        modificationLineItems:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/ModificationLineItem'
-    OrderCreationCustomizationOutputJson:
+    RuleActionPerformedJson:
       type: object
       properties:
-        customizationRunSkipped:
-          type: boolean
-        customizationDefinitionMissing:
-          type: boolean
-        ruleTraces:
-          type: array
-          items:
-            $ref: '#/components/schemas/RuleTraceJson'
+        action:
+          type: string
+        actionMessage:
+          type: string
     OrderPeriodMetadata:
       type: object
       required:
@@ -2163,6 +1733,36 @@ components:
           readOnly: true
           additionalProperties:
             type: object
+    PaginatedResultSubscriptionHead:
+      type: object
+      required:
+      - count
+      - data
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            type: object
+        count:
+          type: integer
+          format: int32
+          readOnly: true
+        pageToken:
+          type: string
+          readOnly: true
+    PriceTierJson:
+      type: object
+      required:
+      - amount
+      - untilQuantity
+      properties:
+        untilQuantity:
+          type: string
+        amount:
+          type: number
+        overage:
+          type: number
     CustomFieldValue:
       type: object
       properties:
@@ -2203,68 +1803,6 @@ components:
           - SYSTEM
         defaultValue:
           $ref: '#/components/schemas/CustomFieldDefault'
-    RuleActionPerformedJson:
-      type: object
-      properties:
-        action:
-          type: string
-        actionMessage:
-          type: string
-    TenantDiscountJson:
-      type: object
-      properties:
-        id:
-          type: string
-        percent:
-          type: number
-        name:
-          type: string
-        type:
-          type: string
-        description:
-          type: string
-        status:
-          type: string
-          enum:
-          - ACTIVE
-          - DEPRECATED
-    OrderLineRuleWarningsJson:
-      type: object
-      properties:
-        lineIdentifier:
-          type: string
-        warnings:
-          type: array
-          items:
-            type: string
-    OrderTerms:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        templateGroupId:
-          type: string
-        templateGroupVersion:
-          type: integer
-          format: int32
-        orderId:
-          type: string
-        levelType:
-          type: string
-          enum:
-          - ORDER
-          - PLAN
-        planIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        templateId:
-          type: string
-          readOnly: true
-        deleted:
-          type: boolean
     Subscription:
       type: object
       required:
@@ -2354,6 +1892,468 @@ components:
           readOnly: true
           items:
             $ref: '#/components/schemas/SubscriptionLine'
+    SubscriptionJson:
+      type: object
+      required:
+      - accountId
+      - billingCycle
+      - charges
+      - creationTime
+      - endDate
+      - entityId
+      - orders
+      - startDate
+      - state
+      - termLength
+      - version
+      properties:
+        id:
+          type: string
+        version:
+          type: integer
+          format: int32
+        entityId:
+          type: string
+        externalId:
+          type: string
+        accountId:
+          type: string
+        shippingContactId:
+          type: string
+        billingContactId:
+          type: string
+        state:
+          type: string
+          enum:
+          - ACTIVE
+          - EXPIRED
+          - CANCELLED
+          - PENDING
+          - PENDING_CANCELLATION
+        startDate:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+        canceledDate:
+          type: integer
+          format: int64
+        termLength:
+          $ref: '#/components/schemas/RecurrenceJson'
+        billingCycle:
+          $ref: '#/components/schemas/RecurrenceJson'
+        paymentTerm:
+          type: string
+        billingTerm:
+          type: string
+          enum:
+          - UP_FRONT
+          - IN_ARREARS
+        charges:
+          type: array
+          items:
+            $ref: '#/components/schemas/SubscriptionChargeJson'
+        predefinedDiscounts:
+          type: array
+          items:
+            $ref: '#/components/schemas/TenantDiscountJson'
+        orders:
+          type: array
+          items:
+            type: string
+        purchaseOrders:
+          type: array
+          items:
+            $ref: '#/components/schemas/PurchaseOrder'
+        purchaseOrderRequiredForInvoicing:
+          type: boolean
+        creationTime:
+          type: integer
+          format: int64
+        rampInterval:
+          type: array
+          items:
+            type: integer
+            format: int64
+        renewedFromSubscriptionId:
+          type: string
+        renewedFromDate:
+          type: integer
+          format: int64
+        renewedToSubscriptionId:
+          type: string
+        renewedToDate:
+          type: integer
+          format: int64
+        restructuredFromSubscriptionId:
+          type: string
+        restructuredFromDate:
+          type: integer
+          format: int64
+        restructuredToSubscriptionId:
+          type: string
+        restructuredToDate:
+          type: integer
+          format: int64
+        autoRenew:
+          type: boolean
+        activationDate:
+          type: integer
+          format: int64
+        name:
+          type: string
+        customFields:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/CustomFieldValue'
+    OrderTerms:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        templateGroupId:
+          type: string
+        templateGroupVersion:
+          type: integer
+          format: int32
+        orderId:
+          type: string
+        levelType:
+          type: string
+          enum:
+          - ORDER
+          - PLAN
+        planIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        templateId:
+          type: string
+          readOnly: true
+        deleted:
+          type: boolean
+    OrderLineRuleWarningsJson:
+      type: object
+      properties:
+        lineIdentifier:
+          type: string
+        warnings:
+          type: array
+          items:
+            type: string
+    DiscountJson:
+      type: object
+      properties:
+        name:
+          type: string
+        percent:
+          type: number
+        discountAmount:
+          type: number
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DEPRECATED
+        discountedPrice:
+          type: number
+    CustomPredefinedTemplateOnOrder:
+      type: object
+      properties:
+        id:
+          type: string
+        orderId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        content:
+          type: string
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
+    RenewalOrderInput:
+      type: object
+      required:
+      - billingContactId
+      - billingCycle
+      - billingTerm
+      - endDate
+      - listAmount
+      - orderIdentifier
+      - paymentTerm
+      - shippingContactId
+      - subscriptionId
+      - subscriptionVersion
+      - totalAmount
+      properties:
+        name:
+          type: string
+          readOnly: true
+        subscriptionId:
+          type: string
+          readOnly: true
+        subscriptionVersion:
+          type: integer
+          format: int32
+          readOnly: true
+        orderIdentifier:
+          type: string
+          readOnly: true
+        shippingContactId:
+          type: string
+          readOnly: true
+        billingContactId:
+          type: string
+          readOnly: true
+        paymentTerm:
+          type: string
+          readOnly: true
+        endDate:
+          type: integer
+          format: int64
+          readOnly: true
+        billingAnchorDate:
+          type: integer
+          format: int64
+          readOnly: true
+        periodMetadata:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/OrderPeriodMetadata'
+        billingCycle:
+          $ref: '#/components/schemas/RecurrenceJson'
+        billingTerm:
+          type: string
+          readOnly: true
+          enum:
+          - UP_FRONT
+          - IN_ARREARS
+        listAmount:
+          type: number
+          readOnly: true
+        totalAmount:
+          type: number
+          readOnly: true
+        submittedBy:
+          type: string
+          readOnly: true
+        purchaseOrderRequiredForInvoicing:
+          type: boolean
+          readOnly: true
+        purchaseOrderNumber:
+          type: string
+          readOnly: true
+        renewalLineItems:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/RenewalLineItemInput'
+    OrderLineActionsPerformedJson:
+      type: object
+      properties:
+        lineIdentifier:
+          type: string
+        actionsPerformed:
+          type: array
+          items:
+            $ref: '#/components/schemas/RuleActionPerformedJson'
+    RenewalLineItemInput:
+      type: object
+      required:
+      - endDate
+      - lineItemIdentifier
+      - listAmount
+      - listUnitPrice
+      - pricingBlock
+      - sellAmount
+      - sellUnitPrice
+      - sku
+      - startDate
+      properties:
+        lineItemIdentifier:
+          type: string
+          readOnly: true
+        sku:
+          type: string
+          readOnly: true
+        groupId:
+          type: string
+          readOnly: true
+        startDate:
+          type: integer
+          format: int64
+          readOnly: true
+        endDate:
+          type: integer
+          format: int64
+          readOnly: true
+        listUnitPrice:
+          type: number
+          readOnly: true
+        sellUnitPrice:
+          type: number
+          readOnly: true
+        sellAmount:
+          type: number
+          readOnly: true
+        listAmount:
+          type: number
+          readOnly: true
+        factors:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Factor'
+        pricingBlock:
+          type: string
+          readOnly: true
+        renewable:
+          type: boolean
+          readOnly: true
+        billingCycle:
+          $ref: '#/components/schemas/RecurrenceJson'
+        customAttributes:
+          type: string
+          readOnly: true
+        renewedFromSubscriptionLineId:
+          type: string
+          readOnly: true
+    AmendmentOrderInput:
+      type: object
+      required:
+      - listAmount
+      - orderIdentifier
+      - startDate
+      - subscriptionId
+      - subscriptionVersion
+      - totalAmount
+      properties:
+        subscriptionId:
+          type: string
+          readOnly: true
+        subscriptionVersion:
+          type: integer
+          format: int32
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        orderIdentifier:
+          type: string
+          readOnly: true
+        startDate:
+          type: integer
+          format: int64
+          readOnly: true
+        listAmount:
+          type: number
+          readOnly: true
+        totalAmount:
+          type: number
+          readOnly: true
+        submittedBy:
+          type: string
+          readOnly: true
+        modificationLineItems:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/ModificationLineItem'
+    CancelOrderRequest:
+      type: object
+      required:
+      - order
+      properties:
+        order:
+          $ref: '#/components/schemas/CancelOrderInput'
+    Factor:
+      type: object
+      required:
+      - id
+      - name
+      - value
+      properties:
+        name:
+          type: string
+          readOnly: true
+        id:
+          type: string
+          readOnly: true
+        value:
+          type: number
+          readOnly: true
+    OpportunityJson:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        entityId:
+          type: string
+        type:
+          type: string
+        stage:
+          type: string
+        crmId:
+          type: string
+        accountId:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        opportunityCrmType:
+          type: string
+          enum:
+          - SALESFORCE
+          - HUBSPOT
+        isClosed:
+          type: boolean
+        primaryOrderId:
+          type: string
+        opportunityId:
+          type: string
+        currency:
+          type: string
+        customFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/CustomFieldEntry'
+    TenantDiscountLineItemJson:
+      type: object
+      properties:
+        id:
+          type: string
+        percent:
+          type: number
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DEPRECATED
+        amount:
+          type: number
   requestBodies:
     postInvoicesForBulkInvoiceRunBody:
       content:

@@ -80,30 +80,6 @@ paths:
                 $ref: '#/components/schemas/PredefinedReportDefsJson'
 components:
   schemas:
-    PredefinedReportDefJson:
-      type: object
-      properties:
-        reportId:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        filters:
-          type: array
-          items:
-            $ref: '#/components/schemas/PredefinedReportParamObject'
-        chart:
-          $ref: '#/components/schemas/PredefinedReportDefChartJson'
-    ReportDuration:
-      type: object
-      properties:
-        start:
-          type: integer
-          format: int64
-        end:
-          type: integer
-          format: int64
     PredefinedReportParamObject:
       type: object
       required:
@@ -134,6 +110,29 @@ components:
           type: object
         optional:
           type: boolean
+    ReportJobResponse:
+      type: object
+      properties:
+        reportId:
+          type: string
+        reportRunId:
+          type: string
+        status:
+          type: string
+          enum:
+          - OK
+          - FAILED
+        uri:
+          type: string
+    ReportDuration:
+      type: object
+      properties:
+        start:
+          type: integer
+          format: int64
+        end:
+          type: integer
+          format: int64
     PredefinedReportDefChartJson:
       type: object
       properties:
@@ -157,27 +156,6 @@ components:
           type: string
         showLegend:
           type: boolean
-    PredefinedReportDefsJson:
-      type: object
-      properties:
-        reportDefs:
-          type: array
-          items:
-            $ref: '#/components/schemas/PredefinedReportDefJson'
-    ReportJobResponse:
-      type: object
-      properties:
-        reportId:
-          type: string
-        reportRunId:
-          type: string
-        status:
-          type: string
-          enum:
-          - OK
-          - FAILED
-        uri:
-          type: string
     PredefinedReportJson:
       type: object
       properties:
@@ -192,6 +170,28 @@ components:
         reportDate:
           type: integer
           format: int64
+    PredefinedReportDefJson:
+      type: object
+      properties:
+        reportId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredefinedReportParamObject'
+        chart:
+          $ref: '#/components/schemas/PredefinedReportDefChartJson'
+    PredefinedReportDefsJson:
+      type: object
+      properties:
+        reportDefs:
+          type: array
+          items:
+            $ref: '#/components/schemas/PredefinedReportDefJson'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

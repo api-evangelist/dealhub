@@ -289,6 +289,35 @@ paths:
                 $ref: '#/components/schemas/CreditMemoBalanceJson'
 components:
   schemas:
+    CreditMemoLineItemJson:
+      type: object
+      required:
+      - tenantId
+      properties:
+        tenantId:
+          type: string
+        chargeId:
+          type: string
+        amount:
+          type: number
+        taxAmount:
+          type: number
+        functionalAmount:
+          type: number
+        functionalTaxAmount:
+          type: number
+        startDate:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
     CreditMemoJson:
       type: object
       required:
@@ -354,48 +383,19 @@ components:
           format: int64
         voidedNote:
           type: string
-    CreditMemoLineItemJson:
+    CreditMemoBalanceJson:
       type: object
-      required:
-      - tenantId
       properties:
-        tenantId:
+        accountId:
           type: string
-        chargeId:
+        creditMemoId:
           type: string
-        amount:
+          format: uuid
+        balance:
           type: number
-        taxAmount:
-          type: number
-        functionalAmount:
-          type: number
-        functionalTaxAmount:
-          type: number
-        startDate:
-          type: integer
-          format: int64
-        endDate:
-          type: integer
-          format: int64
-        createdOn:
-          type: integer
-          format: int64
         updatedOn:
           type: integer
           format: int64
-    TenantCreditMemoConfigurationJson:
-      type: object
-      properties:
-        creditMemoNumberPrefix:
-          type: string
-        creditMemoNumberScheme:
-          type: string
-        creditMemoNumberLength:
-          type: integer
-          format: int32
-        creditMemoNextNumber:
-          type: integer
-          format: int32
     VoidCreditMemoRequest:
       type: object
       required:
@@ -422,6 +422,19 @@ components:
           type: string
           format: uuid
           readOnly: true
+    TenantCreditMemoConfigurationJson:
+      type: object
+      properties:
+        creditMemoNumberPrefix:
+          type: string
+        creditMemoNumberScheme:
+          type: string
+        creditMemoNumberLength:
+          type: integer
+          format: int32
+        creditMemoNextNumber:
+          type: integer
+          format: int32
     StandaloneCreditMemoRequest:
       type: object
       required:
@@ -466,19 +479,6 @@ components:
           type: integer
           format: int64
         endDate:
-          type: integer
-          format: int64
-    CreditMemoBalanceJson:
-      type: object
-      properties:
-        accountId:
-          type: string
-        creditMemoId:
-          type: string
-          format: uuid
-        balance:
-          type: number
-        updatedOn:
           type: integer
           format: int64
     CreditMemoLineItemRequestJson:

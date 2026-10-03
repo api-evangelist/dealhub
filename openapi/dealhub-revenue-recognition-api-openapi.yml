@@ -232,108 +232,6 @@ paths:
           description: successful operation
 components:
   schemas:
-    RecognitionEventCompletion:
-      type: object
-      required:
-      - unitOfCompletion
-      properties:
-        tenantId:
-          type: string
-        entityId:
-          type: string
-        subscriptionId:
-          type: string
-        chargeId:
-          type: string
-        aliasId:
-          type: string
-        accountingPeriodId:
-          type: string
-        unitOfCompletion:
-          type: number
-        status:
-          type: string
-          enum:
-          - ACCEPTED
-          - PROCESSED
-        arrivedOn:
-          type: integer
-          format: int64
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-        deleted:
-          type: boolean
-    BulkRevenueRecognition:
-      type: object
-      properties:
-        entityId:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        targetDate:
-          type: integer
-          format: int64
-        id:
-          type: string
-        bulkRevenueRecognitionId:
-          type: string
-        status:
-          type: string
-          enum:
-          - QUEUED
-          - CREATED
-          - PROCESSING
-          - FAILED
-          - COMPLETED
-        phase:
-          type: string
-          enum:
-          - REVENUE_RECOGNITION_NOT_STARTED
-          - NO_ACCOUNTING_PERIODS_FOUND
-          - REVENUE_RECOGNIZING
-          - REVENUE_RECOGNIZED
-          - ACCOUNTING_PERIOD_CLOSING
-          - JOURNAL_ENTRIES_CREATING
-          - JOURNAL_ENTRIES_CREATED
-          - ACCOUNTING_PERIOD_CLOSED
-        failureReason:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-    BulkRevenueRecognitionItem:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        bulkRevenueRecognitionId:
-          type: string
-        accountingPeriodId:
-          type: string
-        isRecognized:
-          type: boolean
-        journalEntriesGenerated:
-          type: boolean
-        isClosed:
-          type: boolean
-        failureReason:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
     RecognitionRule:
       type: object
       properties:
@@ -383,6 +281,65 @@ components:
           type: boolean
         id:
           type: string
+    RecognitionEventCompletion:
+      type: object
+      required:
+      - unitOfCompletion
+      properties:
+        tenantId:
+          type: string
+        entityId:
+          type: string
+        subscriptionId:
+          type: string
+        chargeId:
+          type: string
+        aliasId:
+          type: string
+        accountingPeriodId:
+          type: string
+        unitOfCompletion:
+          type: number
+        status:
+          type: string
+          enum:
+          - ACCEPTED
+          - PROCESSED
+        arrivedOn:
+          type: integer
+          format: int64
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        deleted:
+          type: boolean
+    BulkRevenueRecognitionItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        bulkRevenueRecognitionId:
+          type: string
+        accountingPeriodId:
+          type: string
+        isRecognized:
+          type: boolean
+        journalEntriesGenerated:
+          type: boolean
+        isClosed:
+          type: boolean
+        failureReason:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
     BulkRevenueRecognitionInput:
       type: object
       properties:
@@ -393,6 +350,49 @@ components:
         description:
           type: string
         targetDate:
+          type: integer
+          format: int64
+    BulkRevenueRecognition:
+      type: object
+      properties:
+        entityId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        targetDate:
+          type: integer
+          format: int64
+        id:
+          type: string
+        bulkRevenueRecognitionId:
+          type: string
+        status:
+          type: string
+          enum:
+          - QUEUED
+          - CREATED
+          - PROCESSING
+          - FAILED
+          - COMPLETED
+        phase:
+          type: string
+          enum:
+          - REVENUE_RECOGNITION_NOT_STARTED
+          - NO_ACCOUNTING_PERIODS_FOUND
+          - REVENUE_RECOGNIZING
+          - REVENUE_RECOGNIZED
+          - ACCOUNTING_PERIOD_CLOSING
+          - JOURNAL_ENTRIES_CREATING
+          - JOURNAL_ENTRIES_CREATED
+          - ACCOUNTING_PERIOD_CLOSED
+        failureReason:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
           type: integer
           format: int64
   requestBodies:

@@ -166,7 +166,18 @@ paths:
                 items:
                   $ref: '#/components/schemas/Message'
 components:
+  requestBodies:
+    generateZeppaArtifactBody:
+      content:
+        text/plain:
+          schema:
+            type: string
   schemas:
+    Type:
+      type: object
+      properties:
+        typeName:
+          type: string
     Message:
       type: object
       required:
@@ -184,6 +195,21 @@ components:
           type: integer
           format: int64
           readOnly: true
+    MediaType:
+      type: object
+      properties:
+        type:
+          type: string
+        subtype:
+          type: string
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+        wildcardType:
+          type: boolean
+        wildcardSubtype:
+          type: boolean
     OutboundEvent:
       type: object
       properties:
@@ -204,32 +230,6 @@ components:
           $ref: '#/components/schemas/Type'
         reconnectDelaySet:
           type: boolean
-    Type:
-      type: object
-      properties:
-        typeName:
-          type: string
-    MediaType:
-      type: object
-      properties:
-        type:
-          type: string
-        subtype:
-          type: string
-        parameters:
-          type: object
-          additionalProperties:
-            type: string
-        wildcardType:
-          type: boolean
-        wildcardSubtype:
-          type: boolean
-  requestBodies:
-    generateZeppaArtifactBody:
-      content:
-        text/plain:
-          schema:
-            type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

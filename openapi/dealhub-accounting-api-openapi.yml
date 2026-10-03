@@ -179,71 +179,6 @@ paths:
                   $ref: '#/components/schemas/LedgerAccount'
 components:
   schemas:
-    AccountingEvent:
-      type: object
-      properties:
-        id:
-          type: string
-        entityId:
-          type: string
-        accountingDate:
-          type: integer
-          format: int64
-        accountId:
-          type: string
-        subscriptionId:
-          type: string
-        sourceTransactionType:
-          type: string
-          enum:
-          - INVOICE_POSTED
-          - PAYMENT_PROCESSED
-          - CREDIT_MEMO_POSTED
-          - REVENUE_RECOGNIZED
-          - PAYMENT_VOIDED
-          - INVOICE_VOIDED
-          - REALIZED_GAIN_LOSS_POSTED
-          - REFUND
-        sourceTransactionId:
-          type: string
-        sourceEventId:
-          type: string
-        sourceEventTimestamp:
-          type: integer
-          format: int64
-        sourceEventPayload:
-          $ref: '#/components/schemas/ByteBuffer'
-        sourceEventMetadata:
-          type: object
-          additionalProperties:
-            type: string
-        sourceEventSequenceNumber:
-          type: integer
-          format: int64
-    ByteBuffer:
-      type: object
-      properties:
-        short:
-          type: integer
-          format: int32
-        char:
-          type: string
-        int:
-          type: integer
-          format: int32
-        long:
-          type: integer
-          format: int64
-        float:
-          type: number
-          format: float
-        double:
-          type: number
-          format: double
-        direct:
-          type: boolean
-        readOnly:
-          type: boolean
     AccountingPeriod:
       type: object
       properties:
@@ -292,6 +227,122 @@ components:
           type: string
         entityId:
           type: string
+    AccountingEventPaginatedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountingEvent'
+        count:
+          type: integer
+          format: int32
+        pageToken:
+          type: string
+        totalCount:
+          type: integer
+          format: int32
+    ByteBuffer:
+      type: object
+      properties:
+        short:
+          type: integer
+          format: int32
+        char:
+          type: string
+        int:
+          type: integer
+          format: int32
+        long:
+          type: integer
+          format: int64
+        float:
+          type: number
+          format: float
+        double:
+          type: number
+          format: double
+        direct:
+          type: boolean
+        readOnly:
+          type: boolean
+    AccountingEvent:
+      type: object
+      properties:
+        id:
+          type: string
+        entityId:
+          type: string
+        accountingDate:
+          type: integer
+          format: int64
+        accountId:
+          type: string
+        subscriptionId:
+          type: string
+        sourceTransactionType:
+          type: string
+          enum:
+          - INVOICE_POSTED
+          - PAYMENT_PROCESSED
+          - CREDIT_MEMO_POSTED
+          - REVENUE_RECOGNIZED
+          - PAYMENT_VOIDED
+          - INVOICE_VOIDED
+          - REALIZED_GAIN_LOSS_POSTED
+          - REFUND
+        sourceTransactionId:
+          type: string
+        sourceEventId:
+          type: string
+        sourceEventTimestamp:
+          type: integer
+          format: int64
+        sourceEventPayload:
+          $ref: '#/components/schemas/ByteBuffer'
+        sourceEventMetadata:
+          type: object
+          additionalProperties:
+            type: string
+        sourceEventSequenceNumber:
+          type: integer
+          format: int64
+    UserGroupJson:
+      type: object
+      properties:
+        id:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        description:
+          type: string
+        users:
+          type: array
+          items:
+            type: string
+        externalId:
+          type: string
+    AccountingPeriodCalculation:
+      type: object
+      properties:
+        deferredRevenueStartingBalance:
+          type: number
+        deferredRevenueEndingBalance:
+          type: number
+        additionalRevenue:
+          type: number
+        recognizedRevenue:
+          type: number
+        unrecognizedRevenue:
+          type: number
+        unrecognizedTransactionCount:
+          type: integer
+          format: int32
     LedgerAccount:
       type: object
       properties:
@@ -328,26 +379,36 @@ components:
           type: boolean
         id:
           type: string
-    UserGroupJson:
+    ApprovalSegmentJson:
       type: object
       properties:
         id:
           type: string
-        entityIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
         name:
           type: string
         description:
           type: string
-        users:
-          type: array
-          items:
-            type: string
-        externalId:
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    EntityRef:
+      type: object
+      required:
+      - entityId
+      - name
+      properties:
+        entityId:
           type: string
+          readOnly: true
+        displayId:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
     UserJson:
       type: object
       properties:
@@ -423,67 +484,6 @@ components:
           type: string
         eventObjectId:
           type: string
-    EntityRef:
-      type: object
-      required:
-      - entityId
-      - name
-      properties:
-        entityId:
-          type: string
-          readOnly: true
-        displayId:
-          type: string
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-    AccountingPeriodCalculation:
-      type: object
-      properties:
-        deferredRevenueStartingBalance:
-          type: number
-        deferredRevenueEndingBalance:
-          type: number
-        additionalRevenue:
-          type: number
-        recognizedRevenue:
-          type: number
-        unrecognizedRevenue:
-          type: number
-        unrecognizedTransactionCount:
-          type: integer
-          format: int32
-    AccountingEventPaginatedResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountingEvent'
-        count:
-          type: integer
-          format: int32
-        pageToken:
-          type: string
-        totalCount:
-          type: integer
-          format: int32
-    ApprovalSegmentJson:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

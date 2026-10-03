@@ -183,6 +183,17 @@ components:
         rowNumber:
           type: integer
           format: int64
+    CrmFieldMappingImportPreview:
+      type: object
+      properties:
+        id:
+          type: string
+        uploadedBy:
+          type: string
+        crmFieldMappingChanges:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateCrmFieldMappingDetail'
     CrmFieldMappingImportDataJson:
       type: object
       properties:
@@ -200,17 +211,6 @@ components:
         updatedOn:
           type: integer
           format: int64
-    CrmFieldMappingImportPreview:
-      type: object
-      properties:
-        id:
-          type: string
-        uploadedBy:
-          type: string
-        crmFieldMappingChanges:
-          type: array
-          items:
-            $ref: '#/components/schemas/UpdateCrmFieldMappingDetail'
   requestBodies:
     uploadApprovalMatrixCSV:
       content:

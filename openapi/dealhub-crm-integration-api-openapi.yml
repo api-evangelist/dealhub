@@ -358,36 +358,26 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    CustomField:
-      type: object
-      properties:
-        name:
-          type: string
-          maxLength: 200
-          description: The name of the custom field, which must be pre-configured in the DealHub version.
-        value:
-          oneOf:
-          - type: array
-            items:
-              type: string
-              maxLength: 8192
-          - type: number
-          - type: array
-            items:
-              type: string
-          description: 'The value of the custom field. The format depends on the field type configured in DealHub:
-
-
-            * `Text`: Must be sent as an array containing a single string, for example, `["renewal_opportunity"]`. Sending a plain string will not be accepted.
-
-            * `Text list`: An array of one or more string values.
-
-            * `Numeric`: A single numeric value.
-
-            * `UTC`: A date string in `yyyy-mm-dd` format.'
-      required:
-      - name
-      - value
+    CreateQuoteRequest:
+      allOf:
+      - $ref: '#/components/schemas/OpportunityInfo'
+      - type: object
+        properties:
+          dealhub_user_id:
+            type: string
+            maxLength: 16
+            description: ID of the user in the DealHub system (as returned from the Authentication request).
+          external_opportunity_id:
+            type: string
+            maxLength: 50
+            description: CRM opportunity ID.
+          version_id:
+            type: string
+            description: For admin use only. DealHub version ID. If not specified, the system will use the active version.
+            maxLength: 16
+        required:
+        - dealhub_user_id
+        - external_opportunity_id
     Contact:
       type: object
       properties:
@@ -432,15 +422,93 @@ components:
       - first_name
       - last_name
       - email
-    ViewOpportunitiesRequest:
+    Address:
       type: object
       properties:
-        dealhub_user_id:
+        street:
+          type: string
+          maxLength: 128
+          description: Street name.
+        city:
+          type: string
+          maxLength: 32
+          description: City name.
+        state:
+          type: string
+          maxLength: 32
+          description: State name.
+        country:
+          type: string
+          maxLength: 32
+          description: Country name.
+        postal_code:
           type: string
           maxLength: 16
-          description: ID of user in the DealHub system (as returned from Authentication request).
+          description: Postal code.
+    UserInformation:
+      type: object
+      properties:
+        external_user_id:
+          type: string
+          maxLength: 200
+          description: CRM user ID (employee of the organization that integrates with DealHub).
+        login:
+          type: string
+          maxLength: 100
+          description: Login of the user. If a new user is created and login is not provided, the email will be used as the login.
+        email:
+          type: string
+          format: email
+          maxLength: 100
+          description: Primary email of the user.
+        name:
+          type: string
+          maxLength: 300
+          description: User's full name.
+        position:
+          type: string
+          maxLength: 300
+          description: The role of the user in the organization (job title).
+        phone:
+          type: string
+          maxLength: 50
+          description: User's phone number.
+        mobile:
+          type: string
+          maxLength: 100
+          description: User's mobile phone number.
+        company:
+          type: string
+          maxLength: 100
+          description: User's company name.
+        street:
+          type: string
+          maxLength: 128
+          description: Street name.
+        city:
+          type: string
+          maxLength: 32
+          description: City name.
+        state:
+          type: string
+          maxLength: 32
+          description: State name.
+        country:
+          type: string
+          maxLength: 32
+          description: Country name.
+        postal_code:
+          type: string
+          maxLength: 16
+          description: Postal code.
+        user_manager_login:
+          type: string
+          maxLength: 100
+          description: Login of the user's manager.
       required:
-      - dealhub_user_id
+      - external_user_id
+      - email
+      - name
     OpenQuoteRequest:
       type: object
       properties:
@@ -462,6 +530,17 @@ components:
       - dealhub_user_id
       - dealhub_quote_id
       - external_opportunity_id
+    RedirectResponse:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          description: The URL to which the user's browser should be redirected.
+        errors:
+          type: array
+          items:
+            type: string
     OpportunityInfo:
       type: object
       description: A schema representing the data that can be sent to create or update an opportunity and its related quote.
@@ -531,90 +610,22 @@ components:
       - customer_name
       - geo_code
       - currency
-    UserInformation:
+    ViewOpportunitiesRequest:
       type: object
       properties:
-        external_user_id:
-          type: string
-          maxLength: 200
-          description: CRM user ID (employee of the organization that integrates with DealHub).
-        login:
-          type: string
-          maxLength: 100
-          description: Login of the user. If a new user is created and login is not provided, the email will be used as the login.
-        email:
-          type: string
-          format: email
-          maxLength: 100
-          description: Primary email of the user.
-        name:
-          type: string
-          maxLength: 300
-          description: User's full name.
-        position:
-          type: string
-          maxLength: 300
-          description: The role of the user in the organization (job title).
-        phone:
-          type: string
-          maxLength: 50
-          description: User's phone number.
-        mobile:
-          type: string
-          maxLength: 100
-          description: User's mobile phone number.
-        company:
-          type: string
-          maxLength: 100
-          description: User's company name.
-        street:
-          type: string
-          maxLength: 128
-          description: Street name.
-        city:
-          type: string
-          maxLength: 32
-          description: City name.
-        state:
-          type: string
-          maxLength: 32
-          description: State name.
-        country:
-          type: string
-          maxLength: 32
-          description: Country name.
-        postal_code:
+        dealhub_user_id:
           type: string
           maxLength: 16
-          description: Postal code.
-        user_manager_login:
-          type: string
-          maxLength: 100
-          description: Login of the user's manager.
+          description: ID of user in the DealHub system (as returned from Authentication request).
       required:
-      - external_user_id
-      - email
-      - name
-    CreateQuoteRequest:
-      allOf:
-      - $ref: '#/components/schemas/OpportunityInfo'
-      - type: object
-        properties:
-          dealhub_user_id:
-            type: string
-            maxLength: 16
-            description: ID of the user in the DealHub system (as returned from the Authentication request).
-          external_opportunity_id:
-            type: string
-            maxLength: 50
-            description: CRM opportunity ID.
-          version_id:
-            type: string
-            description: For admin use only. DealHub version ID. If not specified, the system will use the active version.
-            maxLength: 16
-        required:
-        - dealhub_user_id
-        - external_opportunity_id
+      - dealhub_user_id
+    ErrorResponse:
+      type: object
+      description: A generic error response. The specific message will vary based on the context.
+      properties:
+        message:
+          type: string
+          example: Unauthenticated
     AuthenticationRequest:
       type: object
       properties:
@@ -623,6 +634,49 @@ components:
           description: Information required to create a user in DealHub.
       required:
       - user_information
+    AuthenticationResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: A one-time access token, which expires after 60 seconds.
+        dealhub_user_id:
+          type: string
+          description: The unique identifier for the user in DealHub.
+        errors:
+          type: array
+          items:
+            type: string
+    CustomField:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 200
+          description: The name of the custom field, which must be pre-configured in the DealHub version.
+        value:
+          oneOf:
+          - type: array
+            items:
+              type: string
+              maxLength: 8192
+          - type: number
+          - type: array
+            items:
+              type: string
+          description: 'The value of the custom field. The format depends on the field type configured in DealHub:
+
+
+            * `Text`: Must be sent as an array containing a single string, for example, `["renewal_opportunity"]`. Sending a plain string will not be accepted.
+
+            * `Text list`: An array of one or more string values.
+
+            * `Numeric`: A single numeric value.
+
+            * `UTC`: A date string in `yyyy-mm-dd` format.'
+      required:
+      - name
+      - value
     ViewQuotesRequest:
       type: object
       properties:
@@ -639,60 +693,6 @@ components:
       required:
       - dealhub_user_id
       - external_opportunity_id
-    Address:
-      type: object
-      properties:
-        street:
-          type: string
-          maxLength: 128
-          description: Street name.
-        city:
-          type: string
-          maxLength: 32
-          description: City name.
-        state:
-          type: string
-          maxLength: 32
-          description: State name.
-        country:
-          type: string
-          maxLength: 32
-          description: Country name.
-        postal_code:
-          type: string
-          maxLength: 16
-          description: Postal code.
-    RedirectResponse:
-      type: object
-      properties:
-        url:
-          type: string
-          format: uri
-          description: The URL to which the user's browser should be redirected.
-        errors:
-          type: array
-          items:
-            type: string
-    AuthenticationResponse:
-      type: object
-      properties:
-        access_token:
-          type: string
-          description: A one-time access token, which expires after 60 seconds.
-        dealhub_user_id:
-          type: string
-          description: The unique identifier for the user in DealHub.
-        errors:
-          type: array
-          items:
-            type: string
-    ErrorResponse:
-      type: object
-      description: A generic error response. The specific message will vary based on the context.
-      properties:
-        message:
-          type: string
-          example: Unauthenticated
   securitySchemes:
     secretToken:
       type: http

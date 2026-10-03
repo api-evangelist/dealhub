@@ -422,6 +422,52 @@ paths:
           description: Forbidden. Invalid or missing authentication token.
 components:
   schemas:
+    Quote:
+      type: object
+      properties:
+        dealhub_quote_id:
+          type: string
+        status:
+          type: string
+        quote_upgrade_required:
+          type: boolean
+        info:
+          $ref: '#/components/schemas/QuoteInfo'
+        summary:
+          $ref: '#/components/schemas/QuoteSummary'
+        deal_room_info:
+          $ref: '#/components/schemas/DealRoomInfo'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItem'
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaybookAnswer'
+        approvals:
+          type: array
+          items:
+            $ref: '#/components/schemas/Approval'
+    Signer:
+      type: object
+      properties:
+        company_name:
+          type: string
+          description: Company name of the signer.
+        signee_name:
+          type: string
+          description: Name of the signer.
+        signee_title:
+          type: string
+          description: Title of the signer.
+        signature_date:
+          type: string
+          format: date-time
+          description: Date when the user signed the contract via the DealRoom.
+        ordinal:
+          type: integer
+          description: The order of the signer in the list of signers.
     Approval:
       type: object
       properties:
@@ -453,97 +499,6 @@ components:
         reviewer_comment:
           type: string
           description: Note added by reviewer.
-    OpportunityOwner:
-      type: object
-      description: Details of opportunity owner.
-      required:
-      - external_user_id
-      - email
-      - name
-      properties:
-        external_user_id:
-          type: string
-          maxLength: 200
-          description: CRM user ID (employee of the organization that integrates with DealHub).
-        login:
-          type: string
-          maxLength: 100
-          description: Login of the user.
-        email:
-          type: string
-          format: email
-          maxLength: 100
-          description: Primary email of the user.
-        name:
-          type: string
-          maxLength: 300
-          description: User full name.
-        position:
-          type: string
-          maxLength: 300
-          description: The role of the user in the organization (job title).
-        phone:
-          type: string
-          maxLength: 50
-          description: User phone number.
-        mobile:
-          type: string
-          maxLength: 100
-          description: User mobile phone number.
-        fax:
-          type: string
-          maxLength: 100
-          description: User fax number.
-        company:
-          type: string
-          maxLength: 100
-          description: User company name.
-        street:
-          type: string
-          maxLength: 128
-          description: Street name.
-        city:
-          type: string
-          maxLength: 32
-          description: City name.
-        state:
-          type: string
-          maxLength: 32
-          description: State name.
-        country:
-          type: string
-          maxLength: 32
-          description: Country name.
-        postal_code:
-          type: string
-          maxLength: 16
-          description: Postal code.
-        user_manager_login:
-          type: string
-          maxLength: 100
-          description: Login of user manager.
-    QuoteSummary:
-      type: object
-      properties:
-        currency:
-          type: string
-          description: Quote currency (ISO-4217 format).
-        total_list_price:
-          type: number
-          format: float
-          description: The total list price of the quote.
-        total_net_price:
-          type: number
-          format: float
-          description: Total net price of the quote.
-        total_discount:
-          type: number
-          format: float
-          description: Total discount of the quote.
-        sales_discount:
-          type: number
-          format: float
-          description: Total discount provided by seller.
     LineItem:
       type: object
       properties:
@@ -640,133 +595,6 @@ components:
           description: List of line item attributes (aka proposal attributes).
           additionalProperties:
             type: string
-    Quote:
-      type: object
-      properties:
-        dealhub_quote_id:
-          type: string
-        status:
-          type: string
-        quote_upgrade_required:
-          type: boolean
-        info:
-          $ref: '#/components/schemas/QuoteInfo'
-        summary:
-          $ref: '#/components/schemas/QuoteSummary'
-        deal_room_info:
-          $ref: '#/components/schemas/DealRoomInfo'
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/LineItem'
-        answers:
-          type: array
-          items:
-            $ref: '#/components/schemas/PlaybookAnswer'
-        approvals:
-          type: array
-          items:
-            $ref: '#/components/schemas/Approval'
-    PaginationInfo:
-      type: object
-      properties:
-        more_results_matching_the_request:
-          type: boolean
-        offset:
-          type: string
-        limit:
-          type: string
-    DealRoomSignersResponse:
-      type: object
-      properties:
-        dealroom_state:
-          type: string
-          description: State of the DealRoom.
-        buyer_signers:
-          type: array
-          description: List of signers from the buyer side.
-          items:
-            $ref: '#/components/schemas/Signer'
-        seller_signers:
-          type: array
-          description: List of signers from the selling organization side.
-          items:
-            $ref: '#/components/schemas/Signer'
-    PlaybookAnswer:
-      type: object
-      properties:
-        system_name:
-          type: string
-          description: Name of the system, relevant for multi-system concept.
-        system_id:
-          type: string
-          description: System ID, relevant for multi-system concept.
-        group_id:
-          type: string
-          description: Group ID.
-        group_name:
-          type: string
-          description: Group name.
-        question_id:
-          type: string
-          description: Question ID.
-        question:
-          type: string
-          description: Question text.
-        answer:
-          type: string
-          description: The answer.
-    CreateOpportunityRequest:
-      type: object
-      required:
-      - external_opportunity_id
-      - external_opportunity_name
-      - opportunity_owner
-      - currency
-      - external_customer_id
-      - customer_name
-      properties:
-        external_opportunity_id:
-          type: string
-          maxLength: 50
-          description: CRM opportunity ID.
-        external_opportunity_name:
-          type: string
-          maxLength: 200
-          description: CRM opportunity name.
-        opportunity_owner:
-          $ref: '#/components/schemas/OpportunityOwner'
-        currency:
-          type: string
-          maxLength: 3
-          description: Opportunity currency (ISO code).
-        external_customer_id:
-          type: string
-          maxLength: 50
-          description: CRM customer ID (buyer account).
-        customer_name:
-          type: string
-          maxLength: 256
-          description: CRM customer name.
-    Signer:
-      type: object
-      properties:
-        company_name:
-          type: string
-          description: Company name of the signer.
-        signee_name:
-          type: string
-          description: Name of the signer.
-        signee_title:
-          type: string
-          description: Title of the signer.
-        signature_date:
-          type: string
-          format: date-time
-          description: Date when the user signed the contract via the DealRoom.
-        ordinal:
-          type: integer
-          description: The order of the signer in the list of signers.
     QuoteInfo:
       type: object
       properties:
@@ -847,6 +675,54 @@ components:
         version_id:
           type: string
           description: ID of the version in which the quote is managed.
+    DealRoomSignersResponse:
+      type: object
+      properties:
+        dealroom_state:
+          type: string
+          description: State of the DealRoom.
+        buyer_signers:
+          type: array
+          description: List of signers from the buyer side.
+          items:
+            $ref: '#/components/schemas/Signer'
+        seller_signers:
+          type: array
+          description: List of signers from the selling organization side.
+          items:
+            $ref: '#/components/schemas/Signer'
+    CreateOpportunityRequest:
+      type: object
+      required:
+      - external_opportunity_id
+      - external_opportunity_name
+      - opportunity_owner
+      - currency
+      - external_customer_id
+      - customer_name
+      properties:
+        external_opportunity_id:
+          type: string
+          maxLength: 50
+          description: CRM opportunity ID.
+        external_opportunity_name:
+          type: string
+          maxLength: 200
+          description: CRM opportunity name.
+        opportunity_owner:
+          $ref: '#/components/schemas/OpportunityOwner'
+        currency:
+          type: string
+          maxLength: 3
+          description: Opportunity currency (ISO code).
+        external_customer_id:
+          type: string
+          maxLength: 50
+          description: CRM customer ID (buyer account).
+        customer_name:
+          type: string
+          maxLength: 256
+          description: CRM customer name.
     PaginatedQuotesResponse:
       type: object
       properties:
@@ -856,6 +732,84 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Quote'
+    OpportunityOwner:
+      type: object
+      description: Details of opportunity owner.
+      required:
+      - external_user_id
+      - email
+      - name
+      properties:
+        external_user_id:
+          type: string
+          maxLength: 200
+          description: CRM user ID (employee of the organization that integrates with DealHub).
+        login:
+          type: string
+          maxLength: 100
+          description: Login of the user.
+        email:
+          type: string
+          format: email
+          maxLength: 100
+          description: Primary email of the user.
+        name:
+          type: string
+          maxLength: 300
+          description: User full name.
+        position:
+          type: string
+          maxLength: 300
+          description: The role of the user in the organization (job title).
+        phone:
+          type: string
+          maxLength: 50
+          description: User phone number.
+        mobile:
+          type: string
+          maxLength: 100
+          description: User mobile phone number.
+        fax:
+          type: string
+          maxLength: 100
+          description: User fax number.
+        company:
+          type: string
+          maxLength: 100
+          description: User company name.
+        street:
+          type: string
+          maxLength: 128
+          description: Street name.
+        city:
+          type: string
+          maxLength: 32
+          description: City name.
+        state:
+          type: string
+          maxLength: 32
+          description: State name.
+        country:
+          type: string
+          maxLength: 32
+          description: Country name.
+        postal_code:
+          type: string
+          maxLength: 16
+          description: Postal code.
+        user_manager_login:
+          type: string
+          maxLength: 100
+          description: Login of user manager.
+    PaginationInfo:
+      type: object
+      properties:
+        more_results_matching_the_request:
+          type: boolean
+        offset:
+          type: string
+        limit:
+          type: string
     DealRoomInfo:
       type: object
       properties:
@@ -863,6 +817,52 @@ components:
           type: string
           format: uri
           description: DealRoom URL.
+    PlaybookAnswer:
+      type: object
+      properties:
+        system_name:
+          type: string
+          description: Name of the system, relevant for multi-system concept.
+        system_id:
+          type: string
+          description: System ID, relevant for multi-system concept.
+        group_id:
+          type: string
+          description: Group ID.
+        group_name:
+          type: string
+          description: Group name.
+        question_id:
+          type: string
+          description: Question ID.
+        question:
+          type: string
+          description: Question text.
+        answer:
+          type: string
+          description: The answer.
+    QuoteSummary:
+      type: object
+      properties:
+        currency:
+          type: string
+          description: Quote currency (ISO-4217 format).
+        total_list_price:
+          type: number
+          format: float
+          description: The total list price of the quote.
+        total_net_price:
+          type: number
+          format: float
+          description: Total net price of the quote.
+        total_discount:
+          type: number
+          format: float
+          description: Total discount of the quote.
+        sales_discount:
+          type: number
+          format: float
+          description: Total discount provided by seller.
   securitySchemes:
     bearerAuth:
       type: http

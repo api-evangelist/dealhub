@@ -70,30 +70,20 @@ paths:
           description: successful operation
 components:
   schemas:
-    TrackDealPulseEventRequest:
+    DealPulseListResponse:
       type: object
       required:
-      - eventType
+      - totalCount
       properties:
-        eventType:
-          type: string
-          enum:
-          - CONTACT_ADD
-          - CONTACT_EDIT
-          - FILE_DOWNLOAD
-          - LOAD
-          - PAGE_FOCUS
-          - YOUTUBE_COMPLETE
-          - ORDER_PDF_DOWNLOAD
-          - YOUTUBE_PLAY
-          - LINK_CLICK
-          - SCROLL
-        metadata:
-          type: object
-          additionalProperties:
-            type: object
-        userEmail:
-          type: string
+        dealPulses:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/DealPulseOverview'
+        totalCount:
+          type: integer
+          format: int32
+          readOnly: true
     DealPulseOverview:
       type: object
       required:
@@ -160,20 +150,30 @@ components:
           type: integer
           format: int64
           readOnly: true
-    DealPulseListResponse:
+    TrackDealPulseEventRequest:
       type: object
       required:
-      - totalCount
+      - eventType
       properties:
-        dealPulses:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/DealPulseOverview'
-        totalCount:
-          type: integer
-          format: int32
-          readOnly: true
+        eventType:
+          type: string
+          enum:
+          - CONTACT_ADD
+          - CONTACT_EDIT
+          - FILE_DOWNLOAD
+          - LOAD
+          - PAGE_FOCUS
+          - YOUTUBE_COMPLETE
+          - ORDER_PDF_DOWNLOAD
+          - YOUTUBE_PLAY
+          - LINK_CLICK
+          - SCROLL
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+        userEmail:
+          type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

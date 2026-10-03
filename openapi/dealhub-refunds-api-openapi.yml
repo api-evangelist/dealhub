@@ -83,6 +83,42 @@ paths:
                 $ref: '#/components/schemas/Refund'
 components:
   schemas:
+    Refund:
+      type: object
+      properties:
+        id:
+          type: string
+        refundId:
+          type: string
+        referenceId:
+          type: string
+        tenantId:
+          type: string
+        entityId:
+          type: string
+        creditMemoNumber:
+          type: string
+        amount:
+          type: number
+        refundDate:
+          type: integer
+          format: int64
+        paymentId:
+          type: string
+        paymentMethodType:
+          type: string
+        currencyCode:
+          type: string
+        notes:
+          type: string
+        createdBy:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
     RefundDetail:
       type: object
       required:
@@ -150,42 +186,6 @@ components:
           type: string
         referenceId:
           type: string
-    Refund:
-      type: object
-      properties:
-        id:
-          type: string
-        refundId:
-          type: string
-        referenceId:
-          type: string
-        tenantId:
-          type: string
-        entityId:
-          type: string
-        creditMemoNumber:
-          type: string
-        amount:
-          type: number
-        refundDate:
-          type: integer
-          format: int64
-        paymentId:
-          type: string
-        paymentMethodType:
-          type: string
-        currencyCode:
-          type: string
-        notes:
-          type: string
-        createdBy:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

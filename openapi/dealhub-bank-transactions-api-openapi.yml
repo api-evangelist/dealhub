@@ -149,19 +149,19 @@ components:
           type: string
         bankAccountName:
           type: string
-    PaginatedBankTransactionPotentialInvoiceResponse:
+    PotentialInvoice:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/BankTransactionPotentialInvoice'
-        count:
-          type: integer
-          format: int32
-        pageToken:
+        invoiceNumber:
           type: string
-        totalCount:
+        invoiceAmount:
+          type: number
+        accountName:
+          type: string
+        invoiceDate:
+          type: integer
+          format: int64
+        matchingConfidence:
           type: integer
           format: int32
     BankTransactionsUploadResult:
@@ -180,19 +180,19 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/BankTransactionsUploadData'
-    PotentialInvoice:
+    PaginatedBankTransactionPotentialInvoiceResponse:
       type: object
       properties:
-        invoiceNumber:
-          type: string
-        invoiceAmount:
-          type: number
-        accountName:
-          type: string
-        invoiceDate:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankTransactionPotentialInvoice'
+        count:
           type: integer
-          format: int64
-        matchingConfidence:
+          format: int32
+        pageToken:
+          type: string
+        totalCount:
           type: integer
           format: int32
   securitySchemes:

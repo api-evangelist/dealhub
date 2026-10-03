@@ -1158,67 +1158,6 @@ paths:
           description: successful operation
 components:
   schemas:
-    IntelligentSalesRoomShareLinkAccessRequest:
-      type: object
-      properties:
-        userName:
-          type: string
-          minLength: 0
-          maxLength: 1024
-        userEmail:
-          type: string
-          minLength: 0
-          maxLength: 1024
-    IntelligentSalesRoomUpdateWidgetRequest:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 0
-          maxLength: 255
-        content:
-          type: string
-          minLength: 0
-          maxLength: 10000
-    IntelligentSalesRoomEngagementSession:
-      type: object
-      properties:
-        durationSeconds:
-          type: integer
-          format: int64
-        sessionId:
-          type: string
-        userAgent:
-          type: string
-        userName:
-          type: string
-        salesRoomId:
-          type: string
-        userEmail:
-          type: string
-        sessionEnd:
-          type: integer
-          format: int64
-        lastActivityTime:
-          type: integer
-          format: int64
-        sessionStart:
-          type: integer
-          format: int64
-        isActive:
-          type: boolean
-        ipAddress:
-          type: string
-        tabsVisited:
-          type: array
-          items:
-            type: string
-        activityData:
-          type: object
-          additionalProperties:
-            type: object
-        sessionExpired:
-          type: boolean
     IntelligentSalesRoomUpdateThemeRequest:
       type: object
       required:
@@ -1238,290 +1177,6 @@ components:
           type: string
         secondaryColor:
           type: string
-    IntelligentSalesRoomCreateWidgetRequest:
-      type: object
-      required:
-      - type
-      properties:
-        name:
-          type: string
-          minLength: 0
-          maxLength: 255
-        type:
-          type: string
-          enum:
-          - ORDER_FORM_PDF
-          - CUSTOMER_INFORMATION
-          - ADDITIONAL_INFORMATION
-          - E_SIGNATURE_BUTTON
-          - ACCEPT_PROPOSAL_BUTTON
-          - MEDIA_CONTENT
-          - RICH_TEXT
-          - AI_GENERATED_TEXT
-          - USER_PDF
-        content:
-          type: string
-          minLength: 0
-          maxLength: 10000
-    IntelligentSalesRoomShareLinkAccess:
-      type: object
-      properties:
-        userAgent:
-          type: string
-        userName:
-          type: string
-        salesRoomId:
-          type: string
-        userEmail:
-          type: string
-        firstAccess:
-          type: integer
-          format: int64
-        lastAccess:
-          type: integer
-          format: int64
-        isActive:
-          type: boolean
-        ipAddress:
-          type: string
-    CustomFieldDefault:
-      type: object
-      properties:
-        value:
-          type: string
-        selections:
-          type: array
-          items:
-            type: string
-    IntelligentSalesRoomExtractThemeRequest:
-      type: object
-      properties:
-        websiteUrl:
-          type: string
-          minLength: 0
-          maxLength: 1024
-    IntelligentSalesRoomTrackEventRequest:
-      type: object
-      required:
-      - eventType
-      properties:
-        eventType:
-          type: string
-          enum:
-          - PAGE_FOCUS
-          - PAGE_BLUR
-          - SCROLL
-          - CLICK
-          - KEYDOWN
-          - LOAD
-          - UNLOAD
-          - FILE_UPLOAD_VIEW
-          - FILE_DOWNLOAD
-          - LINK_CLICK
-          - YOUTUBE_PLAY
-          - YOUTUBE_PAUSE
-          - YOUTUBE_COMPLETE
-          - GOOGLE_WORKSPACE_VIEW
-          - CONTACT_EDIT
-          - CONTACT_ADD
-          - CUSTOM_FIELD_EDIT
-          - ORDER_PDF_DOWNLOAD
-          - ESIGNATURE_INITIATE
-          - ACCEPT_PROPOSAL
-        metadata:
-          type: object
-          additionalProperties:
-            type: object
-        userEmail:
-          type: string
-          minLength: 0
-          maxLength: 1024
-    EmailContact:
-      type: object
-      properties:
-        contactId:
-          type: string
-        type:
-          type: string
-          enum:
-          - ACCOUNT_CONTACT
-          - USER_GROUP
-          - USER
-        email:
-          type: string
-        name:
-          type: string
-        entityIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-    IntelligentSalesRoomEngagementSummaryResponse:
-      type: object
-      properties:
-        lastActivity:
-          type: integer
-          format: int64
-        mostActiveUser:
-          type: string
-        totalVisitors:
-          type: integer
-          format: int32
-        totalSessions:
-          type: integer
-          format: int32
-        totalTimeSpentSeconds:
-          type: integer
-          format: int64
-        averageTimeSpent:
-          type: string
-        totalEvents:
-          type: integer
-          format: int32
-    IntelligentSalesRoomAIGeneratedContent:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        salesRoomId:
-          type: string
-        widgetId:
-          type: string
-        isEdited:
-          type: boolean
-        generatedOn:
-          type: integer
-          format: int64
-        lastEditedOn:
-          type: integer
-          format: int64
-        generatedContent:
-          type: string
-        orderFormContext:
-          type: string
-    IntelligentSalesRoomThemeResponse:
-      type: object
-      properties:
-        updatedOn:
-          type: integer
-          format: int64
-        template:
-          type: string
-          enum:
-          - TEMPLATE_1
-          - TEMPLATE_2
-          - TEMPLATE_3
-        websiteUrl:
-          type: string
-        logoUrl:
-          type: string
-        primaryColor:
-          type: string
-        isLogoAutoExtracted:
-          type: boolean
-        isColorAutoExtracted:
-          type: boolean
-    IntelligentSalesRoomWidget:
-      type: object
-      properties:
-        name:
-          type: string
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
-          enum:
-          - ORDER_FORM_PDF
-          - CUSTOMER_INFORMATION
-          - ADDITIONAL_INFORMATION
-          - E_SIGNATURE_BUTTON
-          - ACCEPT_PROPOSAL_BUTTON
-          - MEDIA_CONTENT
-          - RICH_TEXT
-          - AI_GENERATED_TEXT
-          - USER_PDF
-        content:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-        salesRoomId:
-          type: string
-        isUserGenerated:
-          type: boolean
-        isDeletable:
-          type: boolean
-        sortOrder:
-          type: integer
-          format: int32
-    AccountAddressJson:
-      type: object
-      properties:
-        streetAddressLine1:
-          type: string
-          description: Address Line 1 of the Contact
-        streetAddressLine2:
-          type: string
-          description: Address Line 2 of the Contact
-        streetAddressLine3:
-          type: string
-          description: Address Line 3 of the Contact
-        city:
-          type: string
-          description: City of the Contact
-        state:
-          type: string
-          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
-        country:
-          type: string
-          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
-        zipcode:
-          type: string
-          description: Zip or Postal Code of the Contact
-    IntelligentSalesRoomActivityLog:
-      type: object
-      properties:
-        eventType:
-          type: string
-          enum:
-          - PAGE_FOCUS
-          - PAGE_BLUR
-          - SCROLL
-          - CLICK
-          - KEYDOWN
-          - LOAD
-          - UNLOAD
-          - FILE_UPLOAD_VIEW
-          - FILE_DOWNLOAD
-          - LINK_CLICK
-          - YOUTUBE_PLAY
-          - YOUTUBE_PAUSE
-          - YOUTUBE_COMPLETE
-          - GOOGLE_WORKSPACE_VIEW
-          - CONTACT_EDIT
-          - CONTACT_ADD
-          - CUSTOM_FIELD_EDIT
-          - ORDER_PDF_DOWNLOAD
-          - ESIGNATURE_INITIATE
-          - ACCEPT_PROPOSAL
-        metadata:
-          type: object
-          additionalProperties:
-            type: object
-        salesRoomId:
-          type: string
-        userEmail:
-          type: string
-        eventTimestamp:
-          type: integer
-          format: int64
-    IntelligentSalesRoomUpdateCustomerInfoRequest:
-      type: object
     IntelligentSalesRoomFile:
       type: object
       properties:
@@ -1561,62 +1216,48 @@ components:
           type: boolean
         originalFileName:
           type: string
-    IntelligentSalesRoomUpdateAIContentRequest:
+    IntelligentSalesRoomEngagementSummaryResponse:
       type: object
       properties:
-        editedContent:
+        lastActivity:
+          type: integer
+          format: int64
+        mostActiveUser:
           type: string
-          minLength: 0
-          maxLength: 10000
-    IntelligentSalesRoomReorderWidgetsRequest:
+        totalVisitors:
+          type: integer
+          format: int32
+        totalSessions:
+          type: integer
+          format: int32
+        totalTimeSpentSeconds:
+          type: integer
+          format: int64
+        averageTimeSpent:
+          type: string
+        totalEvents:
+          type: integer
+          format: int32
+    EmailContact:
       type: object
-      required:
-      - orderedWidgetIds
       properties:
-        orderedWidgetIds:
-          type: array
-          items:
-            type: string
-    CustomFieldValue:
-      type: object
-      properties:
+        contactId:
+          type: string
         type:
           type: string
-          readOnly: true
           enum:
-          - STRING
-          - PICKLIST
-          - MULTISELECT_PICKLIST
+          - ACCOUNT_CONTACT
+          - USER_GROUP
+          - USER
+        email:
+          type: string
         name:
           type: string
-          readOnly: true
-        label:
-          type: string
-          readOnly: true
-        value:
-          type: string
-          readOnly: true
-        selections:
+        entityIds:
           type: array
-          readOnly: true
+          uniqueItems: true
           items:
             type: string
-        options:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        required:
-          type: boolean
-          readOnly: true
-        source:
-          type: string
-          readOnly: true
-          enum:
-          - USER
-          - SYSTEM
-        defaultValue:
-          $ref: '#/components/schemas/CustomFieldDefault'
     IntelligentSalesRoomOverviewResponse:
       type: object
       properties:
@@ -1683,12 +1324,9 @@ components:
           - FAILED
           - VOIDED
           - DECLINED
-    IntelligentSalesRoomTheme:
+    IntelligentSalesRoomThemeResponse:
       type: object
       properties:
-        createdOn:
-          type: integer
-          format: int64
         updatedOn:
           type: integer
           format: int64
@@ -1704,14 +1342,71 @@ components:
           type: string
         primaryColor:
           type: string
-        secondaryColor:
-          type: string
-        salesRoomId:
-          type: string
         isLogoAutoExtracted:
           type: boolean
         isColorAutoExtracted:
           type: boolean
+    IntelligentSalesRoomEngagementSession:
+      type: object
+      properties:
+        durationSeconds:
+          type: integer
+          format: int64
+        sessionId:
+          type: string
+        userAgent:
+          type: string
+        userName:
+          type: string
+        salesRoomId:
+          type: string
+        userEmail:
+          type: string
+        sessionEnd:
+          type: integer
+          format: int64
+        lastActivityTime:
+          type: integer
+          format: int64
+        sessionStart:
+          type: integer
+          format: int64
+        isActive:
+          type: boolean
+        ipAddress:
+          type: string
+        tabsVisited:
+          type: array
+          items:
+            type: string
+        activityData:
+          type: object
+          additionalProperties:
+            type: object
+        sessionExpired:
+          type: boolean
+    IntelligentSalesRoomAIGeneratedContent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        salesRoomId:
+          type: string
+        widgetId:
+          type: string
+        isEdited:
+          type: boolean
+        generatedOn:
+          type: integer
+          format: int64
+        lastEditedOn:
+          type: integer
+          format: int64
+        generatedContent:
+          type: string
+        orderFormContext:
+          type: string
     AccountContactJson:
       type: object
       required:
@@ -1748,17 +1443,322 @@ components:
           type: string
         eventObjectId:
           type: string
-  requestBodies:
+    IntelligentSalesRoomShareLinkAccess:
+      type: object
+      properties:
+        userAgent:
+          type: string
+        userName:
+          type: string
+        salesRoomId:
+          type: string
+        userEmail:
+          type: string
+        firstAccess:
+          type: integer
+          format: int64
+        lastAccess:
+          type: integer
+          format: int64
+        isActive:
+          type: boolean
+        ipAddress:
+          type: string
+    IntelligentSalesRoomUpdateWidgetRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 0
+          maxLength: 255
+        content:
+          type: string
+          minLength: 0
+          maxLength: 10000
+    IntelligentSalesRoomTheme:
+      type: object
+      properties:
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        template:
+          type: string
+          enum:
+          - TEMPLATE_1
+          - TEMPLATE_2
+          - TEMPLATE_3
+        websiteUrl:
+          type: string
+        logoUrl:
+          type: string
+        primaryColor:
+          type: string
+        secondaryColor:
+          type: string
+        salesRoomId:
+          type: string
+        isLogoAutoExtracted:
+          type: boolean
+        isColorAutoExtracted:
+          type: boolean
+    IntelligentSalesRoomActivityLog:
+      type: object
+      properties:
+        eventType:
+          type: string
+          enum:
+          - PAGE_FOCUS
+          - PAGE_BLUR
+          - SCROLL
+          - CLICK
+          - KEYDOWN
+          - LOAD
+          - UNLOAD
+          - FILE_UPLOAD_VIEW
+          - FILE_DOWNLOAD
+          - LINK_CLICK
+          - YOUTUBE_PLAY
+          - YOUTUBE_PAUSE
+          - YOUTUBE_COMPLETE
+          - GOOGLE_WORKSPACE_VIEW
+          - CONTACT_EDIT
+          - CONTACT_ADD
+          - CUSTOM_FIELD_EDIT
+          - ORDER_PDF_DOWNLOAD
+          - ESIGNATURE_INITIATE
+          - ACCEPT_PROPOSAL
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+        salesRoomId:
+          type: string
+        userEmail:
+          type: string
+        eventTimestamp:
+          type: integer
+          format: int64
+    IntelligentSalesRoomWidget:
+      type: object
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+          - ORDER_FORM_PDF
+          - CUSTOMER_INFORMATION
+          - ADDITIONAL_INFORMATION
+          - E_SIGNATURE_BUTTON
+          - ACCEPT_PROPOSAL_BUTTON
+          - MEDIA_CONTENT
+          - RICH_TEXT
+          - AI_GENERATED_TEXT
+          - USER_PDF
+        content:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        salesRoomId:
+          type: string
+        isUserGenerated:
+          type: boolean
+        isDeletable:
+          type: boolean
+        sortOrder:
+          type: integer
+          format: int32
+    IntelligentSalesRoomExtractThemeRequest:
+      type: object
+      properties:
+        websiteUrl:
+          type: string
+          minLength: 0
+          maxLength: 1024
+    IntelligentSalesRoomShareLinkAccessRequest:
+      type: object
+      properties:
+        userName:
+          type: string
+          minLength: 0
+          maxLength: 1024
+        userEmail:
+          type: string
+          minLength: 0
+          maxLength: 1024
+    CustomFieldValue:
+      type: object
+      properties:
+        type:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        name:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        value:
+          type: string
+          readOnly: true
+        selections:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        required:
+          type: boolean
+          readOnly: true
+        source:
+          type: string
+          readOnly: true
+          enum:
+          - USER
+          - SYSTEM
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+    IntelligentSalesRoomCreateWidgetRequest:
+      type: object
+      required:
+      - type
+      properties:
+        name:
+          type: string
+          minLength: 0
+          maxLength: 255
+        type:
+          type: string
+          enum:
+          - ORDER_FORM_PDF
+          - CUSTOMER_INFORMATION
+          - ADDITIONAL_INFORMATION
+          - E_SIGNATURE_BUTTON
+          - ACCEPT_PROPOSAL_BUTTON
+          - MEDIA_CONTENT
+          - RICH_TEXT
+          - AI_GENERATED_TEXT
+          - USER_PDF
+        content:
+          type: string
+          minLength: 0
+          maxLength: 10000
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
+    AccountAddressJson:
+      type: object
+      properties:
+        streetAddressLine1:
+          type: string
+          description: Address Line 1 of the Contact
+        streetAddressLine2:
+          type: string
+          description: Address Line 2 of the Contact
+        streetAddressLine3:
+          type: string
+          description: Address Line 3 of the Contact
+        city:
+          type: string
+          description: City of the Contact
+        state:
+          type: string
+          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
+        country:
+          type: string
+          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
+        zipcode:
+          type: string
+          description: Zip or Postal Code of the Contact
     IntelligentSalesRoomUpdateCustomerInfoRequest:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/IntelligentSalesRoomUpdateCustomerInfoRequest'
+      type: object
+    IntelligentSalesRoomReorderWidgetsRequest:
+      type: object
+      required:
+      - orderedWidgetIds
+      properties:
+        orderedWidgetIds:
+          type: array
+          items:
+            type: string
+    IntelligentSalesRoomTrackEventRequest:
+      type: object
+      required:
+      - eventType
+      properties:
+        eventType:
+          type: string
+          enum:
+          - PAGE_FOCUS
+          - PAGE_BLUR
+          - SCROLL
+          - CLICK
+          - KEYDOWN
+          - LOAD
+          - UNLOAD
+          - FILE_UPLOAD_VIEW
+          - FILE_DOWNLOAD
+          - LINK_CLICK
+          - YOUTUBE_PLAY
+          - YOUTUBE_PAUSE
+          - YOUTUBE_COMPLETE
+          - GOOGLE_WORKSPACE_VIEW
+          - CONTACT_EDIT
+          - CONTACT_ADD
+          - CUSTOM_FIELD_EDIT
+          - ORDER_PDF_DOWNLOAD
+          - ESIGNATURE_INITIATE
+          - ACCEPT_PROPOSAL
+        metadata:
+          type: object
+          additionalProperties:
+            type: object
+        userEmail:
+          type: string
+          minLength: 0
+          maxLength: 1024
+    IntelligentSalesRoomUpdateAIContentRequest:
+      type: object
+      properties:
+        editedContent:
+          type: string
+          minLength: 0
+          maxLength: 10000
+  requestBodies:
     AccountContactJson:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/AccountContactJson'
+    IntelligentSalesRoomUpdateCustomerInfoRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/IntelligentSalesRoomUpdateCustomerInfoRequest'
     updateCustomFields_1Body:
       content:
         application/json:

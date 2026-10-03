@@ -468,21 +468,6 @@ paths:
           description: Internal server error
 components:
   schemas:
-    ApprovalRoleJson:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
     WorkflowJson:
       type: object
       required:
@@ -536,28 +521,18 @@ components:
           items:
             $ref: '#/components/schemas/ApproverJson'
       description: Approval workflow with approver details (approval domain only)
-    ApprovalStateJson:
+    ApprovalRoleSegmentChange:
       type: object
       properties:
-        id:
+        roleName:
           type: string
-        name:
+        segmentName:
           type: string
-        approvalGroupId:
+        previousUserOrGroupName:
           type: string
-        approverId:
+        newUserOrGroupName:
           type: string
-        approverType:
-          type: string
-          enum:
-          - USER
-          - USER_GROUP
-          - ROLE
-        action:
-          $ref: '#/components/schemas/ApprovalStateActionJson'
-        escalationPolicyId:
-          type: string
-    ApprovalSegmentJson:
+    ApprovalRoleJson:
       type: object
       properties:
         id:
@@ -572,34 +547,46 @@ components:
         updatedOn:
           type: integer
           format: int64
-    ApprovalRoleSegmentChange:
+    OrderApprovalHistoryResponse:
       type: object
+      required:
+      - currentAttempt
+      - orderId
+      - orderStatus
       properties:
-        roleName:
+        orderId:
           type: string
-        segmentName:
+          example: ORD-9FB8TW8
+          description: Order ID reference
+          readOnly: true
+        orderStatus:
           type: string
-        previousUserOrGroupName:
-          type: string
-        newUserOrGroupName:
-          type: string
-    ApprovalMatrixImportDataJson:
-      type: object
-      properties:
-        id:
-          type: string
-        fileName:
-          type: string
-        uploadedBy:
-          type: string
-        status:
-          type: string
-        createdOn:
+          example: APPROVED
+          description: Status of the order
+          readOnly: true
+          enum:
+          - DRAFT
+          - SUBMITTED
+          - APPROVED
+          - EXECUTED
+          - EXPIRED
+        currentAttempt:
           type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
+          format: int32
+          example: 2
+          description: Current approval attempt number
+          readOnly: true
+        currentSubmission:
+          $ref: '#/components/schemas/ApprovalSubmissionJson'
+        approvalHistory:
+          type: array
+          description: Historical approval submissions (previous attempts, if any)
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/ApprovalSubmissionJson'
+        summary:
+          $ref: '#/components/schemas/ApprovalSummaryJson'
+      description: Complete approval history for an order (approval domain only)
     ApprovalSubmissionJson:
       type: object
       required:
@@ -675,11 +662,165 @@ components:
           items:
             $ref: '#/components/schemas/WorkflowJson'
       description: Single approval submission attempt (approval domain only)
-    ApprovalStateActionJson:
+    ApprovalMatrixImportPreview:
       type: object
       properties:
-        emailGroupId:
+        id:
           type: string
+        uploadedBy:
+          type: string
+        segmentsToAdd:
+          type: array
+          items:
+            type: string
+        segmentsToDelete:
+          type: array
+          items:
+            type: string
+        approvalRoleSegmentChanges:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalRoleSegmentChange'
+    ApprovalMatrixImportDataJson:
+      type: object
+      properties:
+        id:
+          type: string
+        fileName:
+          type: string
+        uploadedBy:
+          type: string
+        status:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    ApprovalFlowJson:
+      type: object
+      properties:
+        id:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        isSmartApproval:
+          type: boolean
+        states:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalStateJson'
+        transitionRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalTransitionRuleJson'
+    ApprovalRuleConditions:
+      type: object
+      properties:
+        orderCondition:
+          type: string
+        orderLineCondition:
+          type: string
+    ApprovalSummaryJson:
+      type: object
+      required:
+      - totalAttempts
+      properties:
+        totalAttempts:
+          type: integer
+          format: int32
+          example: 2
+          description: Total number of submission attempts
+          readOnly: true
+        firstSubmittedAt:
+          type: integer
+          format: int64
+          example: 1762509000
+          description: Timestamp (in epoch seconds) of first submission
+          readOnly: true
+        lastUpdatedAt:
+          type: integer
+          format: int64
+          example: 1762514400
+          description: Timestamp (in epoch seconds) of final update
+          readOnly: true
+        totalTimeSeconds:
+          type: integer
+          format: int64
+          example: 23400
+          description: Total time from first submission to last update in seconds
+          readOnly: true
+        totalWorkflows:
+          type: integer
+          format: int32
+          example: 2
+          description: Total number of unique workflows triggered across all attempts
+          readOnly: true
+      description: Summary statistics across all approval attempts
+    ApprovalStateJson:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        approvalGroupId:
+          type: string
+        approverId:
+          type: string
+        approverType:
+          type: string
+          enum:
+          - USER
+          - USER_GROUP
+          - ROLE
+        action:
+          $ref: '#/components/schemas/ApprovalStateActionJson'
+        escalationPolicyId:
+          type: string
+    ApprovalTransitionRuleJson:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        fromState:
+          type: string
+        toState:
+          type: string
+        condition:
+          type: string
+        ruleConditions:
+          $ref: '#/components/schemas/ApprovalRuleConditions'
+    ApprovalSegmentJson:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
     ApproverJson:
       type: object
       required:
@@ -747,152 +888,11 @@ components:
           description: Comment/note from approver
           readOnly: true
       description: Individual approver with timeline data (approval domain only)
-    ApprovalFlowJson:
+    ApprovalStateActionJson:
       type: object
       properties:
-        id:
+        emailGroupId:
           type: string
-        entityIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        name:
-          type: string
-        description:
-          type: string
-        status:
-          type: string
-          enum:
-          - ACTIVE
-          - INACTIVE
-        isSmartApproval:
-          type: boolean
-        states:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalStateJson'
-        transitionRules:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalTransitionRuleJson'
-    ApprovalTransitionRuleJson:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        fromState:
-          type: string
-        toState:
-          type: string
-        condition:
-          type: string
-        ruleConditions:
-          $ref: '#/components/schemas/ApprovalRuleConditions'
-    OrderApprovalHistoryResponse:
-      type: object
-      required:
-      - currentAttempt
-      - orderId
-      - orderStatus
-      properties:
-        orderId:
-          type: string
-          example: ORD-9FB8TW8
-          description: Order ID reference
-          readOnly: true
-        orderStatus:
-          type: string
-          example: APPROVED
-          description: Status of the order
-          readOnly: true
-          enum:
-          - DRAFT
-          - SUBMITTED
-          - APPROVED
-          - EXECUTED
-          - EXPIRED
-        currentAttempt:
-          type: integer
-          format: int32
-          example: 2
-          description: Current approval attempt number
-          readOnly: true
-        currentSubmission:
-          $ref: '#/components/schemas/ApprovalSubmissionJson'
-        approvalHistory:
-          type: array
-          description: Historical approval submissions (previous attempts, if any)
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/ApprovalSubmissionJson'
-        summary:
-          $ref: '#/components/schemas/ApprovalSummaryJson'
-      description: Complete approval history for an order (approval domain only)
-    ApprovalMatrixImportPreview:
-      type: object
-      properties:
-        id:
-          type: string
-        uploadedBy:
-          type: string
-        segmentsToAdd:
-          type: array
-          items:
-            type: string
-        segmentsToDelete:
-          type: array
-          items:
-            type: string
-        approvalRoleSegmentChanges:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalRoleSegmentChange'
-    ApprovalRuleConditions:
-      type: object
-      properties:
-        orderCondition:
-          type: string
-        orderLineCondition:
-          type: string
-    ApprovalSummaryJson:
-      type: object
-      required:
-      - totalAttempts
-      properties:
-        totalAttempts:
-          type: integer
-          format: int32
-          example: 2
-          description: Total number of submission attempts
-          readOnly: true
-        firstSubmittedAt:
-          type: integer
-          format: int64
-          example: 1762509000
-          description: Timestamp (in epoch seconds) of first submission
-          readOnly: true
-        lastUpdatedAt:
-          type: integer
-          format: int64
-          example: 1762514400
-          description: Timestamp (in epoch seconds) of final update
-          readOnly: true
-        totalTimeSeconds:
-          type: integer
-          format: int64
-          example: 23400
-          description: Total time from first submission to last update in seconds
-          readOnly: true
-        totalWorkflows:
-          type: integer
-          format: int32
-          example: 2
-          description: Total number of unique workflows triggered across all attempts
-          readOnly: true
-      description: Summary statistics across all approval attempts
   requestBodies:
     uploadApprovalMatrixCSV:
       content:

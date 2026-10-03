@@ -214,32 +214,34 @@ paths:
           description: successful operation
 components:
   schemas:
-    UsageAggregateOutput:
+    MatchBankTransactionsRequest:
       type: object
       properties:
-        subscriptionId:
+        invoiceID:
           type: string
-        subscriptionChargeGroupId:
-          type: string
-        attributeReferences:
+        bankTransactionIDs:
           type: array
           items:
-            $ref: '#/components/schemas/AttributeReference'
-        startAt:
-          type: integer
-          format: int64
-        endAt:
-          type: integer
-          format: int64
-        observedDataPoints:
-          type: integer
-          format: int32
-        usageSum:
-          type: number
-        usageMax:
-          type: number
-        usageMin:
-          type: number
+            type: string
+    RawUsagesData:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RawUsage'
+      description: A list of RawUsage objects
+    AttributeReference:
+      type: object
+      properties:
+        attributeDefinitionId:
+          type: string
+          readOnly: true
+        attributeValue:
+          type: string
+          readOnly: true
     InvoiceBankTransactionMatchResponse:
       type: object
       properties:
@@ -266,37 +268,19 @@ components:
         paymentId:
           type: string
           readOnly: true
-    BulkPaymentUploadData:
+    BulkPaymentUploadResult:
       type: object
       properties:
-        currencyCode:
-          type: string
-        amount:
-          type: number
-        failed:
-          type: boolean
-        bankFee:
-          type: number
-        invoiceNumber:
-          type: string
-        note:
-          type: string
-        paymentMethod:
-          type: string
-        paymentBankAccountId:
-          type: string
-        paymentDate:
+        paymentsRequestCount:
           type: integer
-          format: int64
-        paymentMethodId:
-          type: string
-          format: uuid
-        failureReason:
-          type: string
-        newInvoiceBalance:
-          type: number
-        originalInvoiceBalance:
-          type: number
+          format: int32
+        failedPaymentsCount:
+          type: integer
+          format: int32
+        bulkPaymentUploadData:
+          type: array
+          items:
+            $ref: '#/components/schemas/BulkPaymentUploadData'
     RawUsage:
       type: object
       properties:
@@ -325,29 +309,6 @@ components:
           items:
             $ref: '#/components/schemas/AttributeReference'
       description: A raw usage record
-    RawUsagesData:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/RawUsage'
-      description: A list of RawUsage objects
-    BulkPaymentUploadResult:
-      type: object
-      properties:
-        paymentsRequestCount:
-          type: integer
-          format: int32
-        failedPaymentsCount:
-          type: integer
-          format: int32
-        bulkPaymentUploadData:
-          type: array
-          items:
-            $ref: '#/components/schemas/BulkPaymentUploadData'
     PrepaidStats:
       type: object
       properties:
@@ -385,24 +346,47 @@ components:
         periodEnd:
           type: integer
           format: int64
-    AttributeReference:
+    BulkPaymentUploadData:
       type: object
       properties:
-        attributeDefinitionId:
+        currencyCode:
           type: string
-          readOnly: true
-        attributeValue:
+        amount:
+          type: number
+        failed:
+          type: boolean
+        bankFee:
+          type: number
+        invoiceNumber:
           type: string
-          readOnly: true
-    MatchBankTransactionsRequest:
+        note:
+          type: string
+        paymentMethod:
+          type: string
+        paymentBankAccountId:
+          type: string
+        paymentDate:
+          type: integer
+          format: int64
+        paymentMethodId:
+          type: string
+          format: uuid
+        failureReason:
+          type: string
+        newInvoiceBalance:
+          type: number
+        originalInvoiceBalance:
+          type: number
+    Entry:
       type: object
       properties:
-        invoiceID:
+        rowNumber:
+          type: integer
+          format: int64
+        failed:
+          type: boolean
+        failureReason:
           type: string
-        bankTransactionIDs:
-          type: array
-          items:
-            type: string
     UsageBatchInsertResult:
       type: object
       properties:
@@ -419,16 +403,32 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Entry'
-    Entry:
+    UsageAggregateOutput:
       type: object
       properties:
-        rowNumber:
+        subscriptionId:
+          type: string
+        subscriptionChargeGroupId:
+          type: string
+        attributeReferences:
+          type: array
+          items:
+            $ref: '#/components/schemas/AttributeReference'
+        startAt:
           type: integer
           format: int64
-        failed:
-          type: boolean
-        failureReason:
-          type: string
+        endAt:
+          type: integer
+          format: int64
+        observedDataPoints:
+          type: integer
+          format: int32
+        usageSum:
+          type: number
+        usageMax:
+          type: number
+        usageMin:
+          type: number
   requestBodies:
     uploadApprovalMatrixCSV:
       content:

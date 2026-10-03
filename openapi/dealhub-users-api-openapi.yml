@@ -281,6 +281,11 @@ paths:
           description: successful operation
 components:
   schemas:
+    UserSsoUpdate:
+      type: object
+      properties:
+        ssoOnly:
+          type: boolean
     InputStream:
       type: object
     UserGroupJson:
@@ -298,6 +303,51 @@ components:
         description:
           type: string
         users:
+          type: array
+          items:
+            type: string
+        externalId:
+          type: string
+    UserInput:
+      type: object
+      properties:
+        id:
+          type: string
+        displayName:
+          type: string
+        title:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        state:
+          type: string
+          enum:
+          - ACTIVE
+          - DISABLED
+          - EXPIRED
+        role:
+          type: string
+          enum:
+          - ADMIN
+          - FINANCE
+          - SALES
+          - SALES_MANAGER
+          - ACCOUNTANT
+          - BILLING_CLERK
+          - REVENUE_CLERK
+          - READ_ONLY
+          - EXECUTIVE
+          - CRM
+          - IMPORT
+          - BILLY_ADMIN
+          - BILLY_ENGINEER
+          - BILLY_SUPPORT
+          - BILLY_JOB
+        ssoOnly:
+          type: boolean
+        entityIds:
           type: array
           items:
             type: string
@@ -378,87 +428,6 @@ components:
           type: string
         eventObjectId:
           type: string
-    EntityRef:
-      type: object
-      required:
-      - entityId
-      - name
-      properties:
-        entityId:
-          type: string
-          readOnly: true
-        displayId:
-          type: string
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-    UserSsoUpdate:
-      type: object
-      properties:
-        ssoOnly:
-          type: boolean
-    UserPaginationResponseJson:
-      type: object
-      properties:
-        data:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/UserJson'
-        numElements:
-          type: integer
-          format: int32
-          readOnly: true
-        nextCursor:
-          type: string
-          format: uuid
-          readOnly: true
-    UserInput:
-      type: object
-      properties:
-        id:
-          type: string
-        displayName:
-          type: string
-        title:
-          type: string
-        email:
-          type: string
-        phoneNumber:
-          type: string
-        state:
-          type: string
-          enum:
-          - ACTIVE
-          - DISABLED
-          - EXPIRED
-        role:
-          type: string
-          enum:
-          - ADMIN
-          - FINANCE
-          - SALES
-          - SALES_MANAGER
-          - ACCOUNTANT
-          - BILLING_CLERK
-          - REVENUE_CLERK
-          - READ_ONLY
-          - EXECUTIVE
-          - CRM
-          - IMPORT
-          - BILLY_ADMIN
-          - BILLY_ENGINEER
-          - BILLY_SUPPORT
-          - BILLY_JOB
-        ssoOnly:
-          type: boolean
-        entityIds:
-          type: array
-          items:
-            type: string
-        externalId:
-          type: string
     ApprovalSegmentJson:
       type: object
       properties:
@@ -474,6 +443,21 @@ components:
         updatedOn:
           type: integer
           format: int64
+    EntityRef:
+      type: object
+      required:
+      - entityId
+      - name
+      properties:
+        entityId:
+          type: string
+          readOnly: true
+        displayId:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
     UserGroupRequestJson:
       type: object
       properties:
@@ -494,17 +478,33 @@ components:
             type: string
         externalId:
           type: string
+    UserPaginationResponseJson:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/UserJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
   requestBodies:
-    UserGroupRequestJson:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/UserGroupRequestJson'
     UserInput:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UserInput'
+    UserGroupRequestJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserGroupRequestJson'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
