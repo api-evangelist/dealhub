@@ -236,6 +236,127 @@ paths:
           description: successful operation
 components:
   schemas:
+    CustomFieldValue:
+      type: object
+      properties:
+        type:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        name:
+          type: string
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        value:
+          type: string
+          readOnly: true
+        selections:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        required:
+          type: boolean
+          readOnly: true
+        source:
+          type: string
+          readOnly: true
+          enum:
+          - USER
+          - SYSTEM
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+    CustomFieldDefinitionCreateInput:
+      type: object
+      required:
+      - fieldType
+      - parentObjectType
+      properties:
+        parentObjectType:
+          type: string
+          readOnly: true
+          enum:
+          - ACCOUNT
+          - ORDER
+          - ORDER_ITEM
+          - PLAN
+          - CHARGE
+          - INVOICE
+          - SALES_ROOM
+          - SUBSCRIPTION
+          - SUBSCRIPTION_ITEM
+          - OPPORTUNITY
+        fieldType:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        fieldName:
+          type: string
+          readOnly: true
+        fieldLabel:
+          type: string
+          readOnly: true
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        required:
+          type: boolean
+          readOnly: true
+        source:
+          type: string
+          readOnly: true
+          enum:
+          - USER
+          - SYSTEM
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
+    CustomFieldDefinitionUpdateInput:
+      type: object
+      properties:
+        fieldName:
+          type: string
+          readOnly: true
+        fieldLabel:
+          type: string
+          readOnly: true
+        fieldType:
+          type: string
+          readOnly: true
+          enum:
+          - STRING
+          - PICKLIST
+          - MULTISELECT_PICKLIST
+        options:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        defaultValue:
+          $ref: '#/components/schemas/CustomFieldDefault'
     CustomFieldDefinitionJson:
       type: object
       properties:
@@ -287,64 +408,6 @@ components:
           readOnly: true
         defaultValue:
           $ref: '#/components/schemas/CustomFieldDefault'
-    CustomFieldDefault:
-      type: object
-      properties:
-        value:
-          type: string
-        selections:
-          type: array
-          items:
-            type: string
-    CustomFieldDefinitionCreateInput:
-      type: object
-      required:
-      - fieldType
-      - parentObjectType
-      properties:
-        parentObjectType:
-          type: string
-          readOnly: true
-          enum:
-          - ACCOUNT
-          - ORDER
-          - ORDER_ITEM
-          - PLAN
-          - CHARGE
-          - INVOICE
-          - SALES_ROOM
-          - SUBSCRIPTION
-          - SUBSCRIPTION_ITEM
-          - OPPORTUNITY
-        fieldType:
-          type: string
-          readOnly: true
-          enum:
-          - STRING
-          - PICKLIST
-          - MULTISELECT_PICKLIST
-        fieldName:
-          type: string
-          readOnly: true
-        fieldLabel:
-          type: string
-          readOnly: true
-        options:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        required:
-          type: boolean
-          readOnly: true
-        source:
-          type: string
-          readOnly: true
-          enum:
-          - USER
-          - SYSTEM
-        defaultValue:
-          $ref: '#/components/schemas/CustomFieldDefault'
     CustomFieldUpdateInput:
       type: object
       properties:
@@ -356,69 +419,6 @@ components:
           readOnly: true
           items:
             type: string
-    CustomFieldDefinitionUpdateInput:
-      type: object
-      properties:
-        fieldName:
-          type: string
-          readOnly: true
-        fieldLabel:
-          type: string
-          readOnly: true
-        fieldType:
-          type: string
-          readOnly: true
-          enum:
-          - STRING
-          - PICKLIST
-          - MULTISELECT_PICKLIST
-        options:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        defaultValue:
-          $ref: '#/components/schemas/CustomFieldDefault'
-    CustomFieldValue:
-      type: object
-      properties:
-        type:
-          type: string
-          readOnly: true
-          enum:
-          - STRING
-          - PICKLIST
-          - MULTISELECT_PICKLIST
-        name:
-          type: string
-          readOnly: true
-        label:
-          type: string
-          readOnly: true
-        value:
-          type: string
-          readOnly: true
-        selections:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        options:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        required:
-          type: boolean
-          readOnly: true
-        source:
-          type: string
-          readOnly: true
-          enum:
-          - USER
-          - SYSTEM
-        defaultValue:
-          $ref: '#/components/schemas/CustomFieldDefault'
   requestBodies:
     CustomFieldUpdateInput:
       content:

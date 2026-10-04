@@ -112,19 +112,25 @@ paths:
           description: successful operation
 components:
   schemas:
-    TimeZone:
+    CompanyContactJson:
       type: object
+      required:
+      - address
       properties:
-        displayName:
+        firstName:
           type: string
-        id:
+          readOnly: true
+        lastName:
           type: string
-        dstsavings:
-          type: integer
-          format: int32
-        rawOffset:
-          type: integer
-          format: int32
+          readOnly: true
+        email:
+          type: string
+          readOnly: true
+        phoneNumber:
+          type: string
+          readOnly: true
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
     AccountReceivableContactJson:
       type: object
       required:
@@ -140,76 +146,19 @@ components:
           type: string
         address:
           $ref: '#/components/schemas/AccountAddressJson'
-    AccountAddress:
+    TimeZone:
       type: object
       properties:
+        displayName:
+          type: string
         id:
           type: string
-          format: uuid
-        addressId:
-          type: string
-        streetAddressLine1:
-          type: string
-        streetAddressLine2:
-          type: string
-        streetAddressLine3:
-          type: string
-        city:
-          type: string
-        state:
-          type: string
-        country:
-          type: string
-        zipcode:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-    NumberConfig:
-      type: object
-      properties:
-        configId:
-          type: string
-        scheme:
-          type: string
-          enum:
-          - SEQUENCE
-          - PSEUDO_RANDOM
-        prefix:
-          type: string
-        length:
+        dstsavings:
           type: integer
           format: int32
-        nextSequenceNumber:
+        rawOffset:
           type: integer
-          format: int64
-    AccountAddressJson:
-      type: object
-      properties:
-        streetAddressLine1:
-          type: string
-          description: Address Line 1 of the Contact
-        streetAddressLine2:
-          type: string
-          description: Address Line 2 of the Contact
-        streetAddressLine3:
-          type: string
-          description: Address Line 3 of the Contact
-        city:
-          type: string
-          description: City of the Contact
-        state:
-          type: string
-          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
-        country:
-          type: string
-          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
-        zipcode:
-          type: string
-          description: Zip or Postal Code of the Contact
+          format: int32
     AccountContact:
       type: object
       properties:
@@ -325,25 +274,48 @@ components:
         erpId:
           type: string
           readOnly: true
-    CompanyContactJson:
+    AccountAddressJson:
       type: object
-      required:
-      - address
       properties:
-        firstName:
+        streetAddressLine1:
           type: string
-          readOnly: true
-        lastName:
+          description: Address Line 1 of the Contact
+        streetAddressLine2:
           type: string
-          readOnly: true
-        email:
+          description: Address Line 2 of the Contact
+        streetAddressLine3:
           type: string
-          readOnly: true
-        phoneNumber:
+          description: Address Line 3 of the Contact
+        city:
           type: string
-          readOnly: true
-        address:
-          $ref: '#/components/schemas/AccountAddressJson'
+          description: City of the Contact
+        state:
+          type: string
+          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
+        country:
+          type: string
+          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
+        zipcode:
+          type: string
+          description: Zip or Postal Code of the Contact
+    NumberConfig:
+      type: object
+      properties:
+        configId:
+          type: string
+        scheme:
+          type: string
+          enum:
+          - SEQUENCE
+          - PSEUDO_RANDOM
+        prefix:
+          type: string
+        length:
+          type: integer
+          format: int32
+        nextSequenceNumber:
+          type: integer
+          format: int64
     Entity:
       type: object
       required:
@@ -401,6 +373,34 @@ components:
         erpId:
           type: string
           readOnly: true
+    AccountAddress:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        addressId:
+          type: string
+        streetAddressLine1:
+          type: string
+        streetAddressLine2:
+          type: string
+        streetAddressLine3:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        country:
+          type: string
+        zipcode:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
   requestBodies:
     uploadApprovalMatrixCSV:
       content:

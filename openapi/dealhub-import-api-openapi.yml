@@ -199,18 +199,6 @@ paths:
                 $ref: '#/components/schemas/FlatfileWorkbookResponse'
 components:
   schemas:
-    FlatfileWorkbookResponseData:
-      type: object
-      required:
-      - environmentId
-      - spaceId
-      properties:
-        spaceId:
-          type: string
-          readOnly: true
-        environmentId:
-          type: string
-          readOnly: true
     FlatfileWorkbookResponse:
       type: object
       required:
@@ -275,6 +263,18 @@ components:
         completedOn:
           type: integer
           format: int64
+    FlatfileWorkbookResponseData:
+      type: object
+      required:
+      - environmentId
+      - spaceId
+      properties:
+        spaceId:
+          type: string
+          readOnly: true
+        environmentId:
+          type: string
+          readOnly: true
   requestBodies:
     uploadApprovalMatrixCSV:
       content:

@@ -93,16 +93,13 @@ paths:
                 items:
                   type: object
 components:
+  requestBodies:
+    OpportunityRestJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OpportunityRestJson'
   schemas:
-    CustomFieldDefault:
-      type: object
-      properties:
-        value:
-          type: string
-        selections:
-          type: array
-          items:
-            type: string
     CustomFieldEntry:
       type: object
       properties:
@@ -218,12 +215,15 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CustomFieldEntry'
-  requestBodies:
-    OpportunityRestJson:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OpportunityRestJson'
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

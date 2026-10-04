@@ -422,6 +422,140 @@ paths:
           description: Forbidden. Invalid or missing authentication token.
 components:
   schemas:
+    Signer:
+      type: object
+      properties:
+        company_name:
+          type: string
+          description: Company name of the signer.
+        signee_name:
+          type: string
+          description: Name of the signer.
+        signee_title:
+          type: string
+          description: Title of the signer.
+        signature_date:
+          type: string
+          format: date-time
+          description: Date when the user signed the contract via the DealRoom.
+        ordinal:
+          type: integer
+          description: The order of the signer in the list of signers.
+    QuoteSummary:
+      type: object
+      properties:
+        currency:
+          type: string
+          description: Quote currency (ISO-4217 format).
+        total_list_price:
+          type: number
+          format: float
+          description: The total list price of the quote.
+        total_net_price:
+          type: number
+          format: float
+          description: Total net price of the quote.
+        total_discount:
+          type: number
+          format: float
+          description: Total discount of the quote.
+        sales_discount:
+          type: number
+          format: float
+          description: Total discount provided by seller.
+    PlaybookAnswer:
+      type: object
+      properties:
+        system_name:
+          type: string
+          description: Name of the system, relevant for multi-system concept.
+        system_id:
+          type: string
+          description: System ID, relevant for multi-system concept.
+        group_id:
+          type: string
+          description: Group ID.
+        group_name:
+          type: string
+          description: Group name.
+        question_id:
+          type: string
+          description: Question ID.
+        question:
+          type: string
+          description: Question text.
+        answer:
+          type: string
+          description: The answer.
+    OpportunityOwner:
+      type: object
+      description: Details of opportunity owner.
+      required:
+      - external_user_id
+      - email
+      - name
+      properties:
+        external_user_id:
+          type: string
+          maxLength: 200
+          description: CRM user ID (employee of the organization that integrates with DealHub).
+        login:
+          type: string
+          maxLength: 100
+          description: Login of the user.
+        email:
+          type: string
+          format: email
+          maxLength: 100
+          description: Primary email of the user.
+        name:
+          type: string
+          maxLength: 300
+          description: User full name.
+        position:
+          type: string
+          maxLength: 300
+          description: The role of the user in the organization (job title).
+        phone:
+          type: string
+          maxLength: 50
+          description: User phone number.
+        mobile:
+          type: string
+          maxLength: 100
+          description: User mobile phone number.
+        fax:
+          type: string
+          maxLength: 100
+          description: User fax number.
+        company:
+          type: string
+          maxLength: 100
+          description: User company name.
+        street:
+          type: string
+          maxLength: 128
+          description: Street name.
+        city:
+          type: string
+          maxLength: 32
+          description: City name.
+        state:
+          type: string
+          maxLength: 32
+          description: State name.
+        country:
+          type: string
+          maxLength: 32
+          description: Country name.
+        postal_code:
+          type: string
+          maxLength: 16
+          description: Postal code.
+        user_manager_login:
+          type: string
+          maxLength: 100
+          description: Login of user manager.
     Quote:
       type: object
       properties:
@@ -449,152 +583,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Approval'
-    Signer:
-      type: object
-      properties:
-        company_name:
-          type: string
-          description: Company name of the signer.
-        signee_name:
-          type: string
-          description: Name of the signer.
-        signee_title:
-          type: string
-          description: Title of the signer.
-        signature_date:
-          type: string
-          format: date-time
-          description: Date when the user signed the contract via the DealRoom.
-        ordinal:
-          type: integer
-          description: The order of the signer in the list of signers.
-    Approval:
-      type: object
-      properties:
-        reviewer:
-          type: string
-          format: email
-          description: Login of the reviewer.
-        step:
-          type: integer
-          description: Approval workflow step.
-        reason:
-          type: string
-          description: List of approval reasons.
-        status:
-          type: string
-          enum:
-          - waiting
-          - rejected
-          - approved
-          description: Status of the specific step within approval flow.
-        impersonated_by:
-          type: string
-          format: email
-          description: Login of the person who approved/rejected quote on behalf of approver.
-        review_date:
-          type: string
-          format: date-time
-          description: Date of approval/rejection.
-        reviewer_comment:
-          type: string
-          description: Note added by reviewer.
-    LineItem:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier of the line item instance in this quote.
-        sku:
-          type: string
-          description: Product catalog unique identifier.
-        bundle_ref:
-          type: string
-          description: Reference of the line item to its bundle (Bundle SKU).
-        name:
-          type: string
-          description: Product catalog name.
-        primary_tag:
-          type: string
-          description: Product primary tag.
-        system_name:
-          type: string
-          description: System name, relevant in case of multi-system concept.
-        system_id:
-          type: string
-          description: System ID, relevant in case of multi-system concept.
-        system_ordinal:
-          type: integer
-          description: Defines the system's position/order within the quote.
-        group_name:
-          type: string
-          description: Name of the group that triggered creation of the line item.
-        ordinal:
-          type: integer
-          description: The position of the line item as displayed to the seller.
-        msrp:
-          type: number
-          format: float
-          description: Line item MSRP.
-        msrp_discount:
-          type: number
-          format: float
-          description: MSRP discount.
-        list_price:
-          type: number
-          format: float
-          description: Line item list price.
-        user_price:
-          type: number
-          format: float
-          description: End user price. Relevant for indirect sale (partners).
-        user_discount:
-          type: number
-          format: float
-          description: End user discount. Relevant for indirect sale (partners).
-        net_per_unit:
-          type: number
-          format: float
-          description: Unit net price.
-        net_price:
-          type: number
-          format: float
-          description: Total net price of the line item.
-        partner_discounts:
-          type: array
-          description: List of partner level discounts (indirect sale).
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-                description: Partner program name.
-              discount:
-                type: number
-                format: float
-                description: Discount percentage.
-              price:
-                type: number
-                format: float
-                description: Price after partner discount.
-        sales_discount:
-          type: number
-          format: float
-          description: Sales discount.
-        total_discount:
-          type: number
-          format: float
-          description: Total discount.
-        product_factors:
-          type: object
-          description: List of all products factors (e.g. quantity, duration, etc) relevant for specific line item.
-          additionalProperties:
-            type: string
-        attributes:
-          type: object
-          description: List of line item attributes (aka proposal attributes).
-          additionalProperties:
-            type: string
     QuoteInfo:
       type: object
       properties:
@@ -691,6 +679,142 @@ components:
           description: List of signers from the selling organization side.
           items:
             $ref: '#/components/schemas/Signer'
+    LineItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the line item instance in this quote.
+        sku:
+          type: string
+          description: Product catalog unique identifier.
+        bundle_ref:
+          type: string
+          description: Reference of the line item to its bundle (Bundle SKU).
+        name:
+          type: string
+          description: Product catalog name.
+        primary_tag:
+          type: string
+          description: Product primary tag.
+        system_name:
+          type: string
+          description: System name, relevant in case of multi-system concept.
+        system_id:
+          type: string
+          description: System ID, relevant in case of multi-system concept.
+        system_ordinal:
+          type: integer
+          description: Defines the system's position/order within the quote.
+        group_name:
+          type: string
+          description: Name of the group that triggered creation of the line item.
+        ordinal:
+          type: integer
+          description: The position of the line item as displayed to the seller.
+        msrp:
+          type: number
+          format: float
+          description: Line item MSRP.
+        msrp_discount:
+          type: number
+          format: float
+          description: MSRP discount.
+        list_price:
+          type: number
+          format: float
+          description: Line item list price.
+        user_price:
+          type: number
+          format: float
+          description: End user price. Relevant for indirect sale (partners).
+        user_discount:
+          type: number
+          format: float
+          description: End user discount. Relevant for indirect sale (partners).
+        net_per_unit:
+          type: number
+          format: float
+          description: Unit net price.
+        net_price:
+          type: number
+          format: float
+          description: Total net price of the line item.
+        partner_discounts:
+          type: array
+          description: List of partner level discounts (indirect sale).
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                description: Partner program name.
+              discount:
+                type: number
+                format: float
+                description: Discount percentage.
+              price:
+                type: number
+                format: float
+                description: Price after partner discount.
+        sales_discount:
+          type: number
+          format: float
+          description: Sales discount.
+        total_discount:
+          type: number
+          format: float
+          description: Total discount.
+        product_factors:
+          type: object
+          description: List of all products factors (e.g. quantity, duration, etc) relevant for specific line item.
+          additionalProperties:
+            type: string
+        attributes:
+          type: object
+          description: List of line item attributes (aka proposal attributes).
+          additionalProperties:
+            type: string
+    Approval:
+      type: object
+      properties:
+        reviewer:
+          type: string
+          format: email
+          description: Login of the reviewer.
+        step:
+          type: integer
+          description: Approval workflow step.
+        reason:
+          type: string
+          description: List of approval reasons.
+        status:
+          type: string
+          enum:
+          - waiting
+          - rejected
+          - approved
+          description: Status of the specific step within approval flow.
+        impersonated_by:
+          type: string
+          format: email
+          description: Login of the person who approved/rejected quote on behalf of approver.
+        review_date:
+          type: string
+          format: date-time
+          description: Date of approval/rejection.
+        reviewer_comment:
+          type: string
+          description: Note added by reviewer.
+    PaginatedQuotesResponse:
+      type: object
+      properties:
+        info:
+          $ref: '#/components/schemas/PaginationInfo'
+        quotes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Quote'
     CreateOpportunityRequest:
       type: object
       required:
@@ -723,84 +847,6 @@ components:
           type: string
           maxLength: 256
           description: CRM customer name.
-    PaginatedQuotesResponse:
-      type: object
-      properties:
-        info:
-          $ref: '#/components/schemas/PaginationInfo'
-        quotes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Quote'
-    OpportunityOwner:
-      type: object
-      description: Details of opportunity owner.
-      required:
-      - external_user_id
-      - email
-      - name
-      properties:
-        external_user_id:
-          type: string
-          maxLength: 200
-          description: CRM user ID (employee of the organization that integrates with DealHub).
-        login:
-          type: string
-          maxLength: 100
-          description: Login of the user.
-        email:
-          type: string
-          format: email
-          maxLength: 100
-          description: Primary email of the user.
-        name:
-          type: string
-          maxLength: 300
-          description: User full name.
-        position:
-          type: string
-          maxLength: 300
-          description: The role of the user in the organization (job title).
-        phone:
-          type: string
-          maxLength: 50
-          description: User phone number.
-        mobile:
-          type: string
-          maxLength: 100
-          description: User mobile phone number.
-        fax:
-          type: string
-          maxLength: 100
-          description: User fax number.
-        company:
-          type: string
-          maxLength: 100
-          description: User company name.
-        street:
-          type: string
-          maxLength: 128
-          description: Street name.
-        city:
-          type: string
-          maxLength: 32
-          description: City name.
-        state:
-          type: string
-          maxLength: 32
-          description: State name.
-        country:
-          type: string
-          maxLength: 32
-          description: Country name.
-        postal_code:
-          type: string
-          maxLength: 16
-          description: Postal code.
-        user_manager_login:
-          type: string
-          maxLength: 100
-          description: Login of user manager.
     PaginationInfo:
       type: object
       properties:
@@ -817,52 +863,6 @@ components:
           type: string
           format: uri
           description: DealRoom URL.
-    PlaybookAnswer:
-      type: object
-      properties:
-        system_name:
-          type: string
-          description: Name of the system, relevant for multi-system concept.
-        system_id:
-          type: string
-          description: System ID, relevant for multi-system concept.
-        group_id:
-          type: string
-          description: Group ID.
-        group_name:
-          type: string
-          description: Group name.
-        question_id:
-          type: string
-          description: Question ID.
-        question:
-          type: string
-          description: Question text.
-        answer:
-          type: string
-          description: The answer.
-    QuoteSummary:
-      type: object
-      properties:
-        currency:
-          type: string
-          description: Quote currency (ISO-4217 format).
-        total_list_price:
-          type: number
-          format: float
-          description: The total list price of the quote.
-        total_net_price:
-          type: number
-          format: float
-          description: Total net price of the quote.
-        total_discount:
-          type: number
-          format: float
-          description: Total discount of the quote.
-        sales_discount:
-          type: number
-          format: float
-          description: Total discount provided by seller.
   securitySchemes:
     bearerAuth:
       type: http

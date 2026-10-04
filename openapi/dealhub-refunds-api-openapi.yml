@@ -83,6 +83,32 @@ paths:
                 $ref: '#/components/schemas/Refund'
 components:
   schemas:
+    RefundRequestJson:
+      type: object
+      required:
+      - amount
+      - createdBy
+      - creditMemoNumber
+      - paymentId
+      - refundDate
+      properties:
+        creditMemoNumber:
+          type: string
+        paymentId:
+          type: string
+        amount:
+          type: number
+        refundDate:
+          type: integer
+          format: int64
+        paymentMethodType:
+          type: string
+        createdBy:
+          type: string
+        notes:
+          type: string
+        referenceId:
+          type: string
     Refund:
       type: object
       properties:
@@ -159,32 +185,6 @@ components:
           type: integer
           format: int64
         eventObjectId:
-          type: string
-    RefundRequestJson:
-      type: object
-      required:
-      - amount
-      - createdBy
-      - creditMemoNumber
-      - paymentId
-      - refundDate
-      properties:
-        creditMemoNumber:
-          type: string
-        paymentId:
-          type: string
-        amount:
-          type: number
-        refundDate:
-          type: integer
-          format: int64
-        paymentMethodType:
-          type: string
-        createdBy:
-          type: string
-        notes:
-          type: string
-        referenceId:
           type: string
   securitySchemes:
     ApiKeyAuth:

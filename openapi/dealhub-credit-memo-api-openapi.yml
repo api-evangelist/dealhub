@@ -289,32 +289,16 @@ paths:
                 $ref: '#/components/schemas/CreditMemoBalanceJson'
 components:
   schemas:
-    CreditMemoLineItemJson:
+    CreditMemoBalanceJson:
       type: object
-      required:
-      - tenantId
       properties:
-        tenantId:
+        accountId:
           type: string
-        chargeId:
+        creditMemoId:
           type: string
-        amount:
+          format: uuid
+        balance:
           type: number
-        taxAmount:
-          type: number
-        functionalAmount:
-          type: number
-        functionalTaxAmount:
-          type: number
-        startDate:
-          type: integer
-          format: int64
-        endDate:
-          type: integer
-          format: int64
-        createdOn:
-          type: integer
-          format: int64
         updatedOn:
           type: integer
           format: int64
@@ -383,17 +367,17 @@ components:
           format: int64
         voidedNote:
           type: string
-    CreditMemoBalanceJson:
+    CreditMemoLineItemRequestJson:
       type: object
       properties:
-        accountId:
+        chargeId:
           type: string
-        creditMemoId:
-          type: string
-          format: uuid
-        balance:
+        amount:
           type: number
-        updatedOn:
+        startDate:
+          type: integer
+          format: int64
+        endDate:
           type: integer
           format: int64
     VoidCreditMemoRequest:
@@ -406,22 +390,35 @@ components:
           format: int64
         voidedNote:
           type: string
-    CreditMemoPaginationResponseJson:
+    CreditMemoLineItemJson:
       type: object
+      required:
+      - tenantId
       properties:
-        data:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/CreditMemoJson'
-        numElements:
-          type: integer
-          format: int32
-          readOnly: true
-        nextCursor:
+        tenantId:
           type: string
-          format: uuid
-          readOnly: true
+        chargeId:
+          type: string
+        amount:
+          type: number
+        taxAmount:
+          type: number
+        functionalAmount:
+          type: number
+        functionalTaxAmount:
+          type: number
+        startDate:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
     TenantCreditMemoConfigurationJson:
       type: object
       properties:
@@ -481,19 +478,22 @@ components:
         endDate:
           type: integer
           format: int64
-    CreditMemoLineItemRequestJson:
+    CreditMemoPaginationResponseJson:
       type: object
       properties:
-        chargeId:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/CreditMemoJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
           type: string
-        amount:
-          type: number
-        startDate:
-          type: integer
-          format: int64
-        endDate:
-          type: integer
-          format: int64
+          format: uuid
+          readOnly: true
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

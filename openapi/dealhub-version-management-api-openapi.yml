@@ -179,21 +179,6 @@ paths:
                     request_id: 4D114DAD97
 components:
   schemas:
-    Version:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the version.
-        comment:
-          type: string
-          description: Comment provided during version creation.
-        status:
-          type: string
-          description: Status of the version.
-        version_id:
-          type: string
-          description: The unique identifier of the version.
     DuplicateVersionRequest:
       type: object
       required:
@@ -230,6 +215,21 @@ components:
         request_id:
           type: string
           description: The ID of the asynchronous request for tracking.
+    Version:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the version.
+        comment:
+          type: string
+          description: Comment provided during version creation.
+        status:
+          type: string
+          description: Status of the version.
+        version_id:
+          type: string
+          description: The unique identifier of the version.
   securitySchemes:
     bearerAuth:
       type: http

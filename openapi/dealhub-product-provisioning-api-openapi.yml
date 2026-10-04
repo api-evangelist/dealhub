@@ -26,6 +26,37 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    SkuSyncInput:
+      type: object
+      required:
+      - sku
+      - type
+      properties:
+        sku:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        type:
+          type: string
+          readOnly: true
+        subtype:
+          type: string
+          readOnly: true
+        desc:
+          type: string
+          readOnly: true
+        defaultTag:
+          type: string
+          readOnly: true
+        tags:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        productAttributes:
+          $ref: '#/components/schemas/SkuProductAttributes'
     SkuProductAttributes:
       type: object
       properties:
@@ -77,37 +108,6 @@ components:
           readOnly: true
           items:
             $ref: '#/components/schemas/SkuSyncInput'
-    SkuSyncInput:
-      type: object
-      required:
-      - sku
-      - type
-      properties:
-        sku:
-          type: string
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-        type:
-          type: string
-          readOnly: true
-        subtype:
-          type: string
-          readOnly: true
-        desc:
-          type: string
-          readOnly: true
-        defaultTag:
-          type: string
-          readOnly: true
-        tags:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        productAttributes:
-          $ref: '#/components/schemas/SkuProductAttributes'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

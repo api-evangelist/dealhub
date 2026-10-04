@@ -451,17 +451,174 @@ paths:
                 $ref: '#/components/schemas/MessagesAndAnswer'
 components:
   schemas:
-    OrderCreationCustomizationOutputJson:
+    NextQuestion:
+      type: object
+      required:
+      - state
+      properties:
+        nextQuestion:
+          $ref: '#/components/schemas/Question'
+        state:
+          type: string
+          readOnly: true
+          enum:
+          - IN_PROGRESS
+          - DONE
+    NextQuestions:
+      type: object
+      required:
+      - state
+      properties:
+        questions:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Question'
+        answersToRemove:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        state:
+          type: string
+          readOnly: true
+          enum:
+          - IN_PROGRESS
+          - DONE
+    RecurrenceJson:
+      type: object
+      required:
+      - cycle
+      - step
+      properties:
+        cycle:
+          type: string
+          enum:
+          - DAY
+          - MONTH
+          - QUARTER
+          - SEMI_ANNUAL
+          - YEAR
+          - PAID_IN_FULL
+          - CUSTOM
+        step:
+          type: integer
+          format: int32
+          minimum: 1
+    PricingOverrideJson:
       type: object
       properties:
-        customizationRunSkipped:
+        priceTiers:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/PriceTierJson'
+        minQuantity:
+          type: integer
+          format: int64
+          readOnly: true
+        maxQuantity:
+          type: integer
+          format: int64
+          readOnly: true
+    RuleTraceJson:
+      type: object
+      properties:
+        ruleName:
+          type: string
+        fired:
           type: boolean
-        customizationDefinitionMissing:
-          type: boolean
-        ruleTraces:
+        orderActionsPerformed:
           type: array
           items:
-            $ref: '#/components/schemas/RuleTraceJson'
+            $ref: '#/components/schemas/RuleActionPerformedJson'
+        orderLineActionsPerformed:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLineActionsPerformedJson'
+        orderRuleWarnings:
+          type: array
+          items:
+            type: string
+        orderLineRuleWarnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderLineRuleWarningsJson'
+    OutboundEvent:
+      type: object
+      properties:
+        name:
+          type: string
+        comment:
+          type: string
+        id:
+          type: string
+        mediaType:
+          $ref: '#/components/schemas/MediaType'
+        data:
+          type: object
+        reconnectDelay:
+          type: integer
+          format: int64
+        genericType:
+          $ref: '#/components/schemas/Type'
+        reconnectDelaySet:
+          type: boolean
+    Message:
+      type: object
+      required:
+      - createdAt
+      - message
+      - role
+      properties:
+        role:
+          type: string
+          readOnly: true
+        message:
+          type: string
+          readOnly: true
+        createdAt:
+          type: integer
+          format: int64
+          readOnly: true
+    QuestionSchema:
+      type: object
+      required:
+      - type
+      properties:
+        type:
+          type: string
+          readOnly: true
+          enum:
+          - ARRAY
+          - STRING
+          - INTEGER
+          - DATE
+        allowedValues:
+          type: array
+          readOnly: true
+          items:
+            type: string
+        minValue:
+          type: integer
+          format: int32
+          readOnly: true
+        maxValue:
+          type: integer
+          format: int32
+          readOnly: true
+    Type:
+      type: object
+      properties:
+        typeName:
+          type: string
+    RuleActionPerformedJson:
+      type: object
+      properties:
+        action:
+          type: string
+        actionMessage:
+          type: string
     CustomFieldEntry:
       type: object
       properties:
@@ -505,26 +662,6 @@ components:
           - SYSTEM
         defaultValue:
           $ref: '#/components/schemas/CustomFieldDefault'
-    Type:
-      type: object
-      properties:
-        typeName:
-          type: string
-    MediaType:
-      type: object
-      properties:
-        type:
-          type: string
-        subtype:
-          type: string
-        parameters:
-          type: object
-          additionalProperties:
-            type: string
-        wildcardType:
-          type: boolean
-        wildcardSubtype:
-          type: boolean
     OrderLineItemJson:
       type: object
       required:
@@ -611,65 +748,218 @@ components:
           type: string
         dryRunItem:
           type: boolean
-    OutboundEvent:
+    OrderTerms:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        templateGroupId:
+          type: string
+        templateGroupVersion:
+          type: integer
+          format: int32
+        orderId:
+          type: string
+        levelType:
+          type: string
+          enum:
+          - ORDER
+          - PLAN
+        planIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        templateId:
+          type: string
+          readOnly: true
+        deleted:
+          type: boolean
+    OpportunityJson:
       type: object
       properties:
         name:
           type: string
-        comment:
-          type: string
         id:
           type: string
-        mediaType:
-          $ref: '#/components/schemas/MediaType'
-        data:
-          type: object
-        reconnectDelay:
-          type: integer
-          format: int64
-        genericType:
-          $ref: '#/components/schemas/Type'
-        reconnectDelaySet:
-          type: boolean
-    PricingOverrideJson:
-      type: object
-      properties:
-        priceTiers:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/PriceTierJson'
-        minQuantity:
-          type: integer
-          format: int64
-          readOnly: true
-        maxQuantity:
-          type: integer
-          format: int64
-          readOnly: true
-    RuleTraceJson:
-      type: object
-      properties:
-        ruleName:
+        entityId:
           type: string
-        fired:
+        type:
+          type: string
+        stage:
+          type: string
+        crmId:
+          type: string
+        accountId:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+        opportunityCrmType:
+          type: string
+          enum:
+          - SALESFORCE
+          - HUBSPOT
+        isClosed:
           type: boolean
-        orderActionsPerformed:
+        primaryOrderId:
+          type: string
+        opportunityId:
+          type: string
+        currency:
+          type: string
+        customFields:
           type: array
           items:
-            $ref: '#/components/schemas/RuleActionPerformedJson'
-        orderLineActionsPerformed:
+            $ref: '#/components/schemas/CustomFieldEntry'
+    CreditableAmount:
+      type: object
+      properties:
+        subscriptionChargeId:
+          type: string
+        creditableAmount:
+          type: number
+        maxCreditableAmount:
+          type: number
+    OrderCreationCustomizationOutputJson:
+      type: object
+      properties:
+        customizationRunSkipped:
+          type: boolean
+        customizationDefinitionMissing:
+          type: boolean
+        ruleTraces:
           type: array
           items:
-            $ref: '#/components/schemas/OrderLineActionsPerformedJson'
-        orderRuleWarnings:
+            $ref: '#/components/schemas/RuleTraceJson'
+    MediaType:
+      type: object
+      properties:
+        type:
+          type: string
+        subtype:
+          type: string
+        parameters:
+          type: object
+          additionalProperties:
+            type: string
+        wildcardType:
+          type: boolean
+        wildcardSubtype:
+          type: boolean
+    QuestionDefinition:
+      type: object
+      required:
+      - id
+      - questionText
+      - required
+      - schema
+      properties:
+        id:
+          type: string
+          readOnly: true
+        questionText:
+          type: string
+          readOnly: true
+        required:
+          type: boolean
+          readOnly: true
+        multiSelectionAllowed:
+          type: boolean
+          readOnly: true
+        schema:
+          $ref: '#/components/schemas/QuestionSchema'
+        dependsAnd:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Answer'
+        dependsOr:
+          type: array
+          readOnly: true
+          items:
+            type: array
+            items:
+              $ref: '#/components/schemas/Answer'
+    OrderLineRuleWarningsJson:
+      type: object
+      properties:
+        lineIdentifier:
+          type: string
+        warnings:
           type: array
           items:
             type: string
-        orderLineRuleWarnings:
+    DiscountDetailJson:
+      type: object
+      properties:
+        name:
+          type: string
+        percent:
+          type: number
+        discountAmount:
+          type: number
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DEPRECATED
+        discountedPrice:
+          type: number
+        amount:
+          type: number
+    OrderLineActionsPerformedJson:
+      type: object
+      properties:
+        lineIdentifier:
+          type: string
+        actionsPerformed:
           type: array
           items:
-            $ref: '#/components/schemas/OrderLineRuleWarningsJson'
+            $ref: '#/components/schemas/RuleActionPerformedJson'
+    MessagesAndAnswer:
+      type: object
+      properties:
+        accountId:
+          type: string
+          readOnly: true
+        entityId:
+          type: string
+          readOnly: true
+        messages:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Message'
+        answers:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Answer'
+    TenantDiscountLineItemJson:
+      type: object
+      properties:
+        id:
+          type: string
+        percent:
+          type: number
+        name:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DEPRECATED
+        amount:
+          type: number
     GuidedSellingUsecase:
       type: object
       required:
@@ -691,46 +981,58 @@ components:
           readOnly: true
           items:
             $ref: '#/components/schemas/QuestionDefinition'
-    NextQuestions:
+    PriceTierJson:
       type: object
       required:
-      - state
+      - amount
+      - untilQuantity
       properties:
-        questions:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/Question'
-        answersToRemove:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        state:
+        untilQuantity:
+          type: string
+        amount:
+          type: number
+        overage:
+          type: number
+    Question:
+      type: object
+      required:
+      - id
+      - questionText
+      - required
+      - schema
+      properties:
+        id:
           type: string
           readOnly: true
-          enum:
-          - IN_PROGRESS
-          - DONE
-    MessagesAndAnswer:
+        questionText:
+          type: string
+          readOnly: true
+        required:
+          type: boolean
+          readOnly: true
+        multiSelectionAllowed:
+          type: boolean
+          readOnly: true
+        schema:
+          $ref: '#/components/schemas/QuestionSchema'
+    TenantDiscountJson:
       type: object
       properties:
-        accountId:
+        id:
           type: string
-          readOnly: true
-        entityId:
+        percent:
+          type: number
+        name:
           type: string
-          readOnly: true
-        messages:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/Message'
-        answers:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/Answer'
+        type:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DEPRECATED
     AttributeReference:
       type: object
       properties:
@@ -740,70 +1042,60 @@ components:
         attributeValue:
           type: string
           readOnly: true
-    RecurrenceJson:
+    CustomPredefinedTemplateOnOrder:
       type: object
-      required:
-      - cycle
-      - step
       properties:
-        cycle:
+        id:
           type: string
-          enum:
-          - DAY
-          - MONTH
-          - QUARTER
-          - SEMI_ANNUAL
-          - YEAR
-          - PAID_IN_FULL
-          - CUSTOM
-        step:
-          type: integer
-          format: int32
-          minimum: 1
-    QuestionSchema:
+        orderId:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        content:
+          type: string
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
+    GuidedSellingInput:
       type: object
       required:
-      - type
+      - initialBlurb
       properties:
-        type:
+        usecaseId:
           type: string
           readOnly: true
-          enum:
-          - ARRAY
-          - STRING
-          - INTEGER
-          - DATE
-        allowedValues:
+        initialBlurb:
+          type: string
+          readOnly: true
+        messagesSoFar:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Message'
+    Answer:
+      type: object
+      required:
+      - questionId
+      properties:
+        questionId:
+          type: string
+          readOnly: true
+        answer:
           type: array
           readOnly: true
           items:
             type: string
-        minValue:
-          type: integer
-          format: int32
+        skipped:
+          type: boolean
           readOnly: true
-        maxValue:
-          type: integer
-          format: int32
-          readOnly: true
-    DiscountDetailJson:
-      type: object
-      properties:
-        name:
-          type: string
-        percent:
-          type: number
-        discountAmount:
-          type: number
-        status:
-          type: string
-          enum:
-          - ACTIVE
-          - DEPRECATED
-        discountedPrice:
-          type: number
-        amount:
-          type: number
     OrderJson:
       type: object
       required:
@@ -1152,299 +1444,12 @@ components:
           $ref: '#/components/schemas/OpportunityJson'
         zeppaOutput:
           $ref: '#/components/schemas/OrderCreationCustomizationOutputJson'
-    TenantDiscountJson:
-      type: object
-      properties:
-        id:
-          type: string
-        percent:
-          type: number
-        name:
-          type: string
-        type:
-          type: string
-        description:
-          type: string
-        status:
-          type: string
-          enum:
-          - ACTIVE
-          - DEPRECATED
-    NextQuestion:
-      type: object
-      required:
-      - state
-      properties:
-        nextQuestion:
-          $ref: '#/components/schemas/Question'
-        state:
-          type: string
-          readOnly: true
-          enum:
-          - IN_PROGRESS
-          - DONE
-    RuleActionPerformedJson:
-      type: object
-      properties:
-        action:
-          type: string
-        actionMessage:
-          type: string
-    PriceTierJson:
-      type: object
-      required:
-      - amount
-      - untilQuantity
-      properties:
-        untilQuantity:
-          type: string
-        amount:
-          type: number
-        overage:
-          type: number
-    Question:
-      type: object
-      required:
-      - id
-      - questionText
-      - required
-      - schema
-      properties:
-        id:
-          type: string
-          readOnly: true
-        questionText:
-          type: string
-          readOnly: true
-        required:
-          type: boolean
-          readOnly: true
-        multiSelectionAllowed:
-          type: boolean
-          readOnly: true
-        schema:
-          $ref: '#/components/schemas/QuestionSchema'
-    OrderTerms:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        templateGroupId:
-          type: string
-        templateGroupVersion:
-          type: integer
-          format: int32
-        orderId:
-          type: string
-        levelType:
-          type: string
-          enum:
-          - ORDER
-          - PLAN
-        planIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        templateId:
-          type: string
-          readOnly: true
-        deleted:
-          type: boolean
-    OrderLineRuleWarningsJson:
-      type: object
-      properties:
-        lineIdentifier:
-          type: string
-        warnings:
-          type: array
-          items:
-            type: string
-    CustomPredefinedTemplateOnOrder:
-      type: object
-      properties:
-        id:
-          type: string
-        orderId:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        content:
-          type: string
-    CustomFieldDefault:
-      type: object
-      properties:
-        value:
-          type: string
-        selections:
-          type: array
-          items:
-            type: string
-    OrderLineActionsPerformedJson:
-      type: object
-      properties:
-        lineIdentifier:
-          type: string
-        actionsPerformed:
-          type: array
-          items:
-            $ref: '#/components/schemas/RuleActionPerformedJson'
-    Message:
-      type: object
-      required:
-      - createdAt
-      - message
-      - role
-      properties:
-        role:
-          type: string
-          readOnly: true
-        message:
-          type: string
-          readOnly: true
-        createdAt:
-          type: integer
-          format: int64
-          readOnly: true
-    Answer:
-      type: object
-      required:
-      - questionId
-      properties:
-        questionId:
-          type: string
-          readOnly: true
-        answer:
-          type: array
-          readOnly: true
-          items:
-            type: string
-        skipped:
-          type: boolean
-          readOnly: true
-    GuidedSellingInput:
-      type: object
-      required:
-      - initialBlurb
-      properties:
-        usecaseId:
-          type: string
-          readOnly: true
-        initialBlurb:
-          type: string
-          readOnly: true
-        messagesSoFar:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/Message'
-    CreditableAmount:
-      type: object
-      properties:
-        subscriptionChargeId:
-          type: string
-        creditableAmount:
-          type: number
-        maxCreditableAmount:
-          type: number
-    OpportunityJson:
-      type: object
-      properties:
-        name:
-          type: string
-        id:
-          type: string
-        entityId:
-          type: string
-        type:
-          type: string
-        stage:
-          type: string
-        crmId:
-          type: string
-        accountId:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-        opportunityCrmType:
-          type: string
-          enum:
-          - SALESFORCE
-          - HUBSPOT
-        isClosed:
-          type: boolean
-        primaryOrderId:
-          type: string
-        opportunityId:
-          type: string
-        currency:
-          type: string
-        customFields:
-          type: array
-          items:
-            $ref: '#/components/schemas/CustomFieldEntry'
-    QuestionDefinition:
-      type: object
-      required:
-      - id
-      - questionText
-      - required
-      - schema
-      properties:
-        id:
-          type: string
-          readOnly: true
-        questionText:
-          type: string
-          readOnly: true
-        required:
-          type: boolean
-          readOnly: true
-        multiSelectionAllowed:
-          type: boolean
-          readOnly: true
-        schema:
-          $ref: '#/components/schemas/QuestionSchema'
-        dependsAnd:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/Answer'
-        dependsOr:
-          type: array
-          readOnly: true
-          items:
-            type: array
-            items:
-              $ref: '#/components/schemas/Answer'
-    TenantDiscountLineItemJson:
-      type: object
-      properties:
-        id:
-          type: string
-        percent:
-          type: number
-        name:
-          type: string
-        type:
-          type: string
-        description:
-          type: string
-        status:
-          type: string
-          enum:
-          - ACTIVE
-          - DEPRECATED
-        amount:
-          type: number
   requestBodies:
+    generateZeppaArtifactBody:
+      content:
+        text/plain:
+          schema:
+            type: string
     AnswerArray:
       content:
         application/json:
@@ -1452,11 +1457,6 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/Answer'
-    generateZeppaArtifactBody:
-      content:
-        text/plain:
-          schema:
-            type: string
     GuidedSellingUsecase:
       content:
         application/json:

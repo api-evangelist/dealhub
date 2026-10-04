@@ -166,59 +166,6 @@ paths:
           description: Forbidden. The authentication token is missing or invalid.
 components:
   schemas:
-    SkuPricingRequest:
-      type: object
-      properties:
-        id:
-          type: string
-          description: A unique identifier that represents the ordinal position of this SKU in the request.
-        sku:
-          type: string
-          description: SKU of the product.
-        parameters:
-          type: array
-          items:
-            $ref: '#/components/schemas/ParameterValue'
-          description: List of parameters required for price calculation.
-      required:
-      - id
-      - sku
-      - parameters
-    PricingRequest:
-      type: object
-      properties:
-        currency:
-          type: string
-          description: The currency ISO code to base the pricing on.
-        geo:
-          type: string
-          description: The geographic region to be used for the pricing calculation.
-        version:
-          type: string
-          description: The version name to retrieve the parameters for. If not provided, the system will use the active version.
-        playbook:
-          type: string
-          description: The playbook name in case multiple playbooks exist.
-        skus:
-          type: array
-          items:
-            $ref: '#/components/schemas/SkuPricingRequest'
-      required:
-      - currency
-      - geo
-      - skus
-    ParameterDefinition:
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name of the parameter to return.
-        type:
-          type: string
-          enum:
-          - number
-          - text
-          description: The expected value type.
     ParametersRequest:
       type: object
       properties:
@@ -243,22 +190,33 @@ components:
       - currency
       - geo
       - skus
-    PricingResponse:
+    ParameterDefinition:
       type: object
       properties:
-        currency:
+        name:
           type: string
-          description: The currency in which the prices are shown.
-        version:
+          description: The name of the parameter to return.
+        type:
           type: string
-          description: The version for which the prices are related.
-        playbook:
+          enum:
+          - number
+          - text
+          description: The expected value type.
+    SkuPrice:
+      type: object
+      properties:
+        id:
           type: string
-          description: The playbook name for which the prices are related.
-        skus:
-          type: array
-          items:
-            $ref: '#/components/schemas/SkuPrice'
+          description: The identifier that represents the ordinal position as sent in the request.
+        sku:
+          type: string
+          description: The product's SKU.
+        price:
+          type: number
+          description: The calculated price per unit in the requested currency (0 if there was an error).
+        error:
+          type: string
+          description: An error message in case something went wrong (e.g., "Pricing could not be calculated").
     SkuParameters:
       type: object
       properties:
@@ -277,21 +235,40 @@ components:
               description: The list of parameters needed to resolve all of the relevant pricing formulas.
               items:
                 $ref: '#/components/schemas/ParameterDefinition'
-    SkuPrice:
+    PricingResponse:
+      type: object
+      properties:
+        currency:
+          type: string
+          description: The currency in which the prices are shown.
+        version:
+          type: string
+          description: The version for which the prices are related.
+        playbook:
+          type: string
+          description: The playbook name for which the prices are related.
+        skus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkuPrice'
+    SkuPricingRequest:
       type: object
       properties:
         id:
           type: string
-          description: The identifier that represents the ordinal position as sent in the request.
+          description: A unique identifier that represents the ordinal position of this SKU in the request.
         sku:
           type: string
-          description: The product's SKU.
-        price:
-          type: number
-          description: The calculated price per unit in the requested currency (0 if there was an error).
-        error:
-          type: string
-          description: An error message in case something went wrong (e.g., "Pricing could not be calculated").
+          description: SKU of the product.
+        parameters:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParameterValue'
+          description: List of parameters required for price calculation.
+      required:
+      - id
+      - sku
+      - parameters
     ParametersResponse:
       type: object
       properties:
@@ -299,6 +276,29 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SkuParameters'
+    PricingRequest:
+      type: object
+      properties:
+        currency:
+          type: string
+          description: The currency ISO code to base the pricing on.
+        geo:
+          type: string
+          description: The geographic region to be used for the pricing calculation.
+        version:
+          type: string
+          description: The version name to retrieve the parameters for. If not provided, the system will use the active version.
+        playbook:
+          type: string
+          description: The playbook name in case multiple playbooks exist.
+        skus:
+          type: array
+          items:
+            $ref: '#/components/schemas/SkuPricingRequest'
+      required:
+      - currency
+      - geo
+      - skus
     ParameterValue:
       type: object
       properties:

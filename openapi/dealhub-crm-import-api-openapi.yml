@@ -347,6 +347,22 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    CrmImportFailure:
+      type: object
+      properties:
+        crm_id:
+          type: string
+          description: The buyer-account CRM id that failed.
+        reason:
+          type: string
+          description: Human-readable failure reason.
+    ErrorResponse:
+      type: object
+      description: A generic error response. The specific message will vary based on the context.
+      properties:
+        message:
+          type: string
+          example: Unauthenticated
     CrmImportLookupResponse:
       type: object
       properties:
@@ -384,12 +400,6 @@ components:
           - string
           - 'null'
           description: Failure reason, if any.
-    CrmImportRequestResponse:
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: ID of the asynchronous import request. Use it for the status / detail / lookup / retry services, or wait for the `crmImport` completion webhook (same request_id).
     CrmImportContactResult:
       type: object
       properties:
@@ -412,13 +422,33 @@ components:
           - string
           - 'null'
           description: Failure reason (contact level). Present only when state = FAILED.
-    ErrorResponse:
+    CrmImportRequestResponse:
       type: object
-      description: A generic error response. The specific message will vary based on the context.
       properties:
-        message:
+        request_id:
           type: string
-          example: Unauthenticated
+          description: ID of the asynchronous import request. Use it for the status / detail / lookup / retry services, or wait for the `crmImport` completion webhook (same request_id).
+    CrmImportDetailResponse:
+      allOf:
+      - $ref: '#/components/schemas/CrmImportStatusResponse'
+      - type: object
+        properties:
+          accounts:
+            type: array
+            description: Per buyer-account results.
+            items:
+              $ref: '#/components/schemas/CrmImportAccountResult'
+    StartCrmImportRequest:
+      type: object
+      properties:
+        buyer_account_crm_ids:
+          type: array
+          description: List of buyer-account CRM ids to import.
+          items:
+            type: string
+          minItems: 1
+      required:
+      - buyer_account_crm_ids
     CrmImportStatusResponse:
       type: object
       properties:
@@ -452,25 +482,6 @@ components:
           description: Per-id failures. Empty when nothing failed.
           items:
             $ref: '#/components/schemas/CrmImportFailure'
-    CrmImportDetailResponse:
-      allOf:
-      - $ref: '#/components/schemas/CrmImportStatusResponse'
-      - type: object
-        properties:
-          accounts:
-            type: array
-            description: Per buyer-account results.
-            items:
-              $ref: '#/components/schemas/CrmImportAccountResult'
-    CrmImportFailure:
-      type: object
-      properties:
-        crm_id:
-          type: string
-          description: The buyer-account CRM id that failed.
-        reason:
-          type: string
-          description: Human-readable failure reason.
     CrmImportAccountResult:
       type: object
       properties:
@@ -494,17 +505,6 @@ components:
           description: Per-contact results for the account.
           items:
             $ref: '#/components/schemas/CrmImportContactResult'
-    StartCrmImportRequest:
-      type: object
-      properties:
-        buyer_account_crm_ids:
-          type: array
-          description: List of buyer-account CRM ids to import.
-          items:
-            type: string
-          minItems: 1
-      required:
-      - buyer_account_crm_ids
   securitySchemes:
     bearerToken:
       type: http

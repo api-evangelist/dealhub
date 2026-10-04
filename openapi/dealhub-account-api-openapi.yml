@@ -173,6 +173,88 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    NewAccountContactJson:
+      type: object
+      required:
+      - accountId
+      - email
+      properties:
+        contactId:
+          type: string
+          description: Contact ID - Used for CPQ-RevenuHub integration
+          minLength: 0
+          maxLength: 36
+        accountId:
+          type: string
+          description: Uniquely identifies the Account
+          minLength: 0
+          maxLength: 36
+        firstName:
+          type: string
+          description: (optional) First Name of the Contact
+        lastName:
+          type: string
+          description: (optional) Last Name of the Contact
+        email:
+          type: string
+          description: Email of the Contact
+        phoneNumber:
+          type: string
+          description: (optional) Phone Number of the Contact
+        title:
+          type: string
+          description: (optional) Title of the Contact
+        address:
+          $ref: '#/components/schemas/AccountAddressJson'
+        externalId:
+          type: string
+          description: (optional) External system identifier
+        erpId:
+          type: string
+          description: (optional) ERP system identifier
+        crmId:
+          type: string
+          description: (optional) CRM system identifier
+        fullName:
+          type: string
+        eventObjectId:
+          type: string
+    AccountQueryRequest:
+      type: object
+      required:
+      - accountIds
+      properties:
+        accountIds:
+          type: array
+          description: List of account identifiers (max 100)
+          items:
+            type: string
+          maxItems: 100
+          minItems: 0
+    AccountAddressJson:
+      type: object
+      properties:
+        streetAddressLine1:
+          type: string
+          description: Address Line 1 of the Contact
+        streetAddressLine2:
+          type: string
+          description: Address Line 2 of the Contact
+        streetAddressLine3:
+          type: string
+          description: Address Line 3 of the Contact
+        city:
+          type: string
+          description: City of the Contact
+        state:
+          type: string
+          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
+        country:
+          type: string
+          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
+        zipcode:
+          type: string
+          description: Zip or Postal Code of the Contact
     NewAccountJson:
       type: object
       required:
@@ -274,99 +356,17 @@ components:
           type: integer
           format: int64
           description: (optional) Last updated timestamp (epoch seconds)
-    AccountAddressJson:
-      type: object
-      properties:
-        streetAddressLine1:
-          type: string
-          description: Address Line 1 of the Contact
-        streetAddressLine2:
-          type: string
-          description: Address Line 2 of the Contact
-        streetAddressLine3:
-          type: string
-          description: Address Line 3 of the Contact
-        city:
-          type: string
-          description: City of the Contact
-        state:
-          type: string
-          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
-        country:
-          type: string
-          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
-        zipcode:
-          type: string
-          description: Zip or Postal Code of the Contact
-    AccountQueryRequest:
-      type: object
-      required:
-      - accountIds
-      properties:
-        accountIds:
-          type: array
-          description: List of account identifiers (max 100)
-          items:
-            type: string
-          maxItems: 100
-          minItems: 0
-    NewAccountContactJson:
-      type: object
-      required:
-      - accountId
-      - email
-      properties:
-        contactId:
-          type: string
-          description: Contact ID - Used for CPQ-RevenuHub integration
-          minLength: 0
-          maxLength: 36
-        accountId:
-          type: string
-          description: Uniquely identifies the Account
-          minLength: 0
-          maxLength: 36
-        firstName:
-          type: string
-          description: (optional) First Name of the Contact
-        lastName:
-          type: string
-          description: (optional) Last Name of the Contact
-        email:
-          type: string
-          description: Email of the Contact
-        phoneNumber:
-          type: string
-          description: (optional) Phone Number of the Contact
-        title:
-          type: string
-          description: (optional) Title of the Contact
-        address:
-          $ref: '#/components/schemas/AccountAddressJson'
-        externalId:
-          type: string
-          description: (optional) External system identifier
-        erpId:
-          type: string
-          description: (optional) ERP system identifier
-        crmId:
-          type: string
-          description: (optional) CRM system identifier
-        fullName:
-          type: string
-        eventObjectId:
-          type: string
   requestBodies:
-    NewAccountJson:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/NewAccountJson'
     NewAccountContactJson:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/NewAccountContactJson'
+    NewAccountJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/NewAccountJson'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

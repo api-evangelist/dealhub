@@ -221,12 +221,6 @@ paths:
                 $ref: '#/components/schemas/AsyncResponse'
 components:
   schemas:
-    AsyncResponse:
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: The ID of the asynchronous request for tracking.
     ProductHierarchyNode:
       type: object
       properties:
@@ -251,6 +245,12 @@ components:
           items:
             $ref: '#/components/schemas/ProductHierarchyNode'
           description: A nested list of child items.
+    AsyncResponse:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: The ID of the asynchronous request for tracking.
   securitySchemes:
     bearerAuth:
       type: http

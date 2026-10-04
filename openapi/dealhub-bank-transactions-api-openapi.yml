@@ -84,31 +84,22 @@ paths:
                 $ref: '#/components/schemas/BankTransactionsUploadResult'
 components:
   schemas:
-    BankTransactionsUploadData:
+    BankTransactionsUploadResult:
       type: object
       properties:
-        failed:
-          type: boolean
-        paymentType:
-          type: string
-        failureReason:
-          type: string
-        bankAccountId:
-          type: string
-        externalTransactionId:
-          type: string
-        transactionAmount:
-          type: string
-        transactionDate:
-          type: string
-        payerName:
-          type: string
-        referenceNumber:
-          type: string
-        transactionCurrency:
-          type: string
-        transactionType:
-          type: string
+        bankTransactionsCount:
+          type: integer
+          format: int32
+        failedBankTransactionsCount:
+          type: integer
+          format: int32
+        successfulBankTransactionsCount:
+          type: integer
+          format: int32
+        bankTransactionsUploadData:
+          type: array
+          items:
+            $ref: '#/components/schemas/BankTransactionsUploadData'
     BankTransactionPotentialInvoice:
       type: object
       properties:
@@ -149,37 +140,6 @@ components:
           type: string
         bankAccountName:
           type: string
-    PotentialInvoice:
-      type: object
-      properties:
-        invoiceNumber:
-          type: string
-        invoiceAmount:
-          type: number
-        accountName:
-          type: string
-        invoiceDate:
-          type: integer
-          format: int64
-        matchingConfidence:
-          type: integer
-          format: int32
-    BankTransactionsUploadResult:
-      type: object
-      properties:
-        bankTransactionsCount:
-          type: integer
-          format: int32
-        failedBankTransactionsCount:
-          type: integer
-          format: int32
-        successfulBankTransactionsCount:
-          type: integer
-          format: int32
-        bankTransactionsUploadData:
-          type: array
-          items:
-            $ref: '#/components/schemas/BankTransactionsUploadData'
     PaginatedBankTransactionPotentialInvoiceResponse:
       type: object
       properties:
@@ -193,6 +153,46 @@ components:
         pageToken:
           type: string
         totalCount:
+          type: integer
+          format: int32
+    BankTransactionsUploadData:
+      type: object
+      properties:
+        failed:
+          type: boolean
+        paymentType:
+          type: string
+        failureReason:
+          type: string
+        bankAccountId:
+          type: string
+        externalTransactionId:
+          type: string
+        transactionAmount:
+          type: string
+        transactionDate:
+          type: string
+        payerName:
+          type: string
+        referenceNumber:
+          type: string
+        transactionCurrency:
+          type: string
+        transactionType:
+          type: string
+    PotentialInvoice:
+      type: object
+      properties:
+        invoiceNumber:
+          type: string
+        invoiceAmount:
+          type: number
+        accountName:
+          type: string
+        invoiceDate:
+          type: integer
+          format: int64
+        matchingConfidence:
           type: integer
           format: int32
   securitySchemes:
