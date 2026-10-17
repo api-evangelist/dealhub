@@ -179,21 +179,26 @@ paths:
                   $ref: '#/components/schemas/LedgerAccount'
 components:
   schemas:
-    AccountingEventPaginatedResponse:
+    UserGroupJson:
       type: object
       properties:
-        data:
+        id:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        description:
+          type: string
+        users:
           type: array
           items:
-            $ref: '#/components/schemas/AccountingEvent'
-        count:
-          type: integer
-          format: int32
-        pageToken:
+            type: string
+        externalId:
           type: string
-        totalCount:
-          type: integer
-          format: int32
     ByteBuffer:
       type: object
       properties:
@@ -218,42 +223,6 @@ components:
           type: boolean
         readOnly:
           type: boolean
-    LedgerAccount:
-      type: object
-      properties:
-        entityIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        name:
-          type: string
-        accountCode:
-          type: string
-        description:
-          type: string
-          minLength: 0
-          maxLength: 65535
-        accountType:
-          type: string
-          enum:
-          - ACCOUNTS_RECEIVABLE
-          - TAX_LIABILITY
-          - CASH
-          - DEFERRED_REVENUE
-          - RECOGNIZED_REVENUE
-          - CONTRACT_ASSET
-          - REALIZED_GAIN_LOSS
-          - EXPENSE
-          - REFUND
-        isDefault:
-          type: boolean
-        inUse:
-          type: boolean
-        default:
-          type: boolean
-        id:
-          type: string
     EntityRef:
       type: object
       required:
@@ -269,105 +238,6 @@ components:
         name:
           type: string
           readOnly: true
-    AccountingPeriod:
-      type: object
-      properties:
-        startDate:
-          type: integer
-          format: int64
-        endDate:
-          type: integer
-          format: int64
-        deferredRevenueBalance:
-          type: number
-        status:
-          type: string
-          enum:
-          - OPEN
-          - CLOSE_IN_PROGRESS
-          - CLOSED
-          - UPCOMING
-        syncStatus:
-          type: string
-          enum:
-          - NONE
-          - WAITING
-          - IN_PROGRESS
-          - SUCCEEDED
-          - FAILED
-        openedBy:
-          type: string
-        openedOn:
-          type: integer
-          format: int64
-        closedBy:
-          type: string
-        closedOn:
-          type: integer
-          format: int64
-        calculation:
-          $ref: '#/components/schemas/AccountingPeriodCalculation'
-        openedByUser:
-          $ref: '#/components/schemas/UserJson'
-        closedByUser:
-          $ref: '#/components/schemas/UserJson'
-        synthetic:
-          type: boolean
-        id:
-          type: string
-        entityId:
-          type: string
-    UserGroupJson:
-      type: object
-      properties:
-        id:
-          type: string
-        entityIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        name:
-          type: string
-        description:
-          type: string
-        users:
-          type: array
-          items:
-            type: string
-        externalId:
-          type: string
-    ApprovalSegmentJson:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-    AccountingPeriodCalculation:
-      type: object
-      properties:
-        deferredRevenueStartingBalance:
-          type: number
-        deferredRevenueEndingBalance:
-          type: number
-        additionalRevenue:
-          type: number
-        recognizedRevenue:
-          type: number
-        unrecognizedRevenue:
-          type: number
-        unrecognizedTransactionCount:
-          type: integer
-          format: int32
     UserJson:
       type: object
       properties:
@@ -443,6 +313,85 @@ components:
           type: string
         eventObjectId:
           type: string
+    AccountingPeriodCalculation:
+      type: object
+      properties:
+        deferredRevenueStartingBalance:
+          type: number
+        deferredRevenueEndingBalance:
+          type: number
+        additionalRevenue:
+          type: number
+        recognizedRevenue:
+          type: number
+        unrecognizedRevenue:
+          type: number
+        unrecognizedTransactionCount:
+          type: integer
+          format: int32
+    ApprovalSegmentJson:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    AccountingPeriod:
+      type: object
+      properties:
+        startDate:
+          type: integer
+          format: int64
+        endDate:
+          type: integer
+          format: int64
+        deferredRevenueBalance:
+          type: number
+        status:
+          type: string
+          enum:
+          - OPEN
+          - CLOSE_IN_PROGRESS
+          - CLOSED
+          - UPCOMING
+        syncStatus:
+          type: string
+          enum:
+          - NONE
+          - WAITING
+          - IN_PROGRESS
+          - SUCCEEDED
+          - FAILED
+        openedBy:
+          type: string
+        openedOn:
+          type: integer
+          format: int64
+        closedBy:
+          type: string
+        closedOn:
+          type: integer
+          format: int64
+        calculation:
+          $ref: '#/components/schemas/AccountingPeriodCalculation'
+        openedByUser:
+          $ref: '#/components/schemas/UserJson'
+        closedByUser:
+          $ref: '#/components/schemas/UserJson'
+        synthetic:
+          type: boolean
+        id:
+          type: string
+        entityId:
+          type: string
     AccountingEvent:
       type: object
       properties:
@@ -484,6 +433,57 @@ components:
         sourceEventSequenceNumber:
           type: integer
           format: int64
+    LedgerAccount:
+      type: object
+      properties:
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        accountCode:
+          type: string
+        description:
+          type: string
+          minLength: 0
+          maxLength: 65535
+        accountType:
+          type: string
+          enum:
+          - ACCOUNTS_RECEIVABLE
+          - TAX_LIABILITY
+          - CASH
+          - DEFERRED_REVENUE
+          - RECOGNIZED_REVENUE
+          - CONTRACT_ASSET
+          - REALIZED_GAIN_LOSS
+          - EXPENSE
+          - REFUND
+        isDefault:
+          type: boolean
+        inUse:
+          type: boolean
+        default:
+          type: boolean
+        id:
+          type: string
+    AccountingEventPaginatedResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountingEvent'
+        count:
+          type: integer
+          format: int32
+        pageToken:
+          type: string
+        totalCount:
+          type: integer
+          format: int32
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

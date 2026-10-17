@@ -81,6 +81,25 @@ paths:
                       errors: []
 components:
   schemas:
+    RequestSummary:
+      type: object
+      properties:
+        success_count:
+          type: integer
+          description: The number of successfully processed records.
+        errors_count:
+          type: integer
+          description: The number of records that could not be processed.
+        warnings:
+          type: array
+          items:
+            type: string
+            description: List of warnings that occurred during execution.
+        errors:
+          type: array
+          items:
+            type: string
+          description: List of errors that occurred during execution.
     RequestStatus:
       type: object
       properties:
@@ -101,25 +120,6 @@ components:
         error_code:
           type: string
           description: Code of the error if the status is 'failed'.
-    RequestSummary:
-      type: object
-      properties:
-        success_count:
-          type: integer
-          description: The number of successfully processed records.
-        errors_count:
-          type: integer
-          description: The number of records that could not be processed.
-        warnings:
-          type: array
-          items:
-            type: string
-            description: List of warnings that occurred during execution.
-        errors:
-          type: array
-          items:
-            type: string
-          description: List of errors that occurred during execution.
     RequestSummaryResponse:
       type: object
       properties:

@@ -281,28 +281,26 @@ paths:
           description: successful operation
 components:
   schemas:
-    InputStream:
-      type: object
-    UserSsoUpdate:
+    UserGroupJson:
       type: object
       properties:
-        ssoOnly:
-          type: boolean
-    EntityRef:
-      type: object
-      required:
-      - entityId
-      - name
-      properties:
-        entityId:
+        id:
           type: string
-          readOnly: true
-        displayId:
-          type: string
-          readOnly: true
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
         name:
           type: string
-          readOnly: true
+        description:
+          type: string
+        users:
+          type: array
+          items:
+            type: string
+        externalId:
+          type: string
     UserInput:
       type: object
       properties:
@@ -348,22 +346,24 @@ components:
             type: string
         externalId:
           type: string
-    ApprovalSegmentJson:
+    InputStream:
       type: object
+    EntityRef:
+      type: object
+      required:
+      - entityId
+      - name
       properties:
-        id:
+        entityId:
           type: string
+          readOnly: true
+        displayId:
+          type: string
+          readOnly: true
         name:
           type: string
-        description:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-    UserGroupJson:
+          readOnly: true
+    UserGroupRequestJson:
       type: object
       properties:
         id:
@@ -458,6 +458,26 @@ components:
           type: string
         eventObjectId:
           type: string
+    ApprovalSegmentJson:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    UserSsoUpdate:
+      type: object
+      properties:
+        ssoOnly:
+          type: boolean
     UserPaginationResponseJson:
       type: object
       properties:
@@ -474,37 +494,17 @@ components:
           type: string
           format: uuid
           readOnly: true
-    UserGroupRequestJson:
-      type: object
-      properties:
-        id:
-          type: string
-        entityIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-        name:
-          type: string
-        description:
-          type: string
-        users:
-          type: array
-          items:
-            type: string
-        externalId:
-          type: string
   requestBodies:
-    UserInput:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/UserInput'
     UserGroupRequestJson:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/UserGroupRequestJson'
+    UserInput:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UserInput'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

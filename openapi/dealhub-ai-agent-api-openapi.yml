@@ -167,6 +167,11 @@ paths:
                   $ref: '#/components/schemas/Message'
 components:
   schemas:
+    Type:
+      type: object
+      properties:
+        typeName:
+          type: string
     OutboundEvent:
       type: object
       properties:
@@ -219,11 +224,6 @@ components:
           type: integer
           format: int64
           readOnly: true
-    Type:
-      type: object
-      properties:
-        typeName:
-          type: string
   requestBodies:
     generateZeppaArtifactBody:
       content:

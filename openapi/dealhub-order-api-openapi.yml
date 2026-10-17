@@ -150,6 +150,52 @@ components:
         subscriptionChargeGroupId:
           type: string
           readOnly: true
+    NewOrderRequest:
+      type: object
+      required:
+      - order
+      properties:
+        order:
+          $ref: '#/components/schemas/NewOrderInput'
+        validateStructure:
+          type: boolean
+          readOnly: true
+    RecurrenceJson:
+      type: object
+      required:
+      - cycle
+      - step
+      properties:
+        cycle:
+          type: string
+          enum:
+          - DAY
+          - MONTH
+          - QUARTER
+          - SEMI_ANNUAL
+          - YEAR
+          - PAID_IN_FULL
+          - CUSTOM
+        step:
+          type: integer
+          format: int32
+          minimum: 1
+    Factor:
+      type: object
+      required:
+      - id
+      - name
+      - value
+      properties:
+        name:
+          type: string
+          readOnly: true
+        id:
+          type: string
+          readOnly: true
+        value:
+          type: number
+          readOnly: true
     Order:
       type: object
       required:
@@ -258,38 +304,12 @@ components:
         subscriptionId:
           type: string
           readOnly: true
-    NewOrderRequest:
-      type: object
-      required:
-      - order
-      properties:
-        order:
-          $ref: '#/components/schemas/NewOrderInput'
-        validateStructure:
-          type: boolean
-          readOnly: true
-    NewOrderLineItemInput:
+    OrderPeriodMetadata:
       type: object
       required:
       - endDate
-      - lineItemIdentifier
-      - listAmount
-      - listUnitPrice
-      - pricingBlock
-      - sellAmount
-      - sellUnitPrice
-      - sku
       - startDate
       properties:
-        lineItemIdentifier:
-          type: string
-          readOnly: true
-        sku:
-          type: string
-          readOnly: true
-        groupId:
-          type: string
-          readOnly: true
         startDate:
           type: integer
           format: int64
@@ -298,34 +318,11 @@ components:
           type: integer
           format: int64
           readOnly: true
-        listUnitPrice:
-          type: number
+        metadata:
+          type: object
           readOnly: true
-        sellUnitPrice:
-          type: number
-          readOnly: true
-        sellAmount:
-          type: number
-          readOnly: true
-        listAmount:
-          type: number
-          readOnly: true
-        factors:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/Factor'
-        pricingBlock:
-          type: string
-          readOnly: true
-        renewable:
-          type: boolean
-          readOnly: true
-        billingCycle:
-          $ref: '#/components/schemas/RecurrenceJson'
-        customAttributes:
-          type: string
-          readOnly: true
+          additionalProperties:
+            type: object
     NewOrderInput:
       type: object
       required:
@@ -411,48 +408,28 @@ components:
           readOnly: true
           items:
             $ref: '#/components/schemas/NewOrderLineItemInput'
-    RecurrenceJson:
-      type: object
-      required:
-      - cycle
-      - step
-      properties:
-        cycle:
-          type: string
-          enum:
-          - DAY
-          - MONTH
-          - QUARTER
-          - SEMI_ANNUAL
-          - YEAR
-          - PAID_IN_FULL
-          - CUSTOM
-        step:
-          type: integer
-          format: int32
-          minimum: 1
-    Factor:
-      type: object
-      required:
-      - id
-      - name
-      - value
-      properties:
-        name:
-          type: string
-          readOnly: true
-        id:
-          type: string
-          readOnly: true
-        value:
-          type: number
-          readOnly: true
-    OrderPeriodMetadata:
+    NewOrderLineItemInput:
       type: object
       required:
       - endDate
+      - lineItemIdentifier
+      - listAmount
+      - listUnitPrice
+      - pricingBlock
+      - sellAmount
+      - sellUnitPrice
+      - sku
       - startDate
       properties:
+        lineItemIdentifier:
+          type: string
+          readOnly: true
+        sku:
+          type: string
+          readOnly: true
+        groupId:
+          type: string
+          readOnly: true
         startDate:
           type: integer
           format: int64
@@ -461,11 +438,34 @@ components:
           type: integer
           format: int64
           readOnly: true
-        metadata:
-          type: object
+        listUnitPrice:
+          type: number
           readOnly: true
-          additionalProperties:
-            type: object
+        sellUnitPrice:
+          type: number
+          readOnly: true
+        sellAmount:
+          type: number
+          readOnly: true
+        listAmount:
+          type: number
+          readOnly: true
+        factors:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/Factor'
+        pricingBlock:
+          type: string
+          readOnly: true
+        renewable:
+          type: boolean
+          readOnly: true
+        billingCycle:
+          $ref: '#/components/schemas/RecurrenceJson'
+        customAttributes:
+          type: string
+          readOnly: true
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

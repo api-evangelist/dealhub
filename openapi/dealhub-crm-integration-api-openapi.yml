@@ -358,6 +358,77 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      description: A generic error response. The specific message will vary based on the context.
+      properties:
+        message:
+          type: string
+          example: Unauthenticated
+    UserInformation:
+      type: object
+      properties:
+        external_user_id:
+          type: string
+          maxLength: 200
+          description: CRM user ID (employee of the organization that integrates with DealHub).
+        login:
+          type: string
+          maxLength: 100
+          description: Login of the user. If a new user is created and login is not provided, the email will be used as the login.
+        email:
+          type: string
+          format: email
+          maxLength: 100
+          description: Primary email of the user.
+        name:
+          type: string
+          maxLength: 300
+          description: User's full name.
+        position:
+          type: string
+          maxLength: 300
+          description: The role of the user in the organization (job title).
+        phone:
+          type: string
+          maxLength: 50
+          description: User's phone number.
+        mobile:
+          type: string
+          maxLength: 100
+          description: User's mobile phone number.
+        company:
+          type: string
+          maxLength: 100
+          description: User's company name.
+        street:
+          type: string
+          maxLength: 128
+          description: Street name.
+        city:
+          type: string
+          maxLength: 32
+          description: City name.
+        state:
+          type: string
+          maxLength: 32
+          description: State name.
+        country:
+          type: string
+          maxLength: 32
+          description: Country name.
+        postal_code:
+          type: string
+          maxLength: 16
+          description: Postal code.
+        user_manager_login:
+          type: string
+          maxLength: 100
+          description: Login of the user's manager.
+      required:
+      - external_user_id
+      - email
+      - name
     Contact:
       type: object
       properties:
@@ -402,6 +473,51 @@ components:
       - first_name
       - last_name
       - email
+    ViewQuotesRequest:
+      type: object
+      properties:
+        dealhub_user_id:
+          type: string
+          maxLength: 16
+          description: ID of user in the DealHub system (as returned from Authentication request).
+        external_opportunity_id:
+          type: string
+          maxLength: 50
+          description: CRM opportunity ID.
+        opportunity_info:
+          $ref: '#/components/schemas/OpportunityInfo'
+      required:
+      - dealhub_user_id
+      - external_opportunity_id
+    AuthenticationRequest:
+      type: object
+      properties:
+        user_information:
+          $ref: '#/components/schemas/UserInformation'
+          description: Information required to create a user in DealHub.
+      required:
+      - user_information
+    OpenQuoteRequest:
+      type: object
+      properties:
+        dealhub_user_id:
+          type: string
+          maxLength: 16
+          description: ID of user in the DealHub system (as returned from Authentication request).
+        dealhub_quote_id:
+          type: string
+          maxLength: 16
+          description: DealHub quote ID.
+        external_opportunity_id:
+          type: string
+          maxLength: 50
+          description: CRM opportunity ID.
+        opportunity_info:
+          $ref: '#/components/schemas/OpportunityInfo'
+      required:
+      - dealhub_user_id
+      - dealhub_quote_id
+      - external_opportunity_id
     Address:
       type: object
       properties:
@@ -425,6 +541,15 @@ components:
           type: string
           maxLength: 16
           description: Postal code.
+    ViewOpportunitiesRequest:
+      type: object
+      properties:
+        dealhub_user_id:
+          type: string
+          maxLength: 16
+          description: ID of user in the DealHub system (as returned from Authentication request).
+      required:
+      - dealhub_user_id
     RedirectResponse:
       type: object
       properties:
@@ -436,34 +561,6 @@ components:
           type: array
           items:
             type: string
-    AuthenticationResponse:
-      type: object
-      properties:
-        access_token:
-          type: string
-          description: A one-time access token, which expires after 60 seconds.
-        dealhub_user_id:
-          type: string
-          description: The unique identifier for the user in DealHub.
-        errors:
-          type: array
-          items:
-            type: string
-    AuthenticationRequest:
-      type: object
-      properties:
-        user_information:
-          $ref: '#/components/schemas/UserInformation'
-          description: Information required to create a user in DealHub.
-      required:
-      - user_information
-    ErrorResponse:
-      type: object
-      description: A generic error response. The specific message will vary based on the context.
-      properties:
-        message:
-          type: string
-          example: Unauthenticated
     CustomField:
       type: object
       properties:
@@ -494,6 +591,39 @@ components:
       required:
       - name
       - value
+    AuthenticationResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+          description: A one-time access token, which expires after 60 seconds.
+        dealhub_user_id:
+          type: string
+          description: The unique identifier for the user in DealHub.
+        errors:
+          type: array
+          items:
+            type: string
+    CreateQuoteRequest:
+      allOf:
+      - $ref: '#/components/schemas/OpportunityInfo'
+      - type: object
+        properties:
+          dealhub_user_id:
+            type: string
+            maxLength: 16
+            description: ID of the user in the DealHub system (as returned from the Authentication request).
+          external_opportunity_id:
+            type: string
+            maxLength: 50
+            description: CRM opportunity ID.
+          version_id:
+            type: string
+            description: For admin use only. DealHub version ID. If not specified, the system will use the active version.
+            maxLength: 16
+        required:
+        - dealhub_user_id
+        - external_opportunity_id
     OpportunityInfo:
       type: object
       description: A schema representing the data that can be sent to create or update an opportunity and its related quote.
@@ -563,136 +693,6 @@ components:
       - customer_name
       - geo_code
       - currency
-    ViewOpportunitiesRequest:
-      type: object
-      properties:
-        dealhub_user_id:
-          type: string
-          maxLength: 16
-          description: ID of user in the DealHub system (as returned from Authentication request).
-      required:
-      - dealhub_user_id
-    ViewQuotesRequest:
-      type: object
-      properties:
-        dealhub_user_id:
-          type: string
-          maxLength: 16
-          description: ID of user in the DealHub system (as returned from Authentication request).
-        external_opportunity_id:
-          type: string
-          maxLength: 50
-          description: CRM opportunity ID.
-        opportunity_info:
-          $ref: '#/components/schemas/OpportunityInfo'
-      required:
-      - dealhub_user_id
-      - external_opportunity_id
-    UserInformation:
-      type: object
-      properties:
-        external_user_id:
-          type: string
-          maxLength: 200
-          description: CRM user ID (employee of the organization that integrates with DealHub).
-        login:
-          type: string
-          maxLength: 100
-          description: Login of the user. If a new user is created and login is not provided, the email will be used as the login.
-        email:
-          type: string
-          format: email
-          maxLength: 100
-          description: Primary email of the user.
-        name:
-          type: string
-          maxLength: 300
-          description: User's full name.
-        position:
-          type: string
-          maxLength: 300
-          description: The role of the user in the organization (job title).
-        phone:
-          type: string
-          maxLength: 50
-          description: User's phone number.
-        mobile:
-          type: string
-          maxLength: 100
-          description: User's mobile phone number.
-        company:
-          type: string
-          maxLength: 100
-          description: User's company name.
-        street:
-          type: string
-          maxLength: 128
-          description: Street name.
-        city:
-          type: string
-          maxLength: 32
-          description: City name.
-        state:
-          type: string
-          maxLength: 32
-          description: State name.
-        country:
-          type: string
-          maxLength: 32
-          description: Country name.
-        postal_code:
-          type: string
-          maxLength: 16
-          description: Postal code.
-        user_manager_login:
-          type: string
-          maxLength: 100
-          description: Login of the user's manager.
-      required:
-      - external_user_id
-      - email
-      - name
-    CreateQuoteRequest:
-      allOf:
-      - $ref: '#/components/schemas/OpportunityInfo'
-      - type: object
-        properties:
-          dealhub_user_id:
-            type: string
-            maxLength: 16
-            description: ID of the user in the DealHub system (as returned from the Authentication request).
-          external_opportunity_id:
-            type: string
-            maxLength: 50
-            description: CRM opportunity ID.
-          version_id:
-            type: string
-            description: For admin use only. DealHub version ID. If not specified, the system will use the active version.
-            maxLength: 16
-        required:
-        - dealhub_user_id
-        - external_opportunity_id
-    OpenQuoteRequest:
-      type: object
-      properties:
-        dealhub_user_id:
-          type: string
-          maxLength: 16
-          description: ID of user in the DealHub system (as returned from Authentication request).
-        dealhub_quote_id:
-          type: string
-          maxLength: 16
-          description: DealHub quote ID.
-        external_opportunity_id:
-          type: string
-          maxLength: 50
-          description: CRM opportunity ID.
-        opportunity_info:
-          $ref: '#/components/schemas/OpportunityInfo'
-      required:
-      - dealhub_user_id
-      - dealhub_quote_id
-      - external_opportunity_id
   securitySchemes:
     secretToken:
       type: http

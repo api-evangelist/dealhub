@@ -148,6 +148,16 @@ paths:
               schema:
                 $ref: '#/components/schemas/Attachment'
 components:
+  requestBodies:
+    uploadApprovalMatrixCSV:
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              file:
+                type: string
+                format: binary
   schemas:
     Attachment:
       type: object
@@ -187,16 +197,6 @@ components:
         updatedOn:
           type: integer
           format: int64
-  requestBodies:
-    uploadApprovalMatrixCSV:
-      content:
-        multipart/form-data:
-          schema:
-            type: object
-            properties:
-              file:
-                type: string
-                format: binary
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

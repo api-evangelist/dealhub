@@ -422,71 +422,6 @@ paths:
           description: Forbidden. Invalid or missing authentication token.
 components:
   schemas:
-    Signer:
-      type: object
-      properties:
-        company_name:
-          type: string
-          description: Company name of the signer.
-        signee_name:
-          type: string
-          description: Name of the signer.
-        signee_title:
-          type: string
-          description: Title of the signer.
-        signature_date:
-          type: string
-          format: date-time
-          description: Date when the user signed the contract via the DealRoom.
-        ordinal:
-          type: integer
-          description: The order of the signer in the list of signers.
-    QuoteSummary:
-      type: object
-      properties:
-        currency:
-          type: string
-          description: Quote currency (ISO-4217 format).
-        total_list_price:
-          type: number
-          format: float
-          description: The total list price of the quote.
-        total_net_price:
-          type: number
-          format: float
-          description: Total net price of the quote.
-        total_discount:
-          type: number
-          format: float
-          description: Total discount of the quote.
-        sales_discount:
-          type: number
-          format: float
-          description: Total discount provided by seller.
-    PlaybookAnswer:
-      type: object
-      properties:
-        system_name:
-          type: string
-          description: Name of the system, relevant for multi-system concept.
-        system_id:
-          type: string
-          description: System ID, relevant for multi-system concept.
-        group_id:
-          type: string
-          description: Group ID.
-        group_name:
-          type: string
-          description: Group name.
-        question_id:
-          type: string
-          description: Question ID.
-        question:
-          type: string
-          description: Question text.
-        answer:
-          type: string
-          description: The answer.
     OpportunityOwner:
       type: object
       description: Details of opportunity owner.
@@ -556,33 +491,6 @@ components:
           type: string
           maxLength: 100
           description: Login of user manager.
-    Quote:
-      type: object
-      properties:
-        dealhub_quote_id:
-          type: string
-        status:
-          type: string
-        quote_upgrade_required:
-          type: boolean
-        info:
-          $ref: '#/components/schemas/QuoteInfo'
-        summary:
-          $ref: '#/components/schemas/QuoteSummary'
-        deal_room_info:
-          $ref: '#/components/schemas/DealRoomInfo'
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/LineItem'
-        answers:
-          type: array
-          items:
-            $ref: '#/components/schemas/PlaybookAnswer'
-        approvals:
-          type: array
-          items:
-            $ref: '#/components/schemas/Approval'
     QuoteInfo:
       type: object
       properties:
@@ -663,22 +571,30 @@ components:
         version_id:
           type: string
           description: ID of the version in which the quote is managed.
-    DealRoomSignersResponse:
+    PlaybookAnswer:
       type: object
       properties:
-        dealroom_state:
+        system_name:
           type: string
-          description: State of the DealRoom.
-        buyer_signers:
-          type: array
-          description: List of signers from the buyer side.
-          items:
-            $ref: '#/components/schemas/Signer'
-        seller_signers:
-          type: array
-          description: List of signers from the selling organization side.
-          items:
-            $ref: '#/components/schemas/Signer'
+          description: Name of the system, relevant for multi-system concept.
+        system_id:
+          type: string
+          description: System ID, relevant for multi-system concept.
+        group_id:
+          type: string
+          description: Group ID.
+        group_name:
+          type: string
+          description: Group name.
+        question_id:
+          type: string
+          description: Question ID.
+        question:
+          type: string
+          description: Question text.
+        answer:
+          type: string
+          description: The answer.
     LineItem:
       type: object
       properties:
@@ -775,46 +691,79 @@ components:
           description: List of line item attributes (aka proposal attributes).
           additionalProperties:
             type: string
-    Approval:
+    QuoteSummary:
       type: object
       properties:
-        reviewer:
+        currency:
           type: string
-          format: email
-          description: Login of the reviewer.
-        step:
-          type: integer
-          description: Approval workflow step.
-        reason:
+          description: Quote currency (ISO-4217 format).
+        total_list_price:
+          type: number
+          format: float
+          description: The total list price of the quote.
+        total_net_price:
+          type: number
+          format: float
+          description: Total net price of the quote.
+        total_discount:
+          type: number
+          format: float
+          description: Total discount of the quote.
+        sales_discount:
+          type: number
+          format: float
+          description: Total discount provided by seller.
+    DealRoomSignersResponse:
+      type: object
+      properties:
+        dealroom_state:
           type: string
-          description: List of approval reasons.
-        status:
+          description: State of the DealRoom.
+        buyer_signers:
+          type: array
+          description: List of signers from the buyer side.
+          items:
+            $ref: '#/components/schemas/Signer'
+        seller_signers:
+          type: array
+          description: List of signers from the selling organization side.
+          items:
+            $ref: '#/components/schemas/Signer'
+    Signer:
+      type: object
+      properties:
+        company_name:
           type: string
-          enum:
-          - waiting
-          - rejected
-          - approved
-          description: Status of the specific step within approval flow.
-        impersonated_by:
+          description: Company name of the signer.
+        signee_name:
           type: string
-          format: email
-          description: Login of the person who approved/rejected quote on behalf of approver.
-        review_date:
+          description: Name of the signer.
+        signee_title:
+          type: string
+          description: Title of the signer.
+        signature_date:
           type: string
           format: date-time
-          description: Date of approval/rejection.
-        reviewer_comment:
-          type: string
-          description: Note added by reviewer.
-    PaginatedQuotesResponse:
+          description: Date when the user signed the contract via the DealRoom.
+        ordinal:
+          type: integer
+          description: The order of the signer in the list of signers.
+    DealRoomInfo:
       type: object
       properties:
-        info:
-          $ref: '#/components/schemas/PaginationInfo'
-        quotes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Quote'
+        url:
+          type: string
+          format: uri
+          description: DealRoom URL.
+    PaginationInfo:
+      type: object
+      properties:
+        more_results_matching_the_request:
+          type: boolean
+        offset:
+          type: string
+        limit:
+          type: string
     CreateOpportunityRequest:
       type: object
       required:
@@ -847,22 +796,73 @@ components:
           type: string
           maxLength: 256
           description: CRM customer name.
-    PaginationInfo:
+    PaginatedQuotesResponse:
       type: object
       properties:
-        more_results_matching_the_request:
+        info:
+          $ref: '#/components/schemas/PaginationInfo'
+        quotes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Quote'
+    Quote:
+      type: object
+      properties:
+        dealhub_quote_id:
+          type: string
+        status:
+          type: string
+        quote_upgrade_required:
           type: boolean
-        offset:
-          type: string
-        limit:
-          type: string
-    DealRoomInfo:
+        info:
+          $ref: '#/components/schemas/QuoteInfo'
+        summary:
+          $ref: '#/components/schemas/QuoteSummary'
+        deal_room_info:
+          $ref: '#/components/schemas/DealRoomInfo'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItem'
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaybookAnswer'
+        approvals:
+          type: array
+          items:
+            $ref: '#/components/schemas/Approval'
+    Approval:
       type: object
       properties:
-        url:
+        reviewer:
           type: string
-          format: uri
-          description: DealRoom URL.
+          format: email
+          description: Login of the reviewer.
+        step:
+          type: integer
+          description: Approval workflow step.
+        reason:
+          type: string
+          description: List of approval reasons.
+        status:
+          type: string
+          enum:
+          - waiting
+          - rejected
+          - approved
+          description: Status of the specific step within approval flow.
+        impersonated_by:
+          type: string
+          format: email
+          description: Login of the person who approved/rejected quote on behalf of approver.
+        review_date:
+          type: string
+          format: date-time
+          description: Date of approval/rejection.
+        reviewer_comment:
+          type: string
+          description: Note added by reviewer.
   securitySchemes:
     bearerAuth:
       type: http

@@ -468,6 +468,230 @@ paths:
           description: Internal server error
 components:
   schemas:
+    ApprovalRoleSegmentChange:
+      type: object
+      properties:
+        roleName:
+          type: string
+        segmentName:
+          type: string
+        previousUserOrGroupName:
+          type: string
+        newUserOrGroupName:
+          type: string
+    ApproverJson:
+      type: object
+      required:
+      - level
+      - status
+      properties:
+        level:
+          type: integer
+          format: int32
+          example: 1
+          description: Approval level/sequence
+          readOnly: true
+        approver:
+          type: string
+          example: sumit.subskribe@company.com
+          description: Approver user ID or email
+          readOnly: true
+        status:
+          type: string
+          example: APPROVED
+          description: Approval status
+          readOnly: true
+          enum:
+          - INACTIVE
+          - AWAITING_APPROVAL
+          - ADMIN_BYPASS
+          - NOT_APPLICABLE
+          - REJECTED
+          - APPROVED
+          - CANCELLED
+          - NEEDS_APPROVAL
+          - FULLY_APPROVED
+          - PENDING
+          - AUTO_APPROVED
+          - ERROR_ORDER_OWNER_IS_MISSING_TO_FIND_APPROVAL_SEGMENT
+          - ERROR_ORDER_OWNER_NOT_PART_OF_ANY_APPROVAL_SEGMENT
+          - ERROR_ORDER_OWNER_PART_OF_MULTIPLE_APPROVAL_SEGMENTS
+          - ERROR_ORDER_OWNER_NOT_PART_OF_APPROVAL_SEGMENT_SELECTED_ON_ORDER
+        assignedAt:
+          type: integer
+          format: int64
+          example: 1762509000
+          description: Timestamp (in epoch seconds) when task was assigned
+          readOnly: true
+        respondedAt:
+          type: integer
+          format: int64
+          example: 1762509000
+          description: Timestamp (in epoch seconds) when approver responded, null if pending
+          readOnly: true
+        duration:
+          type: integer
+          format: int64
+          example: 2700
+          description: Duration from assignment to response in seconds, null if not responded
+          readOnly: true
+        originalApprovalAt:
+          type: integer
+          format: int64
+          example: 1762509000
+          description: Original approval timestamp (in epoch seconds) for smart approvals
+          readOnly: true
+        approverNote:
+          type: string
+          description: Comment/note from approver
+          readOnly: true
+      description: Individual approver with timeline data (approval domain only)
+    ApprovalMatrixImportPreview:
+      type: object
+      properties:
+        id:
+          type: string
+        uploadedBy:
+          type: string
+        segmentsToAdd:
+          type: array
+          items:
+            type: string
+        segmentsToDelete:
+          type: array
+          items:
+            type: string
+        approvalRoleSegmentChanges:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalRoleSegmentChange'
+    ApprovalRuleConditions:
+      type: object
+      properties:
+        orderCondition:
+          type: string
+        orderLineCondition:
+          type: string
+    ApprovalFlowJson:
+      type: object
+      properties:
+        id:
+          type: string
+        entityIds:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+        name:
+          type: string
+        description:
+          type: string
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - INACTIVE
+        isSmartApproval:
+          type: boolean
+        states:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalStateJson'
+        transitionRules:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApprovalTransitionRuleJson'
+    ApprovalStateJson:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        approvalGroupId:
+          type: string
+        approverId:
+          type: string
+        approverType:
+          type: string
+          enum:
+          - USER
+          - USER_GROUP
+          - ROLE
+        action:
+          $ref: '#/components/schemas/ApprovalStateActionJson'
+        escalationPolicyId:
+          type: string
+    ApprovalRoleJson:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    ApprovalTransitionRuleJson:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        fromState:
+          type: string
+        toState:
+          type: string
+        condition:
+          type: string
+        ruleConditions:
+          $ref: '#/components/schemas/ApprovalRuleConditions'
+    OrderApprovalHistoryResponse:
+      type: object
+      required:
+      - currentAttempt
+      - orderId
+      - orderStatus
+      properties:
+        orderId:
+          type: string
+          example: ORD-9FB8TW8
+          description: Order ID reference
+          readOnly: true
+        orderStatus:
+          type: string
+          example: APPROVED
+          description: Status of the order
+          readOnly: true
+          enum:
+          - DRAFT
+          - SUBMITTED
+          - APPROVED
+          - EXECUTED
+          - EXPIRED
+        currentAttempt:
+          type: integer
+          format: int32
+          example: 2
+          description: Current approval attempt number
+          readOnly: true
+        currentSubmission:
+          $ref: '#/components/schemas/ApprovalSubmissionJson'
+        approvalHistory:
+          type: array
+          description: Historical approval submissions (previous attempts, if any)
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/ApprovalSubmissionJson'
+        summary:
+          $ref: '#/components/schemas/ApprovalSummaryJson'
+      description: Complete approval history for an order (approval domain only)
     ApprovalSubmissionJson:
       type: object
       required:
@@ -543,46 +767,43 @@ components:
           items:
             $ref: '#/components/schemas/WorkflowJson'
       description: Single approval submission attempt (approval domain only)
-    ApprovalRoleSegmentChange:
-      type: object
-      properties:
-        roleName:
-          type: string
-        segmentName:
-          type: string
-        previousUserOrGroupName:
-          type: string
-        newUserOrGroupName:
-          type: string
-    ApprovalFlowJson:
+    ApprovalMatrixImportDataJson:
       type: object
       properties:
         id:
           type: string
-        entityIds:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
+        fileName:
+          type: string
+        uploadedBy:
+          type: string
+        status:
+          type: string
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    ApprovalSegmentJson:
+      type: object
+      properties:
+        id:
+          type: string
         name:
           type: string
         description:
           type: string
-        status:
+        createdOn:
+          type: integer
+          format: int64
+        updatedOn:
+          type: integer
+          format: int64
+    ApprovalStateActionJson:
+      type: object
+      properties:
+        emailGroupId:
           type: string
-          enum:
-          - ACTIVE
-          - INACTIVE
-        isSmartApproval:
-          type: boolean
-        states:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalStateJson'
-        transitionRules:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalTransitionRuleJson'
     WorkflowJson:
       type: object
       required:
@@ -636,227 +857,6 @@ components:
           items:
             $ref: '#/components/schemas/ApproverJson'
       description: Approval workflow with approver details (approval domain only)
-    ApprovalMatrixImportDataJson:
-      type: object
-      properties:
-        id:
-          type: string
-        fileName:
-          type: string
-        uploadedBy:
-          type: string
-        status:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-    ApprovalSegmentJson:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-    ApprovalRoleJson:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        description:
-          type: string
-        createdOn:
-          type: integer
-          format: int64
-        updatedOn:
-          type: integer
-          format: int64
-    ApprovalStateActionJson:
-      type: object
-      properties:
-        emailGroupId:
-          type: string
-    ApprovalMatrixImportPreview:
-      type: object
-      properties:
-        id:
-          type: string
-        uploadedBy:
-          type: string
-        segmentsToAdd:
-          type: array
-          items:
-            type: string
-        segmentsToDelete:
-          type: array
-          items:
-            type: string
-        approvalRoleSegmentChanges:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApprovalRoleSegmentChange'
-    ApprovalRuleConditions:
-      type: object
-      properties:
-        orderCondition:
-          type: string
-        orderLineCondition:
-          type: string
-    ApproverJson:
-      type: object
-      required:
-      - level
-      - status
-      properties:
-        level:
-          type: integer
-          format: int32
-          example: 1
-          description: Approval level/sequence
-          readOnly: true
-        approver:
-          type: string
-          example: sumit.subskribe@company.com
-          description: Approver user ID or email
-          readOnly: true
-        status:
-          type: string
-          example: APPROVED
-          description: Approval status
-          readOnly: true
-          enum:
-          - INACTIVE
-          - AWAITING_APPROVAL
-          - ADMIN_BYPASS
-          - NOT_APPLICABLE
-          - REJECTED
-          - APPROVED
-          - CANCELLED
-          - NEEDS_APPROVAL
-          - FULLY_APPROVED
-          - PENDING
-          - AUTO_APPROVED
-          - ERROR_ORDER_OWNER_IS_MISSING_TO_FIND_APPROVAL_SEGMENT
-          - ERROR_ORDER_OWNER_NOT_PART_OF_ANY_APPROVAL_SEGMENT
-          - ERROR_ORDER_OWNER_PART_OF_MULTIPLE_APPROVAL_SEGMENTS
-          - ERROR_ORDER_OWNER_NOT_PART_OF_APPROVAL_SEGMENT_SELECTED_ON_ORDER
-        assignedAt:
-          type: integer
-          format: int64
-          example: 1762509000
-          description: Timestamp (in epoch seconds) when task was assigned
-          readOnly: true
-        respondedAt:
-          type: integer
-          format: int64
-          example: 1762509000
-          description: Timestamp (in epoch seconds) when approver responded, null if pending
-          readOnly: true
-        duration:
-          type: integer
-          format: int64
-          example: 2700
-          description: Duration from assignment to response in seconds, null if not responded
-          readOnly: true
-        originalApprovalAt:
-          type: integer
-          format: int64
-          example: 1762509000
-          description: Original approval timestamp (in epoch seconds) for smart approvals
-          readOnly: true
-        approverNote:
-          type: string
-          description: Comment/note from approver
-          readOnly: true
-      description: Individual approver with timeline data (approval domain only)
-    ApprovalStateJson:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        approvalGroupId:
-          type: string
-        approverId:
-          type: string
-        approverType:
-          type: string
-          enum:
-          - USER
-          - USER_GROUP
-          - ROLE
-        action:
-          $ref: '#/components/schemas/ApprovalStateActionJson'
-        escalationPolicyId:
-          type: string
-    OrderApprovalHistoryResponse:
-      type: object
-      required:
-      - currentAttempt
-      - orderId
-      - orderStatus
-      properties:
-        orderId:
-          type: string
-          example: ORD-9FB8TW8
-          description: Order ID reference
-          readOnly: true
-        orderStatus:
-          type: string
-          example: APPROVED
-          description: Status of the order
-          readOnly: true
-          enum:
-          - DRAFT
-          - SUBMITTED
-          - APPROVED
-          - EXECUTED
-          - EXPIRED
-        currentAttempt:
-          type: integer
-          format: int32
-          example: 2
-          description: Current approval attempt number
-          readOnly: true
-        currentSubmission:
-          $ref: '#/components/schemas/ApprovalSubmissionJson'
-        approvalHistory:
-          type: array
-          description: Historical approval submissions (previous attempts, if any)
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/ApprovalSubmissionJson'
-        summary:
-          $ref: '#/components/schemas/ApprovalSummaryJson'
-      description: Complete approval history for an order (approval domain only)
-    ApprovalTransitionRuleJson:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        fromState:
-          type: string
-        toState:
-          type: string
-        condition:
-          type: string
-        ruleConditions:
-          $ref: '#/components/schemas/ApprovalRuleConditions'
     ApprovalSummaryJson:
       type: object
       required:

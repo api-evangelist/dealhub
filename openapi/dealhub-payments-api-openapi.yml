@@ -443,70 +443,6 @@ paths:
           description: successful operation
 components:
   schemas:
-    PaymentRetryResult:
-      type: object
-      properties:
-        retryAction:
-          type: string
-          enum:
-          - RETRIED
-          - SKIPPED
-          - RETRIED_AFTER_MANUAL_ATTEMPT
-        detail:
-          type: string
-        manualPaymentAttemptId:
-          type: string
-    PaymentRetryPolicy:
-      type: object
-      required:
-      - type
-      discriminator:
-        propertyName: type
-      properties:
-        version:
-          type: integer
-          format: int32
-        totalAttempts:
-          type: integer
-          format: int32
-        type:
-          type: string
-          enum:
-          - INTERVAL_BASED
-    PaymentJsonPaginationResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          readOnly: true
-          items:
-            $ref: '#/components/schemas/PaymentJson'
-        numElements:
-          type: integer
-          format: int32
-          readOnly: true
-        nextCursor:
-          type: string
-          format: uuid
-          readOnly: true
-    VoidPaymentJson:
-      type: object
-      required:
-      - invoiceBalance
-      - invoiceNumber
-      - voidDate
-      properties:
-        paymentId:
-          type: string
-        voidDate:
-          type: integer
-          format: int64
-        invoiceBalance:
-          type: number
-        invoiceNumber:
-          type: string
-        note:
-          type: string
     PaymentJson:
       type: object
       required:
@@ -561,6 +497,128 @@ components:
           type: number
         functionalBankFee:
           type: number
+    PaymentRetryConfigOutput:
+      type: object
+      required:
+      - groupingId
+      - policy
+      properties:
+        groupingId:
+          type: string
+          readOnly: true
+        policy:
+          $ref: '#/components/schemas/PaymentRetryPolicy'
+    PaymentConfiguration:
+      type: object
+      properties:
+        supportedPaymentTypes:
+          type: array
+          uniqueItems: true
+          items:
+            type: string
+            enum:
+            - ACH
+            - CARD
+            - CHECK
+            - WIRE
+            - INVOICE
+            - DEPOSIT
+            - EXTERNAL
+    PaymentBalanceJson:
+      type: object
+      properties:
+        accountId:
+          type: string
+        paymentId:
+          type: string
+        balance:
+          type: number
+        updatedOn:
+          type: integer
+          format: int64
+    VoidPaymentJson:
+      type: object
+      required:
+      - invoiceBalance
+      - invoiceNumber
+      - voidDate
+      properties:
+        paymentId:
+          type: string
+        voidDate:
+          type: integer
+          format: int64
+        invoiceBalance:
+          type: number
+        invoiceNumber:
+          type: string
+        note:
+          type: string
+    PaymentRetryPolicy:
+      type: object
+      required:
+      - type
+      discriminator:
+        propertyName: type
+      properties:
+        version:
+          type: integer
+          format: int32
+        totalAttempts:
+          type: integer
+          format: int32
+        type:
+          type: string
+          enum:
+          - INTERVAL_BASED
+    PaymentJsonPaginationResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          readOnly: true
+          items:
+            $ref: '#/components/schemas/PaymentJson'
+        numElements:
+          type: integer
+          format: int32
+          readOnly: true
+        nextCursor:
+          type: string
+          format: uuid
+          readOnly: true
+    PaymentRetryConfigInput:
+      type: object
+      required:
+      - policy
+      properties:
+        groupingId:
+          type: string
+          readOnly: true
+        policy:
+          $ref: '#/components/schemas/PaymentRetryPolicy'
+    PaymentDeletableResponse:
+      type: object
+      properties:
+        deletable:
+          type: boolean
+          readOnly: true
+        message:
+          type: string
+          readOnly: true
+    PaymentRetryResult:
+      type: object
+      properties:
+        retryAction:
+          type: string
+          enum:
+          - RETRIED
+          - SKIPPED
+          - RETRIED_AFTER_MANUAL_ATTEMPT
+        detail:
+          type: string
+        manualPaymentAttemptId:
+          type: string
     LedgerAccount:
       type: object
       properties:
@@ -597,28 +655,6 @@ components:
           type: boolean
         id:
           type: string
-    PaymentBalanceJson:
-      type: object
-      properties:
-        accountId:
-          type: string
-        paymentId:
-          type: string
-        balance:
-          type: number
-        updatedOn:
-          type: integer
-          format: int64
-    PaymentRetryConfigInput:
-      type: object
-      required:
-      - policy
-      properties:
-        groupingId:
-          type: string
-          readOnly: true
-        policy:
-          $ref: '#/components/schemas/PaymentRetryPolicy'
     PaymentBankAccountJson:
       type: object
       required:
@@ -661,42 +697,6 @@ components:
           type: integer
           format: int64
           readOnly: true
-    PaymentDeletableResponse:
-      type: object
-      properties:
-        deletable:
-          type: boolean
-          readOnly: true
-        message:
-          type: string
-          readOnly: true
-    PaymentConfiguration:
-      type: object
-      properties:
-        supportedPaymentTypes:
-          type: array
-          uniqueItems: true
-          items:
-            type: string
-            enum:
-            - ACH
-            - CARD
-            - CHECK
-            - WIRE
-            - INVOICE
-            - DEPOSIT
-            - EXTERNAL
-    PaymentRetryConfigOutput:
-      type: object
-      required:
-      - groupingId
-      - policy
-      properties:
-        groupingId:
-          type: string
-          readOnly: true
-        policy:
-          $ref: '#/components/schemas/PaymentRetryPolicy'
   requestBodies:
     uploadApprovalMatrixCSV:
       content:

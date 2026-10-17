@@ -169,11 +169,14 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    ResponseItem:
-      oneOf:
-      - $ref: '#/components/schemas/ProductResponseItem'
-      - $ref: '#/components/schemas/BundleResponseItem'
-      description: An item in the response can be either a single product or a bundle.
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: A formatted error message from the external system that will be displayed to the user in the DealHub UI.
+      required:
+      - message
     BaseResponseItem:
       type: object
       description: Common properties for any item returned in the response.
@@ -205,45 +208,6 @@ components:
           format: date-time
           description: A date value, expected in ISO 8601 format (e.g., "2025-09-01T15:39:25Z").
       additionalProperties: true
-    ErrorResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          description: A formatted error message from the external system that will be displayed to the user in the DealHub UI.
-      required:
-      - message
-    CalloutRequest:
-      type: object
-      properties:
-        request_id:
-          type: string
-          description: A unique, randomly generated string to identify the request.
-        authentication:
-          type: string
-          description: Authentication details passed in the request body. This value mirrors the content of the `Authorization` header.
-        playbook_answers:
-          type: object
-          description: A key-value map of playbook answers selected by the administrator in the Callout configuration. The keys and value types are customer-specific.
-          additionalProperties: true
-        items:
-          type: array
-          description: List of items (products or bundles) for pricing.
-          items:
-            $ref: '#/components/schemas/Item'
-      required:
-      - items
-      - request_id
-    CalloutResponse:
-      type: object
-      required:
-      - items
-      properties:
-        items:
-          type: array
-          description: The list of items with their calculated prices and attributes.
-          items:
-            $ref: '#/components/schemas/ResponseItem'
     BundleResponseItem:
       description: Represents a bundle containing other items. The top-level bundle may not have a price itself.
       allOf:
@@ -257,18 +221,6 @@ components:
             description: A list of child items within the bundle. Each item in this list must have a price.
             items:
               $ref: '#/components/schemas/ProductResponseItem'
-    ProductResponseItem:
-      description: Represents a single product with a mandatory price.
-      allOf:
-      - $ref: '#/components/schemas/BaseResponseItem'
-      - type: object
-        required:
-        - list_price
-        properties:
-          list_price:
-            type: number
-            format: float
-            description: List price of the line item. This field is mandatory for every product item.
     Item:
       type: object
       description: Represents a single product or a bundle within the quote. Can contain additional, customer-defined product attributes configured by the admin.
@@ -309,6 +261,54 @@ components:
       - sku
       - type
       additionalProperties: true
+    CalloutResponse:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          description: The list of items with their calculated prices and attributes.
+          items:
+            $ref: '#/components/schemas/ResponseItem'
+    ProductResponseItem:
+      description: Represents a single product with a mandatory price.
+      allOf:
+      - $ref: '#/components/schemas/BaseResponseItem'
+      - type: object
+        required:
+        - list_price
+        properties:
+          list_price:
+            type: number
+            format: float
+            description: List price of the line item. This field is mandatory for every product item.
+    CalloutRequest:
+      type: object
+      properties:
+        request_id:
+          type: string
+          description: A unique, randomly generated string to identify the request.
+        authentication:
+          type: string
+          description: Authentication details passed in the request body. This value mirrors the content of the `Authorization` header.
+        playbook_answers:
+          type: object
+          description: A key-value map of playbook answers selected by the administrator in the Callout configuration. The keys and value types are customer-specific.
+          additionalProperties: true
+        items:
+          type: array
+          description: List of items (products or bundles) for pricing.
+          items:
+            $ref: '#/components/schemas/Item'
+      required:
+      - items
+      - request_id
+    ResponseItem:
+      oneOf:
+      - $ref: '#/components/schemas/ProductResponseItem'
+      - $ref: '#/components/schemas/BundleResponseItem'
+      description: An item in the response can be either a single product or a bundle.
   securitySchemes:
     bearerAuth:
       type: http

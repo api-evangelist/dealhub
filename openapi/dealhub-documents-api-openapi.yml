@@ -184,6 +184,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/DocumentTemplateJson'
 components:
+  requestBodies:
+    DocumentTemplateRequestJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DocumentTemplateRequestJson'
   schemas:
     DocumentTemplateJson:
       type: object
@@ -270,12 +276,6 @@ components:
           - DEPRECATED
         isUserSelectable:
           type: boolean
-  requestBodies:
-    DocumentTemplateRequestJson:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/DocumentTemplateRequestJson'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

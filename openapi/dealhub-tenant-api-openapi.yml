@@ -22,50 +22,7 @@ paths:
       summary: Create rev hub tenant
       x-summary-source: derived
 components:
-  requestBodies:
-    TenantJson:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/TenantJson'
   schemas:
-    TenantSettingJson:
-      type: object
-      properties:
-        defaultTimeZone:
-          type: string
-        supportedCurrencies:
-          type: array
-          items:
-            type: string
-        percentDerivedFrom:
-          type: string
-          enum:
-          - LIST_AMOUNT
-          - SELL_AMOUNT
-        tenantSettingSeal:
-          type: string
-          enum:
-          - 'ON'
-          - 'OFF'
-        orderExpiryDurationInDays:
-          type: string
-        signingOrder:
-          type: string
-          enum:
-          - ACCOUNT_FIRST
-          - TENANT_FIRST
-          - ACCOUNT_ONLY
-        globalBccEmail:
-          type: string
-        isUpdateOrderStartDateEnabled:
-          type: boolean
-        autoReplacePlans:
-          type: boolean
-        isDocxAdminOnly:
-          type: boolean
-        isDocxPasswordProtected:
-          type: boolean
     TenantJson:
       type: object
       properties:
@@ -111,6 +68,43 @@ components:
           readOnly: true
         tenantSetting:
           $ref: '#/components/schemas/TenantSettingJson'
+    TenantSettingJson:
+      type: object
+      properties:
+        defaultTimeZone:
+          type: string
+        supportedCurrencies:
+          type: array
+          items:
+            type: string
+        percentDerivedFrom:
+          type: string
+          enum:
+          - LIST_AMOUNT
+          - SELL_AMOUNT
+        tenantSettingSeal:
+          type: string
+          enum:
+          - 'ON'
+          - 'OFF'
+        orderExpiryDurationInDays:
+          type: string
+        signingOrder:
+          type: string
+          enum:
+          - ACCOUNT_FIRST
+          - TENANT_FIRST
+          - ACCOUNT_ONLY
+        globalBccEmail:
+          type: string
+        isUpdateOrderStartDateEnabled:
+          type: boolean
+        autoReplacePlans:
+          type: boolean
+        isDocxAdminOnly:
+          type: boolean
+        isDocxPasswordProtected:
+          type: boolean
     AccountAddressJson:
       type: object
       properties:
@@ -135,6 +129,12 @@ components:
         zipcode:
           type: string
           description: Zip or Postal Code of the Contact
+  requestBodies:
+    TenantJson:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TenantJson'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

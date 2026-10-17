@@ -432,38 +432,30 @@ paths:
                 $ref: '#/components/schemas/AccountPaymentConfigurationJson'
 components:
   schemas:
-    MetricsJson:
+    AccountAddressJson:
       type: object
       properties:
-        tcv:
-          type: number
-        recurringTotal:
-          type: number
-        nonRecurringTotal:
-          type: number
-        arr:
-          type: number
-        entryArr:
-          type: number
-        exitArr:
-          type: number
-        averageArr:
-          type: number
-        arrTrend:
-          type: array
-          items:
-            $ref: '#/components/schemas/TimeSeriesAmountJson'
-        deltaTcv:
-          type: number
-        deltaArr:
-          type: number
-    ErpInputJson:
-      type: object
-      properties:
-        erpId:
+        streetAddressLine1:
           type: string
-          minLength: 0
-          maxLength: 100
+          description: Address Line 1 of the Contact
+        streetAddressLine2:
+          type: string
+          description: Address Line 2 of the Contact
+        streetAddressLine3:
+          type: string
+          description: Address Line 3 of the Contact
+        city:
+          type: string
+          description: City of the Contact
+        state:
+          type: string
+          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
+        country:
+          type: string
+          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
+        zipcode:
+          type: string
+          description: Zip or Postal Code of the Contact
     CustomFieldValue:
       type: object
       properties:
@@ -504,6 +496,82 @@ components:
           - SYSTEM
         defaultValue:
           $ref: '#/components/schemas/CustomFieldDefault'
+    TimeSeriesAmountJson:
+      type: object
+      properties:
+        instant:
+          type: integer
+          format: int64
+        amount:
+          type: number
+    AccountPaymentMethodJson:
+      type: object
+      required:
+      - paymentType
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        accountId:
+          type: string
+        name:
+          type: string
+        externalPaymentAccountId:
+          type: string
+        paymentType:
+          type: string
+          enum:
+          - ACH
+          - CARD
+          - CHECK
+          - WIRE
+          - INVOICE
+          - DEPOSIT
+          - EXTERNAL
+        paymentMethodId:
+          type: string
+    ErpInputJson:
+      type: object
+      properties:
+        erpId:
+          type: string
+          minLength: 0
+          maxLength: 100
+    CustomFieldDefault:
+      type: object
+      properties:
+        value:
+          type: string
+        selections:
+          type: array
+          items:
+            type: string
+    MetricsJson:
+      type: object
+      properties:
+        tcv:
+          type: number
+        recurringTotal:
+          type: number
+        nonRecurringTotal:
+          type: number
+        arr:
+          type: number
+        entryArr:
+          type: number
+        exitArr:
+          type: number
+        averageArr:
+          type: number
+        arrTrend:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSeriesAmountJson'
+        deltaTcv:
+          type: number
+        deltaArr:
+          type: number
     CrmAccountImportResponse:
       type: object
       properties:
@@ -523,30 +591,6 @@ components:
           type: string
         excludeFromPaymentRetries:
           type: boolean
-    AccountAddressJson:
-      type: object
-      properties:
-        streetAddressLine1:
-          type: string
-          description: Address Line 1 of the Contact
-        streetAddressLine2:
-          type: string
-          description: Address Line 2 of the Contact
-        streetAddressLine3:
-          type: string
-          description: Address Line 3 of the Contact
-        city:
-          type: string
-          description: City of the Contact
-        state:
-          type: string
-          description: State Code of the Contact (ISO 3166-2 state/province code). Currently supported for USA, Canada. For instance, for Arizona (USA), set state as AZ (not US-AZ).For British Columbia (Canada), set as BC (not CA-BC)
-        country:
-          type: string
-          description: Country Code of the Contact ( ISO 3166 alpha-2 country code).
-        zipcode:
-          type: string
-          description: Zip or Postal Code of the Contact
     AccountContactJson:
       type: object
       required:
@@ -583,55 +627,6 @@ components:
           type: string
         eventObjectId:
           type: string
-    AccountPaymentMethodJson:
-      type: object
-      required:
-      - paymentType
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        accountId:
-          type: string
-        name:
-          type: string
-        externalPaymentAccountId:
-          type: string
-        paymentType:
-          type: string
-          enum:
-          - ACH
-          - CARD
-          - CHECK
-          - WIRE
-          - INVOICE
-          - DEPOSIT
-          - EXTERNAL
-        paymentMethodId:
-          type: string
-    CustomFieldDefault:
-      type: object
-      properties:
-        value:
-          type: string
-        selections:
-          type: array
-          items:
-            type: string
-    PaginatedAccountsResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccountJson'
-        numElements:
-          type: integer
-          format: int32
-        nextCursor:
-          type: string
-          format: uuid
     AccountJson:
       type: object
       required:
@@ -734,14 +729,19 @@ components:
           uniqueItems: true
           items:
             type: string
-    TimeSeriesAmountJson:
+    PaginatedAccountsResponse:
       type: object
       properties:
-        instant:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccountJson'
+        numElements:
           type: integer
-          format: int64
-        amount:
-          type: number
+          format: int32
+        nextCursor:
+          type: string
+          format: uuid
   requestBodies:
     AccountContactJson:
       content:
